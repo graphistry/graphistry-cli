@@ -7,9 +7,6 @@ This is a toolkit for launching and managing a graphistry stack on your servers.
 
 Home Page: http://graphistry.com
 
-.. image:: screenshots/pgcli.gif
-.. image:: screenshots/image01.png
-
 Quick Start
 -----------
 
