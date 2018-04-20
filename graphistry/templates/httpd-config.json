@@ -1,0 +1,2 @@
+{"S3_ACCESS": "{{ s3_access }}",
+ "S3_SECRET": "{{ s3_secret }}"}
