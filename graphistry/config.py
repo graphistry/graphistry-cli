@@ -1,14 +1,13 @@
 import errno
-import shutil
 import os
-import platform
 from os.path import expanduser, exists, dirname
 from configmanager import Config
 import requests
 from prompt_toolkit import prompt
 from widgets import revisionist_commit_history_html
-import sys
+import sys, json
 from requests.auth import HTTPBasicAuth
+from fabric.api import local
 
 DEBUG = False
 SHIPYARD_HOST = 'https://shipyard.graphistry.com'
@@ -166,7 +165,17 @@ class Graphistry(object):
 
         self.save_config()
 
+    def gcloud_auth(self):
+        # Just snag whatever credentials are in the config and make sure the key is saved.
+        # docker-py doesn't seem to want to accept the JSON string as a password so this works.
+        key_filename = os.path.join(expanduser('~/.config/graphistry'), '.registrykey.json')
+        if exists(key_filename):
+            registry_credentials = json.dumps(dict(self.config.default_deployment.value['registry_credentials']))
+            _file = open(key_filename, "w")
+            _file.write(registry_credentials)
+            _file.close()
 
+            local('docker login -u _json_key -p "$(cat {0})" https://us.gcr.io | tee'.format(key_filename))
 
     def save_config(self):
         print("Saving Config")

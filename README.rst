@@ -80,7 +80,11 @@ Then you can install graphistry:
 
     $ sudo pip install graphistry
 
+Troubleshooting:
+----------------
 
+Did you have issues with pulling containers and you know they are public? Sometimes `docker-py` gets confused if you have
+old containers or are running out of space. Clear out your containers, do a `docker logout` in your terminal and then try again.
 
 Thanks:
 -------

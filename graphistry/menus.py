@@ -1,8 +1,7 @@
 import importlib
 
 from prompt_toolkit.contrib.completers import WordCompleter
-from commands import __Commands__
-command_completer = WordCompleter(__Commands__, ignore_case=True)
+
 
 
 class MainNav(object):
@@ -14,7 +13,7 @@ class MainNav(object):
         self.completer = None
 
         # get a base set of commands, add some new ones.
-        nav = __Commands__
+        nav = []
 
         self.autocomplete = {
             'nav': nav,
@@ -25,6 +24,8 @@ class MainNav(object):
             'help': 'Show help text.',
             'docker': 'do docker stuff',
             'login': 'Login to Graphistry',
+            'pull': 'Pull docker contgainers',
+            'compile': 'Generate dist/graphistry.tar.gz',
             'exit': 'Leave application. Ctrl-C or Ctrl-D works too.',
         }
 
