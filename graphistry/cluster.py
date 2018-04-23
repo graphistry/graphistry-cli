@@ -2,9 +2,11 @@ from config import Graphistry
 import json, errno
 import docker
 from os.path import expanduser, exists, dirname, join, realpath, isdir
+from os import getcwd
 from docker.errors import NotFound
 from fabric.api import local
 from jinja2 import Environment
+from shutil import copyfile
 
 
 import click
@@ -72,11 +74,23 @@ class Cluster(object):
             _file = open(cwd+'/templates/'+tmpl, "r").read()
             create_config_files(tmpl, jenv.from_string(_file).render(self._g.config.dump_values()))
 
-
-
     def launch(self):
-        import pdb; pdb.set_trace()
+        launch_file_source = join(cwd, 'bootstrap/launch.sh')
+        launch_file = join(cwd, 'launch.sh')
+        if not exists(launch_file):
+            copyfile(launch_file_source, launch_file)
 
+        tls = isdir('ssl')
+        ssl_dir = getcwd() + '/ssl'
+        local('cd deploy && chmod +x launch.sh')
+        if tls:
+            local(
+                'export SSLPATH="{ssl_path}" && export SSL_SELF_PROVIDED="1" && export SHIPYARD="1" && cd deploy && bash launch.sh'.format(
+                    ssl_path=ssl_dir
+                ))
+        else:
+            local('cd deploy && export SHIPYARD="1" && bash launch.sh')
+            
     def compile(self):
         """
         Generate dist/graphistry.tar.gz. Run pull beforehand.
