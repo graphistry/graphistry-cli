@@ -50,35 +50,24 @@ Detailed Installation Instructions:
 -----------------------------------
 
 
-
 Linux:
 ======
 
-In depth getting started guide for ``pip`` - https://pip.pypa.io/en/latest/installing.html.
+Launch a GPU instance of Graphistry of either RHEL or Ubuntu
 
-Check if pip is already available in your system.
+ssh into the graphistry instance and clone this repo `git clone https://github.com/graphistry/graphistry-cli.git`,
+then run `bash graphistry-cli/ubuntu.sh`
 
-::
+This will bootstrap your system and get the graphistry cli ready. This will take a while.
 
-    $ which pip
+After it completes follow the instructions and run `graphistry`
 
-If it doesn't exist, use your linux package manager to install `pip`. This
-might look something like:
+Inside the graphistry prompt you can hit `tab` to see your options, but all you need to do to get graphistry up and running
+is run the `init` command and answer the questions.
 
-::
-
-    $ sudo apt-get install python-pip   # Debian, Ubuntu, Mint etc
-
-    or
-
-    $ sudo yum install python-pip  # RHEL, Centos, Fedora etc
-
-
-Then you can install graphistry:
-
-::
-
-    $ sudo pip install graphistry
+Building a Bundled Deploy
+-------------------------
+From the `graphistry` prompt, type `compile`. Use `load` to load the system.
 
 Troubleshooting:
 ----------------
