@@ -46,9 +46,8 @@ sudo pip3 install fabric3 jinja2 requests git+https://github.com/jonathanslender
 if [ -d "graphistry-cli" ]; then
 
     cd graphistry-cli && sudo python3 setup.py install
-    echo -e "\nLoggin into a new session to enable docker access, run `graphistry`.\n"
-    echo "sudo su - $USER"
+    echo -e "\nLoggin into a new session to enable docker access, run 'graphistry'.\n"
 
-sudo su - $USER
+    sudo su - $USER
 fi
 
