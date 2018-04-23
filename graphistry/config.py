@@ -48,9 +48,9 @@ CONFIG_SCHEMA = {
     'use_ssl': False,
     'graphistry_host': '',
     'es_host': '',
-    'es_port': '',
+    'es_port': '9200',
     'splunk_host': '',
-    'splunk_port': '',
+    'splunk_port': '3000',
     'splunk_user': '',
     'splunk_password': '',
     'ip_internal_accept_list': '',
@@ -87,8 +87,7 @@ class Graphistry(object):
         elif res.status_code == 403:
             print('You do not have permissions to do this action. Ask your administrator to upgrade your account.')
             sys.exit()
-        import pdb;
-        pdb.set_trace()
+
         conf = res.json()['results'][0]
         schema = {
             'user': conf['user'],
@@ -97,9 +96,9 @@ class Graphistry(object):
             'use_ssl': False,
             'graphistry_host': '',
             'es_host': '',
-            'es_port': '',
+            'es_port': '9200',
             'splunk_host': '',
-            'splunk_port': '',
+            'splunk_port': '3000',
             'splunk_user': '',
             'splunk_password': '',
             'ip_internal_accept_list': '',
@@ -110,7 +109,6 @@ class Graphistry(object):
 
 
         }
-
         self.get_config(schema)
 
     def load_config(self):

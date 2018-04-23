@@ -1,20 +1,15 @@
 from config import Graphistry
-import json
+import json, errno
 import docker
-import sys
 from os.path import expanduser, exists, dirname, join, realpath, isdir
-from pathlib import Path
 from docker.errors import NotFound
-from requests.exceptions import ReadTimeout
 from fabric.api import local
+from jinja2 import Environment
+
 
 import click
 
-
 cwd = dir_path = dirname(realpath(__file__))
-
-
-
 
 def pretty_line(line):
     return json.loads(
@@ -24,9 +19,16 @@ def pretty_line(line):
         )
     )
 
+def create_config_files(filename, text):
+    try:
+        _file = open(filename, "w")
+        _file.write(text)
+        _file.close()
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+
 class Cluster(object):
-
-
     def __init__(self):
         self._g = Graphistry()
         self._g.load_config()
@@ -62,6 +64,16 @@ class Cluster(object):
             for line in docker.pull(image, stream=True):
                 click.secho(pretty_line(line), fg="blue")
 
+    def write_configs(self):
+        jenv = Environment()
+        jenv.filters['jsonify'] = json.dumps
+        templates = ['pivot-config.json', 'httpd-config.json', 'viz-app-config.json']
+        for tmpl in templates:
+            _file = open(cwd+'/templates/'+tmpl, "r").read()
+            create_config_files(tmpl, jenv.from_string(_file).render(self._g.config.dump_values()))
+
+
+
     def launch(self):
         import pdb; pdb.set_trace()
 
@@ -71,40 +83,31 @@ class Cluster(object):
         :return:
         """
         images = self.images['public']+self.images['private']
-        _docker = self.docker_lowlevel_api()
 
         try:
             for tag in images:
                 print("Saving Image: {0}".format(tag))
-                image = _docker.get_image(tag)
 
             local('docker save -o containers.tar ' + ' '.join(images))
             local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
+            if not exists('dist'):
+                local('mkdir dist')
+                click.secho('Compiling Distribution Bundle [dist/graphistry.tar.gz]. This will take a a few minutes.',
+                            fg='yellow')
+            tls = isdir('ssl')
+            maybe_ssl = ' ssl' if tls else ''
+
+            cmd = "touch dist/graphistry.tar.gz && " \
+                  "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh " \
+                  "httpd-config.json load.sh pivot-config.json " \
+                  "viz-app-config.json containers.tar'"
+            local(cmd + maybe_ssl)
 
         except NotFound:
             click.secho("Containers not found, use `pull`.", fg="red")
 
-
     def load(self):
-        _filename = "containers.tar"
-        if exists(_filename):
+        if exists("containers.tar"):
             local("docker load -i containers.tar")
         else:
             click.secho("Container archive not found. Run complie or ask your administrator for one.", fg="red")
-
-
-        """
-        local('docker save -o containers.tar ' + ' '.join(images))
-        local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
-        if not exists('dist'):
-            local('mkdir dist')
-            click.secho('Compiling Distrobution Bundle [dist/graphistry.tar.gz]. This will take a a few minutes.', fg='yellow')
-        tls = isdir('ssl')
-        maybe_ssl = ' ssl' if tls else ''
-
-        cmd = "touch dist/graphistry.tar.gz && " \
-              "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh " \
-              "httpd-config.json load.sh pivot-config.json " \
-              "viz-app-config.json containers.tar'"
-        local(cmd + maybe_ssl)
-        """

@@ -39,6 +39,10 @@ def main():
                 _c = Cluster()
                 _c.compile()
 
+            elif text == 'xx':
+                _c = Cluster()
+                _c.write_configs()
+
         except EOFError:
             break  # Control-D pressed.
         except KeyboardInterrupt:
