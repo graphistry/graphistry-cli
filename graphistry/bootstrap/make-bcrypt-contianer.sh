@@ -12,3 +12,4 @@ rm NodeJSDockerfile
 echo -e "\nTest bcrypt-cli Container\n"
 echo "docker run -it bcrypt bcrypt-cli "xxxx" 10"
 docker run -it bcrypt bcrypt-cli "xxxx" 10
+echo -e "\n\n"

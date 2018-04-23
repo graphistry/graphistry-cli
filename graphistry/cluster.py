@@ -87,7 +87,7 @@ class Cluster(object):
 
         click.secho("", fg="yellow")
         click.secho("Graphistry Launched. Please Browse to:", fg="yellow")
-        click.secho("http://{0}".format(self._g.config.es_host.value), fg="yellow")
+        click.secho("http://{0}".format(self._g.config.graphistry_host.value), fg="yellow")
 
 
     def compile(self):

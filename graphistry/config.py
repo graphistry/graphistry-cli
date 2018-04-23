@@ -88,7 +88,7 @@ class Graphistry(object):
 
     def create_bcrypt_container(self):
         make_bcrypt = join(cwd, 'bootstrap/make-bcrypt-contianer.sh')
-        local('bash {mb}'.format(mb=make_bcrypt))
+        local('sudo bash {mb}'.format(mb=make_bcrypt))
 
 
     def login(self):

@@ -78,11 +78,14 @@ wget -P /tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nv
 sudo rpm -i /tmp/nvidia-docker*.rpm && rm /tmp/nvidia-docker*.rpm
 sudo systemctl start nvidia-docker
 
-echo "Test Nvidia-Docker Install"
-#sudo su - $USER exit
-#nvidia-docker run --rm nvidia/cuda nvidia-smi
-
 sudo pip3 install fabric3 jinja2 requests bcrypt git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0
 
-echo "Please log out and back in to use docker, then run graphistry"
+if [ -d "graphistry-cli" ]; then
+
+    cd graphistry-cli && sudo python3 setup.py install
+    echo -e "\nLoggin into a new session to enable docker access, run `graphistry`.\n"
+    echo "sudo su - $USER"
+
+    sudo su - $USER
+fi
 
