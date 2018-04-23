@@ -1,6 +1,6 @@
 import errno
 import os
-from os.path import expanduser, exists, dirname, realpath
+from os.path import expanduser, exists, dirname, realpath, join
 from configmanager import Config
 import requests
 from prompt_toolkit import prompt
@@ -86,6 +86,11 @@ class Graphistry(object):
 
         return self.config
 
+    def create_bcrypt_container(self):
+        make_bcrypt = join(cwd, 'bootstrap/make-bcrypt-contianer.sh')
+        local('chmod +x {mb} && bash {mb}'.format(mb=make_bcrypt))
+
+
     def login(self):
         toolbar_quip = revisionist_commit_history_html()
         username = prompt('username: ', bottom_toolbar=toolbar_quip, history=None)
@@ -168,7 +173,7 @@ class Graphistry(object):
                                                bottom_toolbar=toolbar_quip, history=None)
         password = prompt('Pivotapp Http Ingress Password: ',
                                                    bottom_toolbar=toolbar_quip, history=None, is_password=True)
-        
+
         self.config.http_password_hash.value = local('docker run -it bcrypt bcrypt-cli "{0}" 10'.format(password),
                                                      capture=True)
 

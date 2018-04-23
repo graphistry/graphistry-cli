@@ -14,10 +14,21 @@ def main():
             text = prompt('graphistry>> ', completer=MainNav().get_completer(), bottom_toolbar=revisionist_commit_history_html,
                       complete_while_typing=True, enable_open_in_editor=True, history=None)
 
+
             if text == 'login':
                 _g = Graphistry()
                 _g.login()
                 _g.save_config()
+
+            elif text == 'init':
+                _g = Graphistry()
+                _g.create_bcrypt_container()
+                _g.login()
+                _g.save_config()
+                _g.template_config()
+
+                _c = Cluster()
+                _c.launch()
 
             elif text == 'config':
                 _g = Graphistry()

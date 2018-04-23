@@ -79,27 +79,10 @@ sudo rpm -i /tmp/nvidia-docker*.rpm && rm /tmp/nvidia-docker*.rpm
 sudo systemctl start nvidia-docker
 
 echo "Test Nvidia-Docker Install"
-sudo su - $USER
-nvidia-docker run --rm nvidia/cuda nvidia-smi
+#sudo su - $USER exit
+#nvidia-docker run --rm nvidia/cuda nvidia-smi
 
-sudo pip3 install fabric3 jinja2 requests bcrypt
+sudo pip3 install fabric3 jinja2 requests bcrypt git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0
 
-#curl --silent --location https://rpm.nodesource.com/setup_9.x | sudo bash -
-#sudo yum -y install nodejs
-#sudo npm install bcrypt-cli -g
-
-# Make a node container just for doing bcrypt-cli
-cat >./NodeJSDockerfile <<EOL
-FROM node:9-alpine
-
-RUN npm install bcrypt-cli -g
-EOL
-
-docker build -t bcrypt -f NodeJSDockerfile .
-
-rm NodeJSDockerfile
-
-echo -e "\nTest bcrypt-cli Container\n"
-echo "docker run -it bcrypt bcrypt-cli "xxxx" 10"
-docker run -it bcrypt bcrypt-cli "xxxx" 10
+echo "Please log out and back in to use docker, then run graphistry"
 
