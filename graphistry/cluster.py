@@ -85,6 +85,10 @@ class Cluster(object):
         else:
             local('cd deploy && export SHIPYARD="1" && bash launch.sh')
 
+        click.secho("", fg="yellow")
+        click.secho("Graphistry Launched. Please Browse to:", fg="yellow")
+        click.secho("http://{0}".format(self._g.config.es_host.value), fg="yellow")
+
 
     def compile(self):
         """

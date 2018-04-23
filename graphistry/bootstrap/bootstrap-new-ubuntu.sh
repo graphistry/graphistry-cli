@@ -43,6 +43,8 @@ sudo pip3 install nvidia-docker-compose
 # Install some python deps
 sudo pip3 install fabric3 jinja2 requests git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0
 
+cd graphistry-cli && sudo python3 setup.py install
+
 echo "Please log out and back in to use docker, then run graphistry"
 
 
