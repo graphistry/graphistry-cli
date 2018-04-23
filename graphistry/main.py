@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
 from prompt_toolkit import prompt
-import json
-from widgets import revisionist_commit_history_html
+
+from graphistry.widgets import revisionist_commit_history_html
 from graphistry.menus import MainNav
 from graphistry.config import Graphistry
 from graphistry.cluster import Cluster
