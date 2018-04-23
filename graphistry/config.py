@@ -4,7 +4,7 @@ from os.path import expanduser, exists, dirname
 from configmanager import Config
 import requests
 from prompt_toolkit import prompt
-from widgets import revisionist_commit_history_html
+from graphistry.widgets import revisionist_commit_history_html
 import sys, json
 from requests.auth import HTTPBasicAuth
 from fabric.api import local
