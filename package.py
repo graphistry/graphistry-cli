@@ -52,7 +52,7 @@ class Package(Command):
                 else:
                     local_dependencies.append(dependency)
 
-        print "local packages in wheel: %s", local_dependencies
+        print("local packages in wheel: %s", local_dependencies)
         self.execute("mv requirements.txt requirements.orig")
 
         with open("requirements.txt", "w") as requirements_file:
@@ -65,7 +65,7 @@ class Package(Command):
         and displays the output in real time.
         """
 
-        print "Running shell command: %s", command
+        print("Running shell command: %s", command)
 
         if capture_output:
             return subprocess.check_output(shlex.split(command))
@@ -78,12 +78,12 @@ class Package(Command):
             if output == "" and process.poll() is not None:
                 break
             if output:
-                print output.strip()
+                print(output.strip())
 
         return_code = process.poll()
 
         if return_code != 0:
-            print "Error running command %s - exit code: %s", command, return_code
+            print("Error running command %s - exit code: %s", command, return_code)
             raise IOError("Shell Commmand Failed")
 
         return return_code
@@ -94,7 +94,7 @@ class Package(Command):
 
     def restore_requirements_txt(self):
         if os.path.exists("requirements.orig"):
-            print "Restoring original requirements.txt file"
+            print("Restoring original requirements.txt file")
             commands = [
                 "rm requirements.txt",
                 "mv requirements.orig requirements.txt"
@@ -109,11 +109,11 @@ class Package(Command):
             "pip wheel --wheel-dir={dir} -r requirements.txt".format(dir=WHEELHOUSE)
         ])
 
-        print "Packing requirements.txt into wheelhouse"
+        print("Packing requirements.txt into wheelhouse")
         self.run_commands(commands)
-        print "Generating local requirements.txt"
+        print("Generating local requirements.txt")
         self.localize_requirements()
 
-        print "Packing code and wheelhouse into dist"
+        print("Packing code and wheelhouse into dist")
         self.run_command("sdist")
         self.restore_requirements_txt()

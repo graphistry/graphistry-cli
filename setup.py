@@ -2,6 +2,7 @@ import re
 import ast
 import platform
 from setuptools import setup, find_packages
+from package import Package
 
 _version_re = re.compile(r'__version__\s+=\s+(.*)')
 
@@ -14,7 +15,7 @@ description = 'This is a toolkit for launching and managing a graphistry stack o
 install_requirements = [
     'click==6.7',
     'Pygments >= 2.0',  # Pygments has to be Capitalcased. WTF?
-    #'prompt_toolkit>=2.0',
+    'prompt_toolkit>=2.0',
     'configmanager >= 1.34.0',
     'humanize >= 0.5.1',
     'cli_helpers[styles] >= 1.0.1',
@@ -41,12 +42,18 @@ setup(
     url='http://graphistry.com',
     packages=find_packages(),
     include_package_data=True,
+    cmdclass={
+        "package": Package
+    },
     description=description,
     package_data={'graphistry': ['private_containers','container_lists/private.txt', 'container_lists/public.txt',
                                  'bootstrap/launch.sh', 'templates/httpd-config.json', 'templates/pivot-config.json',
                                  'templates/viz-app-config.json']},
     long_description=open('README.rst').read(),
     install_requires=install_requirements,
+    dependency_links=[
+        "git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0"
+    ],
     entry_points='''
         [console_scripts]
         graphistry=graphistry.main:main
