@@ -5,7 +5,7 @@ from os.path import expanduser, exists, dirname, join, realpath, isdir
 from os import getcwd
 from docker.errors import NotFound
 from fabric.api import local
-from jinja2 import Environment
+
 from shutil import copyfile
 
 
@@ -20,15 +20,6 @@ def pretty_line(line):
             indent=4
         )
     )
-
-def create_config_files(filename, text):
-    try:
-        _file = open(filename, "w")
-        _file.write(text)
-        _file.close()
-    except OSError as e:
-        if e.errno != errno.EEXIST:
-            raise
 
 class Cluster(object):
     def __init__(self):
@@ -66,13 +57,7 @@ class Cluster(object):
             for line in docker.pull(image, stream=True):
                 click.secho(pretty_line(line), fg="blue")
 
-    def write_configs(self):
-        jenv = Environment()
-        jenv.filters['jsonify'] = json.dumps
-        templates = ['pivot-config.json', 'httpd-config.json', 'viz-app-config.json']
-        for tmpl in templates:
-            _file = open(cwd+'/templates/'+tmpl, "r").read()
-            create_config_files(tmpl, jenv.from_string(_file).render(self._g.config.dump_values()))
+
 
     def launch(self):
         self._g.gcloud_auth()
@@ -106,6 +91,7 @@ class Cluster(object):
         Generate dist/graphistry.tar.gz. Run pull beforehand.
         :return:
         """
+        self.pull()
         images = self.images['public']+self.images['private']
 
         try:
@@ -116,6 +102,8 @@ class Cluster(object):
             local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
             if not exists('dist'):
                 local('mkdir dist')
+                local('mkdir -p deploy/wheelhouse')
+                local('cd deploy/wheelhouse && pip wheel -r {0}'.format(join(cwd, 'requirements.txt')))
                 click.secho('Compiling Distribution Bundle [dist/graphistry.tar.gz]. This will take a a few minutes.',
                             fg='yellow')
             tls = isdir('ssl')
@@ -124,7 +112,7 @@ class Cluster(object):
             cmd = "touch dist/graphistry.tar.gz && " \
                   "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh " \
                   "httpd-config.json load.sh pivot-config.json " \
-                  "viz-app-config.json containers.tar'"
+                  "viz-app-config.json containers.tar deploy/wheelhouse"
             local(cmd + maybe_ssl)
 
         except NotFound:
@@ -135,3 +123,13 @@ class Cluster(object):
             local("docker load -i containers.tar")
         else:
             click.secho("Container archive not found. Run complie or ask your administrator for one.", fg="red")
+
+    def stop(self):
+        """
+        Stop all running containers
+        :return:
+        """
+        try:
+            local('docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)')
+        except:
+            click.secho("ERROR: could not stop contrainers; were none running?", fg="red")

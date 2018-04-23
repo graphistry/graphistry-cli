@@ -32,7 +32,7 @@ sudo dpkg -i /tmp/nvidia-docker*.deb && rm /tmp/nvidia-docker*.deb
 . ~/.profile
 nvidia-docker run --rm nvidia/cuda nvidia-smi
 
-sudo apt install -y python-pip
+sudo apt install -y python-pip python3-pip
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 sudo python3 get-pip.py
 rm get-pip.py
@@ -45,4 +45,20 @@ sudo pip3 install nvidia-docker-compose
 #sudo apt-get install -y nodejs
 #$sudo npm install bcrypt-cli -g
 
+# Make a node container just for doing bcrypt-cli
+cat >./NodeJSDockerfile <<EOL
+FROM node:9-alpine
+
+RUN npm install bcrypt-cli -g
+EOL
+
+docker build -t bcrypt -f NodeJSDockerfile .
+
+rm NodeJSDockerfile
+
+echo -e "\nTest bcrypt-cli Container\n"
+echo "docker run -it bcrypt bcrypt-cli "xxxx" 10"
+docker run -it bcrypt bcrypt-cli "xxxx" 10
+
+# Install some python deps
 sudo pip3 install fabric3 jinja2 requests bcrypt

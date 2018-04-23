@@ -48,7 +48,7 @@ setup(
     description=description,
     package_data={'graphistry': ['private_containers','container_lists/private.txt', 'container_lists/public.txt',
                                  'bootstrap/launch.sh', 'templates/httpd-config.json', 'templates/pivot-config.json',
-                                 'templates/viz-app-config.json']},
+                                 'templates/viz-app-config.json', 'requirements.txt']},
     long_description=open('README.rst').read(),
     install_requires=install_requirements,
     dependency_links=[

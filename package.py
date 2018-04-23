@@ -1,7 +1,6 @@
 from setuptools import Command
+from fabric.api import local
 
-import shlex
-import subprocess
 import os
 
 WHEELHOUSE = "wheelhouse"
@@ -53,44 +52,15 @@ class Package(Command):
                     local_dependencies.append(dependency)
 
         print("local packages in wheel: {0}".format(local_dependencies))
-        self.execute("mv requirements.txt requirements.orig")
+        local("mv requirements.txt requirements.orig")
 
         with open("requirements.txt", "w") as requirements_file:
             # filter is used to remove empty list members (None).
             requirements_file.write("\n".join(filter(None, local_dependencies)))
 
-    def execute(self, command, capture_output=False):
-        """
-        The execute command will loop and keep on reading the stdout and check for the return code
-        and displays the output in real time.
-        """
-
-        print("Running shell command: {0}".format(command))
-
-        if capture_output:
-            return subprocess.check_output(shlex.split(command))
-
-        process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
-
-        while True:
-            output = process.stdout.readline()
-
-            if output == "" and process.poll() is not None:
-                break
-            if output:
-                print(output.strip())
-
-        return_code = process.poll()
-
-        if return_code != 0:
-            print("Error running command {0} - exit code: {1}".format(command, return_code))
-            raise IOError("Shell Commmand Failed")
-
-        return return_code
-
     def run_commands(self, commands):
         for command in commands:
-            self.execute(command)
+            local(command)
 
     def restore_requirements_txt(self):
         if os.path.exists("requirements.orig"):

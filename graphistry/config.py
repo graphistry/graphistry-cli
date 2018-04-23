@@ -9,6 +9,9 @@ import sys, json
 from requests.auth import HTTPBasicAuth
 from fabric.api import local
 import bcrypt
+from jinja2 import Environment
+
+cwd = dir_path = dirname(realpath(__file__))
 
 DEBUG = False
 SHIPYARD_HOST = 'https://shipyard.graphistry.com'
@@ -32,6 +35,14 @@ def ensure_dir_exists(path):
         if exc.errno != errno.EEXIST:
             raise
 
+def create_config_files(filename, text):
+    try:
+        _file = open(filename, "w")
+        _file.write(text)
+        _file.close()
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
 
 CONFIG_SCHEMA = {
     'user': {
@@ -155,14 +166,25 @@ class Graphistry(object):
 
         self.config.http_user.value = prompt('Pivotapp Http Ingress Username: ',
                                                bottom_toolbar=toolbar_quip, history=None)
-        self.config.http_password_hash.value = bcrypt.hashpw(prompt('Pivotapp Http Ingress Password: ',
-                                                   bottom_toolbar=toolbar_quip, history=None, is_password=True), bcrypt.gensalt(10))
+        password_hash = prompt('Pivotapp Http Ingress Password: ',
+                                                   bottom_toolbar=toolbar_quip, history=None, is_password=True)
+        self.config.http_password_hash.value = bcrypt.hashpw(password_hash, bcrypt.gensalt(10))
 
         self.config.s3_access.value = prompt('AWS Access Key Id: ', bottom_toolbar=toolbar_quip, history=None)
         self.config.s3_secret.value = prompt('AWS Access Key Secret: ', bottom_toolbar=toolbar_quip, history=None)
 
 
         self.save_config()
+        self.write_configs()
+
+    def write_configs(self):
+        jenv = Environment()
+        jenv.filters['jsonify'] = json.dumps
+        templates = ['pivot-config.json', 'httpd-config.json', 'viz-app-config.json']
+        for tmpl in templates:
+            _file = open(cwd+'/templates/'+tmpl, "r")
+            create_config_files(tmpl, jenv.from_string(_file.read()).render(self.config.dump_values()))
+            _file.close()
 
     def gcloud_auth(self):
         # Just snag whatever credentials are in the config and make sure the key is saved.
