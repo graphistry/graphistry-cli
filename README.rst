@@ -92,6 +92,5 @@ creating `Python Prompt Toolkit <http://github.com/jonathanslenders/python-promp
 which is quite literally the backbone library, that made this app possible.
 And the people who made `pgcli <https://github.com/dbcli/pgcli>`_ which I mostly wholesale copied to make this tool
 
-`Click <http://click.pocoo.org/>`_ is used for command line option parsing
-and printing error messages.
+`Click <http://click.pocoo.org/>`_ is used for command line option parsing and printing error messages.
 

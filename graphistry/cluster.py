@@ -124,11 +124,13 @@ class Cluster(object):
                 copyfile(rhel, 'bootstrap/rhel.sh')
 
             config = expanduser('~/.config/graphistry')
+            copyfile(config, 'config.bakup')
+
             cmd = "touch dist/graphistry.tar.gz && " \
                   "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh " \
                   "httpd-config.json load.sh pivot-config.json " \
-                  "viz-app-config.json containers.tar deploy/wheelhouse bootstrap "
-            local(cmd + config + maybe_ssl)
+                  "viz-app-config.json containers.tar deploy/wheelhouse bootstrap config.backup"
+            local(cmd + maybe_ssl)
 
         except NotFound:
             click.secho("Containers not found, use `pull`.", fg="red")
