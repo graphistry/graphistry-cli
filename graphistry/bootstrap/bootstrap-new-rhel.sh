@@ -79,7 +79,7 @@ sudo rpm -i /tmp/nvidia-docker*.rpm && rm /tmp/nvidia-docker*.rpm
 sudo systemctl start nvidia-docker
 
 echo "Test Nvidia-Docker Install"
-. ~/.profile
+sudo su - $USER
 nvidia-docker run --rm nvidia/cuda nvidia-smi
 
 sudo pip3 install fabric3 jinja2 requests bcrypt

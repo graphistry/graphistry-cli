@@ -22,6 +22,7 @@ sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/
 sudo dpkg -i cuda-repo-ubuntu1604_9.1.85-1_amd64.deb
 sudo apt-get update
 sudo apt-get install -y cuda
+rm cuda-repo-ubuntu1604_9.1.85-1_amd64.deb
 
 # Install Nvidia Docker
 # Install nvidia-docker and nvidia-docker-plugin
@@ -29,7 +30,7 @@ wget -P /tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nv
 sudo dpkg -i /tmp/nvidia-docker*.deb && rm /tmp/nvidia-docker*.deb
 
 # Test nvidia-smi
-. ~/.profile
+sudo su - $USER
 nvidia-docker run --rm nvidia/cuda nvidia-smi
 
 sudo apt install -y python-pip python3-pip

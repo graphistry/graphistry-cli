@@ -1,6 +1,6 @@
 import errno
 import os
-from os.path import expanduser, exists, dirname
+from os.path import expanduser, exists, dirname, realpath
 from configmanager import Config
 import requests
 from prompt_toolkit import prompt
@@ -166,9 +166,11 @@ class Graphistry(object):
 
         self.config.http_user.value = prompt('Pivotapp Http Ingress Username: ',
                                                bottom_toolbar=toolbar_quip, history=None)
-        password_hash = prompt('Pivotapp Http Ingress Password: ',
+        password = prompt('Pivotapp Http Ingress Password: ',
                                                    bottom_toolbar=toolbar_quip, history=None, is_password=True)
-        self.config.http_password_hash.value = bcrypt.hashpw(password_hash, bcrypt.gensalt(10))
+        
+        self.config.http_password_hash.value = local('docker run -it bcrypt bcrypt-cli "{0}" 10'.format(password),
+                                                     capture=True)
 
         self.config.s3_access.value = prompt('AWS Access Key Id: ', bottom_toolbar=toolbar_quip, history=None)
         self.config.s3_secret.value = prompt('AWS Access Key Secret: ', bottom_toolbar=toolbar_quip, history=None)
