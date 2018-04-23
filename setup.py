@@ -42,6 +42,8 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     description=description,
+    package_data={'graphistry': ['containers',
+                            'container_lists']},
     long_description=open('README.rst').read(),
     install_requires=install_requirements,
     entry_points='''
