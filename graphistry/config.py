@@ -167,13 +167,12 @@ class Graphistry(object):
         # Just snag whatever credentials are in the config and make sure the key is saved.
         # docker-py doesn't seem to want to accept the JSON string as a password so this works.
         key_filename = os.path.join(expanduser('~/.config/graphistry'), '.registrykey.json')
-        if exists(key_filename):
-            registry_credentials = json.dumps(dict(self.config.default_deployment.value['registry_credentials']))
-            _file = open(key_filename, "w")
-            _file.write(registry_credentials)
-            _file.close()
+        registry_credentials = json.dumps(dict(self.config.default_deployment.value['registry_credentials']))
+        _file = open(key_filename, "w")
+        _file.write(registry_credentials)
+        _file.close()
 
-            local('docker login -u _json_key -p "$(cat {0})" https://us.gcr.io | tee'.format(key_filename))
+        local('docker login -u _json_key -p "$(cat {0})" https://us.gcr.io | tee'.format(key_filename))
 
     def save_config(self):
         print("Saving Config")

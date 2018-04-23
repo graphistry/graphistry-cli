@@ -14,7 +14,7 @@ description = 'This is a toolkit for launching and managing a graphistry stack o
 install_requirements = [
     'click==6.7',
     'Pygments >= 2.0',  # Pygments has to be Capitalcased. WTF?
-    'prompt_toolkit>=1.0.10,<1.1.0',
+    #'prompt_toolkit>=2.0',
     'configmanager >= 1.34.0',
     'humanize >= 0.5.1',
     'cli_helpers[styles] >= 1.0.1',

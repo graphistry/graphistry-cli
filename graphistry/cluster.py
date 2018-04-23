@@ -1,4 +1,4 @@
-from config import Graphistry
+from graphistry.config import Graphistry
 import json, errno
 import docker
 from os.path import expanduser, exists, dirname, join, realpath, isdir
@@ -75,10 +75,19 @@ class Cluster(object):
             create_config_files(tmpl, jenv.from_string(_file).render(self._g.config.dump_values()))
 
     def launch(self):
+        self._g.gcloud_auth()
+
         launch_file_source = join(cwd, 'bootstrap/launch.sh')
-        launch_file = join(cwd, 'launch.sh')
+        launch_file = 'deploy/launch.sh'
+        if not exists('deploy'):
+            local('mkdir deploy')
+
         if not exists(launch_file):
             copyfile(launch_file_source, launch_file)
+
+        local("sed -i 's!<VIZAPP_CONTAINER_NAME>!{0}!g' {1}".format(self._g.config.vizapp_container.value, launch_file))
+        local("sed -i 's!<PIVOTAPP_CONTAINER_NAME>!{0}!g' {1}".format(self._g.config.pivotapp_container.value, launch_file))
+
 
         tls = isdir('ssl')
         ssl_dir = getcwd() + '/ssl'
@@ -90,7 +99,8 @@ class Cluster(object):
                 ))
         else:
             local('cd deploy && export SHIPYARD="1" && bash launch.sh')
-            
+
+
     def compile(self):
         """
         Generate dist/graphistry.tar.gz. Run pull beforehand.
