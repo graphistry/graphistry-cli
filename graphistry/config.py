@@ -7,7 +7,7 @@ from prompt_toolkit import prompt
 from graphistry.widgets import revisionist_commit_history_html
 import sys, json
 from requests.auth import HTTPBasicAuth
-from fabric.api import local
+from fabric.api import local, settings, hide
 import bcrypt
 from jinja2 import Environment
 
@@ -88,7 +88,7 @@ class Graphistry(object):
 
     def create_bcrypt_container(self):
         make_bcrypt = join(cwd, 'bootstrap/make-bcrypt-contianer.sh')
-        local('chmod +x {mb} && bash {mb}'.format(mb=make_bcrypt))
+        local('bash {mb}'.format(mb=make_bcrypt))
 
 
     def login(self):
@@ -173,9 +173,9 @@ class Graphistry(object):
                                                bottom_toolbar=toolbar_quip, history=None)
         password = prompt('Pivotapp Http Ingress Password: ',
                                                    bottom_toolbar=toolbar_quip, history=None, is_password=True)
-
-        self.config.http_password_hash.value = local('docker run -it bcrypt bcrypt-cli "{0}" 10'.format(password),
-                                                     capture=True)
+        with hide('output', 'running', 'warnings'), settings(warn_only=True):
+            self.config.http_password_hash.value = local('docker run -it bcrypt bcrypt-cli "{0}" 10'.format(password),
+                                                         capture=True)
 
         self.config.s3_access.value = prompt('AWS Access Key Id: ', bottom_toolbar=toolbar_quip, history=None)
         self.config.s3_secret.value = prompt('AWS Access Key Secret: ', bottom_toolbar=toolbar_quip, history=None)
