@@ -17,15 +17,16 @@ class MainNav(object):
 
         self.autocomplete = {
             'nav': nav,
-            'base': ['home', 'help', 'docker', 'login', 'pull', 'compile', 'exit']
+            'base': ['init', 'login', 'config', 'launch', 'pull', 'compile', 'load', 'exit']
         }
         self.meta_dict = {
-            'home': 'Back to main menu.',
-            'help': 'Show help text.',
-            'docker': 'do docker stuff',
+            'init': 'Configure and Launch Graphistry',
             'login': 'Login to Graphistry',
+            'config': 'Configure Graphistry',
+            'launch': 'Launch Graphistry',
             'pull': 'Pull docker contgainers',
             'compile': 'Generate dist/graphistry.tar.gz',
+            'load': 'Load Graphistry from Container Archive',
             'exit': 'Leave application. Ctrl-C or Ctrl-D works too.',
         }
 

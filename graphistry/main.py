@@ -6,6 +6,7 @@ from graphistry.widgets import revisionist_commit_history_html
 from graphistry.menus import MainNav
 from graphistry.config import Graphistry
 from graphistry.cluster import Cluster
+import sys
 
 
 def main():
@@ -50,9 +51,8 @@ def main():
                 _c = Cluster()
                 _c.compile()
 
-            elif text == 'xx':
-                _c = Cluster()
-                _c.write_configs()
+            elif text == 'exit':
+                sys.exit()
 
         except EOFError:
             break  # Control-D pressed.
