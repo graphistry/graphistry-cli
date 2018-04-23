@@ -57,6 +57,10 @@ Launch a GPU instance of Graphistry of either RHEL or Ubuntu
 
 ssh into the graphistry instance and clone this repo
 
+Clone and Launch
+----------------
+
+::
     $ git clone https://github.com/graphistry/graphistry-cli.git
     $ bash graphistry-cli/ubuntu.sh
 
