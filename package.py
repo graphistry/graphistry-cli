@@ -52,7 +52,7 @@ class Package(Command):
                 else:
                     local_dependencies.append(dependency)
 
-        print("local packages in wheel: %s", local_dependencies)
+        print("local packages in wheel: {0}".format(local_dependencies))
         self.execute("mv requirements.txt requirements.orig")
 
         with open("requirements.txt", "w") as requirements_file:
@@ -65,7 +65,7 @@ class Package(Command):
         and displays the output in real time.
         """
 
-        print("Running shell command: %s", command)
+        print("Running shell command: {0}".format(command))
 
         if capture_output:
             return subprocess.check_output(shlex.split(command))
@@ -83,7 +83,7 @@ class Package(Command):
         return_code = process.poll()
 
         if return_code != 0:
-            print("Error running command %s - exit code: %s", command, return_code)
+            print("Error running command {0} - exit code: {1}".format(command, return_code))
             raise IOError("Shell Commmand Failed")
 
         return return_code
