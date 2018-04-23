@@ -82,8 +82,9 @@ echo "Test Nvidia-Docker Install"
 . ~/.profile
 nvidia-docker run --rm nvidia/cuda nvidia-smi
 
-sudo pip3 install fabric3 jinja2 requests
+sudo pip3 install fabric3 jinja2 requests bcrypt
 
-curl --silent --location https://rpm.nodesource.com/setup_9.x | sudo bash -
-sudo yum -y install nodejs
-sudo npm install bcrypt-cli -g
+#curl --silent --location https://rpm.nodesource.com/setup_9.x | sudo bash -
+#sudo yum -y install nodejs
+#sudo npm install bcrypt-cli -g
+

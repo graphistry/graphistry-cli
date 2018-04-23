@@ -8,6 +8,7 @@ from graphistry.widgets import revisionist_commit_history_html
 import sys, json
 from requests.auth import HTTPBasicAuth
 from fabric.api import local
+import bcrypt
 
 DEBUG = False
 SHIPYARD_HOST = 'https://shipyard.graphistry.com'
@@ -154,8 +155,8 @@ class Graphistry(object):
 
         self.config.http_user.value = prompt('Pivotapp Http Ingress Username: ',
                                                bottom_toolbar=toolbar_quip, history=None)
-        self.config.http_password_hash.value = prompt('Pivotapp Http Ingress Password: ',
-                                                   bottom_toolbar=toolbar_quip, history=None, is_password=True)
+        self.config.http_password_hash.value = bcrypt.hashpw(prompt('Pivotapp Http Ingress Password: ',
+                                                   bottom_toolbar=toolbar_quip, history=None, is_password=True), bcrypt.gensalt(10))
 
         self.config.s3_access.value = prompt('AWS Access Key Id: ', bottom_toolbar=toolbar_quip, history=None)
         self.config.s3_secret.value = prompt('AWS Access Key Secret: ', bottom_toolbar=toolbar_quip, history=None)

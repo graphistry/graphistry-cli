@@ -2,7 +2,7 @@
 
 # Install Docker
 sudo apt-get update
-sudo apt-get install -y apt-transport-https     ca-certificates     curl     software-properties-common
+sudo apt-get install -y apt-transport-https     ca-certificates     curl     software-properties-common build-essential libffi-dev
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo apt-key fingerprint 0EBFCD88
 sudo add-apt-repository    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
@@ -32,14 +32,17 @@ sudo dpkg -i /tmp/nvidia-docker*.deb && rm /tmp/nvidia-docker*.deb
 . ~/.profile
 nvidia-docker run --rm nvidia/cuda nvidia-smi
 
-sudo apt install -y python-pip python3-pip
-sudo pip3 install pip --upgrade
+sudo apt install -y python-pip
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+sudo python3 get-pip.py
+rm get-pip.py
+
 sudo pip install pip --upgrade
 sudo pip3 install nvidia-docker-compose
 
 ## Install Node 9
-curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-sudo apt-get install -y nodejs
-sudo npm install bcrypt-cli -g
+#curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+#sudo apt-get install -y nodejs
+#$sudo npm install bcrypt-cli -g
 
-sudo pip3 install fabric3 jinja2 requests
+sudo pip3 install fabric3 jinja2 requests bcrypt
