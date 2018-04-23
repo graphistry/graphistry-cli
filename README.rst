@@ -61,8 +61,7 @@ Clone and Launch
 ----------------
 
 ::
-    $ git clone https://github.com/graphistry/graphistry-cli.git
-    $ bash graphistry-cli/ubuntu.sh
+    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/ubuntu.sh
 
 `graphistry-cli` is currently not a public repo, so you'll need to use your github credentials to get the repo.
 
