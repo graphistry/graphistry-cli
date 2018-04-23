@@ -64,3 +64,11 @@ target/
 # Generated Packages
 *.deb
 *.rpm
+
+# Graphistry
+containers.tar
+graphistry.tar.gz
+load.sh
+launch.sh
+*.tar
+tmp

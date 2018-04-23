@@ -31,6 +31,10 @@ def main():
                 _c = Cluster()
                 _c.launch()
 
+            elif text == 'load':
+                _c = Cluster()
+                _c.load()
+
             elif text == 'compile':
                 _c = Cluster()
                 _c.compile()

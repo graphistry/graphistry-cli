@@ -17,7 +17,7 @@ class MainNav(object):
 
         self.autocomplete = {
             'nav': nav,
-            'base': ['home', 'help', 'docker', 'login', 'exit']
+            'base': ['home', 'help', 'docker', 'login', 'pull', 'compile', 'exit']
         }
         self.meta_dict = {
             'home': 'Back to main menu.',

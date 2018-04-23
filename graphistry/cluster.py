@@ -1,9 +1,12 @@
 from config import Graphistry
 import json
 import docker
-
+import sys
 from os.path import expanduser, exists, dirname, join, realpath, isdir
 from pathlib import Path
+from docker.errors import NotFound
+from requests.exceptions import ReadTimeout
+from fabric.api import local
 
 import click
 
@@ -67,25 +70,30 @@ class Cluster(object):
         Generate dist/graphistry.tar.gz. Run pull beforehand.
         :return:
         """
-        temp_folder = '/tmp/graphistry/images'
-        path = Path(temp_folder)
-        path.mkdir(parents=True, exist_ok=True)
-
-
         images = self.images['public']+self.images['private']
-        docker = self.docker_lowlevel_api()
+        _docker = self.docker_lowlevel_api()
 
-        for tag in images:
-            print("Saving Image: {0}".format(tag))
-            image = docker.get_image(tag)
-            f = open('{0}/containers.tar'.format(temp_folder, tag.replace('/', '_')), 'ab')
-            for chunk in image:
-                f.write(chunk)
-            f.close()
+        try:
+            for tag in images:
+                print("Saving Image: {0}".format(tag))
+                image = _docker.get_image(tag)
+
+            local('docker save -o containers.tar ' + ' '.join(images))
+            local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
+
+        except NotFound:
+            click.secho("Containers not found, use `pull`.", fg="red")
+
+
+    def load(self):
+        _filename = "containers.tar"
+        if exists(_filename):
+            local("docker load -i containers.tar")
+        else:
+            click.secho("Container archive not found. Run complie or ask your administrator for one.", fg="red")
+
 
         """
-        
-
         local('docker save -o containers.tar ' + ' '.join(images))
         local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
         if not exists('dist'):
@@ -99,4 +107,4 @@ class Cluster(object):
               "httpd-config.json load.sh pivot-config.json " \
               "viz-app-config.json containers.tar'"
         local(cmd + maybe_ssl)
-"""
+        """
