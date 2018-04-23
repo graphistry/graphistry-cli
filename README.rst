@@ -69,14 +69,14 @@ RHEL/Centos7
 
 This will bootstrap your system and get the graphistry cli ready. This will take a while.
 
-After it completes follow the instructions and run `graphistry`
+After it completes follow the instructions and run ``graphistry``
 
-Inside the graphistry prompt you can hit `tab` to see your options, but all you need to do to get graphistry up and running
-is run the `init` command and answer the questions.
+Inside the graphistry prompt you can hit ``tab`` to see your options, but all you need to do to get graphistry up and running
+is run the ``init`` command and answer the questions.
 
 Building a Bundled Deploy
 -------------------------
-From the `graphistry` prompt, type `compile`. Use `load` to load the system.
+From the ``graphistry`` prompt, type ``compile``. Use ``load`` to load the system.
 
 Troubleshooting:
 ----------------
