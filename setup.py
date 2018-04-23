@@ -46,7 +46,7 @@ setup(
     install_requires=install_requirements,
     entry_points='''
         [console_scripts]
-        graphistry=graphistry.main
+        graphistry=graphistry.main:main
     ''',
     classifiers=[
         'Intended Audience :: Developers',
