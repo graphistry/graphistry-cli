@@ -113,10 +113,20 @@ class Cluster(object):
             tls = isdir('ssl')
             maybe_ssl = ' ssl' if tls else ''
 
+            rhel = join(cwd, 'bootstrap/bootstrap-new-rhel.sh')
+            ubuntu = join(cwd, 'bootstrap/bootstrap-new-ubuntu.sh')
+
+            if not exists('bootstrap'):
+                local('mkdir bootstrap')
+
+            if not exists('ubuntu.sh') or not exists('rhel.sh'):
+                copyfile(ubuntu, 'bootstrap/ubuntu.sh')
+                copyfile(rhel, 'bootstrap/rhel.sh')
+
             cmd = "touch dist/graphistry.tar.gz && " \
                   "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh " \
                   "httpd-config.json load.sh pivot-config.json " \
-                  "viz-app-config.json containers.tar deploy/wheelhouse"
+                  "viz-app-config.json containers.tar deploy/wheelhouse bootstrap"
             local(cmd + maybe_ssl)
 
         except NotFound:
