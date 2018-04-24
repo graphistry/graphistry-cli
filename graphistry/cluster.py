@@ -1,12 +1,12 @@
 from graphistry.config import Graphistry
-import json, errno
+import json
 import docker
 from os.path import expanduser, exists, dirname, join, realpath, isdir
 from os import getcwd
 from docker.errors import NotFound
 from fabric.api import local
 
-from shutil import copyfile, copytree
+from shutil import copyfile
 
 
 import click
@@ -58,7 +58,6 @@ class Cluster(object):
                 click.secho(pretty_line(line), fg="blue")
 
 
-
     def launch(self):
         self._g.gcloud_auth()
 
@@ -88,7 +87,6 @@ class Cluster(object):
         click.secho("", fg="yellow")
         click.secho("Graphistry Launched. Please Browse to:", fg="yellow")
         click.secho("http://{0}".format(self._g.config.graphistry_host.value), fg="yellow")
-
 
     def compile(self):
         """
@@ -123,15 +121,15 @@ class Cluster(object):
                 copyfile(ubuntu, 'bootstrap/ubuntu.sh')
                 copyfile(rhel, 'bootstrap/rhel.sh')
 
-            config = expanduser('~/.config/graphistry')
-            if not exists('config.bakup/graphistry'):
-                local('mkdir -p config.bakup/graphistry')
-            copytree(config, 'config.bakup/graphistry')
+            config = expanduser('~/.config/graphistry/config.json')
+
+            if exists(config):
+                copyfile(config, 'deploy/config.json')
 
             cmd = "touch dist/graphistry.tar.gz && " \
-                  "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh " \
+                  "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json" \
                   "httpd-config.json load.sh pivot-config.json " \
-                  "viz-app-config.json containers.tar deploy/wheelhouse bootstrap config.backup"
+                  "viz-app-config.json containers.tar deploy/wheelhouse bootstrap"
             local(cmd + maybe_ssl)
 
         except NotFound:
