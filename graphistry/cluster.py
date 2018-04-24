@@ -124,7 +124,9 @@ class Cluster(object):
                 copyfile(rhel, 'bootstrap/rhel.sh')
 
             config = expanduser('~/.config/graphistry')
-            copytree(config, 'config.bakup')
+            if not exists('config.bakup/graphistry'):
+                local('mkdir -p config.bakup/graphistry')
+            copytree(config, 'config.bakup/graphistry')
 
             cmd = "touch dist/graphistry.tar.gz && " \
                   "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh " \

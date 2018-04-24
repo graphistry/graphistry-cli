@@ -81,7 +81,7 @@ wget -P /tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nv
 sudo rpm -i /tmp/nvidia-docker*.rpm && rm /tmp/nvidia-docker*.rpm
 sudo systemctl start nvidia-docker
 
-sudo pip3.6 install fabric3 jinja2 requests bcrypt git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0
+sudo pip3.6 install fabric3 jinja2 requests bcrypt six==1.10.0 funcsigs git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0
 
 if [ -d "graphistry-cli" ]; then
 
