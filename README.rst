@@ -10,13 +10,14 @@ Home Page: http://graphistry.com
 Quick Start
 -----------
 
-If you already know how to install python packages, then you can simply do:
-
+Ubuntu
 ::
+    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/ubuntu.sh
 
-    $ pip install -U graphistry-cli
+RHEL/Centos7
+::
+    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/rhel.sh
 
-If you don't know how to install python packages, please check the
 `detailed instructions`_.
 
 .. _`detailed instructions`: https://github.com/graphistry/graphistry-cli#detailed-installation-instructions
