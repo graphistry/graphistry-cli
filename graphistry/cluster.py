@@ -127,7 +127,7 @@ class Cluster(object):
                 copyfile(config, 'deploy/config.json')
 
             cmd = "touch dist/graphistry.tar.gz && " \
-                  "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json" \
+                  "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json " \
                   "httpd-config.json load.sh pivot-config.json " \
                   "viz-app-config.json containers.tar deploy/wheelhouse bootstrap"
             local(cmd + maybe_ssl)
