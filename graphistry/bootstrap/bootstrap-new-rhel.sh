@@ -4,7 +4,10 @@ cat /etc/*-release
 sudo yum install -y http://mirror.centos.org/centos/7/extras/x86_64/Packages/container-selinux-2.42-1.gitad8f0f7.el7.noarch.rpm | tee
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm | tee
 
-sudo yum install -y wget sudo python34 python34-pip | tee
+sudo yum install -y wget sudo python36 | tee
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+sudo python36 get-pip.py
+rm get-pip.py
 
 # Install Docker
 # https://docs.docker.com/install/linux/docker-ce/centos
@@ -78,11 +81,11 @@ wget -P /tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nv
 sudo rpm -i /tmp/nvidia-docker*.rpm && rm /tmp/nvidia-docker*.rpm
 sudo systemctl start nvidia-docker
 
-sudo pip3 install fabric3 jinja2 requests bcrypt git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0
+sudo pip3.6 install fabric3 jinja2 requests bcrypt git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0
 
 if [ -d "graphistry-cli" ]; then
 
-    cd graphistry-cli && sudo python3 setup.py install
+    cd graphistry-cli && sudo python36 setup.py install
     echo -e "\nLoggin into a new session to enable docker access, run 'graphistry'.\n"
 
     sudo su - $USER

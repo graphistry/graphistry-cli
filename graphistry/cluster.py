@@ -6,7 +6,7 @@ from os import getcwd
 from docker.errors import NotFound
 from fabric.api import local
 
-from shutil import copyfile
+from shutil import copyfile, copytree
 
 
 import click
@@ -124,7 +124,7 @@ class Cluster(object):
                 copyfile(rhel, 'bootstrap/rhel.sh')
 
             config = expanduser('~/.config/graphistry')
-            copyfile(config, 'config.bakup')
+            copytree(config, 'config.bakup')
 
             cmd = "touch dist/graphistry.tar.gz && " \
                   "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh " \
