@@ -11,10 +11,18 @@ Quick Start
 -----------
 
 Ubuntu
+------
+Install Graphistry
 ::
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/ubuntu.sh
 
 RHEL/Centos7
+------------
+Install git
+::
+    $ sudo yum install -y git
+
+Install Graphistry
 ::
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/rhel.sh
 
@@ -59,10 +67,18 @@ Launch a GPU instance of Graphistry of either RHEL or Ubuntu
 ssh into the graphistry instance and clone this repo
 
 Ubuntu
+------
+Install Graphistry
 ::
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/ubuntu.sh
 
 RHEL/Centos7
+------------
+Install git
+::
+    $ sudo yum install -y git
+
+Install Graphistry
 ::
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/rhel.sh
 
