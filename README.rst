@@ -27,7 +27,7 @@ Usage
 
 ::
 
-    $ graphistry [config | launch | stop]
+    $ graphistry
 
 
 Features
