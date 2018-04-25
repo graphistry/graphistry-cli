@@ -98,10 +98,9 @@ class Cluster(object):
 
         try:
             # Check that images exist so we can build, if not raised NotFound kills the process
-            click.secho('[graphistry] Saving Images:', fg='yellow')
+            click.secho('[graphistry] Saving Images:\n', fg='yellow')
             for tag in images:
                 click.secho('\t- {0}'.format(tag), fg='yellow')
-                print()
 
             # Build dist directory and python wheelhouse
             click.secho('[graphistry] Building Dependency Wheelhouse for CLI', fg='yellow')
@@ -128,12 +127,13 @@ class Cluster(object):
 
             # Make easy entrypoint into bootstrap script
             click.secho('[graphistry] Make easy entrypoint into bootstrap script.', fg='yellow')
-            local('echo -e "#\!/bin/bash\ncd graphistry-cli && bash bootstrap.sh $1" > bootstrap.sh && chmod +x bootstrap.sh')
+            local('echo -e "#\!/bin/bash\ncd graphistry-cli && bash bootstrap.sh \$1" > bootstrap.sh && chmod +x bootstrap.sh')
 
             # Build the package
             click.secho("[graphistry] Compiling Distribution Bundle [dist/graphistry.tar.gz]. "
                         "This will take a a few minutes.",
                         fg='yellow')
+
             if not exists('dist'):
                 local('mkdir dist')
             cmd = "touch dist/graphistry.tar.gz && " \
