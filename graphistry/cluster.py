@@ -110,15 +110,9 @@ class Cluster(object):
                 local('mkdir -p {0}'.format(wheelhouse_dir))
             local('cd graphistry-cli/wheelhouse && pip wheel -r {0}'.format(join(cwd, 'requirements.txt')))
 
-
             # Check for TLS state | TODO: We can just check the config boolean
             tls = isdir('ssl')
             maybe_ssl = ' ssl' if tls else ''
-
-            # Find the bootstrap scripts and add them to the deployment package path
-            click.secho('[graphistry] Adding Bootstrap Scripts', fg='yellow')
-            rhel = join(cwd, 'bootstrap/bootstrap-new-rhel.sh')
-            ubuntu = join(cwd, 'bootstrap/bootstrap-new-ubuntu.sh')
 
             # Grab the current config to be used on the on-prem deploy
             click.secho('[graphistry] Copying configuration for distribution.', fg='yellow')
