@@ -32,7 +32,7 @@ Ubuntu
 ------
 Install Graphistry
 ::
-    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/ubuntu.sh
+    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
 
 RHEL/Centos7
 ------------
@@ -42,7 +42,7 @@ Install git
 
 Install Graphistry
 ::
-    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/rhel.sh
+    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
 
 `detailed instructions`_.
 
@@ -139,23 +139,31 @@ Launch a GPU instance of Graphistry of either RHEL or Ubuntu. See the HW/SW docu
 Log into your Graphistry server and install the CLI:
 
 
-**Ubuntu**
+Ubuntu
+------
 Install Graphistry
 ::
-    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/ubuntu.sh
+    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
 
-**RHEL/Centos7**
+RHEL/Centos7
+------------
 Install git
 ::
     $ sudo yum install -y git
 
 Install Graphistry
 ::
-    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/rhel.sh
+    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
 
 **Airgapped Bootstrapping**
 
-The above scripts bootstrap the installation of Python3, Docker, CUDA, and Nvidia-Docker for various Linux distributions. You can install those manually. See the above scripts for ideas on how.
+The above scripts bootstrap the installation of Python3, Docker, CUDA, and Nvidia-Docker for various Linux distributions.
+You can install those manually or use ``./bootstrap.sh <ubuntu/rhel>`` that is extracted to the root from your bundle.
+
+The individual steps are broken out into their own scripts in the ``graphistry/bootstrap`` directory.
+
+Once you've bootstrapped, all you need to do is run the ``graphistry`` cli, then use the ``load``, ``config``, and
+``launch`` commands consecutively.
 
 Installation:
 -------------
@@ -171,17 +179,17 @@ Additional Commands and Configuration
 Starting:
 ----
 
-From the Graphistry cli, run `launch`
+From the Graphistry cli, run ``launch``
 
 Stopping:
 ----
 
-From the Graphistry cli, run `stop`
+From the Graphistry cli, run ``stop``
 
 Upgrading:
 ----
 
-From the Graphistry cli, run `update`. The next time you run `init`, `launch`, `pull`, or `compile`, the latest version of Graphistry will be used.
+From the Graphistry cli, run ``update``. The next time you run ``init``, ``launch``, ``pull``, or ``compile``, the latest version of Graphistry will be used.
 
 Setup SSL:
 ----
