@@ -60,13 +60,17 @@ Press tab to see options. Run `init` for first configuration & launch.
 Features
 ========
 
-The `graphistry` management cli is written using prompt_toolkit_.
+The `graphistry` management cli is written using prompt_toolkit_. It supports commands that:
 
-* Talk about # TODO
-* What This does
+* Connect to your Graphistry Cloud administrator account
+* Assist initial installation and launch
+* Download new versions of Graphistry
+* Configure your system
+* Start and stop your system
+* Create bundles for scanning and air-gapped deployment
+* Can be used with orchestration systmes like Ansible
 
-.. _prompt_toolkit: https://github.com/jonathanslenders/python-prompt-toolkit
-.. _this issue: https://github.com/graphistry/graphistry-cli/issues
+These commands can largely be done without the tool, but are easier with them.
 
 Config
 ------
