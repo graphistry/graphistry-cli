@@ -97,20 +97,22 @@ class Cluster(object):
         images = self.images['public']+self.images['private']
 
         try:
+            # Check that images exist so we can build, if not raised NotFound kills the process
             for tag in images:
                 print("Saving Image: {0}".format(tag))
 
-            local('docker save -o containers.tar ' + ' '.join(images))
-            local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
-            if not exists('dist'):
-                local('mkdir dist')
-                local('mkdir -p deploy/wheelhouse')
-                local('cd deploy/wheelhouse && pip wheel -r {0}'.format(join(cwd, 'requirements.txt')))
-                click.secho('Compiling Distribution Bundle [dist/graphistry.tar.gz]. This will take a a few minutes.',
-                            fg='yellow')
+            # Build dist directory and python wheelhouse
+            if not exists('graphistry-cli/wheelhouse'):
+                local('mkdir graphistry-cli/wheelhouse')
+                local('mkdir -p graphistry-cli/wheelhouse')
+                local('cd graphistry-cli/wheelhouse && pip wheel -r {0}'.format(join(cwd, 'requirements.txt')))
+
+
+            # Check for TLS state | TODO: We can just check the config boolean
             tls = isdir('ssl')
             maybe_ssl = ' ssl' if tls else ''
 
+            # Find the bootstrap scripts and add them to the deployment package path
             rhel = join(cwd, 'bootstrap/bootstrap-new-rhel.sh')
             ubuntu = join(cwd, 'bootstrap/bootstrap-new-ubuntu.sh')
 
@@ -121,16 +123,26 @@ class Cluster(object):
                 copyfile(ubuntu, 'bootstrap/ubuntu.sh')
                 copyfile(rhel, 'bootstrap/rhel.sh')
 
+            # Grab the current config to be used on the on-prem deploy
             config = expanduser('~/.config/graphistry/config.json')
 
             if exists(config):
                 copyfile(config, 'deploy/config.json')
 
-            cmd = "touch dist/graphistry.tar.gz && " \
-                  "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json " \
-                  "httpd-config.json load.sh pivot-config.json " \
-                  "viz-app-config.json containers.tar deploy/wheelhouse bootstrap"
-            local(cmd + maybe_ssl)
+            # Compile the docker containers. This is done last because it takes forever.
+            local('docker save -o containers.tar ' + ' '.join(images))
+            local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
+
+            # Build the package
+            if not exists('dist'):
+                local('mkdir dist')
+                cmd = "touch dist/graphistry.tar.gz && " \
+                      "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json " \
+                      "httpd-config.json load.sh pivot-config.json graphistry-cli " \
+                      "viz-app-config.json containers.tar deploy/wheelhouse bootstrap"
+                local(cmd + maybe_ssl)
+                click.secho('Compiling Distribution Bundle [dist/graphistry.tar.gz]. This will take a a few minutes.',
+                            fg='yellow')
 
         except NotFound:
             click.secho("Containers not found, use `pull`.", fg="red")
