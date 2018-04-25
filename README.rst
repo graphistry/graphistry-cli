@@ -1,17 +1,25 @@
 A CLI for Managing a Graphistry Deployment
 ------------------------------------------
 
-|Build Status| |CodeCov| |PyPI| |Landscape| |Gitter|
+The Graphistry command-line interface supports installing, launching, and managing Graphistry. This document also walks through air-gapped deployment concerns such as environment bootstrapping and migrations.
 
-This is a toolkit for launching and managing a Graphistry stack on your servers.
+``graphistry`` supports multiple commands. It:
 
-Home Page: http://graphistry.com
+* ``init`` your initial installation (configure, pull, launch)
+* ``login``  to the Graphistry Cloud under your organization's administrator account
+* ``pull``  new versions
+* ``config``  your system
+* ``launch``  your system
+* ``stop``  your system
+* ``compile`` and ``load`` bundles for scanning and air-gapped deployment
+* Can be used with orchestration systmes like Ansible
+
+These commands can largely be done without the tool, but are easier with them.
 
 
 Contents
-===========
+--------
 * Quick Start
-* Features
 * Detailed Installation Instructions
    * Prerequisites
    * AWS
@@ -28,25 +36,18 @@ Contents
 Quick Start
 ===========
 
-Ubuntu
-------
-Install Graphistry
-::
+Bootstrap: Download the CLI and setup your Linux environment
+--------------------------
+
+**AWS**
+Search for the ``graphistry`` public AMI in your region (ex: US-East-1, Oregon). Launch as a ``g3+``or ``p*`` GPU instance  with S3AllAccess permissions, and override default parameters for: 200GB RAM, and enable http/https/ssl in the security groups. SSH as ``ubuntu@[your ami]``.
+
+**Ubuntu**
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
 
-RHEL/Centos7
-------------
-Install git
-::
+**RHEL/Centos7**
     $ sudo yum install -y git
-
-Install Graphistry
-::
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
-
-`detailed instructions`_.
-
-.. _`detailed instructions`: https://github.com/graphistry/graphistry-cli#detailed-installation-instructions
 
 Usage
 -----
@@ -55,33 +56,15 @@ Usage
 
     $ graphistry
 
-Press tab to see options. Run `init` for first configuration & launch.
-
-Features
-========
-
-The `graphistry` management cli is written using prompt_toolkit_. It supports commands that:
-
-* Connect to your Graphistry Cloud administrator account
-* Assist initial installation and launch
-* Download new versions of Graphistry
-* Configure your system
-* Start and stop your system
-* Create bundles for scanning and air-gapped deployment
-* Can be used with orchestration systmes like Ansible
-
-These commands can largely be done without the tool, but are easier with them.
-
-Config
-------
-A config file is automatically created at ``~/.config/graphistry/config`` at first launch.
-See the file itself for a description of all available options.
+* Press tab to see options
+* Run ``init`` for streamlined initial configuration & launch
+* See below for SSL setup, which we recommend for use with notebooks, embedding in web apps, and overall security.
 
 
 Detailed Installation Instructions:
 ===================================
 
-The following walks you through launching and configuring your system environment, installing and configuring Graphistry, and launching Graphistry. Additional instructions at the bottom cover air-gapped installations and binary scans.
+The following walks you through launching and configuring your system environment, installing and configuring Graphistry, and launching Graphistry. Additional instructions for air-gapped installation and binary scans are available at the bottom.
 
 Prerequisites:
 -------------
@@ -141,9 +124,10 @@ Log into your Graphistry server and install the CLI:
 
 Ubuntu
 ------
-Install Graphistry
+Install Graphistry and launch the CLI
 ::
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
+    $ graphistry
 
 RHEL/Centos7
 ------------
@@ -151,9 +135,10 @@ Install git
 ::
     $ sudo yum install -y git
 
-Install Graphistry
+Install Graphistry and launch the CLI
 ::
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
+    $ graphistry
 
 **Airgapped Bootstrapping**
 
@@ -162,19 +147,25 @@ You can install those manually or use ``./bootstrap.sh <ubuntu/rhel>`` that is e
 
 The individual steps are broken out into their own scripts in the ``graphistry/bootstrap`` directory.
 
-Once you've bootstrapped, all you need to do is run the ``graphistry`` cli, then use the ``load``, ``config``, and
-``launch`` commands consecutively.
+Once you've bootstrapped, run ``graphistry`` and then: ``load``, ``config``, ``launch``. (Instead of ``init``.)
+
 
 Installation:
 -------------
 
 1. The above commands will bootstrap your system and get the Graphistry cli ready. This will take a while.
 2. After they complete, follow the instructions and run ``graphistry``
-3. Now inside the Graphistry prompt, you can hit ``tab`` to see your options, but all you need to do to get Graphistry up and running
-is run the ``init`` command and answer the questions.
+3. Now inside the Graphistry prompt, you can hit ``tab`` to see your options, but all you need to do to get Graphistry up and running is run the ``init`` command and answer the questions. Leave any blank that you are unsure about, and be ready to say which if you find launch issues.
+
 
 Additional Commands and Configuration
 ======================
+
+Config
+------
+A config file is automatically created at ``~/.config/graphistry/config`` at first launch.
+See the file itself for a description of all available options. See individual ``*.json`` files for app configurations.
+
 
 Starting:
 ----
