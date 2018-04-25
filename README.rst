@@ -3,12 +3,13 @@ A CLI for Managing a Graphistry Deployment
 
 |Build Status| |CodeCov| |PyPI| |Landscape| |Gitter|
 
-This is a toolkit for launching and managing a graphistry stack on your servers.
+This is a toolkit for launching and managing a Graphistry stack on your servers.
 
 Home Page: http://graphistry.com
 
+
 Quick Start
------------
+===========
 
 Ubuntu
 ------
@@ -37,9 +38,10 @@ Usage
 
     $ graphistry
 
+Press tab to see options. Run `init` for first configuration & launch.
 
 Features
---------
+========
 
 The `graphistry` management cli is written using prompt_toolkit_.
 
@@ -56,24 +58,70 @@ See the file itself for a description of all available options.
 
 
 Detailed Installation Instructions:
------------------------------------
+===================================
+
+The following walks you through launching and configuring your system environment, installing and configuring Graphistry, and launching Graphistry. Additional instructions at the bottom cover air-gapped installations and binary scans.
+
+Prerequisites:
+-------------
+* Linux (see below AMI versions) with an Nvidia GPU
+* Graphistry account and internet connection for initial system download
+
+AWS:
+---
+
+*Instance*
+Use a Graphistry-provided AMI in your region (search for Graphistry in Public AMIs). Otherwise, start with one of the following Linux distributions, and configure it using the instructions below under 'Linux'.
+
+*Third-Party Base AMI*
+
+We recommend using a Graphistry-provided AMI in your region (search for Graphistry in Public AMIs). Otherwise:
+
+* Ubuntu 16.04
+  * Find AMI for region https://cloud-images.ubuntu.com/locator/
+  * Ex: Amazon AWS us-east-1 xenial 16.04 amd64 hvm-ssd 20180405 ami-6dfe5010 
+  * Follow provisioning instructions from AWS install
+  * G3 or P2: 200 GB, add a name tag, ssh/http/https; use & store an AWS keypair
+  * Login: ssh -i ...private_key.pem ubuntu@public.dns
+* Redhat 7.4 GA
+  * Find AMI for region: https://access.redhat.com/articles/3135091 
+  * Ex:  RHEL 7.4 GA
+  * ami-c998b6b2	us-east-1	On-Demand	EBS backed image	8/1/2017
+  * Follow above AWS Ubuntu instructions, except use ssh username *"ec2-user"*
+* CentOS 7
+  * Find AMI for region: https://wiki.centos.org/Cloud/AWS
+  * Ex: CentOS 1803_01 
+  * CentOS Linux 7 1801_01 2018-Jan-14 us-east-1 ami-4bf3d731 x86_64 HVM EBS
+  * Follow above AWS Ubuntu instructions, except use ssh username *"centos"*
+
+*Instance Settings*
+
+* S3 credentials
+  * Services → Security & Identity → IAM → users → security credentials → create new access key
+    * Permissions tab: AmazonS3FullAccess
+  * Save access ID, key for later use
+* Instance: g3+ or p*
+* 200GB+ RAM
+* Security groups: ssh, http, https
+
+*Setup*
+
+If you are using a Graphistry-provided AMI, run ``graphistry``. Else, first run through the below Linux instructions.
 
 
 Linux:
-======
+-----
 
 Launch a GPU instance of Graphistry of either RHEL or Ubuntu
 
-ssh into the graphistry instance and clone this repo
+ssh into the Graphistry instance and clone this repo
 
-Ubuntu
-------
+*Ubuntu*
 Install Graphistry
 ::
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/ubuntu.sh
 
-RHEL/Centos7
-------------
+*RHEL/Centos7*
 Install git
 ::
     $ sudo yum install -y git
@@ -82,18 +130,28 @@ Install Graphistry
 ::
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/rhel.sh
 
-`graphistry-cli` is currently not a public repo, so you'll need to use your github credentials to get the repo.
 
-This will bootstrap your system and get the graphistry cli ready. This will take a while.
+Installation:
+-------------
 
-After it completes follow the instructions and run ``graphistry``
-
-Inside the graphistry prompt you can hit ``tab`` to see your options, but all you need to do to get graphistry up and running
+1. The above commands will bootstrap your system and get the Graphistry cli ready. This will take a while.
+2. After they complete, follow the instructions and run ``graphistry``
+3. Now inside the Graphistry prompt, you can hit ``tab`` to see your options, but all you need to do to get Graphistry up and running
 is run the ``init`` command and answer the questions.
 
-Building a Bundled Deploy
--------------------------
-From the ``graphistry`` prompt, type ``compile``. Use ``load`` to load the system.
+SSL:
+----
+
+If you have SSL certificates, we recommend installing them: this improves security and enables Graphistry to embed into tools that also use HTTPs.
+
+1. Create folder `ssl/` as a sibling to `deploy`
+2. Place files ``ssl_certificate.pem`` and ``ssl_certificate_key.pem`` into folder ``ssl/`` .
+3. When running `graphistry` -> `config` (or `graphistry` -> `init`), say "yes" to using SSL
+
+Bundle a Deploy for Scanning and Air-Gapped Deployment:
+--------------------------------------------------------
+1. From the ``graphistry`` prompt, type ``compile`` to generate a *.tar.gz
+2. Run ``load`` to load bundled containers from another system. We assume Docker, Nvidia-Docker, and Graphistry cli are present in the new system.
 
 Troubleshooting:
 ----------------
