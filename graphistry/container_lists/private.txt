@@ -1,2 +1,3 @@
 us.gcr.io/psychic-expanse-187412/graphistry/release/nginx-central-vizservers:925
 us.gcr.io/psychic-expanse-187412/graphistry/release/nginx-central-vizservers:925.httponly
+bcrypt:latest
