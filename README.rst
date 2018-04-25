@@ -83,6 +83,7 @@ Prerequisites:
 -------------
 * Linux (see below AMI versions) with an Nvidia GPU
 * Graphistry account and internet connection for initial system download
+* For air-gapped, see the Linux bootstrap dependencies section
 
 AWS:
 -------------
@@ -148,6 +149,9 @@ Install Graphistry
 ::
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/rhel.sh
 
+**Airgapped Bootstrapping**
+
+The above scripts bootstrap the installation of Python3, Docker, CUDA, and Nvidia-Docker for various Linux distributions. You can install those manually. See the above scripts for ideas on how.
 
 Installation:
 -------------
@@ -186,8 +190,9 @@ If you have SSL certificates, we recommend installing them: this improves securi
 
 Bundle a Deploy for Scanning and Air-Gapped Deployment:
 --------------------------------------------------------
-1. From the ``graphistry`` prompt, type ``compile`` to generate a *.tar.gz
-2. Run ``load`` to load bundled containers from another system. We assume Docker, Nvidia-Docker, and Graphistry cli are present in the new system.
+1. See the Linux bootstrapping section for setting up environment dependencies
+2. Online system: From the ``graphistry`` cli, type ``compile`` to generate a *.tar.gz, and transfer (alongside the cli) to your offline system.
+3. Offline system: Run ``load`` to load bundled containers from another system. We assume Docker, Nvidia-Docker, and Graphistry cli are present in the new system.
 
 Troubleshooting:
 ======================
