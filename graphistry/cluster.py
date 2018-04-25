@@ -126,6 +126,9 @@ class Cluster(object):
             local('docker save -o containers.tar ' + ' '.join(images))
             local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
 
+            # Make easy entrypoint into bootstrap script
+            local('echo -e "#\!/bin/bash\ncd graphistry-cli && bash bootstrap.sh $1" > bootstrap.sh && chmod +x bootstrap.sh')
+
             # Build the package
             click.secho("[graphistry] Compiling Distribution Bundle [dist/graphistry.tar.gz]. "
                         "This will take a a few minutes.",
