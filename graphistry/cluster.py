@@ -127,6 +127,7 @@ class Cluster(object):
             local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
 
             # Make easy entrypoint into bootstrap script
+            click.secho('[graphistry] Make easy entrypoint into bootstrap script.', fg='yellow')
             local('echo -e "#\!/bin/bash\ncd graphistry-cli && bash bootstrap.sh $1" > bootstrap.sh && chmod +x bootstrap.sh')
 
             # Build the package
