@@ -102,10 +102,11 @@ class Cluster(object):
                 print("Saving Image: {0}".format(tag))
 
             # Build dist directory and python wheelhouse
+            click.secho('Building Dependency Wheelhouse for CLI', fg='yellow')
             if not exists('graphistry-cli/wheelhouse'):
                 local('mkdir graphistry-cli/wheelhouse')
-                local('mkdir -p graphistry-cli/wheelhouse')
-                local('cd graphistry-cli/wheelhouse && pip wheel -r {0}'.format(join(cwd, 'requirements.txt')))
+            local('mkdir -p graphistry-cli/wheelhouse')
+            local('cd graphistry-cli/wheelhouse && pip wheel -r {0}'.format(join(cwd, 'requirements.txt')))
 
 
             # Check for TLS state | TODO: We can just check the config boolean
@@ -113,6 +114,7 @@ class Cluster(object):
             maybe_ssl = ' ssl' if tls else ''
 
             # Find the bootstrap scripts and add them to the deployment package path
+            click.secho('Adding Bootstrap Scripts', fg='yellow')
             rhel = join(cwd, 'bootstrap/bootstrap-new-rhel.sh')
             ubuntu = join(cwd, 'bootstrap/bootstrap-new-ubuntu.sh')
 
@@ -124,16 +126,20 @@ class Cluster(object):
                 copyfile(rhel, 'bootstrap/rhel.sh')
 
             # Grab the current config to be used on the on-prem deploy
+            click.secho('Copying configuration for distribution.', fg='yellow')
             config = expanduser('~/.config/graphistry/config.json')
 
             if exists(config):
                 copyfile(config, 'deploy/config.json')
 
             # Compile the docker containers. This is done last because it takes forever.
+            click.secho('Saving containers from docker.', fg='yellow')
             local('docker save -o containers.tar ' + ' '.join(images))
             local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
 
             # Build the package
+            click.secho('Compiling Distribution Bundle [dist/graphistry.tar.gz]. This will take a a few minutes.',
+                        fg='yellow')
             if not exists('dist'):
                 local('mkdir dist')
                 cmd = "touch dist/graphistry.tar.gz && " \
@@ -141,8 +147,7 @@ class Cluster(object):
                       "httpd-config.json load.sh pivot-config.json graphistry-cli " \
                       "viz-app-config.json containers.tar deploy/wheelhouse bootstrap"
                 local(cmd + maybe_ssl)
-                click.secho('Compiling Distribution Bundle [dist/graphistry.tar.gz]. This will take a a few minutes.',
-                            fg='yellow')
+
 
         except NotFound:
             click.secho("Containers not found, use `pull`.", fg="red")
