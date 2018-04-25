@@ -98,7 +98,7 @@ class Cluster(object):
 
         try:
             # Check that images exist so we can build, if not raised NotFound kills the process
-            click.secho('[graphistry] Saving Images:\n', fg='yellow')
+            click.secho('[graphistry] Saving Images:', fg='yellow')
             for tag in images:
                 click.secho('\t- {0}'.format(tag), fg='yellow')
 

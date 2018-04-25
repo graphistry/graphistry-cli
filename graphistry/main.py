@@ -51,6 +51,11 @@ def main():
                 _c = Cluster()
                 _c.compile()
 
+            elif text == 'update':
+                _g = Graphistry()
+                _g.login()
+                _g.save_config()
+
             elif text == 'exit':
                 sys.exit()
 
