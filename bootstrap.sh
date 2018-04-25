@@ -1,10 +1,11 @@
 #!/bin/bash
 OS=$1
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-chmod +x graphistry/bootstrap/$OS/*
+sudo chmod +x ${DIR}/graphistry/bootstrap/$OS/*
 
 if [[ $OS == 'rhel' ]] || [[ $OS == 'ubuntu' ]]; then
-for SCRIPT in graphistry/bootstrap/$OS/*
+for SCRIPT in ${DIR}/graphistry/bootstrap/$OS/*
 	do
 		if [ -f $SCRIPT -a -x $SCRIPT ]
 		then
