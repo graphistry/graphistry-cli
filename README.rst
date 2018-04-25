@@ -13,15 +13,15 @@ Contents
 * Quick Start
 * Features
 * Detailed Installation Instructions
-  * Prerequisites
-  * AWS
-  * Linux
-  * Installation
+   * Prerequisites
+   * AWS
+   * Linux
+   * Installation
 * Additional Commands and Configuration
-  * Starting and stopping
-  * Updating
-  * SSL
-  * Bundling for scanning and air-gapped deployment
+   * Starting and stopping
+   * Updating
+   * SSL
+   * Bundling for scanning and air-gapped deployment
 * Troubleshooting
 * Thanks
 
