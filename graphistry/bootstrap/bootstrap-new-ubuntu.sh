@@ -29,15 +29,12 @@ rm cuda-repo-ubuntu1604_9.1.85-1_amd64*
 wget -P /tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nvidia-docker_1.0.1-1_amd64.deb
 sudo dpkg -i /tmp/nvidia-docker*.deb && rm /tmp/nvidia-docker*.deb
 
-# Test nvidia-smi
-#nvidia-docker run --rm nvidia/cuda nvidia-smi
-
 sudo apt install -y python-pip python3-pip
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 sudo python3 get-pip.py
 rm get-pip.py
 
-if [ ! -f deploy/config.json ]; then
+if [ -f deploy/config.json ]; then
     mkdir -p .config/graphistry
     cp deploy/config.json .config/graphistry/
     sudo python3 -m wheel install graphistry-cli/wheelhouse/* --force

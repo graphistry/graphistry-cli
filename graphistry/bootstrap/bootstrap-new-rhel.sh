@@ -82,7 +82,7 @@ sudo rpm -i /tmp/nvidia-docker*.rpm && rm /tmp/nvidia-docker*.rpm
 sudo systemctl start nvidia-docker
 
 
-if [ ! -f deploy/config.json ]; then
+if [ -f deploy/config.json ]; then
     mkdir -p .config/graphistry
     cp deploy/config.json .config/graphistry/
     sudo python3 -m wheel install graphistry-cli/wheelhouse/* --force
