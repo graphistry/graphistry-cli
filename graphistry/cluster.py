@@ -105,9 +105,9 @@ class Cluster(object):
 
             # Build dist directory and python wheelhouse
             click.secho('[graphistry] Building Dependency Wheelhouse for CLI', fg='yellow')
-            if not exists('graphistry-cli/wheelhouse'):
-                local('mkdir graphistry-cli/wheelhouse')
-            local('mkdir -p graphistry-cli/wheelhouse')
+            wheelhouse_dir = expanduser('graphistry-cli/wheelhouse')
+            if not exists(wheelhouse_dir):
+                local('mkdir -p {0}'.format(wheelhouse_dir))
             local('cd graphistry-cli/wheelhouse && pip wheel -r {0}'.format(join(cwd, 'requirements.txt')))
 
 
