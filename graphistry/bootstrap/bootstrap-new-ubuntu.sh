@@ -37,11 +37,13 @@ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 sudo python3 get-pip.py
 rm get-pip.py
 
-sudo pip install pip --upgrade
-sudo pip3 install nvidia-docker-compose
-
-# Install some python deps
-sudo pip3 install fabric3 jinja2 requests git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0
+if [ ! -f deploy/config.json ]; then
+    mkdir -p .config/graphistry
+    cp deploy/config.json .config/graphistry/
+    sudo python3 -m wheel install graphistry-cli/wheelhouse/* --force
+else
+    sudo pip3 install -r graphistry-cli/graphistry/requirements.txt
+fi
 
 if [ -d "graphistry-cli" ]; then
 

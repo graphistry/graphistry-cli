@@ -8,3 +8,5 @@ jinja2>=2.10
 requests>=2.18.4
 fabric3>=1.12.0
 docker>=3.2.1
+six==1.10.0
+funcsigs

@@ -98,11 +98,13 @@ class Cluster(object):
 
         try:
             # Check that images exist so we can build, if not raised NotFound kills the process
+            click.secho('[graphistry] Saving Images:', fg='yellow')
             for tag in images:
-                print("Saving Image: {0}".format(tag))
+                click.secho('\t- {0}'.format(tag), fg='yellow')
+                print()
 
             # Build dist directory and python wheelhouse
-            click.secho('Building Dependency Wheelhouse for CLI', fg='yellow')
+            click.secho('[graphistry] Building Dependency Wheelhouse for CLI', fg='yellow')
             if not exists('graphistry-cli/wheelhouse'):
                 local('mkdir graphistry-cli/wheelhouse')
             local('mkdir -p graphistry-cli/wheelhouse')
@@ -114,40 +116,33 @@ class Cluster(object):
             maybe_ssl = ' ssl' if tls else ''
 
             # Find the bootstrap scripts and add them to the deployment package path
-            click.secho('Adding Bootstrap Scripts', fg='yellow')
+            click.secho('[graphistry] Adding Bootstrap Scripts', fg='yellow')
             rhel = join(cwd, 'bootstrap/bootstrap-new-rhel.sh')
             ubuntu = join(cwd, 'bootstrap/bootstrap-new-ubuntu.sh')
 
-            if not exists('bootstrap'):
-                local('mkdir bootstrap')
-
-            if not exists('ubuntu.sh') or not exists('rhel.sh'):
-                copyfile(ubuntu, 'bootstrap/ubuntu.sh')
-                copyfile(rhel, 'bootstrap/rhel.sh')
-
             # Grab the current config to be used on the on-prem deploy
-            click.secho('Copying configuration for distribution.', fg='yellow')
+            click.secho('[graphistry] Copying configuration for distribution.', fg='yellow')
             config = expanduser('~/.config/graphistry/config.json')
 
             if exists(config):
                 copyfile(config, 'deploy/config.json')
 
             # Compile the docker containers. This is done last because it takes forever.
-            click.secho('Saving containers from docker.', fg='yellow')
+            click.secho('[graphistry] Saving containers from docker.', fg='yellow')
             local('docker save -o containers.tar ' + ' '.join(images))
             local('echo -e "#\!/bin/bash\ndocker load -i containers.tar" > load.sh && chmod +x load.sh')
 
             # Build the package
-            click.secho('Compiling Distribution Bundle [dist/graphistry.tar.gz]. This will take a a few minutes.',
+            click.secho("[graphistry] Compiling Distribution Bundle [dist/graphistry.tar.gz]. "
+                        "This will take a a few minutes.",
                         fg='yellow')
             if not exists('dist'):
                 local('mkdir dist')
-                cmd = "touch dist/graphistry.tar.gz && " \
-                      "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json " \
-                      "httpd-config.json load.sh pivot-config.json graphistry-cli " \
-                      "viz-app-config.json containers.tar deploy/wheelhouse bootstrap"
-                local(cmd + maybe_ssl)
-
+            cmd = "touch dist/graphistry.tar.gz && " \
+                  "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json " \
+                  "httpd-config.json load.sh pivot-config.json graphistry-cli " \
+                  "viz-app-config.json containers.tar deploy/wheelhouse"
+            local(cmd + maybe_ssl)
 
         except NotFound:
             click.secho("Containers not found, use `pull`.", fg="red")
