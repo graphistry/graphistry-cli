@@ -94,7 +94,7 @@ class Cluster(object):
         :return:
         """
         self.pull()
-        images = self.images['public']+self.images['private']+'bcrypt:latest'
+        images = self.images['public']+self.images['private']+['bcrypt:latest']
 
         try:
             # Check that images exist so we can build, if not raised NotFound kills the process
