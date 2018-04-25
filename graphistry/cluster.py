@@ -141,7 +141,7 @@ class Cluster(object):
             cmd = "touch dist/graphistry.tar.gz && " \
                   "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json " \
                   "httpd-config.json load.sh pivot-config.json graphistry-cli " \
-                  "viz-app-config.json containers.tar deploy/wheelhouse"
+                  "viz-app-config.json containers.tar"
             local(cmd + maybe_ssl)
 
         except NotFound:
