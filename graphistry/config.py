@@ -111,8 +111,8 @@ class Graphistry(object):
             'default_deployment': conf['default_deployment'],
             'investigations': [],
             'registry_credentials': conf['default_deployment']['registry_credentials'],
-            'vizapp_container': conf['vizapp_container'],
-            'pivotapp_container': conf['pivotapp_container'],
+            'vizapp_container': conf['default_deployment']['vizapp_container'],
+            'pivotapp_container': conf['default_deployment']['pivotapp_container'],
             'is_airgapped': False,
             'use_ssl': False,
             'graphistry_host': '',
@@ -227,27 +227,3 @@ class Graphistry(object):
             self.config.json.dump(self.config_file, with_defaults=True)
 
 
-            """
-            
-            HOST1=ec2-user@ec2-54-202-44-174.us-west-2.compute.amazonaws.com
-            HOST2=ec2-user@ec2-34-217-121-70.us-west-2.compute.amazonaws.com
-            SRC=/home/ec2-user/dist/graphistry.tar.gz
-            DST=/home/ec2-user/graphistry.tar.gz
-            
-SOURCE_USER=ec2-user
-SOURCE_HOST=ec2-user@ec2-54-202-44-174.us-west-2.compute.amazonaws.com
-SOURCE_PATH=/home/ec2-user/dist/graphistry.tar.gz
-
-TARGET_USER=ec2-user
-TARGET_HOST=ec2-user@ec2-34-217-121-70.us-west-2.compute.amazonaws.com
-TARGET_PATH=/home/ec2-user/graphistry.tar.gz
-
-ssh -l $TARGET_USER -A -R localhost:22000:$TARGET_HOST:22 \
-$SOURCE_USER@$SOURCE_HOST "rsync -e 'ssh -p 22000' -vuar $SOURCE_PATH \
-$TARGET_USER@localhost:$TARGET_PATH"
-            
-            ssh -R localhost:50000:$HOST1:22 $HOST2 'rsync -e "ssh $HOST2 -p 50000" -vuar $SRC localhost:$DST'
-
-            ssh -R localhost:50000:ec2-user@ec2-34-217-121-70.us-west-2.compute.amazonaws.com:22 ec2-user@ec2-54-202-44-174.us-west-2.compute.amazonaws.com 'rsync -e "ssh -p 50000" -vuar /home/ec2-user/dist/graphistry.tar.gz localhost:/home/ec2-user/graphistry.tar.gz'
-            
-            """
