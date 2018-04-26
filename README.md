@@ -1,13 +1,9 @@
 A CLI for Managing a Graphistry Deployment
 ------------------------------------------
 
-<<<<<<< HEAD:README.md
-This is a toolkit for launching and managing a Graphistry stack on your servers.
-=======
 The Graphistry command-line interface supports installing, launching, and managing Graphistry. This document also walks through air-gapped deployment concerns such as environment bootstrapping and migrations.
 
 ``graphistry`` supports multiple commands. It:
->>>>>>> 2663acf43fbc88ee2b4d6f96caa94e0e86bf2323:README.rst
 
 * ``init`` your initial installation (configure, pull, launch)
 * ``login``  to the Graphistry Cloud under your organization's administrator account
@@ -16,7 +12,7 @@ The Graphistry command-line interface supports installing, launching, and managi
 * ``launch``  your system
 * ``stop``  your system
 * ``compile`` and ``load`` bundles for scanning and air-gapped deployment
-* Can be used with orchestration systmes like Ansible
+* Can be used with orchestration systems like Ansible
 
 These commands can largely be done without the tool, but are easier with them.
 
@@ -40,7 +36,6 @@ Contents
 Quick Start
 ===========
 
-<<<<<<< HEAD:README.md
 Ubuntu
 ------
 ***Install Graphistry***
@@ -53,7 +48,6 @@ Bootstrap: Download the CLI and setup your Linux environment
 Search for the ``graphistry`` public AMI in your region (ex: US-East-1, Oregon). Launch as a ``g3+``or ``p*`` GPU instance  with S3AllAccess permissions, and override default parameters for: 200GB RAM, and enable http/https/ssl in the security groups. SSH as ``ubuntu@[your ami]``.
 
 **Ubuntu**
->>>>>>> 2663acf43fbc88ee2b4d6f96caa94e0e86bf2323:README.rst
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
 
 **RHEL/Centos7**
@@ -62,9 +56,6 @@ Search for the ``graphistry`` public AMI in your region (ex: US-East-1, Oregon).
 
 Usage
 -----
-
-::
-
     $ graphistry
 
 * Press tab to see options
