@@ -174,8 +174,8 @@ class Graphistry(object):
                                                    bottom_toolbar=toolbar_quip, history=None, is_password=True)
 
         # Ip Whitelist
-        self.config.ip_internal_accept_list.value = prompt('Your Internal IP Accept Whitelist (beyond typical RFC 1918), ex: 
-                                                           ["127.0.0.1", "10.*"]',
+        self.config.ip_internal_accept_list.value = prompt('Your Internal IP Accept Whitelist (beyond typical RFC 1918)'
+                                                           ', ex:["127.0.0.1", "10.*"]',
                                                            bottom_toolbar=toolbar_quip, history=None)
 
         # Http Ingress
