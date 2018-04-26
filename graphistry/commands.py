@@ -15,8 +15,6 @@ __CommandsMeta__ = {
     'exit': 'Leave application. Ctrl-C or Ctrl-D works too.',
 }
 
-
-@click.command()
 def init():
     _g = Graphistry()
     _g.create_bcrypt_container()
@@ -27,48 +25,48 @@ def init():
     _c = Cluster()
     _c.launch()
 
-@click.command()
+
 def login():
     _g = Graphistry()
     _g.login()
     _g.save_config()
 
-@click.command()
+
 def config():
     _g = Graphistry()
     _g.template_config()
 
-@click.command()
+
 def pull():
     _c = Cluster()
     _c.pull()
 
-@click.command()
+
 def launch():
     _c = Cluster()
     _c.launch()
 
-@click.command()
+
 def load():
     _c = Cluster()
     _c.load()
 
-@click.command()
+
 def compile():
     _c = Cluster()
     _c.compile()
 
-@click.command()
+
 def update():
     _g = Graphistry()
     _g.login()
     _g.save_config()
 
-@click.command()
+
 def stop():
     _c = Cluster()
     _c.stop()
 
-@click.command()
+
 def exit():
     sys.exit()

@@ -10,7 +10,7 @@ import click
 
 
 @click.command()
-@click.option('--headless', '-h', multiple=True)
+@click.option('--headless', '-h')
 def main(headless=''):
     if headless:
         click.secho(__CommandsMeta__[headless], fg='yellow')
