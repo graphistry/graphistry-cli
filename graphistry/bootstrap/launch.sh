@@ -152,8 +152,8 @@ docker rm -f -v $PIVOTAPP_BOX_NAME || true
 
 mkdir -p pivot-app
 echo "${PIVOT_APP_CONFIG:-{}}" > ./pivot-config.json
-[[ -d ../pivot-config.json ]] && rm -rf ../pivot-config.json
-stat ../pivot-config.json || (echo '{}' > ../pivot-config.json)
+[[ -d ${PWD}/../pivot-config.json ]] && rm -rf ${PWD}/../pivot-config.json
+stat ${PWD}/../pivot-config.json || (echo '{}' > ${PWD}/../pivot-config.json)
 PIVOT_LOG_LEVEL=${PIVOT_LOG_LEVEL:-debug}
 docker run -d \
     --name $PIVOTAPP_BOX_NAME \
