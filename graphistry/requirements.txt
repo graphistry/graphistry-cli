@@ -6,7 +6,8 @@ humanize>=0.5.1
 cli_helpers[styles]>=1.0.1
 jinja2>=2.10
 requests>=2.18.4
-fabric3>=1.12.0
+fabric3==1.12.post1
 docker>=3.2.1
 six==1.10.0
 funcsigs
+cffi==1.11.4

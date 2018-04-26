@@ -31,7 +31,7 @@ wget -O graphistry.tar.gz  "${PRESIGN_URL}" && tar -xvf graphistry.tar.gz && ./b
 **get_s3_object.sh**
 ```bash
 #!/bin/sh
-file=graphistry.tar.gz
+file=path/to/file
 bucket=your-bucket
 resource="/${bucket}/${file}"
 contentType="application/x-compressed-tar"
