@@ -114,12 +114,14 @@ class Cluster(object):
             tls = isdir('ssl')
             maybe_ssl = ' ssl' if tls else ''
 
-            # Grab the current config to be used on the on-prem deploy
-            click.secho('[graphistry] Copying configuration for distribution.', fg='yellow')
-            config = expanduser('~/.config/graphistry/config.json')
+            # Grab the current config to be used on the on-prem deploy if requested
+            if self._g.config.compile_with_config.value:
+                click.secho('[graphistry] Copying configuration for distribution.', fg='yellow')
+                config = expanduser('~/.config/graphistry/config.json')
 
-            if exists(config):
-                copyfile(config, 'deploy/config.json')
+                if exists(config):
+                    copyfile(config, 'deploy/config.json')
+            maybe_config = ' ./deploy/config.json' if tls else ''
 
             # Compile the docker containers. This is done last because it takes forever.
             click.secho('[graphistry] Saving containers from docker.', fg='yellow')
@@ -139,10 +141,10 @@ class Cluster(object):
                 local('mkdir dist')
             cmd = "touch dist/graphistry.tar.gz && " \
                   "tar --exclude='./graphistry-cli/.git' " \
-                  "-czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json " \
+                  "-czf dist/graphistry.tar.gz ./deploy/launch.sh " \
                   "httpd-config.json load.sh pivot-config.json graphistry-cli bootstrap.sh " \
                   "viz-app-config.json containers.tar"
-            local(cmd + maybe_ssl)
+            local(cmd + maybe_config + maybe_ssl)
 
         except NotFound:
             click.secho("Containers not found, use `pull`.", fg="red")

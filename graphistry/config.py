@@ -56,6 +56,7 @@ CONFIG_SCHEMA = {
     'vizapp_container': 'us.gcr.io/psychic-expanse-187412/graphistry/release/viz-app:925',
     'pivotapp_container': 'us.gcr.io/psychic-expanse-187412/graphistry/release/pivot-app:925',
     'is_airgapped': False,
+    'compile_with_config': True,
     'use_ssl': False,
     'graphistry_host': '',
     'es_host': '',
@@ -113,6 +114,7 @@ class Graphistry(object):
             'vizapp_container': conf['default_deployment']['vizapp_container'],
             'pivotapp_container': conf['default_deployment']['pivotapp_container'],
             'is_airgapped': False,
+            'compile_with_config': True,
             'use_ssl': False,
             'graphistry_host': '',
             'es_host': '',
@@ -149,7 +151,12 @@ class Graphistry(object):
         self.load_config()
 
         # Graphistry Basic
-        self.config.is_airgapped.value = True if exists(expanduser('~/.graphistry_airgapped')) else False
+        self.config.is_airgapped.value = prompt('Is this for an airgapped/on-prem deploy [y/n default n]: ',
+                                           bottom_toolbar=toolbar_quip, history=None)
+        if self.config.is_airgapped.value:
+            self.config.compile_with_config.value = prompt('Compile with configuration files? [y/n default y]: ',
+                                               bottom_toolbar=toolbar_quip, history=None)
+
         self.config.use_ssl.value = prompt('Use SSL? [y/n default n]: ',
                                            bottom_toolbar=toolbar_quip, history=None)
 
