@@ -13,10 +13,12 @@ import click
 @click.option('--headless', '-h')
 def main(headless=''):
     if headless:
-        click.secho(__CommandsMeta__[headless], fg='yellow')
+        click.secho("[graphistry] Command does not exist.".format(__CommandsMeta__[headless]), fg='yellow')
         if headless in __Commands__:
             cmd = MainNav.get_command(headless)
             cmd()
+        else:
+            click.secho("[graphistry] Command does not exist.", fg='red')
     else:
         while True:
             toolbar_message = revisionist_commit_history_html()
@@ -31,6 +33,8 @@ def main(headless=''):
                 if select in __Commands__:
                     cmd = MainNav.get_command(select)
                     cmd()
+                else:
+                    click.secho("[graphistry] Command does not exist.", fg='red')
             except EOFError:
                 break  # Control-D pressed.
             except KeyboardInterrupt:
