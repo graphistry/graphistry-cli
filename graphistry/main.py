@@ -18,7 +18,7 @@ def main():
                           history=None)
 
             if text in MainNav.nav:
-                MainNav.run_command(text)
+                MainNav.run_command(text)()
 
         except EOFError:
             break  # Control-D pressed.
