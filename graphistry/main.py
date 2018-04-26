@@ -20,7 +20,6 @@ def main():
 
             if text in __Commands__:
                 cmd = MainNav.run_command(text)
-                print(cmd)
                 cmd()
 
         except EOFError:

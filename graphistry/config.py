@@ -8,7 +8,6 @@ from graphistry.widgets import revisionist_commit_history_html
 import sys, json
 from requests.auth import HTTPBasicAuth
 from fabric.api import local, settings, hide
-import bcrypt
 from jinja2 import Environment
 
 cwd = dir_path = dirname(realpath(__file__))
