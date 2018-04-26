@@ -10,12 +10,12 @@ import click
 
 
 @click.command()
-@click.option('--headless', '-h')
-def main(headless=''):
-    if headless:
-        click.secho("[graphistry] Command does not exist.".format(__CommandsMeta__[headless]), fg='yellow')
-        if headless in __Commands__:
-            cmd = MainNav.get_command(headless)
+@click.option('--command', '-c')
+def main(command=''):
+    if command:
+        click.secho("[graphistry] Command does not exist.".format(__CommandsMeta__[command]), fg='yellow')
+        if command in __Commands__:
+            cmd = MainNav.get_command(command)
             cmd()
         else:
             click.secho("[graphistry] Command does not exist.", fg='red')
