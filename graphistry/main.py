@@ -8,12 +8,8 @@ from graphistry.commands import __Commands__
 
 import click
 
-# Loop through the availible commands and assign them as CLI args
-for _c in __Commands__:
-    click.option('--{0}'.format(_c), 'select', flag_value=_c)
 
-
-@click.command()
+@click.group()
 def main(select=None):
     while True:
         toolbar_message = revisionist_commit_history_html()
@@ -27,7 +23,7 @@ def main(select=None):
                                 history=None)
 
             if select in __Commands__:
-                cmd = MainNav.run_command(select)
+                cmd = MainNav.get_command(select)
                 cmd()
 
         except EOFError:
@@ -35,6 +31,10 @@ def main(select=None):
         except KeyboardInterrupt:
             break
 
+
+# Loop through the availible commands and assign them as CLI args
+for _c in __Commands__:
+    main.add_command(MainNav.get_command(_c))
 
 if __name__ == '__main__':
     main()

@@ -9,6 +9,7 @@ class MainNav(object):
     This is the main navigation, services collection, and word auto-completer.
     """
     nav = []
+
     def __init__(self):
         #: The compiled string for navigation
         self.completer = None
@@ -31,7 +32,7 @@ class MainNav(object):
         return self.completer
 
     @staticmethod
-    def run_command(cmd):
+    def get_command(cmd):
         m = importlib.import_module("graphistry.commands")
         return getattr(m, cmd)
 
