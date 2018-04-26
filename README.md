@@ -40,9 +40,8 @@ Ubuntu
 ------
 ***Install Graphistry***
 
-=======
 Bootstrap: Download the CLI and setup your Linux environment
---------------------------
+------------------------------------------------------------
 
 **AWS**
 Search for the ``graphistry`` public AMI in your region (ex: US-East-1, Oregon). Launch as a ``g3+``or ``p*`` GPU instance  with S3AllAccess permissions, and override default parameters for: 200GB RAM, and enable http/https/ssl in the security groups. SSH as ``ubuntu@[your ami]``.
@@ -170,22 +169,22 @@ See the file itself for a description of all available options. See individual `
 
 
 Starting:
-----
+---------
 
 From the Graphistry cli, run ``launch``
 
 Stopping:
-----
+---------
 
 From the Graphistry cli, run ``stop``
 
 Upgrading:
-----
+----------
 
 From the Graphistry cli, run ``update``. The next time you run ``init``, ``launch``, ``pull``, or ``compile``, the latest version of Graphistry will be used.
 
 Setup SSL:
-----
+----------
 
 If you have SSL certificates, we recommend installing them: this improves security and enables Graphistry to embed into tools that also use HTTPs.
 
@@ -200,13 +199,13 @@ Bundle a Deploy for Scanning and Air-Gapped Deployment:
 3. Offline system: Run ``load`` to load bundled containers from another system. We assume Docker, Nvidia-Docker, and Graphistry cli are present in the new system.
 
 Troubleshooting:
-======================
+================
 
 Did you have issues with pulling containers and you know they are public? Sometimes `docker-py` gets confused if you have
 old containers or are running out of space. Clear out your containers, do a `docker logout` in your terminal and then try again.
 
 Thanks:
-======================
+=======
 
 A special thanks to `Jonathan Slenders <https://twitter.com/jonathan_s>`_ for
 creating `Python Prompt Toolkit <http://github.com/jonathanslenders/python-prompt-toolkit>`_,
