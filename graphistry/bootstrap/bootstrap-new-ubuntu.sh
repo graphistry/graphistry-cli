@@ -45,7 +45,7 @@ fi
 if [ -d "graphistry-cli" ]; then
 
     cd graphistry-cli && sudo python3 setup.py install
-    echo -e "\nLoggin into a new session to enable docker access, run 'graphistry'.\n"
+    echo -e "\nLogin into a new session to enable docker access, run 'graphistry'.\n"
 
     sudo su - $USER
 fi

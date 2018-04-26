@@ -3,15 +3,16 @@ A CLI for Managing a Graphistry Deployment
 
 The Graphistry command-line interface supports installing, launching, and managing Graphistry. This document also walks through air-gapped deployment concerns such as environment bootstrapping and migrations.
 
-``graphistry`` supports multiple commands. It:
+``graphistry`` supports multiple commands:
 
 * ``init`` your initial installation (configure, pull, launch)
 * ``login``  to the Graphistry Cloud under your organization's administrator account
-* ``pull``  new versions
 * ``config``  your system
 * ``launch``  your system
+* ``pull``  new versions
+* ``compile`` your bundle into a tarball for scanning and air-gapped deployment
+* ``load`` a bundled tarball for air-gapped deployment
 * ``stop``  your system
-* ``compile`` and ``load`` bundles for scanning and air-gapped deployment
 * Can be used with orchestration systems like Ansible
 
 These commands can largely be done without the tool, but are easier with them.
@@ -36,9 +37,6 @@ Contents
 Quick Start
 ===========
 
-Ubuntu
-------
-***Install Graphistry***
 
 Bootstrap: Download the CLI and setup your Linux environment
 ------------------------------------------------------------
@@ -53,13 +51,14 @@ Search for the ``graphistry`` public AMI in your region (ex: US-East-1, Oregon).
     $ sudo yum install -y git
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
 
-Usage
+Run
 -----
     $ graphistry
 
 * Press tab to see options
 * Run ``init`` for streamlined initial configuration & launch
 * See below for SSL setup, which we recommend for use with notebooks, embedding in web apps, and overall security.
+* For subsequent use, run ``launch`` and ``stop``
 
 
 Detailed Installation Instructions:

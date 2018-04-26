@@ -174,14 +174,14 @@ class Graphistry(object):
                                                    bottom_toolbar=toolbar_quip, history=None, is_password=True)
 
         # Ip Whitelist
-        self.config.ip_internal_accept_list.value = prompt('Your Interal Ip Accept Whitelist '
-                                                           '[comma seperated please]: ',
-                                                           bottom_toolbar=toolbar_quip, history=None, is_password=True)
+        self.config.ip_internal_accept_list.value = prompt('Your Internal IP Accept Whitelist (beyond typical RFC 1918), ex: 
+                                                           ["127.0.0.1", "10.*"]',
+                                                           bottom_toolbar=toolbar_quip, history=None)
 
         # Http Ingress
-        self.config.http_user.value = prompt('Pivotapp Http Ingress Username: ',
+        self.config.http_user.value = prompt('Pivotapp HTTP Ingress Username: ',
                                              bottom_toolbar=toolbar_quip, history=None)
-        password = prompt('Pivotapp Http Ingress Password: ',
+        password = prompt('Pivotapp HTTP Ingress Password: ',
                           bottom_toolbar=toolbar_quip,
                           history=None,
                           is_password=True)
@@ -190,7 +190,7 @@ class Graphistry(object):
                                                          capture=True)
 
         # AWS
-        self.config.s3_access.value = prompt('AWS Access Key Id: ', bottom_toolbar=toolbar_quip, history=None)
+        self.config.s3_access.value = prompt('AWS Access Key ID: ', bottom_toolbar=toolbar_quip, history=None)
         self.config.s3_secret.value = prompt('AWS Access Key Secret: ', bottom_toolbar=toolbar_quip, history=None)
 
 
