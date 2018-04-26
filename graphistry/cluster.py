@@ -138,7 +138,8 @@ class Cluster(object):
             if not exists('dist'):
                 local('mkdir dist')
             cmd = "touch dist/graphistry.tar.gz && " \
-                  "tar -czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json " \
+                  "tar --exclude='./graphistry-cli/.git' " \
+                  "-czf dist/graphistry.tar.gz ./deploy/launch.sh ./deploy/config.json " \
                   "httpd-config.json load.sh pivot-config.json graphistry-cli bootstrap.sh " \
                   "viz-app-config.json containers.tar"
             local(cmd + maybe_ssl)

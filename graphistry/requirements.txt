@@ -10,4 +10,3 @@ fabric3==1.12.post1
 docker>=3.2.1
 six==1.10.0
 funcsigs
-cffi==1.11.4

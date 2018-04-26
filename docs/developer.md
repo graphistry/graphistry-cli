@@ -4,7 +4,7 @@
 ```bash
 sudo pip install awscli
 aws configure
-aws s3 cp graphistry.tar.gz s3://<yourbucket>/graphistry.tar.gz
+aws s3 cp dist/graphistry.tar.gz s3://<yourbucket>/graphistry.tar.gz
 aws s3 presign s3://<yourbucket>/graphistry.tar.gz
 ```
 
@@ -22,7 +22,7 @@ wget -O graphistry.tar.gz  '<url returned from presign>' # quoting that string i
 
 If you want to get, extract, and bootstrap all in one command:
 ```bash
-PRESIGN_URL=<url returned from presign>
+PRESIGN_URL="<url returned from presign>" # quoting that string is important
 wget -O graphistry.tar.gz  "${PRESIGN_URL}" && tar -xvf graphistry.tar.gz && ./bootstrap.sh [rhel|ubuntu]
 ```
 
@@ -31,7 +31,7 @@ wget -O graphistry.tar.gz  "${PRESIGN_URL}" && tar -xvf graphistry.tar.gz && ./b
 **get_s3_object.sh**
 ```bash
 #!/bin/sh
-file=path/to/file
+file=graphistry.tar.gz
 bucket=your-bucket
 resource="/${bucket}/${file}"
 contentType="application/x-compressed-tar"

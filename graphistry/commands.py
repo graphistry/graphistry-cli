@@ -2,7 +2,7 @@ from graphistry.config import Graphistry
 from graphistry.cluster import Cluster
 import sys
 
-__Commands__ = ['init', 'login', 'config', 'pull', 'launch', 'load', 'compile', 'update', 'exit']
+__Commands__ = ['init', 'login', 'config', 'pull', 'launch', 'load', 'compile', 'update', 'stop', 'exit']
 __CommandsMeta__ = {
     'init': 'Configure and Launch Graphistry',
     'login': 'Login to Graphistry',
@@ -11,6 +11,7 @@ __CommandsMeta__ = {
     'pull': 'Pull docker contgainers',
     'compile': 'Generate dist/graphistry.tar.gz',
     'load': 'Load Graphistry from Container Archive',
+    'stop': 'Stop All Graphistry Containers',
     'exit': 'Leave application. Ctrl-C or Ctrl-D works too.',
 }
 
@@ -62,6 +63,9 @@ def update():
     _g.login()
     _g.save_config()
 
+def stop():
+    _c = Cluster()
+    _c.stop()
 
 def exit():
     sys.exit()
