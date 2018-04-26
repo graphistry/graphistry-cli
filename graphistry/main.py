@@ -18,7 +18,10 @@ def main():
                           history=None)
 
             if text in MainNav.nav:
-                MainNav.run_command(text)()
+                cmd = MainNav.run_command(text)
+                print(cmd)
+                cmd()
+
         except EOFError:
             break  # Control-D pressed.
         except KeyboardInterrupt:
