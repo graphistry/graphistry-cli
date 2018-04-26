@@ -4,6 +4,7 @@ from prompt_toolkit import prompt
 
 from graphistry.widgets import revisionist_commit_history_html
 from graphistry.menus import MainNav
+from graphistry.commands import __Commands__
 
 
 def main():
@@ -17,7 +18,7 @@ def main():
                           complete_while_typing=True,
                           history=None)
 
-            if text in MainNav.nav:
+            if text in __Commands__:
                 cmd = MainNav.run_command(text)
                 print(cmd)
                 cmd()
