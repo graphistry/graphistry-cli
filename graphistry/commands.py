@@ -2,7 +2,7 @@ from graphistry.config import Graphistry
 from graphistry.cluster import Cluster
 import sys, click
 
-__Commands__ = ['init', 'login', 'config', 'pull', 'launch', 'load', 'compile', 'update', 'stop', 'exit']
+__Commands__ = ['init', 'login', 'config', 'pull', 'launch', 'load', 'compile', 'update', 'stop', 'help', 'exit']
 __CommandsMeta__ = {
     'init': 'Configure and Launch Graphistry',
     'login': 'Login to Graphistry',
@@ -12,6 +12,7 @@ __CommandsMeta__ = {
     'compile': 'Generate dist/graphistry.tar.gz',
     'load': 'Load Graphistry from Container Archive',
     'stop': 'Stop All Graphistry Containers',
+    'help': 'Shows all CLI commands',
     'exit': 'Leave application. Ctrl-C or Ctrl-D works too.',
 }
 
@@ -66,6 +67,11 @@ def update():
 def stop():
     _c = Cluster()
     _c.stop()
+
+
+def help():
+    for k,v in __CommandsMeta__.items():
+        click.secho("{0}: {1}".format(k,v), fg='yellow')
 
 
 def exit():
