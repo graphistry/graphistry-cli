@@ -12,10 +12,6 @@
 ### $GRAPHISTRY_PIVOT_CACHE is where pivots and investigations get written to disk.
 ### $NGINX_HTTP_PORT and $NGINX_HTTPS_PORT are where we expose our app to the host.
 
-if [ -n "$GCLI_CONTAINER" ]
-then
-    GCLI_C=`curl -s http://localhost:3476/docker/cli`
-fi
 
 if [ -n "${SHIPYARD}" ]
 then
@@ -38,7 +34,7 @@ else
     RUNTIME=nvidia-docker
 fi
 
-$RUNTIME run --rm $GCLI_C ${VIZ_APP_BASE_CONTAINER} clinfo
+$RUNTIME run --rm ${VIZ_APP_BASE_CONTAINER} clinfo
 
 ### 1. Ensure we have a network for our application to run in.
 
@@ -57,7 +53,7 @@ if (docker exec $PG_BOX_NAME psql -c "select 'database is up' as healthcheck" po
   echo Keeping db.
 else
   echo Bringing up db.
-  docker run $GCLI -d --restart=unless-stopped --net none --name ${PG_BOX_NAME} -e POSTGRES_USER=${PG_USER} -e POSTGRES_PASSWORD=${PG_PASS} postgres:9-alpine
+  docker run -d --restart=unless-stopped --net none --name ${PG_BOX_NAME} -e POSTGRES_USER=${PG_USER} -e POSTGRES_PASSWORD=${PG_PASS} postgres:9-alpine
   if [ -z $DB_RESTORE ] ; then
     echo Nothing to restore.
   else
@@ -121,7 +117,7 @@ NPROC=${NPROC:-$(((which nproc > /dev/null) && nproc) || echo 1)}
 CENTRAL_MERGED_CONFIG=$(docker   run --rm -v ${PWD}/../httpd-config.json:/tmp/box-config.json -v ${PWD}/httpd-config.json:/tmp/local-config.json ${VIZ_APP_BASE_CONTAINER} bash -c 'mergeThreeFiles.js $graphistry_install_path/central-cloud-options.json    /tmp/box-config.json /tmp/local-config.json')
 VIZWORKER_MERGED_CONFIG=$(docker run --rm -e NPROC=$NPROC -v ${PWD}/../httpd-config.json:/tmp/box-config.json -v ${PWD}/httpd-config.json:/tmp/local-config.json ${VIZ_APP_BASE_CONTAINER} bash -c '(envsubst < $graphistry_install_path/viz-worker-cloud-options.json.envsubst > /tmp/default-config.json) && mergeThreeFiles.js /tmp/default-config.json /tmp/box-config.json /tmp/local-config.json')
 
-$RUNTIME run  \
+$RUNTIME run \
     --net $GRAPHISTRY_NETWORK \
     --restart=unless-stopped \
     --name $VIZAPP_BOX_NAME \
@@ -141,7 +137,6 @@ $RUNTIME run  \
     -v ${GRAPHISTRY_DATA_CACHE:-${PWD}/data_cache}:/tmp/graphistry/data_cache \
     -v ${GRAPHISTRY_WORKBOOK_CACHE:-${PWD}/workbook_cache}:/tmp/graphistry/workbook_cache \
     -v ${PWD}/supervisor:/var/log/supervisor \
-    $GCLI_C \
     ${VIZ_APP_BASE_CONTAINER}
 
 ### 5a. Start pivot-app.
@@ -168,7 +163,6 @@ docker run -d \
     --link $VIZAPP_BOX_NAME:viz \
     --restart=unless-stopped \
     --network=$GRAPHISTRY_NETWORK \
-    $GCLI_C \
     ${PIVOT_APP_BASE_CONTAINER}
 
 ### 6. Prometheus
