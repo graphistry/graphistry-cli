@@ -13,7 +13,7 @@ import click
 @click.option('--command', '-c')
 def main(command=''):
     if command:
-        click.secho("[graphistry] Command does not exist.".format(__CommandsMeta__[command]), fg='yellow')
+        click.secho("[graphistry] Command does not exist. '{0}' ".format(__CommandsMeta__[command]), fg='yellow')
         if command in __Commands__:
             cmd = MainNav.get_command(command)
             cmd()
