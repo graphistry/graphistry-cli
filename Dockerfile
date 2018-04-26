@@ -1,6 +1,6 @@
 FROM ubuntu:17.10
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get -qq update && apt-get install -qq -y sudo wget
+RUN apt-get -qq update && apt-get install -qq -y sudo wget keyboard-configuration
 
 ADD . /cli
 

@@ -51,7 +51,7 @@ setup(
                                  'templates/pivot-config.json',
                                  'templates/viz-app-config.json',
                                  'requirements.txt']},
-    long_description=open('README.md').read(),
+    long_description=description,
     install_requires=install_requirements,
     dependency_links=[
         "git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0"
