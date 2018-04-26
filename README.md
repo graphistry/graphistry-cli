@@ -197,9 +197,38 @@ If you have SSL certificates, we recommend installing them: this improves securi
 
 Bundle a Deploy for Scanning and Air-Gapped Deployment:
 --------------------------------------------------------
+
+A full Graphistry deployment involves several systems:
+
+* Bootstrapped environment (see above): Docker, Nvidia-Docker, Python3, ...
+* Graphistry CLI (Python 3 wheel)
+* Graphistry itself (Docker containers)
+* Graphistry configuration (.config and .json) <-- can be generated on the air-gapped system
+
+The process is:
+1. Download a tarball from Graphistry as a password-protected URL, or generated via the CLI on an internet-connected device
+2. Setup the airgapped server: perform the above bootstrap processes and install the tarball
+3. Reconfigure the Graphistry installation for the air-gapped server and launch it
+
+**Generate a Tarball (Internet-connected)**
+
+Either download a tarball from your Graphistry account, or on an internet-connected device, generate a tarball:
+
 1. See the Linux bootstrapping section for setting up environment dependencies
-2. Online system: From the ``graphistry`` cli, type ``compile`` to generate a *.tar.gz, and transfer (alongside the cli) to your offline system.
-3. Offline system: Run ``load`` to load bundled containers from another system. We assume Docker, Nvidia-Docker, and Graphistry cli are present in the new system.
+2. Start the CLI: ``graphistry``
+3. From the CLI, run:  ``login`` ; ``pull`` ; ``compile``
+
+You will now have a ``*.tar.gz`` that contains binaries (CLI + Graphistry) and any existing configuration (.config, .json).
+
+**Load a Tarball (Airgapped)**
+
+From a bootstrapped environment (Docker, Python3, Nvidia-Docker, ... see above):
+
+1. Decompress: ``tar -xvzf my_graphistry.tar.gz``
+2. Start the CLI: ``graphistry``
+3. From the CLI, run: ``load`` ; ``config`` ; ``launch``
+
+The ``config`` call will generate details specific to the airgapped deployment and store them in ``.config`` and ``.json`` files. 
 
 Troubleshooting:
 ================
