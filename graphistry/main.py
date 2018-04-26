@@ -9,18 +9,21 @@ from graphistry.commands import __Commands__
 import click
 
 
-@click.group()
-def main(select=None):
+@click.command()
+@click.option('--headless', '-h', multiple=True)
+def main(headless=None):
     while True:
         toolbar_message = revisionist_commit_history_html()
 
         try:
-            if not select:
+            if not headless:
                 select = prompt('graphistry>> ',
                                 completer=MainNav().get_completer(),
                                 bottom_toolbar=toolbar_message,
                                 complete_while_typing=True,
                                 history=None)
+            else:
+                select = headless
 
             if select in __Commands__:
                 cmd = MainNav.get_command(select)
@@ -31,10 +34,6 @@ def main(select=None):
         except KeyboardInterrupt:
             break
 
-
-# Loop through the availible commands and assign them as CLI args
-for _c in __Commands__:
-    main.add_command(MainNav.get_command(_c))
 
 if __name__ == '__main__':
     main()
