@@ -1,7 +1,7 @@
 import importlib
 
 from prompt_toolkit.contrib.completers import WordCompleter
-from commands import __Commands__, __CommandsMeta__
+from graphistry.commands import __Commands__, __CommandsMeta__
 
 
 class MainNav(object):
