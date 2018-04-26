@@ -25,15 +25,15 @@ RUN apt-get install -y --no-install-recommends \
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 RUN python3.6 get-pip.py
 
-ADD . /home/cli
+ADD . /home/graphistry-cli
 
 
-#RUN bash /home/cli/graphistry/bootstrap/ubuntu/10-system-deps.sh
-RUN bash /home/cli/graphistry/bootstrap/ubuntu/20-docker.sh
-#RUN bash /home/cli/graphistry/bootstrap/ubuntu/30-CUDA.sh
-#RUN bash /home/cli/graphistry/bootstrap/ubuntu/40-nvidia-docker.sh
-RUN sudo pip3.6 install -r /home/cli/graphistry/requirements.txt
+#RUN bash /home/graphistry-cli/graphistry/bootstrap/ubuntu/10-system-deps.sh
+RUN bash /home/graphistry-cli/graphistry/bootstrap/ubuntu/20-docker.sh
+#RUN bash /home/graphistry-cli/graphistry/bootstrap/ubuntu/30-CUDA.sh
+#RUN bash /home/graphistry-cli/graphistry/bootstrap/ubuntu/40-nvidia-docker.sh
+RUN sudo pip3.6 install -r /home/graphistry-cli/graphistry/requirements.txt
 
-RUN cd /home/cli && sudo python3.6 setup.py install
+RUN cd /home/graphistry-cli && sudo python3.6 setup.py install
 
 WORKDIR /home
