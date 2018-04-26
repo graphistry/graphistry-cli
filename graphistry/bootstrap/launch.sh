@@ -161,10 +161,10 @@ docker run -d \
     -e "NODE_ENV=production" \
     -e "GRAPHISTRY_LOG_LEVEL=$PIVOT_LOG_LEVEL" \
     -e "LOG_FILE=logs/pivot.log" \
-    -v $PWD/pivot-app/:/pivot-app/logs \
-    -v ${GRAPHISTRY_PIVOT_CACHE:-$PWD/../.pivot-db}:/pivot-app/data \
-    -v $PWD/../pivot-config.json:/pivot-app/config/z-box-override.json:ro \
-    -v $PWD/pivot-config.json:/pivot-app/config/zzz-deploy-override.json:ro \
+    -v ${PWD}/pivot-app/:/pivot-app/logs \
+    -v ${GRAPHISTRY_PIVOT_CACHE:-${PWD}/../.pivot-db}:/pivot-app/data \
+    -v ${PWD}/../pivot-config.json:/pivot-app/config/z-box-override.json:ro \
+    -v ${PWD}/pivot-config.json:/pivot-app/config/zzz-deploy-override.json:ro \
     --link $VIZAPP_BOX_NAME:viz \
     --restart=unless-stopped \
     --network=$GRAPHISTRY_NETWORK \
