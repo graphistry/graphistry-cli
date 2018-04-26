@@ -4,6 +4,10 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 ENV GCLI_CONTAINER True
 
+# Trick launch.sh into thinking there's no GPU
+# so we can just use the API to the host
+ENV NV_GPU "-1"
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
         sudo \
         wget \
