@@ -1,15 +1,12 @@
-A CLI for Managing a Graphistry Deployment
-------------------------------------------
+# A CLI for Managing a Graphistry Deployment
 
-|Build Status| |CodeCov| |PyPI| |Landscape| |Gitter|
 
 This is a toolkit for launching and managing a Graphistry stack on your servers.
 
 Home Page: http://graphistry.com
 
 
-Contents
-===========
+## Contents
 * Quick Start
 * Features
 * Detailed Installation Instructions
@@ -30,8 +27,8 @@ Quick Start
 
 Ubuntu
 ------
-Install Graphistry
-::
+***Install Graphistry***
+
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
 
 RHEL/Centos7
