@@ -125,22 +125,25 @@ Log into your Graphistry server and install the CLI:
 
 Ubuntu
 ------
-Install Graphistry and launch the CLI
+***Install Graphistry and launch the CLI***
+
 ```
-    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
-    $ graphistry
+$ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
+$ graphistry
 ```
 
 RHEL/Centos7
 ------------
-Install git
+**Install git**
 ```
-    $ sudo yum install -y git
+$ sudo yum install -y git
 ```
-Install Graphistry and launch the CLI
+
+**Install Graphistry and launch the CLI**
+
 ```
-    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
-    $ graphistry
+$ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
+$ graphistry
 ```
 **Airgapped Bootstrapping**
 
