@@ -21,6 +21,7 @@ def pretty_line(line):
         )
     )
 
+
 class Cluster(object):
     def __init__(self):
         self._g = Graphistry()
@@ -45,9 +46,10 @@ class Cluster(object):
         return docker.APIClient(base_url='unix://var/run/docker.sock')
 
     def pull(self, reauth=False):
+        self._g.registry_auth()
         docker = self.docker_lowlevel_api()
         if reauth:
-            self._g.gcloud_auth()
+            self._g.registry_auth()
         click.secho("Pulling Private Images", fg="magenta")
         for image in self.images['private']:
             for line in docker.pull(image, stream=True):
@@ -57,9 +59,8 @@ class Cluster(object):
             for line in docker.pull(image, stream=True):
                 click.secho(pretty_line(line), fg="blue")
 
-
     def launch(self):
-        self._g.gcloud_auth()
+        self._g.registry_auth()
 
         launch_file_source = join(cwd, 'bootstrap/launch.sh')
         launch_file = 'deploy/launch.sh'

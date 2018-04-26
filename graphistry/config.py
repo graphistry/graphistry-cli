@@ -206,7 +206,7 @@ class Graphistry(object):
             create_config_files(tmpl, jenv.from_string(_file.read()).render(self.config.dump_values()))
             _file.close()
 
-    def gcloud_auth(self):
+    def registry_auth(self):
         # Just snag whatever credentials are in the config and make sure the key is saved.
         # docker-py doesn't seem to want to accept the JSON string as a password so this works.
         key_filename = os.path.join(expanduser('~/.config/graphistry'), '.registrykey.json')
