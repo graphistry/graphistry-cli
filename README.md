@@ -126,21 +126,22 @@ Log into your Graphistry server and install the CLI:
 Ubuntu
 ------
 Install Graphistry and launch the CLI
-::
+```
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
     $ graphistry
+```
 
 RHEL/Centos7
 ------------
 Install git
-::
+```
     $ sudo yum install -y git
-
+```
 Install Graphistry and launch the CLI
-::
+```
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
     $ graphistry
-
+```
 **Airgapped Bootstrapping**
 
 The above scripts bootstrap the installation of Python3, Docker, CUDA, and Nvidia-Docker for various Linux distributions.
@@ -207,10 +208,10 @@ old containers or are running out of space. Clear out your containers, do a `doc
 Thanks:
 =======
 
-A special thanks to `Jonathan Slenders <https://twitter.com/jonathan_s>`_ for
-creating `Python Prompt Toolkit <http://github.com/jonathanslenders/python-prompt-toolkit>`_,
+A special thanks to `Jonathan Slenders <https://twitter.com/jonathan_s>` for
+creating `Python Prompt Toolkit <http://github.com/jonathanslenders/python-prompt-toolkit>`,
 which is quite literally the backbone library, that made this app possible.
-And the people who made `pgcli <https://github.com/dbcli/pgcli>`_ which I mostly wholesale copied to make this tool
+And the people who made `pgcli <https://github.com/dbcli/pgcli>` which I mostly wholesale copied to make this tool
 
-`Click <http://click.pocoo.org/>`_ is used for command line option parsing and printing error messages.
+`Click <http://click.pocoo.org/>` is used for command line option parsing and printing error messages.
 
