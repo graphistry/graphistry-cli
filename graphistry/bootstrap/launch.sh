@@ -121,7 +121,7 @@ NPROC=${NPROC:-$(((which nproc > /dev/null) && nproc) || echo 1)}
 CENTRAL_MERGED_CONFIG=$(docker   run --rm -v ${PWD}/../httpd-config.json:/tmp/box-config.json -v ${PWD}/httpd-config.json:/tmp/local-config.json ${VIZ_APP_BASE_CONTAINER} bash -c 'mergeThreeFiles.js $graphistry_install_path/central-cloud-options.json    /tmp/box-config.json /tmp/local-config.json')
 VIZWORKER_MERGED_CONFIG=$(docker run --rm -e NPROC=$NPROC -v ${PWD}/../httpd-config.json:/tmp/box-config.json -v ${PWD}/httpd-config.json:/tmp/local-config.json ${VIZ_APP_BASE_CONTAINER} bash -c '(envsubst < $graphistry_install_path/viz-worker-cloud-options.json.envsubst > /tmp/default-config.json) && mergeThreeFiles.js /tmp/default-config.json /tmp/box-config.json /tmp/local-config.json')
 
-$RUNTIME run $GCLI_C \
+$RUNTIME run  \
     --net $GRAPHISTRY_NETWORK \
     --restart=unless-stopped \
     --name $VIZAPP_BOX_NAME \
@@ -141,6 +141,7 @@ $RUNTIME run $GCLI_C \
     -v ${GRAPHISTRY_DATA_CACHE:-${PWD}/data_cache}:/tmp/graphistry/data_cache \
     -v ${GRAPHISTRY_WORKBOOK_CACHE:-${PWD}/workbook_cache}:/tmp/graphistry/workbook_cache \
     -v ${PWD}/supervisor:/var/log/supervisor \
+    $GCLI_C \
     ${VIZ_APP_BASE_CONTAINER}
 
 ### 5a. Start pivot-app.
