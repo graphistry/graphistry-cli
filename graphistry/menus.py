@@ -31,8 +31,9 @@ class MainNav(object):
         return self.completer
 
     @staticmethod
-    def run_command(service):
-        return importlib.import_module("graphistry.commands."+service)
+    def run_command(cmd):
+        m = importlib.import_module("graphistry.commands")
+        return getattr(m, cmd)
 
     def do_prompt(self, prompt):
         return self.autocomplete
