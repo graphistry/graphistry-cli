@@ -1,7 +1,9 @@
 FROM ubuntu:16.04
-RUN apt-get update && apt-get install -y sudo wget
+ENV DEBIAN_FRONTEND=newt
+RUN apt-get -qq update && apt-get install -qq -y sudo wget
 
 ADD . /cli
+
 
 RUN bash /cli/graphistry/bootstrap/ubuntu/10-system-deps.sh
 RUN bash /cli/graphistry/bootstrap/ubuntu/20-docker.sh
