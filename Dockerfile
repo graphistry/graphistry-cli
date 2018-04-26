@@ -42,4 +42,4 @@ RUN sudo pip3.6 install -r /home/user/graphistry-cli/graphistry/requirements.txt
 
 RUN cd /home/user/graphistry-cli && sudo python3.6 setup.py install
 
-WORKDIR /home
+WORKDIR /home/user
