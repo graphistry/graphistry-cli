@@ -1,12 +1,13 @@
-# A CLI for Managing a Graphistry Deployment
-
+A CLI for Managing a Graphistry Deployment
+------------------------------------------
 
 This is a toolkit for launching and managing a Graphistry stack on your servers.
 
 Home Page: http://graphistry.com
 
 
-## Contents
+Contents
+===========
 * Quick Start
 * Features
 * Detailed Installation Instructions
