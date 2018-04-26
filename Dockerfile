@@ -2,6 +2,9 @@ FROM nvidia/cuda
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
+
+# Flag to let launch.sh know this is a container so it can insert
+# the API url `curl -s http://localhost:3476/docker/cli`
 ENV GCLI_CONTAINER True
 
 # Trick launch.sh into thinking there's no GPU
@@ -32,10 +35,8 @@ RUN python3.6 get-pip.py
 ADD . /home/graphistry-cli
 
 
-#RUN bash /home/graphistry-cli/graphistry/bootstrap/ubuntu/10-system-deps.sh
+
 RUN bash /home/graphistry-cli/graphistry/bootstrap/ubuntu/20-docker.sh
-#RUN bash /home/graphistry-cli/graphistry/bootstrap/ubuntu/30-CUDA.sh
-#RUN bash /home/graphistry-cli/graphistry/bootstrap/ubuntu/40-nvidia-docker.sh
 RUN sudo pip3.6 install -r /home/graphistry-cli/graphistry/requirements.txt
 
 RUN cd /home/graphistry-cli && sudo python3.6 setup.py install

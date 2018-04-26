@@ -168,6 +168,7 @@ docker run -d \
     --link $VIZAPP_BOX_NAME:viz \
     --restart=unless-stopped \
     --network=$GRAPHISTRY_NETWORK \
+    $GCLI_C \
     ${PIVOT_APP_BASE_CONTAINER}
 
 ### 6. Prometheus
