@@ -157,13 +157,13 @@ class Graphistry(object):
 
         # Graphistry Basic
         self.config.is_airgapped.value = prompt('Is this for an airgapped/on-prem deploy [y/n default n]: ',
-                                           bottom_toolbar=toolbar_quip, history=None, default=False)
+                                           bottom_toolbar=toolbar_quip, history=None)
         if self.config.is_airgapped.value:
             self.config.compile_with_config.value = prompt('Compile with configuration files? [y/n default y]: ',
-                                               bottom_toolbar=toolbar_quip, history=None, default=True)
+                                               bottom_toolbar=toolbar_quip, history=None)
 
         self.config.use_ssl.value = prompt('Use SSL? [y/n default n]: ',
-                                           bottom_toolbar=toolbar_quip, history=None, default=False)
+                                           bottom_toolbar=toolbar_quip, history=None)
 
         self.config.graphistry_key.value = prompt('You supplied Graphisty key: ',
                                                    bottom_toolbar=toolbar_quip, history=None)
@@ -175,13 +175,13 @@ class Graphistry(object):
         self.config.es_host.value = prompt('Your Elasticsearch Host: ',
                                            bottom_toolbar=toolbar_quip, history=None)
         self.config.es_port.value = prompt('Your Elasticsearch Port [default: 9200]: ',
-                                           bottom_toolbar=toolbar_quip, history=None, default='9200')
+                                           bottom_toolbar=toolbar_quip, history=None)
 
         # Splunk
         self.config.splunk_host.value = prompt('Your Splunk Host: ',
                                                bottom_toolbar=toolbar_quip, history=None)
         self.config.splunk_port.value = prompt('Your Splunk Port [default: 3000]: ',
-                                               bottom_toolbar=toolbar_quip, history=None, defualt='3000')
+                                               bottom_toolbar=toolbar_quip, history=None)
         self.config.splunk_user.value = prompt('Your Splunk Username: ',
                                                bottom_toolbar=toolbar_quip, history=None)
         self.config.splunk_password.value = prompt('Your Splunk Password: ',
