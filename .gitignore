@@ -70,9 +70,9 @@ target/
 containers.tar
 graphistry.tar.gz
 load.sh
-launch.sh
+./launch.sh
 *.tar
 tmp
-pivot-config.json
-httpd-config.json
-viz-app-config.json
+./pivot-config.json
+./httpd-config.json
+./viz-app-config.json
