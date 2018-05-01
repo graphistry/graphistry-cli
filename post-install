@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Setting up symlink to graphistry"
+ln -sf /usr/share/graphistry/bin/graphistry /usr/local/bin/graphistry
