@@ -215,7 +215,7 @@ class Graphistry(object):
         jenv.filters['jsonify'] = json.dumps
         templates = ['pivot-config.json', 'httpd-config.json', 'viz-app-config.json']
         for tmpl in templates:
-            _file = open('graphistry-cli/graphistry/templates/'+tmpl, "r")
+            _file = open(expanduser('~/graphistry-cli/graphistry/templates/'+tmpl), "r")
             create_config_files(tmpl, jenv.from_string(_file.read()).render(self.config.dump_values()))
             _file.close()
 
