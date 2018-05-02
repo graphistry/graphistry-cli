@@ -50,7 +50,7 @@ Bootstrap: Download the CLI and setup your Linux environment
 ------------------------------------------------------------
 
 **AWS**
-Search for the ``graphistry`` public AMI in your region (ex: US-East-1, Oregon). Launch as a ``g3+``or ``p*`` GPU instance  with S3AllAccess permissions, and override default parameters for: 200GB RAM, and enable http/https/ssl in the security groups. SSH as ``ubuntu@[your ami]``.
+Launch an official AWS Ubuntu/RHEL/Centos AMI using a ``g3+``or ``p*`` GPU instance. Use S3AllAccess permissions, and override default parameters for: 200GB RAM, and enable http/https/ssl in the security groups. SSH as ``ubuntu@[your ami]``, ``centos@``, or ``ec2-user@``. Proceed to the OS-specific instructions below.
 
 **Ubuntu**
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
@@ -58,6 +58,8 @@ Search for the ``graphistry`` public AMI in your region (ex: US-East-1, Oregon).
 **RHEL/Centos7**
     $ sudo yum install -y git
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
+
+Log off and back in (full restart not required.)
 
 Run
 -----
@@ -84,24 +86,23 @@ AWS:
 -------------
 
 **Instance**
-Use a Graphistry-provided AMI in your region (search for Graphistry in Public AMIs). Otherwise, start with one of the following Linux distributions, and configure it using the instructions below under 'Linux'.
-
-**Third-Party Base AMI**
-
-We recommend using a Graphistry-provided AMI in your region (search for Graphistry in Public AMIs). Otherwise:
+Start with one of the following Linux distributions, and configure it using the instructions below under 'Instance settings'.
 
 * **Ubuntu 16.04**
+  * Available on official AWS launch homepage
   * Find AMI for region https://cloud-images.ubuntu.com/locator/
   * Ex: Amazon AWS us-east-1 xenial 16.04 amd64 hvm-ssd 20180405 ami-6dfe5010 
   * Follow provisioning instructions from AWS install
   * G3 or P2: 200 GB, add a name tag, ssh/http/https; use & store an AWS keypair
   * Login: ssh -i ...private_key.pem ubuntu@public.dns
 * **Redhat 7.4 GA**
+  * Available on official AWS launch homepage
   * Find AMI for region: https://access.redhat.com/articles/3135091 
   * Ex:  RHEL 7.4 GA
   * ami-c998b6b2	us-east-1	On-Demand	EBS backed image	8/1/2017
   * Follow above AWS Ubuntu instructions, except use ssh username *"ec2-user"*
 * **CentOS 7**
+  * Available on official AWS launch homepage
   * Find AMI for region: https://wiki.centos.org/Cloud/AWS
   * Ex: CentOS 1803_01 
   * CentOS Linux 7 1801_01 2018-Jan-14 us-east-1 ami-4bf3d731 x86_64 HVM EBS
@@ -119,7 +120,7 @@ We recommend using a Graphistry-provided AMI in your region (search for Graphist
 
 **Setup**
 
-If you are using a Graphistry-provided AMI, run ``graphistry``. Else, first run through the below Linux instructions.
+Continue to the Linux instructions below.
 
 
 Linux:
@@ -132,25 +133,17 @@ Log into your Graphistry server and install the CLI:
 
 Ubuntu
 ------
-***Install Graphistry and launch the CLI***
 
 ```
 $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
-$ graphistry
 ```
 
 RHEL/Centos7
 ------------
-**Install git**
+
 ```
 $ sudo yum install -y git
-```
-
-**Install Graphistry and launch the CLI**
-
-```
 $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
-$ graphistry
 ```
 **Airgapped Bootstrapping**
 
@@ -159,7 +152,7 @@ You can install those manually or use ``./bootstrap.sh <ubuntu/rhel>`` that is e
 
 The individual steps are broken out into their own scripts in the ``graphistry/bootstrap`` directory.
 
-Once you've bootstrapped, run ``graphistry`` and then: ``load``, ``config``, ``launch``. (Instead of ``init``.)
+When airgapped and generating an image, once you've bootstrapped, run ``graphistry`` and then: ``load``, ``config``, ``launch``. (Instead of ``init``.)
 
 
 Installation:
@@ -173,26 +166,6 @@ Installation:
 Additional Commands and Configuration
 ======================
 
-Config
-------
-A config file is automatically created at ``~/.config/graphistry/config`` at first launch.
-See the file itself for a description of all available options. See individual ``*.json`` files for app configurations.
-
-
-Starting:
----------
-
-From the Graphistry cli, run ``launch``
-
-Stopping:
----------
-
-From the Graphistry cli, run ``stop``
-
-Upgrading:
-----------
-
-From the Graphistry cli, run ``update``. The next time you run ``init``, ``launch``, ``pull``, or ``compile``, the latest version of Graphistry will be used.
 
 Setup SSL:
 ----------
@@ -201,7 +174,7 @@ If you have SSL certificates, we recommend installing them: this improves securi
 
 1. Create folder `ssl/` as a sibling to `deploy`
 2. Place files ``ssl_certificate.pem`` and ``ssl_certificate_key.pem`` into folder ``ssl/`` .
-3. When running `graphistry` -> `config` (or `graphistry` -> `init`), say "yes" to using SSL
+3. Restart Graphistry
 
 Bundle a Deploy for Scanning and Air-Gapped Deployment:
 --------------------------------------------------------
@@ -211,7 +184,7 @@ A full Graphistry deployment involves several systems:
 * Bootstrapped environment (see above): Docker, Nvidia-Docker, Python3, ...
 * Graphistry CLI (Python 3 wheel)
 * Graphistry itself (Docker containers)
-* Graphistry configuration (.config and .json) <-- can be generated on the air-gapped system
+* Graphistry configuration (.config/* and *.json) <-- can be generated on the air-gapped system
 
 The process is:
 1. Download a tarball from Graphistry as a password-protected URL, or generated via the CLI on an internet-connected device
@@ -220,13 +193,13 @@ The process is:
 
 **Generate a Tarball (Internet-connected)**
 
-Either download a tarball from your Graphistry account, or on an internet-connected device, generate a tarball:
+Either download a tarball from your Graphistry account, or generate one from scratch:
 
 1. See the Linux bootstrapping section for setting up environment dependencies
 2. Start the CLI: ``graphistry``
-3. From the CLI, run:  ``login`` ; ``pull`` ; ``compile``
+3. From the CLI, run:  ``login`` ; ``pull`` ; ``compile`
 
-You will now have a ``*.tar.gz`` that contains binaries (CLI + Graphistry) and any existing configuration (.config, .json).
+You will now have a ``*.tar.gz`` that contains binaries (CLI + Graphistry). To include configurations, switch to ``compile_with_config`` in Step 3 above.
 
 **Load a Tarball (Airgapped)**
 
