@@ -37,6 +37,8 @@ Contents
    * Updating
    * SSL
    * Bundling for scanning and air-gapped deployment
+* Upgrading
+* Testing
 * Troubleshooting
 * Thanks
 
@@ -234,7 +236,79 @@ From a bootstrapped environment (Docker, Python3, Nvidia-Docker, ... see above):
 2. Start the CLI: ``graphistry``
 3. From the CLI, run: ``load`` ; ``config`` ; ``launch``
 
-The ``config`` call will generate details specific to the airgapped deployment and store them in ``.config`` and ``.json`` files. 
+If the transferred file included complete system configurations, you can skip the ``config`` step.
+
+
+Upgrading:
+==========
+
+### Update to the latest CLI
+
+The CLI is a standard Python3 program:
+
+```
+#Stop the Graphistry server if it is running
+$graphistry -c stop
+
+#Fetch the latest CLI
+$cd graphistry-cli
+$git pull
+
+#Clean existing
+$pip3 uninstall graphistry
+$python3 setup.py clean
+$pythpn3 setup.py install
+```
+
+### Update to the latest container: Internet connected
+
+* Pull the latest settings: ``graphistry -c pull``
+* From the CLI, run ``load`` ; ``config`` ; ``launch``
+
+
+### Update to the latest container: Airgapped
+
+* Copy the latest container to your system
+* Stop Graphistry if it is running: ``graphistry -c stop``
+* From the CLI, run ``load`` ; ``config`` ; ``launch``
+
+
+Testing:
+========
+
+* Installation repositories are accessible:
+  * ping www.github.com
+  * ping shipyard.graphistry.com
+  * ping us.gcr.io
+* Configurations were generated: 
+  * ``.config/graphistry/config.json``
+  * ``httpd-config.json``
+  * ``pivot-config.json``
+  * ``viz-app-config.json``
+* Services are running: ``docker ps`` reveals no restart loops on:
+  * ``monolith-network-nginx``
+  * ``monolith-network-pivot``
+  * ``monolith-network-viz``
+  * ``monolith-network-mongo``
+  * ``monolith-network-db-bu``
+  * ``monolith-network-pg``
+* Services pass initial healthchecks:
+  * ``site.com/central/healthcheck``
+  * ``site.com/pivot/healthcheck``
+  * ``site.com/worker/healthcheck``
+* Pages load
+  * ``site.com`` shows Graphistry homepage
+  * ``site.com/graph/graph.html?dataset=Facebook`` clusters and renders a graph
+  * ``site.com/pivot`` loads a list of investigations
+  * ``site.com/pivot/connectors`` loads a list of connectors
+  * ^^^ When clicking the ``Status`` button for each connector, it reports green
+  *  Opening and running an investigation in ``site.com/pivot`` uploads and shows a graph
+* Data uploads
+  * Can generate an API key with the CLI: ``graphistry`` --> ``keygen``
+  * Can use the key to upload a visualization: https://graphistry.github.io/docs/legacy/api/0.9.2/api.html#curlexample
+  * Can then open that visualization in a browser
+
+
 
 Troubleshooting:
 ================
