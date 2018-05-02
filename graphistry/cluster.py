@@ -90,7 +90,7 @@ class Cluster(object):
         click.secho("Graphistry Launched. Please Browse to:", fg="yellow")
         click.secho("http://{0}".format(self._g.config.graphistry_host.value), fg="yellow")
 
-    def compile(self):
+    def compile(self, include_config=False):
         """
         Generate dist/graphistry.tar.gz. Run pull beforehand.
         :return:
@@ -116,7 +116,7 @@ class Cluster(object):
             maybe_ssl = ' ssl' if tls else ''
 
             # Grab the current config to be used on the on-prem deploy if requested
-            if self._g.config.compile_with_config.value:
+            if include_config:
                 click.secho('[graphistry] Copying configuration for distribution.', fg='yellow')
                 config = expanduser('~/.config/graphistry/config.json')
 

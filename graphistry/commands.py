@@ -57,6 +57,10 @@ def compile():
     _c = Cluster()
     _c.compile()
 
+def compile_with_config():
+    _c = Cluster()
+    _c.compile(include_config=True)
+
 
 def update():
     _g = Graphistry()
