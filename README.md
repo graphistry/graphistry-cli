@@ -52,10 +52,10 @@ Bootstrap: Download the CLI and setup your Linux environment
 **AWS**
 Launch an official AWS Ubuntu/RHEL/Centos AMI using a ``g3+``or ``p*`` GPU instance. Use S3AllAccess permissions, and override default parameters for: 200GB RAM, and enable http/https/ssl in the security groups. SSH as ``ubuntu@[your ami]``, ``centos@``, or ``ec2-user@``. Proceed to the OS-specific instructions below.
 
-**Ubuntu**
+**Ubuntu 16.04**
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
 
-**RHEL/Centos7**
+**RHEL 7.4 / CentOS 7**
     $ sudo yum install -y git
     $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
 
@@ -152,7 +152,14 @@ You can install those manually or use ``./bootstrap.sh <ubuntu/rhel>`` that is e
 
 The individual steps are broken out into their own scripts in the ``graphistry/bootstrap`` directory.
 
-When airgapped and generating an image, once you've bootstrapped, run ``graphistry`` and then: ``load``, ``config``, ``launch``. (Instead of ``init``.)
+Airgapped
+---------
+
+1. If you do not have a large container file, generate it. Run ``graphistry`` and then: ``init``. After, ``compile``.
+
+2. Move the container to the airgapped system, and bootstrap the system. (See scripts used abaove.)
+
+3. Run ``graphistry`` and then: ``load``, ``config_offline``, and then ``launch``.
 
 
 Installation:
@@ -197,7 +204,7 @@ Either download a tarball from your Graphistry account, or generate one from scr
 
 1. See the Linux bootstrapping section for setting up environment dependencies
 2. Start the CLI: ``graphistry``
-3. From the CLI, run:  ``login`` ; ``pull`` ; ``compile`
+3. From the CLI, run:  ``init` and then ``compile``
 
 You will now have a ``*.tar.gz`` that contains binaries (CLI + Graphistry). To include configurations, switch to ``compile_with_config`` in Step 3 above.
 
@@ -207,9 +214,9 @@ From a bootstrapped environment (Docker, Python3, Nvidia-Docker, ... see above):
 
 1. Decompress: ``tar -xvzf my_graphistry.tar.gz``
 2. Start the CLI: ``graphistry``
-3. From the CLI, run: ``load`` ; ``config`` ; ``launch``
+3. From the CLI, run: ``load`` ; ``config_offline`` ; ``launch``
 
-If the transferred file included complete system configurations, you can skip the ``config`` step.
+If the transferred file included sufficient system configurations, you can skip the ``config_offline`` step.
 
 
 Upgrading:
