@@ -2,19 +2,22 @@ from graphistry.config import Graphistry
 from graphistry.cluster import Cluster
 import sys, click
 
-__Commands__ = ['init', 'login', 'config', 'pull', 'launch', 'load', 'compile', 'update', 'stop', 'help', 'exit']
 __CommandsMeta__ = {
-    'init': 'Configure and Launch Graphistry',
-    'login': 'Login to Graphistry',
-    'config': 'Configure Graphistry',
-    'launch': 'Launch Graphistry',
-    'pull': 'Pull docker contgainers',
     'compile': 'Generate dist/graphistry.tar.gz',
-    'load': 'Load Graphistry from Container Archive',
-    'stop': 'Stop All Graphistry Containers',
-    'help': 'Shows all CLI commands',
+    'compile_with_config': 'Generate dist/graphistry.tar.gz and include local configuration',
+    'config': 'Configure Graphistry relative to latest Graphistry online baseline',
+    'config_offline': 'Configure Graphistry relative to offline baseline',
     'exit': 'Leave application. Ctrl-C or Ctrl-D works too.',
+    'help': 'Shows all CLI commands',
+    'init': 'Download, configure, and launch Graphistry',
+    'launch': 'Launch Graphistry based on local containers',
+    'load': 'Load Graphistry from Container Archive',
+    'login': 'Login to Graphistry',
+    'pull': 'Pull docker containers',
+    'stop': 'Stop All Graphistry Containers',
 }
+__Commands__ = list(__CommandsMeta__.keys())
+
 
 def init():
     _g = Graphistry()
