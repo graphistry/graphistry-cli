@@ -8,6 +8,7 @@ __CommandsMeta__ = {
     'config': 'Configure Graphistry relative to latest Graphistry online baseline',
     'config_offline': 'Configure Graphistry relative to offline baseline',
     'exit': 'Leave application. Ctrl-C or Ctrl-D works too.',
+    'keygen': 'Create API key token',
     'help': 'Shows all CLI commands',
     'init': 'Download, configure, and launch Graphistry',
     'launch': 'Launch Graphistry based on local containers',
@@ -56,6 +57,9 @@ def launch():
     _c = Cluster()
     _c.launch()
 
+def keygen():
+    _c = Cluster()
+    _c.keygen()
 
 def load():
     _c = Cluster()
