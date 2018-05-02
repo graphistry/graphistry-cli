@@ -189,15 +189,20 @@ class Graphistry(object):
                                            bottom_toolbar=toolbar_quip, history=None)
         if self.config.es_host.value != '':
             self.config.es_port.value = prompt('Your Elasticsearch Port [default: 9200]: ',
-                                               bottom_toolbar=toolbar_quip, history=None)        
+                                               bottom_toolbar=toolbar_quip, history=None)
+            if self.config.es_port.value == '':
+                self.config.es_port.value = CONFIG_SCHEMA['es_port']
 
 
         # Splunk
         self.config.splunk_host.value = prompt('Your Splunk Host (enter to skip): ',
                                                bottom_toolbar=toolbar_quip, history=None)
         if self.config.splunk_host.value != '':
-            self.config.splunk_port.value = prompt('Your Splunk Port [default: 3000]: ',
-                                                   bottom_toolbar=toolbar_quip, history=None)
+            
+            self.config.splunk_port.value = prompt('Your Splunk UI Port [default: 3000]: ',                                                   bottom_toolbar=toolbar_quip, history=None)
+            if self.config.splunk_port.value == '':
+                self.config.splunk_port.value = CONFIG_SCHEMA['splunk_port']
+
             self.config.splunk_user.value = prompt('Your Splunk Username: ',
                                                    bottom_toolbar=toolbar_quip, history=None)
             self.config.splunk_password.value = prompt('Your Splunk Password: ',
