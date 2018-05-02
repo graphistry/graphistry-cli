@@ -5,21 +5,27 @@ The Graphistry command-line interface supports installing, launching, and managi
 
 ``graphistry`` supports multiple commands:
 
-* ``init`` your initial installation (configure, pull, launch)
-* ``login``  to the Graphistry Cloud under your organization's administrator account
-* ``config``  your system
-* ``launch``  your system
-* ``pull``  new versions
-* ``compile`` your bundle into a tarball for scanning and air-gapped deployment
-* ``load`` a bundled tarball for air-gapped deployment
-* ``stop``  your system
-* Can be used with orchestration systems like Ansible
 
-These commands can largely be done without the tool, but are easier with them.
+* ``init`` Download, configure, and launch Graphistry
+* ``compile`` Generate dist/graphistry.tar.gz
+* ``compile_with_config`` Generate dist/graphistry.tar.gz and include local configuration
+* ``config`` Configure Graphistry relative to latest Graphistry online baseline
+* ``config_offline`` Configure Graphistry relative to offline baseline
+* ``exit`` Leave application. Ctrl-C or Ctrl-D works too.
+* ``keygen`` Create API key token
+* ``help`` Shows all CLI commands
+* ``launch`` Launch Graphistry based on local containers
+* ``load`` Load Graphistry from Container Archive
+* ``login`` Login to Graphistry
+* ``pull`` Pull docker containers
+* ``stop`` Stop All Graphistry Containers
+
+Run non-interactive commands with ``-c``, such as ``graphistry -c stop``.
 
 
 Contents
 --------
+
 * Quick Start
 * Detailed Installation Instructions
    * Prerequisites
