@@ -5,6 +5,8 @@ from os.path import expanduser, exists, dirname, join, realpath, isdir
 from os import getcwd
 from docker.errors import NotFound
 from fabric.api import local
+from prompt_toolkit import prompt
+from graphistry.widgets import revisionist_commit_history_html
 
 from shutil import copyfile
 
@@ -59,9 +61,7 @@ class Cluster(object):
             for line in docker.pull(image, stream=True):
                 click.secho(pretty_line(line), fg="blue")
 
-    def launch(self):
-        if not self._g.config.is_airgapped.value:
-            self._g.registry_auth()
+    def launch(self):            
 
         launch_file_source = join(cwd, 'bootstrap/launch.sh')
         launch_file = 'deploy/launch.sh'
@@ -90,7 +90,7 @@ class Cluster(object):
         click.secho("Graphistry Launched. Please Browse to:", fg="yellow")
         click.secho("http://{0}".format(self._g.config.graphistry_host.value), fg="yellow")
 
-    def compile(self):
+    def compile(self, include_config=False):
         """
         Generate dist/graphistry.tar.gz. Run pull beforehand.
         :return:
@@ -116,7 +116,7 @@ class Cluster(object):
             maybe_ssl = ' ssl' if tls else ''
 
             # Grab the current config to be used on the on-prem deploy if requested
-            if self._g.config.compile_with_config.value:
+            if include_config:
                 click.secho('[graphistry] Copying configuration for distribution.', fg='yellow')
                 config = expanduser('~/.config/graphistry/config.json')
 
@@ -156,6 +156,22 @@ class Cluster(object):
         else:
             click.secho("Container archive not found. Run complie or ask your administrator for one.", fg="red")
 
+
+    def keygen(self):
+        """
+        Generate API key token based on an inputted tracking identifier. Requires Graphistry to be running.
+        :return:
+        """
+
+        toolbar_quip = revisionist_commit_history_html()
+        click.secho('[graphistry] Generating API key token.', fg='yellow')
+        username = prompt('User name or email, no special characters or spaces (enter for autogen): ', bottom_toolbar=toolbar_quip, history=None)
+        try:
+            local('docker exec monolith-network-nginx wget -q -O - "http://vizapp:3000/api/internal/provision?text=%s" ; echo' %(username))        
+        except:
+            click.secho("ERROR: could not generate API key; is Graphistry running or did you include special characters and spaces?", fg="red")
+
+
     def stop(self):
         """
         Stop all running containers
@@ -164,4 +180,4 @@ class Cluster(object):
         try:
             local('docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)')
         except:
-            click.secho("ERROR: could not stop contrainers; were none running?", fg="red")
+            click.secho("ERROR: could not stop containers; were none running?", fg="red")

@@ -2,19 +2,23 @@ from graphistry.config import Graphistry
 from graphistry.cluster import Cluster
 import sys, click
 
-__Commands__ = ['init', 'login', 'config', 'pull', 'launch', 'load', 'compile', 'update', 'stop', 'help', 'exit']
 __CommandsMeta__ = {
-    'init': 'Configure and Launch Graphistry',
-    'login': 'Login to Graphistry',
-    'config': 'Configure Graphistry',
-    'launch': 'Launch Graphistry',
-    'pull': 'Pull docker contgainers',
     'compile': 'Generate dist/graphistry.tar.gz',
-    'load': 'Load Graphistry from Container Archive',
-    'stop': 'Stop All Graphistry Containers',
-    'help': 'Shows all CLI commands',
+    'compile_with_config': 'Generate dist/graphistry.tar.gz and include local configuration',
+    'config': 'Configure Graphistry relative to latest Graphistry online baseline',
+    'config_offline': 'Configure Graphistry relative to offline baseline',
     'exit': 'Leave application. Ctrl-C or Ctrl-D works too.',
+    'keygen': 'Create API key token',
+    'help': 'Shows all CLI commands',
+    'init': 'Download, configure, and launch Graphistry',
+    'launch': 'Launch Graphistry based on local containers',
+    'load': 'Load Graphistry from Container Archive',
+    'login': 'Login to Graphistry',
+    'pull': 'Pull docker containers',
+    'stop': 'Stop All Graphistry Containers',
 }
+__Commands__ = list(__CommandsMeta__.keys())
+
 
 def init():
     _g = Graphistry()
@@ -24,6 +28,7 @@ def init():
     _g.template_config()
 
     _c = Cluster()
+    _c.pull()
     _c.launch()
 
 
@@ -38,6 +43,11 @@ def config():
     _g.template_config()
 
 
+def config_offline():
+    _g = Graphistry()
+    _g.template_config(airgapped=True)
+
+
 def pull():
     _c = Cluster()
     _c.pull()
@@ -47,6 +57,9 @@ def launch():
     _c = Cluster()
     _c.launch()
 
+def keygen():
+    _c = Cluster()
+    _c.keygen()
 
 def load():
     _c = Cluster()
@@ -56,6 +69,10 @@ def load():
 def compile():
     _c = Cluster()
     _c.compile()
+
+def compile_with_config():
+    _c = Cluster()
+    _c.compile(include_config=True)
 
 
 def update():

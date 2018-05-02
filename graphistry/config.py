@@ -65,8 +65,6 @@ CONFIG_SCHEMA = {
     'vizapp_container': 'us.gcr.io/psychic-expanse-187412/graphistry/release/viz-app:925',
     'pivotapp_container': 'us.gcr.io/psychic-expanse-187412/graphistry/release/pivot-app:925',
     'is_airgapped': False,
-    'compile_with_config': True,
-    'use_ssl': False,
     'api_canary': '',
     'api_secret': '',
     'graphistry_key': '',
@@ -127,8 +125,6 @@ class Graphistry(object):
             'vizapp_container': conf['default_deployment']['vizapp_container'],
             'pivotapp_container': conf['default_deployment']['pivotapp_container'],
             'is_airgapped': False,
-            'compile_with_config': True,
-            'use_ssl': False,
             'api_canary': '',
             'api_secret': '',
             'graphistry_key': '',
@@ -149,7 +145,7 @@ class Graphistry(object):
         }
         self.get_config(schema)
 
-    def load_config(self):
+    def load_config(self, airgapped=False):
         print("Loading Config")
         if exists(self.config_file):
             self.config = Config(
@@ -158,31 +154,24 @@ class Graphistry(object):
                 auto_load=True,
             )
             self.config.json.load(self.config_file)
+        elif airgapped:
+            self.get_config(CONFIG_SCHEMA)
         else:
             self.login()
         return self.config
 
-    def template_config(self):
+    def template_config(self, airgapped=False):
         toolbar_quip = revisionist_commit_history_html()
-        self.load_config()
+        self.load_config(airgapped)
 
-        # Graphistry Basic
-        click.secho("[graphistry ] Basic Deployment config", fg="yellow")
-        self.config.is_airgapped.value = prompt('Is this for an airgapped/on-prem deploy [y/n default n]: ',
-                                           bottom_toolbar=toolbar_quip, history=None)
-        if self.config.is_airgapped.value:
-            self.config.compile_with_config.value = prompt('Compile with configuration files? [y/n default y]: ',
-                                               bottom_toolbar=toolbar_quip, history=None)
+        self.config.is_airgapped.value = airgapped
 
-        self.config.use_ssl.value = prompt('Use SSL? [y/n default n]: ',
-                                           bottom_toolbar=toolbar_quip, history=None)
-
+        
         # Graphistry API Key Generation
-        click.secho("[graphitry] API Key Settings. [Hash algorithm is 'aes-256-cbc'.]", fg="yellow")
-        click.secho("[graphitry] [If you choose nothing for your salt or canary they will be generated for you.", fg="yellow")
-
-        api_canary = prompt('Hash Canary string: ', bottom_toolbar=toolbar_quip, history=None)
-        api_secret = prompt('Your Secret string: ', bottom_toolbar=toolbar_quip, history=None)
+        click.secho("[graphistry] Configure API key generation. [Hash algorithm is 'aes-256-cbc'.]", fg="yellow")
+        
+        api_canary = prompt('Hash Canary string (enter to autogenerate): ', bottom_toolbar=toolbar_quip, history=None)
+        api_secret = prompt('Your Secret string (enter to autogenerate): ', bottom_toolbar=toolbar_quip, history=None)
 
         if api_canary == '':
             self.config.api_canary.value = id_generator(10)
@@ -193,36 +182,47 @@ class Graphistry(object):
         #self.config.graphistry_key.value = prompt('You supplied Graphisty key: ',
         #                                           bottom_toolbar=toolbar_quip, history=None)
 
+
+        # Elasticsearch
+        click.secho("[graphistry] Configure connectors", fg="yellow")
+        self.config.es_host.value = prompt('Your Elasticsearch Host (enter to skip): ',
+                                           bottom_toolbar=toolbar_quip, history=None)
+        if self.config.es_host.value != '':
+            self.config.es_port.value = prompt('Your Elasticsearch Port [default: 9200]: ',
+                                               bottom_toolbar=toolbar_quip, history=None)
+            if self.config.es_port.value == '':
+                self.config.es_port.value = CONFIG_SCHEMA['es_port']
+
+
+        # Splunk
+        self.config.splunk_host.value = prompt('Your Splunk Host (enter to skip): ',
+                                               bottom_toolbar=toolbar_quip, history=None)
+        if self.config.splunk_host.value != '':
+            
+            self.config.splunk_port.value = prompt('Your Splunk UI Port [default: 3000]: ',                                                   bottom_toolbar=toolbar_quip, history=None)
+            if self.config.splunk_port.value == '':
+                self.config.splunk_port.value = CONFIG_SCHEMA['splunk_port']
+
+            self.config.splunk_user.value = prompt('Your Splunk Username: ',
+                                                   bottom_toolbar=toolbar_quip, history=None)
+            self.config.splunk_password.value = prompt('Your Splunk Password: ',
+                                                       bottom_toolbar=toolbar_quip, history=None, is_password=True)
+
+        click.secho("[graphistry] Configure networking", fg="yellow")
+
+        # Pivotapp->ETL/Vizapp
         self.config.graphistry_host.value = prompt('Your FQDN for this deployment [e.g., graphistry.yourcompany.com]: ',
                                                    bottom_toolbar=toolbar_quip, history=None)
 
-        # Elasticsearch
-        click.secho("[graphistry ] Elasticsearch and Splunk Config", fg="yellow")
-        self.config.es_host.value = prompt('Your Elasticsearch Host: ',
-                                           bottom_toolbar=toolbar_quip, history=None)
-        self.config.es_port.value = prompt('Your Elasticsearch Port [default: 9200]: ',
-                                           bottom_toolbar=toolbar_quip, history=None)
-
-        # Splunk
-        self.config.splunk_host.value = prompt('Your Splunk Host: ',
-                                               bottom_toolbar=toolbar_quip, history=None)
-        self.config.splunk_port.value = prompt('Your Splunk Port [default: 3000]: ',
-                                               bottom_toolbar=toolbar_quip, history=None)
-        self.config.splunk_user.value = prompt('Your Splunk Username: ',
-                                               bottom_toolbar=toolbar_quip, history=None)
-        self.config.splunk_password.value = prompt('Your Splunk Password: ',
-                                                   bottom_toolbar=toolbar_quip, history=None, is_password=True)
-
-        click.secho("[graphistry ] Network Config", fg="yellow")
         # Ip Whitelist
         self.config.ip_internal_accept_list.value = prompt('Your Internal IP Accept Whitelist (beyond typical RFC 1918)'
                                                            ', ex:["127.0.0.1", "10.*"]',
                                                            bottom_toolbar=toolbar_quip, history=None)
 
         # Http Ingress
-        self.config.http_user.value = prompt('Pivotapp HTTP Ingress Username: ',
+        self.config.http_user.value = prompt('HTTP Ingress Username: ',
                                              bottom_toolbar=toolbar_quip, history=None)
-        password = prompt('Pivotapp HTTP Ingress Password: ',
+        password = prompt('HTTP Ingress Password: ',
                           bottom_toolbar=toolbar_quip,
                           history=None,
                           is_password=True)
@@ -231,8 +231,9 @@ class Graphistry(object):
                                                          capture=True)
 
         # AWS
-        self.config.s3_access.value = prompt('AWS Access Key ID: ', bottom_toolbar=toolbar_quip, history=None)
-        self.config.s3_secret.value = prompt('AWS Access Key Secret: ', bottom_toolbar=toolbar_quip, history=None)
+        self.config.s3_access.value = prompt('AWS Access Key ID (enter to skip): ', bottom_toolbar=toolbar_quip, history=None)
+        if self.config.s3_access.value != '':
+            self.config.s3_secret.value = prompt('AWS Access Key Secret: ', bottom_toolbar=toolbar_quip, history=None)
 
         self.save_config()
         self.write_configs()
@@ -265,5 +266,7 @@ class Graphistry(object):
 
         if self.config:
             self.config.json.dump(self.config_file, with_defaults=True)
+            print("Wrote config:", self.config_file)
+
 
 
