@@ -20,6 +20,7 @@ def celebrity_name():
     """
     celebs = ['Albert Einstein', 'Benjamin Franklin', 'Marilyn Monroe',
               'Thomas Jefferson', 'Henry Rollins', 'Eli Whitney',
+              'Grace Hopper', 'Alexander Hamilton', 'Cleopatra',
               'George Washington Carver', 'Marie Curie', 'Sally Ride',
               'David Lynch']
     return random.choice(celebs)

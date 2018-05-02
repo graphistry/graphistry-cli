@@ -9,6 +9,9 @@ import sys, json
 from requests.auth import HTTPBasicAuth
 from fabric.api import local, settings, hide
 from jinja2 import Environment
+import click
+import string
+import random
 
 cwd = dir_path = dirname(realpath(__file__))
 
@@ -45,6 +48,10 @@ def create_config_files(filename, text):
             raise
 
 
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
 CONFIG_SCHEMA = {
     'user': {
         'name': '',
@@ -60,6 +67,8 @@ CONFIG_SCHEMA = {
     'is_airgapped': False,
     'compile_with_config': True,
     'use_ssl': False,
+    'api_canary': '',
+    'api_secret': '',
     'graphistry_key': '',
     'graphistry_host': '',
     'es_host': '',
@@ -120,6 +129,8 @@ class Graphistry(object):
             'is_airgapped': False,
             'compile_with_config': True,
             'use_ssl': False,
+            'api_canary': '',
+            'api_secret': '',
             'graphistry_key': '',
             'graphistry_host': '',
             'es_host': '',
@@ -156,6 +167,7 @@ class Graphistry(object):
         self.load_config()
 
         # Graphistry Basic
+        click.secho("[graphistry ] Basic Deployment config", fg="yellow")
         self.config.is_airgapped.value = prompt('Is this for an airgapped/on-prem deploy [y/n default n]: ',
                                            bottom_toolbar=toolbar_quip, history=None)
         if self.config.is_airgapped.value:
@@ -165,13 +177,27 @@ class Graphistry(object):
         self.config.use_ssl.value = prompt('Use SSL? [y/n default n]: ',
                                            bottom_toolbar=toolbar_quip, history=None)
 
-        self.config.graphistry_key.value = prompt('You supplied Graphisty key: ',
-                                                   bottom_toolbar=toolbar_quip, history=None)
+        # Graphistry API Key Generation
+        click.secho("[graphitry] API Key Settings. [Hash algorithm is 'aes-256-cbc'.]", fg="yellow")
+        click.secho("[graphitry] [If you choose nothing for your salt or canary they will be generated for you.", fg="yellow")
+
+        api_canary = prompt('Hash Canary string: ', bottom_toolbar=toolbar_quip, history=None)
+        api_secret = prompt('Your Secret string: ', bottom_toolbar=toolbar_quip, history=None)
+
+        if api_canary == '':
+            self.config.api_canary.value = id_generator(10)
+
+        if api_secret == '':
+            self.config.api_secret.value = id_generator(10)
+
+        #self.config.graphistry_key.value = prompt('You supplied Graphisty key: ',
+        #                                           bottom_toolbar=toolbar_quip, history=None)
 
         self.config.graphistry_host.value = prompt('Your FQDN for this deployment [e.g., graphistry.yourcompany.com]: ',
                                                    bottom_toolbar=toolbar_quip, history=None)
 
         # Elasticsearch
+        click.secho("[graphistry ] Elasticsearch and Splunk Config", fg="yellow")
         self.config.es_host.value = prompt('Your Elasticsearch Host: ',
                                            bottom_toolbar=toolbar_quip, history=None)
         self.config.es_port.value = prompt('Your Elasticsearch Port [default: 9200]: ',
@@ -187,6 +213,7 @@ class Graphistry(object):
         self.config.splunk_password.value = prompt('Your Splunk Password: ',
                                                    bottom_toolbar=toolbar_quip, history=None, is_password=True)
 
+        click.secho("[graphistry ] Network Config", fg="yellow")
         # Ip Whitelist
         self.config.ip_internal_accept_list.value = prompt('Your Internal IP Accept Whitelist (beyond typical RFC 1918)'
                                                            ', ex:["127.0.0.1", "10.*"]',
