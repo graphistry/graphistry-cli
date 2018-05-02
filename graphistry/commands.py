@@ -24,6 +24,7 @@ def init():
     _g.template_config()
 
     _c = Cluster()
+    _c.pull()
     _c.launch()
 
 
@@ -36,6 +37,11 @@ def login():
 def config():
     _g = Graphistry()
     _g.template_config()
+
+
+def config_offline():
+    _g = Graphistry()
+    _g.template_config(airgapped=True)
 
 
 def pull():

@@ -145,7 +145,7 @@ class Graphistry(object):
         }
         self.get_config(schema)
 
-    def load_config(self):
+    def load_config(self, airgapped=False):
         print("Loading Config")
         if exists(self.config_file):
             self.config = Config(
@@ -154,23 +154,19 @@ class Graphistry(object):
                 auto_load=True,
             )
             self.config.json.load(self.config_file)
+        elif airgapped:
+            self.get_config(CONFIG_SCHEMA)
         else:
             self.login()
         return self.config
 
-    def template_config(self):
+    def template_config(self, airgapped=False):
         toolbar_quip = revisionist_commit_history_html()
-        self.load_config()
+        self.load_config(airgapped)
 
-        # Graphistry Basic
-        click.secho("[graphistry ] Basic Deployment config", fg="yellow")
-        self.config.is_airgapped.value = prompt('Is this for an airgapped/on-prem deploy [y/n default n]: ',
-                                           bottom_toolbar=toolbar_quip, history=None)
-        if self.config.is_airgapped.value:
-            self.config.compile_with_config.value = prompt('Compile with configuration files? [y/n default y]: ',
-                                               bottom_toolbar=toolbar_quip, history=None)
+        self.config.is_airgapped.value = airgapped
 
-
+        
         # Graphistry API Key Generation
         click.secho("[graphitry] API Key Settings. [Hash algorithm is 'aes-256-cbc'.]", fg="yellow")
         click.secho("[graphitry] [If you choose nothing for your salt or canary they will be generated for you.", fg="yellow")

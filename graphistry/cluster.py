@@ -59,9 +59,7 @@ class Cluster(object):
             for line in docker.pull(image, stream=True):
                 click.secho(pretty_line(line), fg="blue")
 
-    def launch(self):
-        if not self._g.config.is_airgapped.value:
-            self._g.registry_auth()
+    def launch(self):            
 
         launch_file_source = join(cwd, 'bootstrap/launch.sh')
         launch_file = 'deploy/launch.sh'
