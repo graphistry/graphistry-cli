@@ -66,7 +66,6 @@ CONFIG_SCHEMA = {
     'pivotapp_container': 'us.gcr.io/psychic-expanse-187412/graphistry/release/pivot-app:925',
     'is_airgapped': False,
     'compile_with_config': True,
-    'use_ssl': False,
     'api_canary': '',
     'api_secret': '',
     'graphistry_key': '',
@@ -128,7 +127,6 @@ class Graphistry(object):
             'pivotapp_container': conf['default_deployment']['pivotapp_container'],
             'is_airgapped': False,
             'compile_with_config': True,
-            'use_ssl': False,
             'api_canary': '',
             'api_secret': '',
             'graphistry_key': '',
@@ -174,8 +172,6 @@ class Graphistry(object):
             self.config.compile_with_config.value = prompt('Compile with configuration files? [y/n default y]: ',
                                                bottom_toolbar=toolbar_quip, history=None)
 
-        self.config.use_ssl.value = prompt('Use SSL? [y/n default n]: ',
-                                           bottom_toolbar=toolbar_quip, history=None)
 
         # Graphistry API Key Generation
         click.secho("[graphitry] API Key Settings. [Hash algorithm is 'aes-256-cbc'.]", fg="yellow")
