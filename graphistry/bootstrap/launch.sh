@@ -139,6 +139,33 @@ $RUNTIME run \
     -v ${PWD}/supervisor:/var/log/supervisor \
     ${VIZ_APP_BASE_CONTAINER}
 
+
+
+#Either pass in env var failure GRAPHISTRY_KEY_MISSING or success GRAPHISTRY_KEY
+GRAPHISTRY_KEY_ENV="GRAPHISTRY_KEY_MISSING"
+WGET_KEY="wget -q -O- http://localhost:3000/api/internal/provision?text=pivotapp"
+if [ -n "${SHIPYARD}" ] ; then
+    echo "Generating internal API key"
+    for i in {1..12}
+    do
+        OUT=$(docker exec monolith-network-viz sh -c "${WGET_KEY} | sed 's#.*success\":\([a-z]*\).*#\1#g'")
+        if [ "$OUT" = "true" ] ; then
+            GRAPHISTRY_KEY=$(docker exec monolith-network-viz sh -c "${WGET_KEY} | sed 's#.*encrypted\":\"\([a-zA-Z0-9]*\).*#\1#g'")
+            GRAPHISTRY_KEY_ENV="GRAPHISTRY_KEY"
+            break
+        else
+            echo "Reattempt out: " $(docker exec monolith-network-viz sh -c "${WGET_KEY}")
+            sleep $i
+        fi
+    done
+    if [ "$OUT" != "true" ] ; then
+        echo "ERROR generating"
+        echo "Reattempt out: " $(docker exec monolith-network-viz sh -c "${WGET_KEY}")
+        exit
+    fi
+fi
+
+
 ### 5a. Start pivot-app.
 
 PIVOTAPP_BOX_NAME=${GRAPHISTRY_NETWORK}-pivot
@@ -156,6 +183,7 @@ docker run -d \
     -e "NODE_ENV=production" \
     -e "GRAPHISTRY_LOG_LEVEL=$PIVOT_LOG_LEVEL" \
     -e "LOG_FILE=logs/pivot.log" \
+    -e "${GRAPHISTRY_KEY_ENV}=${GRAPHISTRY_KEY}" \
     -v $PWD/pivot-app/:/pivot-app/logs \
     -v ${GRAPHISTRY_PIVOT_CACHE:-$PWD/../.pivot-db}:/pivot-app/data \
     -v $PWD/../pivot-config.json:/pivot-app/config/z-box-override.json:ro \
