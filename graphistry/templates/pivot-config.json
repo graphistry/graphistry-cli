@@ -12,7 +12,13 @@
     {% if es_host %}
     "elasticsearch":{
       "host": "{{ es_host }}",
-      "port": {{ es_port|default('9200') }}
+      "port": {{ es_port|default('9200') }},
+      "protocol": "{{ es_protocol }}",
+
+      {% if es_auth != '' %}
+      "auth": "{{ es_auth }}",
+      {% endif %}
+
     },
     {% endif %}
 
@@ -21,7 +27,9 @@
       {"key": "{{ splunk_password }}",
       "user": "{{ splunk_user }}",
       "host": "{{ splunk_host }}",
-      "uiPort": {{ splunk_port|default('3000') }}
+      "port": {{ splunk_api_port|default('8089') }},
+      "uiPort": {{ splunk_web_port|default('443') }},
+      "protocol": "{{ splunk_protocol }}"
     },
     {% endif %}
 

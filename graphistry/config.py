@@ -71,10 +71,14 @@ CONFIG_SCHEMA = {
     'graphistry_host': '',
     'es_host': '',
     'es_port': '9200',
+    'es_protocol': 'http',
+    'es_auth': '',
     'splunk_host': '',
-    'splunk_port': '3000',
+    'splunk_web_port': '443',
+    'splunk_api_port': '8089',
     'splunk_user': '',
     'splunk_password': '',
+    'splunk_protocol': 'https',
     'ip_internal_accept_list': '',
     'http_user': '',
     'http_password_hash': '',
@@ -131,8 +135,13 @@ class Graphistry(object):
             'graphistry_host': '',
             'es_host': '',
             'es_port': '9200',
+            'es_protocol': 'http',
+            'es_auth': '',
             'splunk_host': '',
-            'splunk_port': '3000',
+            'splunk_web_port': '443',
+            'splunk_api_port': '8089',
+            'splunk_protocol': 'https',    
+            'splunk'
             'splunk_user': '',
             'splunk_password': '',
             'ip_internal_accept_list': '',
@@ -185,7 +194,7 @@ class Graphistry(object):
 
         # Elasticsearch
         click.secho("[graphistry] Configure connectors", fg="yellow")
-        self.config.es_host.value = prompt('Your Elasticsearch Host (enter to skip): ',
+        self.config.es_host.value = prompt('Your Elasticsearch Host, e.g., elk.company.com (enter to skip): ',
                                            bottom_toolbar=toolbar_quip, history=None)
         if self.config.es_host.value != '':
             self.config.es_port.value = prompt('Your Elasticsearch Port [default: 9200]: ',
@@ -193,15 +202,38 @@ class Graphistry(object):
             if self.config.es_port.value == '':
                 self.config.es_port.value = CONFIG_SCHEMA['es_port']
 
+            self.config.es_protocol.value = prompt('Your Elasticsearch Protocol [default: http]: ',
+                                               bottom_toolbar=toolbar_quip, history=None)
+            if self.config.es_protocol.value == '':
+                self.config.es_protocol.value = CONFIG_SCHEMA['es_protocol']
+
+            self.config.es_auth.value = prompt('Your Elasticsearch auth, e.g., user:password [default: none]: ',
+                                               bottom_toolbar=toolbar_quip, history=None)
+            if self.config.es_auth.value == '':
+                self.config.es_auth.value = CONFIG_SCHEMA['es_auth']
+
 
         # Splunk
-        self.config.splunk_host.value = prompt('Your Splunk Host (enter to skip): ',
+        self.config.splunk_host.value = prompt('Your Splunk Host, e.g., www.splunk.com (enter to skip): ',
                                                bottom_toolbar=toolbar_quip, history=None)
         if self.config.splunk_host.value != '':
             
-            self.config.splunk_port.value = prompt('Your Splunk UI Port [default: 3000]: ',                                                   bottom_toolbar=toolbar_quip, history=None)
-            if self.config.splunk_port.value == '':
-                self.config.splunk_port.value = CONFIG_SCHEMA['splunk_port']
+            #### DEFAULTS
+            self.config.splunk_api_port.value = prompt('Your Splunk API Port [default: 8089]: ',
+                bottom_toolbar=toolbar_quip, history=None)
+            if self.config.splunk_api_port.value == '':
+                self.config.splunk_api_port.value = CONFIG_SCHEMA['splunk_api_port']
+
+            self.config.splunk_web_port.value = prompt('Your Splunk Web UI Port [default: 443]: ',
+                bottom_toolbar=toolbar_quip, history=None)
+            if self.config.splunk_web_port.value == '':
+                self.config.splunk_web_port.value = CONFIG_SCHEMA['splunk_web_port']
+
+            self.config.splunk_protocol.value = prompt('Your Splunk Protocol, e.g., https [default: https]: ',
+                bottom_toolbar=toolbar_quip, history=None)
+            if self.config.splunk_protocol.value == '':
+                self.config.splunk_protocol.value = CONFIG_SCHEMA['splunk_protocol']
+
 
             self.config.splunk_user.value = prompt('Your Splunk Username: ',
                                                    bottom_toolbar=toolbar_quip, history=None)
