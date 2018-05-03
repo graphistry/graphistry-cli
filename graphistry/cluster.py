@@ -95,6 +95,12 @@ class Cluster(object):
         Generate dist/graphistry.tar.gz. Run pull beforehand.
         :return:
         """
+
+        try:
+            bcrypt_image = self.docker.images.get('bcrypt:latest')
+        except docker.errors.ImageNotFound:
+            self._g.create_bcrypt_container()
+            
         self.pull()
         images = self.images['public']+self.images['private']+['bcrypt:latest']
 
