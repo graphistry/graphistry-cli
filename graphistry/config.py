@@ -242,7 +242,7 @@ class Graphistry(object):
         click.secho("[graphistry] Configure networking", fg="yellow")
 
         # Pivotapp->ETL/Vizapp
-        self.config.graphistry_host.value = prompt('Your FQDN for this deployment [e.g., graphistry.yourcompany.com]: ',
+        self.config.graphistry_host.value = prompt('Your FQDN for this deployment, including protocol [e.g., http://graphistry.yourcompany.com]: ',
                                                    bottom_toolbar=toolbar_quip, history=None)
 
         # Ip Whitelist
