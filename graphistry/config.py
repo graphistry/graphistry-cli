@@ -141,7 +141,6 @@ class Graphistry(object):
             'splunk_web_port': '443',
             'splunk_api_port': '8089',
             'splunk_protocol': 'https',    
-            'splunk'
             'splunk_user': '',
             'splunk_password': '',
             'ip_internal_accept_list': '',
