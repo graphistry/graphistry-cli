@@ -158,7 +158,7 @@ if [ -n "${SHIPYARD}" ] ; then
             sleep $i
         fi
     done
-    if [ "$OUT" -ne "true" ] ; then
+    if [ "$OUT" != "true" ] ; then
         echo "ERROR generating"
         echo "Reattempt out: " $(docker exec monolith-network-viz sh -c "${WGET_KEY}")
         exit
