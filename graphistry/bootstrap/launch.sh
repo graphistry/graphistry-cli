@@ -148,9 +148,9 @@ if [ -n "${SHIPYARD}" ] ; then
     echo "Generating internal API key"
     for i in {1..12}
     do
-        OUT=$(docker exec monolith-network-viz sh -c "${WGET_KEY} | jq .success")
+        OUT=$(docker exec monolith-network-viz sh -c "${WGET_KEY} | sed 's#.*success\":\([a-z]*\).*#\1#p'")
         if [ "$OUT" = "true" ] ; then
-            GRAPHISTRY_KEY=$(docker exec monolith-network-viz sh -c "${WGET_KEY} | jq .encrypted")
+            GRAPHISTRY_KEY=$(docker exec monolith-network-viz sh -c "${WGET_KEY} | sed 's#.*encrypted\":\([a-zA-Z0-9]*\).*#\1#p'")
             GRAPHISTRY_KEY_ENV="GRAPHISTRY_KEY"
             break
         else
