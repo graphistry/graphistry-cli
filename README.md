@@ -208,12 +208,12 @@ A full Graphistry deployment involves several systems:
 * Bootstrapped environment (see above): Docker, Nvidia-Docker, Python3, ...
 * Graphistry CLI (Python 3 wheel)
 * Graphistry itself (Docker containers)
-* Graphistry configuration (.config/* and *.json) <-- can be generated on the air-gapped system
+* Graphistry configuration (~/.config/graphistry/* and *.json) <-- generate on the final (airgapped) system
 
 The process is:
 1. Download a tarball from Graphistry as a password-protected URL, or generated via the CLI on an internet-connected device
 2. Setup the airgapped server: perform the above bootstrap processes and install the tarball
-3. Reconfigure the Graphistry installation for the air-gapped server and launch it
+3. Configure the Graphistry installation for the air-gapped server and launch it
 
 **Generate a Tarball (Internet-connected)**
 
@@ -221,54 +221,89 @@ Either download a tarball from your Graphistry account, or generate one from scr
 
 1. See the Linux bootstrapping section for setting up environment dependencies
 2. Start the CLI: ``graphistry``
-3. From the CLI, run:  ``init` and then ``compile``
+3. From the CLI, run:  ``init`` and then ``compile``
 
-You will now have a ``*.tar.gz`` that contains binaries (CLI + Graphistry). To include configurations, switch to ``compile_with_config`` in Step 3 above.
+You will now have the file ``dist/graphistry.tar.gz`` that contains binaries (CLI + Graphistry) and none of the instance-specific configuration files or data.
 
 **Load a Tarball (Airgapped)**
 
 From a bootstrapped environment (Docker, Python3, Nvidia-Docker, ... see above):
 
-1. Decompress: ``tar -xvzf my_graphistry.tar.gz``
-2. Start the CLI: ``graphistry``
-3. From the CLI, run: ``load`` ; ``config_offline`` ; ``launch``
+1. Decompress ``tar -xvzf graphistry942.tar.gz`` into ``releases/942`` 
+2. Install the CLI corresponding to the new container:
+```
+    $ cd releases/942/graphistry-cli
+    $ python3.6 setup.py install
+```
+3. Load the container, configure it, and launch it:
+```
+    $ cd .. ### containers.tar should be in this folder
+    $ graphistry
+    >  config_offline
+    >  load
+    >  launch
+```    
 
-If the transferred file included sufficient system configurations, you can skip the ``config_offline`` step.
+You can skip the ``config_offline`` step if the transferred file included sufficient system configurations, such as through correct use of ``compile_with_config`` or through orchestration-provision configuration.
 
 
 Upgrading:
 ==========
 
-### Update to the latest CLI
-
-The CLI is a standard Python3 program:
-
-```
-#Stop the Graphistry server if it is running
-$graphistry -c stop
-
-#Fetch the latest CLI
-$cd graphistry-cli
-$git pull
-
-#Clean existing
-$pip3 uninstall graphistry
-$python3 setup.py clean
-$pythpn3 setup.py install
-```
+Your version of Graphistry is determined by your cloud admin account and the version of the Graphistry CLI being used. The overall flow is: stop the running server, remove the old configuration and reinstall the relevant CLI,  configure the system, download any new containers, and launch.
 
 ### Update to the latest container: Internet connected
 
-* Pull the latest settings: ``graphistry -c pull``
-* From the CLI, run ``load`` ; ``config`` ; ``launch``
+1. Stop the Graphistry server if it is running
+```
+    $ graphistry -c stop
+```
+
+2. Update the CLI
+```
+    $ cd graphistry-cli
+    $ git pull
+    $ pip3 uninstall graphistry
+    $ python3.6 setup.py clean
+    $ pythpn3.6 setup.py install
+```    
+
+3. Update Graphistry and restart
+```
+    $ rm -rf ~/.config ##### Backup this folder and *.json
+    $ graphistry
+    >   pull
+    >   config
+    >   load
+    >   launch
+```    
 
 
 ### Update to the latest container: Airgapped
 
-* Copy the latest container to your system
-* Stop Graphistry if it is running: ``graphistry -c stop``
-* From the CLI, run ``load`` ; ``config`` ; ``launch``
+1. Copy the latest container to your system, e.g., `graphistry/releases/942`
+2. Stop Graphistry if it is running: 
+```
+    $ graphistry -c stop
+```
 
+3. Update the CLI
+```
+    $ cd graphistry-cli
+    $ pip3 uninstall graphistry
+    $ python3.6 setup.py clean
+    $ pythpn3.6 setup.py install
+```    
+
+4. Reconfigure, update, and relaunch Graphistry
+```
+    $ cd .. # containers.tar should be in this folder
+    $ rm -rf ~/.config ##### Backup this folder and *.json
+    $ graphistry
+    >    config
+    >    load
+    >    launch
+```    
 
 Testing:
 ========
