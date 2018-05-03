@@ -143,7 +143,7 @@ $RUNTIME run \
 
 #Either pass in env var failure GRAPHISTRY_KEY_MISSING or success GRAPHISTRY_KEY
 GRAPHISTRY_KEY_ENV="GRAPHISTRY_KEY_MISSING"
-WGET_KEY="wget -q -O- http://viz:3000/api/internal/provision?text=pivotapp"
+WGET_KEY="wget -q -O- http://localhost:3000/api/internal/provision?text=pivotapp"
 if [ -n "${SHIPYARD}" ] ; then
     echo "Generating internal API key"
     for i in {1..12}
@@ -154,6 +154,7 @@ if [ -n "${SHIPYARD}" ] ; then
             GRAPHISTRY_KEY_ENV="GRAPHISTRY_KEY"
             break
         else
+            echo "Reattempt out: " $(docker exec monolith-network-viz sh -c "${WGET_KEY}")
             sleep $i
         fi
     done
