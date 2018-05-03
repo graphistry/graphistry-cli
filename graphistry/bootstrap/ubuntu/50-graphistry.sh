@@ -13,4 +13,3 @@ cd ${DIR}/../../../ && sudo python3 setup.py install
 echo -e "\nLogin into a new session to enable docker access, run 'graphistry'.\n"
 
 sudo su - $USER
-yep
