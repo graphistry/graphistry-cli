@@ -50,20 +50,34 @@ Bootstrap: Download the CLI and setup your Linux environment
 ------------------------------------------------------------
 
 **AWS**
-Launch an official AWS Ubuntu/RHEL/Centos AMI using a ``g3+``or ``p*`` GPU instance. Use S3AllAccess permissions, and override default parameters for: 200GB RAM, and enable http/https/ssl in the security groups. SSH as ``ubuntu@[your ami]``, ``centos@``, or ``ec2-user@``. Proceed to the OS-specific instructions below.
+
+* Launch an official AWS Ubuntu/RHEL/Centos AMI using a ``g3+``or ``p*`` GPU instance. 
+* Use S3AllAccess permissions, and override default parameters for: 200GB RAM
+* Enable SSH/HTTP/HTTPS in the security groups
+* SSH as ``ubuntu@[your ami]``, ``centos@``, or ``ec2-user@``. 
+
+Proceed to the OS-specific instructions below.
 
 **Ubuntu 16.04**
-    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
+```
+    $ git clone https://github.com/graphistry/graphistry-cli.git
+    $ bash graphistry-cli/bootstrap.sh ubuntu
+```
 
 **RHEL 7.4 / CentOS 7**
+```
     $ sudo yum install -y git
-    $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
+    $ git clone https://github.com/graphistry/graphistry-cli.git 
+    $ bash graphistry-cli/bootstrap.sh rhel
+```
 
 Log off and back in (full restart not required.)
 
 Run
 -----
+```
     $ graphistry
+```
 
 * Press tab to see options
 * Run ``init`` for streamlined initial configuration & launch
