@@ -29,7 +29,7 @@
       "host": "{{ splunk_host }}",
       "port": {{ splunk_api_port|default('8089') }},
       "uiPort": {{ splunk_web_port|default('443') }},
-      "protocol": "{{ splunk_protocol }}"
+      "scheme": "{{ splunk_protocol }}"
     },
     {% endif %}
 
