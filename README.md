@@ -36,7 +36,8 @@ Contents
    * Starting and stopping
    * Updating
    * SSL
-   * Bundling for scanning and air-gapped deployment
+   * Bundling for scanning and 
+   -gapped deployment
 * Upgrading
 * Testing
 * Troubleshooting
@@ -148,15 +149,17 @@ Log into your Graphistry server and install the CLI:
 ### Ubuntu
 
 ```
-$ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
+    $ git clone https://github.com/graphistry/graphistry-cli.git
+    $ bash graphistry-cli/bootstrap.sh ubuntu
 ```
 
 ### RHEL/Centos7
 
 
 ```
-$ sudo yum install -y git
-$ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
+    $ sudo yum install -y git
+    $ git clone https://github.com/graphistry/graphistry-cli.git 
+    $ bash graphistry-cli/bootstrap.sh rhel
 ```
 
 Airgapped
@@ -172,11 +175,22 @@ The individual steps are broken out into their own scripts in the ``graphistry/b
 
 ### Transfer, configure, & launch
 
-1. If you do not have a large container file, generate it. Run ``graphistry`` and then: ``init``. After, ``compile``.
+1. If you do not have a large container file, generate it. Run:
+```
+    $ graphistry
+    >   init
+    >   compile
+```    
 
 2. Move the container to the airgapped system, and bootstrap the system. (See scripts used above.)
 
-3. Run ``graphistry`` and then: ``load``, ``config_offline``, and then ``launch``.
+3. Configure and launch:
+```
+    $ graphistry
+    >   load
+    >   config_offline
+    >   launch
+```    
 
 
 Installation:
@@ -220,8 +234,12 @@ The process is:
 Either download a tarball from your Graphistry account, or generate one from scratch:
 
 1. See the Linux bootstrapping section for setting up environment dependencies
-2. Start the CLI: ``graphistry``
-3. From the CLI, run:  ``init`` and then ``compile``
+2. Setup, start, and serialize the server:
+```
+    $ graphistry
+    >   init
+    >  compile
+```    
 
 You will now have the file ``dist/graphistry.tar.gz`` that contains binaries (CLI + Graphistry) and none of the instance-specific configuration files or data.
 
@@ -273,7 +291,7 @@ Your version of Graphistry is determined by your cloud admin account and the ver
     $ rm -rf ~/.config ##### Backup this folder and *.json
     $ graphistry
     >   pull
-    >   config
+    >   config_offline
     >   load
     >   launch
 ```    
