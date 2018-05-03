@@ -144,10 +144,9 @@ class Cluster(object):
                   "tar --exclude='./graphistry-cli/.git' " \
                   "-czf dist/graphistry.tar.gz ./deploy/launch.sh " \
                   "graphistry-cli " \
-                  "bootstrap.sh load.sh containers.tar " \
-                  ("" if not include_config else "httpd-config.json pivot-config.json viz-app-config.json ") \
-                  ("" if not include_config else maybe_config) \
-                  ("" if not include_config else maybe_ssl)
+                  "bootstrap.sh load.sh containers.tar "
+            if include_config:
+                cmd = cmd + "httpd-config.json pivot-config.json viz-app-config.json " + maybe_config + " " + maybe_ssl
             local(cmd)
 
         except NotFound:
