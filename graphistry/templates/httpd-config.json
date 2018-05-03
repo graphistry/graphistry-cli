@@ -1,5 +1,10 @@
-{"S3_ACCESS": "{{ s3_access }}",
+{
+
+{% if s3_access != '' %}
+ "S3_ACCESS": "{{ s3_access }}",
  "S3_SECRET": "{{ s3_secret }}",
+{% endif %}
+
 {% if api_canary %}
   "API":{
     "CANARY": "{{ api_canary }}",
