@@ -137,41 +137,44 @@ Start with one of the following Linux distributions, and configure it using the 
 Continue to the Linux instructions below.
 
 
-Linux:
------
+Linux (Non-Airgapped):
+----------------------
 
 Launch a GPU instance of Graphistry of either RHEL or Ubuntu. See the HW/SW document for recommended system specifications.
 
 Log into your Graphistry server and install the CLI:
 
 
-Ubuntu
-------
+### Ubuntu
 
 ```
 $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh ubuntu
 ```
 
-RHEL/Centos7
-------------
+### RHEL/Centos7
+
 
 ```
 $ sudo yum install -y git
 $ git clone https://github.com/graphistry/graphistry-cli.git && bash graphistry-cli/bootstrap.sh rhel
 ```
-**Airgapped Bootstrapping**
+
+Airgapped
+---------
+
+
+### Bootstrapping
 
 The above scripts bootstrap the installation of Python3, Docker, CUDA, and Nvidia-Docker for various Linux distributions.
 You can install those manually or use ``./bootstrap.sh <ubuntu/rhel>`` that is extracted to the root from your bundle.
 
 The individual steps are broken out into their own scripts in the ``graphistry/bootstrap`` directory.
 
-Airgapped
----------
+### Transfer, configure, & launch
 
 1. If you do not have a large container file, generate it. Run ``graphistry`` and then: ``init``. After, ``compile``.
 
-2. Move the container to the airgapped system, and bootstrap the system. (See scripts used abaove.)
+2. Move the container to the airgapped system, and bootstrap the system. (See scripts used above.)
 
 3. Run ``graphistry`` and then: ``load``, ``config_offline``, and then ``launch``.
 
