@@ -35,6 +35,7 @@ def init():
 
 
 def load_investigations():
+    _g = Graphistry()
     _g.load_investigations()
 
 
