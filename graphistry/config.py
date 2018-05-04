@@ -157,7 +157,7 @@ class Graphistry(object):
         schema = {
             'user': conf['user'],
             'default_deployment': conf['default_deployment'],
-            'investigations': [],
+            'investigations': conf['default_deployment']['investigations'],
             'registry_credentials': conf['default_deployment']['registry_credentials'],
             'vizapp_container': conf['default_deployment']['vizapp_container'],
             'pivotapp_container': conf['default_deployment']['pivotapp_container'],
