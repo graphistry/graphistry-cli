@@ -111,16 +111,19 @@ class Graphistry(object):
         :return:
         """
         self.load_config(airgapped)
-        pivot_db = expanduser('~/.pivot-db')
+        pivot_db = join(cwd, '.pivot-db')
+        invest_dir = join(pivot_db, 'investigations')
+        pivots_dir = join(pivot_db, 'pivots')
+        
         print(pivot_db)
         if not os.path.exists(pivot_db):
             local('mkdir -p ' + pivot_db)
 
-        if not os.path.exists(join(pivot_db, 'investigations')):
-            local('mkdir -p ' + join(pivot_db, 'investigations'))
+        if not os.path.exists(invest_dir):
+            local('mkdir -p ' + invest_dir)
 
-        if not os.path.exists(join(pivot_db + 'pivots')):
-            local('mkdir -p ' + join(pivot_db + 'pivots'))
+        if not os.path.exists(pivots_dir):
+            local('mkdir -p ' + pivots_dir)
 
         with hide('output', 'running', 'warnings'), settings(warn_only=True):
             local('sudo chmod -R 777 ' + pivot_db)
@@ -128,15 +131,18 @@ class Graphistry(object):
         for inv in self.config.investigations.value:
             try:
                 print("writing investigation {0}".format(inv['name']))
-                with open(join(pivot_db, 'investigations/{id}.json'.format(id=inv['json']['id']), 'w')) as outfile:
+                investigation = join(invest_dir, '{id}.json'.format(id=inv['json']['id']))
+                with open(investigation, 'w') as outfile:
                     json.dump(inv['json'], outfile, ensure_ascii=False, indent=4, sort_keys=True)
 
                 for piv in inv['pivots']:
                     print("writing pivot {0}".format(piv['name']))
-                    with open(join(pivot_db, 'pivots/{id}.json'.format(id=piv['json']['id']), 'w')) as outfile:
+                    pivot = join(pivots_dir, '{id}.json'.format(id=piv['json']['id']), 'w')
+                    with open(pivot) as outfile:
                         json.dump(piv['json'], outfile, ensure_ascii=False, indent=4, sort_keys=True)
             except Exception as e:
                 print(e)
+
         with hide('output', 'running', 'warnings'), settings(warn_only=True):
             local('sudo chmod -R 777 ' + pivot_db)
 
