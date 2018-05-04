@@ -124,7 +124,7 @@ class Graphistry(object):
         with hide('output', 'running', 'warnings'), settings(warn_only=True):
             local('sudo chmod -R 777 ' + pivot_db)
 
-        for inv in self.config.default_deployment.value['investigations']:
+        for inv in self.config.investigations.value:
             try:
                 print("writing investigation {0}".format(inv['name']))
                 with open(join(pivot_db, 'investigations/{id}.json'.format(id=inv['json']['id']), 'w')) as outfile:
