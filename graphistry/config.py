@@ -137,8 +137,8 @@ class Graphistry(object):
 
                 for piv in inv['pivots']:
                     print("writing pivot {0}".format(piv['name']))
-                    pivot = join(pivots_dir, '{id}.json'.format(id=piv['json']['id']), 'w')
-                    with open(pivot) as outfile:
+                    pivot = join(pivots_dir, '{id}.json'.format(id=piv['json']['id']))
+                    with open(pivot, 'w') as outfile:
                         json.dump(piv['json'], outfile, ensure_ascii=False, indent=4, sort_keys=True)
             except Exception as e:
                 print(e)
