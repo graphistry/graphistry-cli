@@ -105,6 +105,37 @@ class Graphistry(object):
         make_bcrypt = join(cwd, 'bootstrap/make-bcrypt-contianer.sh')
         local('sudo bash {mb}'.format(mb=make_bcrypt))
 
+    def load_investigations(self):
+        """
+        This will load the pivotdb test data.
+        :return:
+        """
+        home = expanduser('~/')
+        if not os.path.exists(join(home, '.pivot-db')):
+            local('mkdir -p ' + join(home, '.pivot-db'))
+
+        if not os.path.exists(join(home,'.pivot-db/investigations')):
+            local('mkdir -p ' + join(home, '.pivot-db/investigations'))
+
+        if not os.path.exists(join(home + '.pivot-db/pivots')):
+            local('mkdir -p ' + join(home, '.pivot-db/pivots'))
+
+        with hide('output', 'running', 'warnings'), settings(warn_only=True):
+            local('sudo chmod -R 777 ' + join(home, '.pivot-db'))
+        for inv in self.config.default_deployment.value['investigations']:
+            try:
+                print("writing investigation {0}".format(inv['name']))
+                with open(join(home, '.pivot-db/investigations/{id}.json'.format(id=inv['json']['id']), 'w')) as outfile:
+                    json.dump(inv['json'], outfile, ensure_ascii=False, indent=4, sort_keys=True)
+
+                for piv in inv['pivots']:
+                    print("writing pivot {0}".format(piv['name']))
+                    with open(join(home, '.pivot-db/pivots/{id}.json'.format(id=piv['json']['id']), 'w')) as outfile:
+                        json.dump(piv['json'], outfile, ensure_ascii=False, indent=4, sort_keys=True)
+            except Exception as e:
+                print(e)
+        with hide('output', 'running', 'warnings'), settings(warn_only=True):
+            local('sudo chmod -R 777 ' + join(home, '.pivot-db'))
 
     def login(self):
         toolbar_quip = revisionist_commit_history_html()
