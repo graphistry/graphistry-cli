@@ -105,11 +105,12 @@ class Graphistry(object):
         make_bcrypt = join(cwd, 'bootstrap/make-bcrypt-contianer.sh')
         local('sudo bash {mb}'.format(mb=make_bcrypt))
 
-    def load_investigations(self):
+    def load_investigations(self, airgapped=False):
         """
         This will load the pivotdb test data.
         :return:
         """
+        self.load_config(airgapped)
         pivot_db = expanduser('~/.pivot-db')
         print(pivot_db)
         if not os.path.exists(pivot_db):
