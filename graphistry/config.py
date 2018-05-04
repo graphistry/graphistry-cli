@@ -111,10 +111,10 @@ class Graphistry(object):
         :return:
         """
         self.load_config(airgapped)
-        pivot_db = join(cwd, '.pivot-db')
+        pivot_db = '.pivot-db'
         invest_dir = join(pivot_db, 'investigations')
         pivots_dir = join(pivot_db, 'pivots')
-        
+
         print(pivot_db)
         if not os.path.exists(pivot_db):
             local('mkdir -p ' + pivot_db)
