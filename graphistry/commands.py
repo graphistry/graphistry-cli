@@ -8,6 +8,7 @@ __CommandsMeta__ = {
     'config': 'Configure Graphistry relative to latest Graphistry online baseline',
     'config_offline': 'Configure Graphistry relative to offline baseline',
     'exit': 'Leave application. Ctrl-C or Ctrl-D works too.',
+    'load_investigations': 'Load investigations from configuration.',
     'keygen': 'Create API key token',
     'help': 'Shows all CLI commands',
     'init': 'Download, configure, and launch Graphistry',
@@ -26,10 +27,16 @@ def init():
     _g.login()
     _g.save_config()
     _g.template_config()
+    _g.load_investigations()
 
     _c = Cluster()
     _c.pull()
     _c.launch()
+
+
+def load_investigations():
+    _g = Graphistry()
+    _g.load_investigations()
 
 
 def login():

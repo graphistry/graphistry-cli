@@ -62,8 +62,8 @@ CONFIG_SCHEMA = {
     'default_deployment': {},
     'investigations': [],
     'registry_credentials': {},
-    'vizapp_container': 'us.gcr.io/psychic-expanse-187412/graphistry/release/viz-app:925',
-    'pivotapp_container': 'us.gcr.io/psychic-expanse-187412/graphistry/release/pivot-app:925',
+    'vizapp_container': 'us.gcr.io/psychic-expanse-187412/graphistry/release/viz-app:942',
+    'pivotapp_container': 'us.gcr.io/psychic-expanse-187412/graphistry/release/pivot-app:942',
     'is_airgapped': False,
     'api_canary': '',
     'api_secret': '',
@@ -105,6 +105,46 @@ class Graphistry(object):
         make_bcrypt = join(cwd, 'bootstrap/make-bcrypt-contianer.sh')
         local('sudo bash {mb}'.format(mb=make_bcrypt))
 
+    def load_investigations(self, airgapped=False):
+        """
+        This will load the pivotdb test data.
+        :return:
+        """
+        self.load_config(airgapped)
+        pivot_db = '.pivot-db'
+        invest_dir = join(pivot_db, 'investigations')
+        pivots_dir = join(pivot_db, 'pivots')
+
+        print(pivot_db)
+        if not os.path.exists(pivot_db):
+            local('mkdir -p ' + pivot_db)
+
+        if not os.path.exists(invest_dir):
+            local('mkdir -p ' + invest_dir)
+
+        if not os.path.exists(pivots_dir):
+            local('mkdir -p ' + pivots_dir)
+
+        with hide('output', 'running', 'warnings'), settings(warn_only=True):
+            local('sudo chmod -R 777 ' + pivot_db)
+
+        for inv in self.config.investigations.value:
+            try:
+                print("writing investigation {0}".format(inv['name']))
+                investigation = join(invest_dir, '{id}.json'.format(id=inv['json']['id']))
+                with open(investigation, 'w') as outfile:
+                    json.dump(inv['json'], outfile, ensure_ascii=False, indent=4, sort_keys=True)
+
+                for piv in inv['pivots']:
+                    print("writing pivot {0}".format(piv['name']))
+                    pivot = join(pivots_dir, '{id}.json'.format(id=piv['json']['id']))
+                    with open(pivot, 'w') as outfile:
+                        json.dump(piv['json'], outfile, ensure_ascii=False, indent=4, sort_keys=True)
+            except Exception as e:
+                print(e)
+
+        with hide('output', 'running', 'warnings'), settings(warn_only=True):
+            local('sudo chmod -R 777 ' + pivot_db)
 
     def login(self):
         toolbar_quip = revisionist_commit_history_html()
@@ -124,7 +164,7 @@ class Graphistry(object):
         schema = {
             'user': conf['user'],
             'default_deployment': conf['default_deployment'],
-            'investigations': [],
+            'investigations': conf['default_deployment']['investigations'],
             'registry_credentials': conf['default_deployment']['registry_credentials'],
             'vizapp_container': conf['default_deployment']['vizapp_container'],
             'pivotapp_container': conf['default_deployment']['pivotapp_container'],
