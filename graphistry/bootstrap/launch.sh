@@ -16,7 +16,7 @@
 if [ -n "${SHIPYARD}" ]
 then
     VIZ_APP_BASE_CONTAINER="<VIZAPP_CONTAINER_NAME>"
-    NGINX_BASE_CONTAINER="us.gcr.io/psychic-expanse-187412/graphistry/release/nginx-central-vizservers:925"
+    NGINX_BASE_CONTAINER="us.gcr.io/psychic-expanse-187412/graphistry/release/nginx-central-vizservers:942"
     PIVOT_APP_BASE_CONTAINER="<PIVOTAPP_CONTAINER_NAME>"
 else
     VIZ_APP_BASE_CONTAINER="graphistry/viz-app:$1"

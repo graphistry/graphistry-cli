@@ -27,7 +27,8 @@ def pretty_line(line):
 class Cluster(object):
     def __init__(self):
         self._g = Graphistry()
-        self._g.load_config()
+        if not exists('containers.tar'):
+            self._g.load_config()
 
         cl_priv_file = open(join(cwd, "container_lists/private.txt"))
         cl_pub_file = open(join(cwd, "container_lists/public.txt"))
