@@ -187,8 +187,8 @@ The individual steps are broken out into their own scripts in the ``graphistry/b
 3. Configure and launch:
 ```
     $ graphistry
+    >   config_offline
     >   load
-    >   config_offline
     >   launch
 ```    
 
