@@ -173,7 +173,7 @@ class Cluster(object):
 
         toolbar_quip = revisionist_commit_history_html()
         click.secho('[graphistry] Generating API key token.', fg='yellow')
-        username = prompt('User name or email, no special characters or spaces (enter for autogen): ', bottom_toolbar=toolbar_quip, history=None)
+        username = prompt('User name or email, no special characters or spaces (enter for autogen): ', bottom_toolbar=toolbar_quip)
         try:
             local('docker exec monolith-network-nginx wget -q -O - "http://vizapp:3000/api/internal/provision?text=%s" ; echo' %(username))        
         except:

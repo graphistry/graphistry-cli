@@ -27,8 +27,7 @@ def main(command=''):
                 select = prompt('graphistry>> ',
                                 completer=MainNav().get_completer(),
                                 bottom_toolbar=toolbar_message,
-                                complete_while_typing=True,
-                                history=None)
+                                complete_while_typing=True)
 
                 if select in __Commands__:
                     cmd = MainNav.get_command(select)
