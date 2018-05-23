@@ -53,7 +53,7 @@ setup(
     long_description=description,
     install_requires=install_requirements,
     dependency_links=[
-        "git+https://github.com/jonathanslenders/python-prompt-toolkit.git@2.0"
+        "git+https://github.com/graphistry/python-prompt-toolkit.git@2.0"
     ],
     entry_points='''
         [console_scripts]

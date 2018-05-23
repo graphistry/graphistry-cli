@@ -148,8 +148,8 @@ class Graphistry(object):
 
     def login(self):
         toolbar_quip = revisionist_commit_history_html()
-        username = prompt('username: ', bottom_toolbar=toolbar_quip, history=None)
-        password = prompt('password: ', bottom_toolbar=toolbar_quip, history=None, is_password=True)
+        username = prompt('username: ', bottom_toolbar=toolbar_quip)
+        password = prompt('password: ', bottom_toolbar=toolbar_quip, is_password=True)
         res = requests.get('{0}/api/v1/config/?format=json'.format(SHIPYARD_HOST),
                            auth=HTTPBasicAuth(username, password))
 
@@ -218,8 +218,8 @@ class Graphistry(object):
         # Graphistry API Key Generation
         click.secho("[graphistry] Configure API key generation. [Hash algorithm is 'aes-256-cbc'.]", fg="yellow")
         
-        api_canary = prompt('Hash Canary string (enter to autogenerate): ', bottom_toolbar=toolbar_quip, history=None)
-        api_secret = prompt('Your Secret string (enter to autogenerate): ', bottom_toolbar=toolbar_quip, history=None)
+        api_canary = prompt('Hash Canary string (enter to autogenerate): ', bottom_toolbar=toolbar_quip)
+        api_secret = prompt('Your Secret string (enter to autogenerate): ', bottom_toolbar=toolbar_quip)
 
         if api_canary == '':
             self.config.api_canary.value = id_generator(10)
@@ -228,83 +228,82 @@ class Graphistry(object):
             self.config.api_secret.value = id_generator(10)
 
         #self.config.graphistry_key.value = prompt('You supplied Graphisty key: ',
-        #                                           bottom_toolbar=toolbar_quip, history=None)
+        #                                           bottom_toolbar=toolbar_quip)
 
 
         # Elasticsearch
         click.secho("[graphistry] Configure connectors", fg="yellow")
         self.config.es_host.value = prompt('Your Elasticsearch Host, e.g., elk.company.com (enter to skip): ',
-                                           bottom_toolbar=toolbar_quip, history=None)
+                                           bottom_toolbar=toolbar_quip)
         if self.config.es_host.value != '':
             self.config.es_port.value = prompt('Your Elasticsearch Port [default: 9200]: ',
-                                               bottom_toolbar=toolbar_quip, history=None)
+                                               bottom_toolbar=toolbar_quip)
             if self.config.es_port.value == '':
                 self.config.es_port.value = CONFIG_SCHEMA['es_port']
 
             self.config.es_protocol.value = prompt('Your Elasticsearch Protocol [default: http]: ',
-                                               bottom_toolbar=toolbar_quip, history=None)
+                                               bottom_toolbar=toolbar_quip)
             if self.config.es_protocol.value == '':
                 self.config.es_protocol.value = CONFIG_SCHEMA['es_protocol']
 
             self.config.es_auth.value = prompt('Your Elasticsearch auth, e.g., user:password [default: none]: ',
-                                               bottom_toolbar=toolbar_quip, history=None)
+                                               bottom_toolbar=toolbar_quip)
             if self.config.es_auth.value == '':
                 self.config.es_auth.value = CONFIG_SCHEMA['es_auth']
 
 
         # Splunk
         self.config.splunk_host.value = prompt('Your Splunk Host, e.g., www.splunk.com (enter to skip): ',
-                                               bottom_toolbar=toolbar_quip, history=None)
+                                               bottom_toolbar=toolbar_quip)
         if self.config.splunk_host.value != '':
             
             #### DEFAULTS
             self.config.splunk_api_port.value = prompt('Your Splunk API Port [default: 8089]: ',
-                bottom_toolbar=toolbar_quip, history=None)
+                bottom_toolbar=toolbar_quip)
             if self.config.splunk_api_port.value == '':
                 self.config.splunk_api_port.value = CONFIG_SCHEMA['splunk_api_port']
 
             self.config.splunk_web_port.value = prompt('Your Splunk Web UI Port [default: 443]: ',
-                bottom_toolbar=toolbar_quip, history=None)
+                bottom_toolbar=toolbar_quip)
             if self.config.splunk_web_port.value == '':
                 self.config.splunk_web_port.value = CONFIG_SCHEMA['splunk_web_port']
 
             self.config.splunk_protocol.value = prompt('Your Splunk Protocol, e.g., https [default: https]: ',
-                bottom_toolbar=toolbar_quip, history=None)
+                bottom_toolbar=toolbar_quip)
             if self.config.splunk_protocol.value == '':
                 self.config.splunk_protocol.value = CONFIG_SCHEMA['splunk_protocol']
 
 
             self.config.splunk_user.value = prompt('Your Splunk Username: ',
-                                                   bottom_toolbar=toolbar_quip, history=None)
+                                                   bottom_toolbar=toolbar_quip)
             self.config.splunk_password.value = prompt('Your Splunk Password: ',
-                                                       bottom_toolbar=toolbar_quip, history=None, is_password=True)
+                                                       bottom_toolbar=toolbar_quip, is_password=True)
 
         click.secho("[graphistry] Configure networking", fg="yellow")
 
         # Pivotapp->ETL/Vizapp
         self.config.graphistry_host.value = prompt('Your FQDN for this deployment, including protocol [e.g., http://graphistry.yourcompany.com]: ',
-                                                   bottom_toolbar=toolbar_quip, history=None)
+                                                   bottom_toolbar=toolbar_quip)
 
         # Ip Whitelist
         self.config.ip_internal_accept_list.value = prompt('Your Internal IP Accept Whitelist (beyond typical RFC 1918)'
                                                            ', ex:["127.0.0.1", "10.*"]',
-                                                           bottom_toolbar=toolbar_quip, history=None)
+                                                           bottom_toolbar=toolbar_quip)
 
         # Http Ingress
         self.config.http_user.value = prompt('HTTP Ingress Username: ',
-                                             bottom_toolbar=toolbar_quip, history=None)
+                                             bottom_toolbar=toolbar_quip)
         password = prompt('HTTP Ingress Password: ',
                           bottom_toolbar=toolbar_quip,
-                          history=None,
                           is_password=True)
         with hide('output', 'running', 'warnings'), settings(warn_only=True):
             self.config.http_password_hash.value = local('docker run -it bcrypt bcrypt-cli "{0}" 10'.format(password),
                                                          capture=True)
 
         # AWS
-        self.config.s3_access.value = prompt('AWS Access Key ID (enter to skip): ', bottom_toolbar=toolbar_quip, history=None)
+        self.config.s3_access.value = prompt('AWS Access Key ID (enter to skip): ', bottom_toolbar=toolbar_quip)
         if self.config.s3_access.value != '':
-            self.config.s3_secret.value = prompt('AWS Access Key Secret: ', bottom_toolbar=toolbar_quip, history=None)
+            self.config.s3_secret.value = prompt('AWS Access Key Secret: ', bottom_toolbar=toolbar_quip)
 
         self.save_config()
         self.write_configs()

@@ -1,6 +1,6 @@
 import importlib
 
-from prompt_toolkit.contrib.completers import WordCompleter
+from prompt_toolkit.completion import WordCompleter
 from graphistry.commands import __Commands__, __CommandsMeta__
 
 
