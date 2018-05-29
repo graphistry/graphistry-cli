@@ -54,7 +54,6 @@ graphistry>> config_offline                                                     
 
 ==>
 
-```                                    
 Loading Config
 [graphistry] Configure API key generation. [Hash algorithm is 'aes-256-cbc'.]
 Hash Canary string (enter to autogenerate):                                                                                       
@@ -79,7 +78,6 @@ graphistry>> load                                                               
 
 ==>
 
-```                                    
 Loading Config
 [localhost] local: docker load -i containers.tar
 cd7100a72410: Loading layer [==================================================>]  4.403MB/4.403MB
@@ -95,8 +93,7 @@ Loaded image: graphistry/s3cmd-postgres:latest
 graphistry>> launch                                                                           ```
 
 ==>
-
-```                                    
+                                 
 Loading Config
 [localhost] local: sed -i 's!<VIZAPP_CONTAINER_NAME>!us.gcr.io/psychic-expanse-187412/graphistry/release/viz-app:942!g' deploy/launch.sh
 ...
