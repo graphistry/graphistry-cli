@@ -49,7 +49,7 @@ Bootstrap: Download the CLI and setup your Linux environment
 **AWS**
 
 * Launch an official AWS Ubuntu/RHEL/Centos AMI using a ``g3+``or ``p*`` GPU instance. 
-* Use S3AllAccess permissions, and override default parameters for: 200GB RAM
+* Use S3AllAccess permissions, and override default parameters for: 200GB disk
 * Enable SSH/HTTP/HTTPS in the security groups
 * SSH as ``ubuntu@[your ami]``, ``centos@``, or ``ec2-user@``. 
 
