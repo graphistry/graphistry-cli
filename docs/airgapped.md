@@ -31,6 +31,7 @@ You can run Graphistry in airgapped environments using the following steps:
 
 ## 2. Install the Graphistry CLI
 
+
 ```
 [ec2-user@ip ~]$ bash graphistry-cli/graphistry/bootstrap/rhel/50-graphistry.sh
 ```
@@ -71,7 +72,7 @@ Saving Config
 Wrote config: /home/ec2-user/.config/graphistry/config.json
 ```
 
-5. Load containers from tarball
+## 5. Load containers from tarball
 
 ```
 graphistry>> load                                                                             ```
@@ -87,7 +88,7 @@ faf7f7ff8bb6: Loading layer [==================================================>
 Loaded image: graphistry/s3cmd-postgres:latest
 ```
 
-6. Launch!
+## 6. Launch!
 
 ```
 graphistry>> launch                                                                           ```
@@ -109,7 +110,7 @@ http://####.compute.amazonaws.com
 ```
 
 
-7. Test
+## 7. Test
 
 * Static assets: http://my.website.com
 * GPUs: http://my.website.com/graph/graph.html?dataset=Facebook
