@@ -176,6 +176,14 @@ If you have SSL certificates, we recommend installing them: this improves securi
 2. Place files ``ssl_certificate.pem`` and ``ssl_certificate_key.pem`` into folder ``ssl/`` .
 3. Restart Graphistry
 
+Restarting:
+-----------
+
+* Run `graphistry -c stop` followed by `graphistry -c launch`
+* On reboot, you may need to first run:
+  * `sudo systemctl start docker`
+  * `sudo service nvidia-docker start`
+
 
 Upgrading:
 ==========
