@@ -15,10 +15,12 @@ You can run Graphistry in airgapped environments using the following steps:
 
 ## 0. Prerequisites
 
-* Graphistry tarball URL
-* Bootstrapped environment dependencies, see https://github.com/graphistry/graphistry-cli and https://github.com/graphistry/graphistry-cli/tree/master/graphistry/bootstrap/rhel 
-* Ubuntu, RHEL, CentOS supported
-
+* Graphistry (`*.tar.gz` file)
+* Docker host setup for Nvidia:
+  * Docker (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/20-docker.sh
+  * CUDA 9.1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/30-CUDA.sh
+  * Nivida-Docker 1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/40-nvidia-docker.sh  
+  * *Alternatives*: Ubuntu, RHEL, CentOS -- https://github.com/graphistry/graphistry-cli/tree/master/graphistry/bootstrap
 
 
 ## 1. Download and extract Graphistry to ``~``
@@ -29,11 +31,14 @@ You can run Graphistry in airgapped environments using the following steps:
 [ec2-user@ip- ~]$ tar -xvvf graphistry942.tar.gz 
 ```
 
-## 2. Install the Graphistry CLI
+## 2. Install the Graphistry CLI with a global config file
 
 
 ```
+[ec2-user@ip ~]$ mkdir -p ~/.config/graphistry
+[ec2-user@ip ~]$ cp deploy/config.json ~/.config/graphistry/
 [ec2-user@ip ~]$ bash graphistry-cli/graphistry/bootstrap/rhel/50-graphistry.sh
+[ec2-user@ip ~]$ sudo python36 -m wheel install ${DIR}/../../../wheelhouse/* --force
 ```
 
 
