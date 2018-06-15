@@ -15,42 +15,57 @@ You can run Graphistry in airgapped environments using the following steps:
 
 ## 0. Prerequisites
 
-* Graphistry tarball URL
-* Bootstrapped environment dependencies, see https://github.com/graphistry/graphistry-cli and https://github.com/graphistry/graphistry-cli/tree/master/graphistry/bootstrap/rhel 
-* Ubuntu, RHEL, CentOS supported
+* Graphistry (`*.tar.gz` file)
+* Server:
+  * OS: RHEL 7.5 / Ubuntu 16.04 LTS /CentOS
+  * CPU: 8GB+ CPU RAM; recommended 4+ cores with 16+ GB RAM
+  * GPU: CUDA-capable Nvidia GPU (Tesla, Pasal, Volta series) with 4GB+ RAM; recommended 12+ GB GPU RAM
+* Server Docker host setup for Nvidia:
+  * Docker (RHEL): 
+  * CUDA 9.1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/30-CUDA.sh
+  * Nivida-Docker 1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/40-nvidia-docker.sh  
+  * *Alternatives*: Ubuntu, RHEL, CentOS -- https://github.com/graphistry/graphistry-cli/tree/master/graphistry/bootstrap
+* Browser: Chrome/Firefox with WebGL enabled
+
+**Resources**
+
+* Full bootstrap: https://github.com/graphistry/graphistry-cli
+* Docker: https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/20-docker.sh
+* CUDA: https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/30-CUDA.sh
+* Nvidia-Docker: https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/40-nvidia-docker.sh  
 
 
-
-## 1. Download and extract Graphistry to ``~``
+## 1. Extract Graphistry tarball to ``~``
 
 ```
-[ec2-user@ip- ~]$ curl "https://.../graphistry942-####.tar.gz" > graphistry942.tar.gz
+[user@ip- ~]$ curl "https://.../graphistry942-####.tar.gz" > graphistry942.tar.gz
 
-[ec2-user@ip- ~]$ tar -xvvf graphistry942.tar.gz 
+[user@ip- ~]$ tar -xvvf graphistry942.tar.gz 
 ```
 
-## 2. Install the Graphistry CLI
+## 2. Install the Graphistry CLI with prepackaged dependencies
 
+Install CLI that comes with tarball (folder `graphistry-cli`) or from https://github.com/graphistry/graphistry-cli
 
 ```
-[ec2-user@ip ~]$ bash graphistry-cli/graphistry/bootstrap/rhel/50-graphistry.sh
+[user@ip ~]$ cd ~/graphistry-cli/wheelhouse && sudo python3 -m wheel install * --force
+[user@ip ~]$ cd ~/graphistry-cli && sudo python3 setup.py install
 ```
-
 
 ## 3. Restart your bash environment: log off and on again
 
 ```
-[ec2-user@ip ~]$ exit
-[ec2-user@ip ~]$ exit
-$ ssh ec2-user@ip..o
+[user@ip ~]$ exit
+[user@ip ~]$ exit
+$ ssh user@ip..o
 ```
 
 ## 4. Configure Graphistry for offline
 
-You may leave everything blank except FQDN, HTTP Username, and HTTP Password:
+For minimal install (e.g. no configured connectors), you may leave everything blank except FQDN, HTTP Username, and HTTP Password:
 
 
-```[ec2-user@ip- ~]$ graphistry
+```[user@ip- ~]$ graphistry
 graphistry>> config_offline                                                                   ```
 
 ==>
@@ -69,7 +84,7 @@ HTTP Ingress Username: admin
 HTTP Ingress Password: **                                                                                                         
 AWS Access Key ID (enter to skip):                                                                                                
 Saving Config
-Wrote config: /home/ec2-user/.config/graphistry/config.json
+Wrote config: /home/user/.config/graphistry/config.json
 ```
 
 ## 5. Load containers from tarball
@@ -106,14 +121,38 @@ Graphistry has been launched, and should be up and running.
 SUCCESS.
 
 Graphistry Launched. Please Browse to:
-http://####.compute.amazonaws.com
+http://####.com
 ```
 
 
 ## 7. Test
 
-* Static assets: http://my.website.com
-* GPUs: http://my.website.com/graph/graph.html?dataset=Facebook
-* Uploads: Try a notebook upload pointing to the above server
 
-See further tests at  https://github.com/graphistry/graphistry-cli
+* Configurations were generated: Use `ls`/`less` 
+  * ``.config/graphistry/config.json``
+  * ``httpd-config.json``
+  * ``pivot-config.json``
+  * ``viz-app-config.json``
+* Services are running: ``docker ps`` reveals no restart loops on:
+  * ``graphistry/nginx-central-vizservers``
+  * ``graphistry/pivot-app``
+  * ``graphistry/viz-app``
+  * ``mongo``
+  * ``graphistry/s3cmd-postgres``
+  * ``postgres:9-alpine``
+* Services pass initial healthchecks:
+  * ``site.com/central/healthcheck``
+  * ``site.com/pivot/healthcheck``
+  * ``site.com/worker/healthcheck``
+* Pages load: Visualization
+  * ``site.com`` shows Graphistry homepage
+  * ``site.com/graph/graph.html?dataset=Facebook`` clusters and renders a graph
+* Pages load: Investigation
+  * ``site.com/pivot`` loads a list of investigations
+  * ``site.com/pivot/connectors`` loads a list of connectors
+  * ^^^ When clicking the ``Status`` button for each connector, it reports green
+  *  Opening and running an investigation in ``site.com/pivot`` uploads and shows a graph
+* Data uploads
+  * Can generate an API key with the CLI: ``graphistry`` --> ``keygen``
+  * Can use the key to upload a visualization: https://graphistry.github.io/docs/legacy/api/0.9.2/api.html#curlexample
+  * Can then open that visualization in a browser
