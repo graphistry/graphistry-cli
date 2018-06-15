@@ -21,8 +21,6 @@ You can run Graphistry in airgapped environments using the following steps:
   * CUDA 9.1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/30-CUDA.sh
   * Nivida-Docker 1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/40-nvidia-docker.sh  
   * *Alternatives*: Ubuntu, RHEL, CentOS -- https://github.com/graphistry/graphistry-cli/tree/master/graphistry/bootstrap
-
-
 ## 1. Download and extract Graphistry to ``~``
 
 ```
@@ -31,16 +29,14 @@ You can run Graphistry in airgapped environments using the following steps:
 [ec2-user@ip- ~]$ tar -xvvf graphistry942.tar.gz 
 ```
 
-## 2. Install the Graphistry CLI with a global config file
+## 2. Install the Graphistry CLI with prepackaged dependencies
 
+Comes with tarball (folder `graphistry-cli`) or from https://github.com/graphistry/graphistry-cli
 
 ```
-[ec2-user@ip ~]$ mkdir -p ~/.config/graphistry
-[ec2-user@ip ~]$ cp deploy/config.json ~/.config/graphistry/
-[ec2-user@ip ~]$ bash graphistry-cli/graphistry/bootstrap/rhel/50-graphistry.sh
-[ec2-user@ip ~]$ sudo python36 -m wheel install ${DIR}/../../../wheelhouse/* --force
+[ec2-user@ip ~]$ cd ~/graphistry-cli/wheelhouse && sudo python3 -m wheel install * --force
+[ec2-user@ip ~]$ cd ~/graphistry-cli && sudo python3 setup.py install
 ```
-
 
 ## 3. Restart your bash environment: log off and on again
 
