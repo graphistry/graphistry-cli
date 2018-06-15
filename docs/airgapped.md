@@ -113,8 +113,30 @@ http://####.compute.amazonaws.com
 
 ## 7. Test
 
-* Static assets: http://my.website.com
-* GPUs: http://my.website.com/graph/graph.html?dataset=Facebook
-* Uploads: Try a notebook upload pointing to the above server
-
-See further tests at  https://github.com/graphistry/graphistry-cli
+* Configurations were generated: Use `ls`/`less` 
+  * ``.config/graphistry/config.json``
+  * ``httpd-config.json``
+  * ``pivot-config.json``
+  * ``viz-app-config.json``
+* Services are running: ``docker ps`` reveals no restart loops on:
+  * ``graphistry/nginx-central-vizservers``
+  * ``graphistry/pivot-app``
+  * ``graphistry/viz-app``
+  * ``mongo``
+  * ``graphistry/s3cmd-postgres``
+  * ``postgres:9-alpine``
+* Services pass initial healthchecks:
+  * ``site.com/central/healthcheck``
+  * ``site.com/pivot/healthcheck``
+  * ``site.com/worker/healthcheck``
+* Pages load
+  * ``site.com`` shows Graphistry homepage
+  * ``site.com/graph/graph.html?dataset=Facebook`` clusters and renders a graph
+  * ``site.com/pivot`` loads a list of investigations
+  * ``site.com/pivot/connectors`` loads a list of connectors
+  * ^^^ When clicking the ``Status`` button for each connector, it reports green
+  *  Opening and running an investigation in ``site.com/pivot`` uploads and shows a graph
+* Data uploads
+  * Can generate an API key with the CLI: ``graphistry`` --> ``keygen``
+  * Can use the key to upload a visualization: https://graphistry.github.io/docs/legacy/api/0.9.2/api.html#curlexample
+  * Can then open that visualization in a browser
