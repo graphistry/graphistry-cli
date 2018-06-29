@@ -39,9 +39,9 @@ Contents
 * Troubleshooting
 * Thanks
 
+
 Quick Start
 ===========
-
 
 Bootstrap: Download the CLI and setup your Linux environment
 ------------------------------------------------------------
@@ -52,6 +52,13 @@ Bootstrap: Download the CLI and setup your Linux environment
 * Use S3AllAccess permissions, and override default parameters for: 200GB disk
 * Enable SSH/HTTP/HTTPS in the security groups
 * SSH as ``ubuntu@[your ami]``, ``centos@``, or ``ec2-user@``. 
+
+Proceed to the OS-specific instructions below.
+
+**Azure**
+
+* Launch an Ubuntu/RHEL/Centos Virtual machine with an ``N*`` GPU compute SKU, e.g., NC6 (hdd)
+* Enable SSH/HTTP/HTTPS
 
 Proceed to the OS-specific instructions below.
 
