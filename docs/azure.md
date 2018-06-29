@@ -51,7 +51,7 @@ See general installation instructions for currently supported Linux versions. RH
 7. Test login; see SSH command at `Overview` -> `Connect` -> `Login using VM Account`
 
 
-2. Proceed to general Graphistry installation
+## 2. Proceed to general Graphistry installation
 
 Login to your instance (see **Test login** above) and use the instructions for [general installation](https://github.com/graphistry/graphistry-cli).
 
