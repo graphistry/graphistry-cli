@@ -99,41 +99,16 @@ Prerequisites:
 * Linux (see below AMI versions) with an Nvidia GPU
 * Graphistry account and internet connection for initial system download
 
-AWS:
--------------
+Cloud:
+----------------------
 
-**Instance**
-Start with one of the following Linux distributions, and configure it using the instructions below under 'Instance settings'.
+### AWS
 
-* **Ubuntu 16.04**
-  * Available on official AWS launch homepage
-  * Find AMI for region https://cloud-images.ubuntu.com/locator/
-  * Ex: Amazon AWS us-east-1 xenial 16.04 amd64 hvm-ssd 20180405 ami-6dfe5010 
-  * Follow provisioning instructions from AWS install
-  * G3 or P2: 200 GB, add a name tag, ssh/http/https; use & store an AWS keypair
-  * Login: ssh -i ...private_key.pem ubuntu@public.dns
-* **Redhat 7.4 GA**
-  * Available on official AWS launch homepage
-  * Find AMI for region: https://access.redhat.com/articles/3135091 
-  * Ex:  RHEL 7.4 GA
-  * ami-c998b6b2	us-east-1	On-Demand	EBS backed image	8/1/2017
-  * Follow above AWS Ubuntu instructions, except use ssh username *"ec2-user"*
-* **CentOS 7**
-  * Available on official AWS launch homepage
-  * Find AMI for region: https://wiki.centos.org/Cloud/AWS
-  * Ex: CentOS 1803_01 
-  * CentOS Linux 7 1801_01 2018-Jan-14 us-east-1 ami-4bf3d731 x86_64 HVM EBS
-  * Follow above AWS Ubuntu instructions, except use ssh username *"centos"*
+See [full AWS installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/aws.md).
 
-**Instance Settings**
+### Azure
 
-* Instance: g3+ or p*
-* 200GB+ RAM
-* Security groups: ssh, http, https
-
-**Setup**
-
-Continue to the Linux instructions below.
+See [full Azure installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/azure.md).
 
 
 Linux:
