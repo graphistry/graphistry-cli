@@ -1,0 +1,12 @@
+{
+
+
+
+
+  "API":{
+    "CANARY": "C2P8H78KQZ",
+    "SECRET": "D7ABMW0ZY6",
+    "ALGORITHM": "aes-256-cbc"
+  }
+
+}

@@ -1,0 +1,32 @@
+{
+    "log": {
+        "level": "debug"
+    },
+    "graphistry": {
+      
+	    "host": "http://MY.ADDRESS.COM"
+    },
+
+    
+
+    
+
+    
+
+    
+    "authentication": {
+      "passwordHash":   "$2a$10$s/bwo97icnlAvenqnByau.rwoA2mmntSzzEVdjfzhBXYRZxzhVVN.",
+      "username": "admin"
+    },
+    
+
+    "pivots": {
+      "show": [
+        
+        
+        "http-search",
+        "http-expand",
+        "manual-data"
+      ]
+    }
+}
