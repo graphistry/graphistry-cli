@@ -1,11 +1,11 @@
 # Some Additional Features for Developers and Sysadmins
 
-## Sending a compiled Graphistry distrobution to s3 to install on other systems with 3mo expiray
+## Sending a compiled Graphistry distrobution to s3 to install on other systems with 4mo expiray
 ```bash
 sudo pip install awscli
 aws configure
-aws s3 cp dist/graphistry.tar.gz s3://<yourbucket>/graphistry.tar.gz
-aws s3 presign s3://<yourbucket>/graphistry.tar.gz --expires-in 7776000
+aws s3 cp dist/graphistry.tar.gz s3://airgapped-deploy/graphistry-BUILD-NUMBER.tar.gz
+aws s3 presign s3://airgapped-deploy/graphistry-BUILD-NUMBER.tar.gz --expires-in 10368000
 ```
 
 ## Download the bundle from s3 with `awscli`
