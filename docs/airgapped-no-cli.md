@@ -101,7 +101,7 @@ It is always safe to remove all containers and load them again, e.g., `docker sy
 
 * Stop the system, and potentially, `docker system prune -a`
 * Run `docker load -i containers.tar` on the new system
-* Using the **new** `deploy` (e.g., `launch.sh`), start as usual
+* Using the **new** `deploy` (e.g., `~/deploy $ SHIPYARD=1 ./launch.sh`), start as usual
 
 ### Inspect
 
