@@ -21,9 +21,9 @@ You can run Graphistry in airgapped environments using the following steps:
   * CPU: 8GB+ CPU RAM; recommended 4+ cores with 16+ GB RAM
   * GPU: CUDA-capable Nvidia GPU (Tesla, Pasal, Volta series) with 4GB+ RAM; recommended 12+ GB GPU RAM
 * Server Docker host setup for Nvidia:
-  * Docker (RHEL): 
+  * Docker (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/20-docker.sh
   * CUDA 9.1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/30-CUDA.sh
-  * Nivida-Docker 1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/40-nvidia-docker.sh  
+  * Nivida-Docker-1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/40-nvidia-docker.sh  
   * *Alternatives*: Ubuntu, RHEL, CentOS -- https://github.com/graphistry/graphistry-cli/tree/master/graphistry/bootstrap
 * Browser: Chrome/Firefox with WebGL enabled
 
