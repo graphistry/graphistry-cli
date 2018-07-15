@@ -20,7 +20,8 @@ Contents:
 ## Quickstart
 
 ```
-### bootstrap 10,20,30,40.sh from graphistry-cli/graphistry/bootstrap/rhel (can skip Python)
+### docker, cuda, nvidia-docker:
+### 10,20,30,40.sh from graphistry-cli/graphistry/bootstrap/rhel (can skip Python)
 
 ~ $ tar -xvvf graphistry.tar.gz
 ~ $ docker load -i containers.tar
