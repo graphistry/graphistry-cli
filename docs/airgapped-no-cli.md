@@ -118,6 +118,7 @@ It is always safe to remove all containers and load them again, e.g., `docker sy
   * `docker ps` shows 0 or more containers running
   * `nvidia-smi` lists a GPU
   * `nvidia-docker run --rm nvidia/cuda nvidia-smi` shows 0 or more containers running 
+  * `nvidia-docker run --rm graphistry/viz-app nvidia-smi` shows 0 or more containers running 
 * Services are running: ``docker ps`` reveals no restart loops on:
   * ``graphistry/nginx-central-vizservers``
   * ``graphistry/pivot-app``
