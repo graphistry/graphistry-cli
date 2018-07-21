@@ -26,7 +26,23 @@ In folder `~/`, modify `(httpd|viz-app|pivot-app)-config.json` to turn on debug 
 
 2. Restart Graphistry (`docker restart <containerid>`)
 
-3. Watch `nginx`, `central`, and `worker` logs:
+3. Ensure all workers reported in and are ready:
+
+```docker exec monolith-network-mongo mongo localhost/cluster --eval "printjson(db.node_monitor.find({}).toArray())"```
+
+Should report 32 workers that look like:
+```
+{
+        "_id" : ObjectId("5b5022ab689859b490c6bae3"),
+        "ip" : "localhost",
+        "pid" : 25,
+        "port" : 10001,
+        "active" : false,
+        "updated" : ISODate("2018-07-20T00:13:38.957Z")
+}
+```
+
+4. Watch `nginx`, `central`, and `worker` logs:
 
 * `tail -f deploy/nginx/*.log`
 * `tail -f deploy/graphistry-json/central.log`
@@ -34,7 +50,9 @@ In folder `~/`, modify `(httpd|viz-app|pivot-app)-config.json` to turn on debug 
 
 Clear screen before starting the test session.
 
-4. Start test session: Navigate browser to `http://www.yourgraphistry.com/graph/graph.html?dataset=Facebook`
+
+5. Start test session: Navigate browser to `http://www.yourgraphistry.com/graph/graph.html?dataset=Facebook`
+
 
 ## Nginx logs
 
