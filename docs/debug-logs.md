@@ -46,7 +46,7 @@ Should report 32 workers that look like:
 
 * `tail -f deploy/nginx/*.log`
 * `tail -f deploy/graphistry-json/central.log`
-* `tail -f viz-worker*.log | grep -iv healthcheck`
+* `tail -f deploy/graphistry-json/viz-worker*.log | grep -iv healthcheck`
 
 Clear screen before starting the test session.
 
