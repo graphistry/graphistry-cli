@@ -207,6 +207,10 @@ Testing:
   * ping www.github.com
   * ping shipyard.graphistry.com
   * ping us.gcr.io
+* Nvidia infrastructure setup correctly
+  * `nvidia-smi` reports available GPUs
+  * `docker run nvidia/cuda which nvidia-smi` reports available GPUs
+  * Using the image listed in `docker images`, running `nvidia-docker run us.gcr.io/psychic-expanse-187412/graphistry/release/viz-app:1024 nvidia-smi` reports available GPUs
 * Configurations were generated: 
   * ``.config/graphistry/config.json``
   * ``httpd-config.json``
