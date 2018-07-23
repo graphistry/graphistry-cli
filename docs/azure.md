@@ -43,7 +43,7 @@ Expect 1-3 days based on your requested `Severity` rating and who Azure assigns 
 See general installation instructions for currently supported Linux versions. RHEL/CentOS/Ubuntu are all supported.
 
 1. `Virtual machines` -> `Create virtual machine`
-2. `RHel (ex: 7.4)` or `Ubuntu (ex: 18.04 LTS)`
+2. `RHel (ex: 7.4)` (please let us know if another OS is required)
 3. **Basics**: As desired; make sure can login, such as by SSH public key; needs to be a region with GPU quota
 4. **Size**: GPU of all disk types, e.g., NC6 (hdd) is cheapest for development
 5. **Settings**: Open ports for administration (SSH) and usage (HTTP, HTTPS)
