@@ -119,6 +119,13 @@ It is always safe to remove all containers and load them again, e.g., `docker sy
   * `nvidia-smi` lists a GPU
   * `nvidia-docker run --rm nvidia/cuda nvidia-smi` shows 0 or more containers running 
   * `nvidia-docker run --rm graphistry/viz-app nvidia-smi` shows 0 or more containers running 
+  * Success from: 
+```  
+wget "https://airgapped-deploy.s3.amazonaws.com/cljs1.1.tar.gz?AWSAccessKeyId=AKIAJSGVPK46VRVYMU2A&Signature=ErMRA2fGBLF4XKBPyUWbSkCZZY4%3D&Expires=1542764057"
+tar -xvvf "cljs1.1.tar.gz?AWSAccessKeyId=AKIAJSGVPK46VRVYMU2A&Signature=ErMRA2fGBLF4XKBPyUWbSkCZZY4%3D&Expires=1542764057""
+docker load -i cljs1.1.tar
+nvidia-docker run graphistry/cljs:1.1 npm test
+```
 * Services are running: ``docker ps`` reveals no restart loops on:
   * ``graphistry/nginx-central-vizservers``
   * ``graphistry/pivot-app``
