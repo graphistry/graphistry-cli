@@ -43,15 +43,37 @@ Expect 1-3 days based on your requested `Severity` rating and who Azure assigns 
 See general installation instructions for currently supported Linux versions. RHEL/CentOS/Ubuntu are all supported.
 
 1. `Virtual machines` -> `Create virtual machine`
-2. `RHel (ex: 7.4)` (please let us know if another OS is required)
+2. `Ubuntu 16.04 LTS` Please let us know if another OS is required
 3. **Basics**: As desired; make sure can login, such as by SSH public key; needs to be a region with GPU quota
 4. **Size**: GPU of all disk types, e.g., NC6 (hdd) is cheapest for development
 5. **Settings**: Open ports for administration (SSH) and usage (HTTP, HTTPS)
 6. **Summary**: Should say “`Validation passed`” at the top -> visually audit settings + hit `Create`
-7. Test login; see SSH command at `Overview` -> `Connect` -> `Login using VM Account`
+
+## 2. Confirm proper instance
+
+1. Test login; see SSH command at `Overview` -> `Connect` -> `Login using VM Account`
+2. Check to make sure GPU is attached:
+```
+
+$ lspci -vnn | grep VGA -A 12
+0000:00:08.0 VGA compatible controller [0300]: Microsoft Corporation Hyper-V virtual VGA [1414:5353] (prog-if 00 [VGA controller])
+	Flags: bus master, fast devsel, latency 0, IRQ 11
+	Memory at f8000000 (32-bit, non-prefetchable) [size=64M]
+	[virtual] Expansion ROM at 000c0000 [disabled] [size=128K]
+	Kernel driver in use: hyperv_fb
+	Kernel modules: hyperv_fb
+
+5dc5:00:00.0 3D controller [0302]: NVIDIA Corporation GK210GL [Tesla K80] [10de:102d] (rev a1)
+	Subsystem: NVIDIA Corporation GK210GL [Tesla K80] [10de:106c]
+	Flags: bus master, fast devsel, latency 0, IRQ 24, NUMA node 0
+	Memory at 21000000 (32-bit, non-prefetchable) [size=16M]
+	Memory at 1000000000 (64-bit, prefetchable) [size=16G]
+	Memory at 1400000000 (64-bit, prefetchable) [size=32M]
+```
 
 
-## 2. Proceed to general Graphistry installation
+
+## 3. Proceed to general Graphistry installation
 
 Login to your instance (see **Test login** above) and use the instructions for [general installation](https://github.com/graphistry/graphistry-cli).
 
