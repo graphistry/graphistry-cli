@@ -48,7 +48,7 @@ Bootstrap: Download the CLI and setup your Linux environment
 
 **AWS**
 
-* Launch an official AWS Ubuntu/RHEL/Centos AMI using a ``g3+``or ``p*`` GPU instance. 
+* Launch an official AWS Ubuntu 16.04 LTS AMI using a ``g3+``or ``p*`` GPU instance. 
 * Use S3AllAccess permissions, and override default parameters for: 200GB disk
 * Enable SSH/HTTP/HTTPS in the security groups
 * SSH as ``ubuntu@[your ami]``, ``centos@``, or ``ec2-user@``. 
@@ -57,7 +57,7 @@ Proceed to the OS-specific instructions below.
 
 **Azure**
 
-* Launch an Ubuntu 16.04 Virtual machine with an ``N*`` GPU compute SKU, e.g., NC6 (hdd)
+* Launch an Ubuntu 16.04 LTS Virtual Machine with an ``NC*`` GPU compute SKU, e.g., NC6 (hdd)
 * Enable SSH/HTTP/HTTPS
 * Check to make sure GPU is attached 
 
@@ -80,13 +80,14 @@ $ lspci -vnn | grep VGA -A 12
 
 Proceed to the OS-specific instructions below.
 
-**Ubuntu 16.04**
+**Ubuntu 16.04 LTS**
 ```
     $ git clone https://github.com/graphistry/graphistry-cli.git
     $ bash graphistry-cli/bootstrap.sh ubuntu-cuda9.2
 ```
 
 **RHEL 7.4 / CentOS 7**
+*Note: Temporarily not supported on AWS/Azure*
 ```
     $ sudo yum install -y git
     $ git clone https://github.com/graphistry/graphistry-cli.git 
@@ -132,12 +133,14 @@ See [full Azure installation instructions](https://github.com/graphistry/graphis
 Linux:
 ----------------------
 
-Launch a GPU instance of Graphistry of either RHEL or Ubuntu. See the HW/SW document for recommended system specifications.
+*Note: Temporarily, only Ubuntu 16.04 LTS supported on AWS/Azure*
+
+Launch a GPU instance of Graphistry of either RHEL or Ubuntu. See the HW/SW document for recommended system specifications. 
 
 Log into your Graphistry server and install the CLI:
 
 
-### Ubuntu 16.04
+### Ubuntu 16.04 LTS
 
 ```
     $ git clone https://github.com/graphistry/graphistry-cli.git
@@ -146,6 +149,7 @@ Log into your Graphistry server and install the CLI:
 
 ### RHEL/Centos7
 
+*Note: Temporarily not supported on AWS/Azure*
 
 ```
     $ sudo yum install -y git
