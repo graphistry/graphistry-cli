@@ -40,7 +40,7 @@ Expect 1-3 days based on your requested `Severity` rating and who Azure assigns 
 
 ## 1. Start a new GPU virtual machine
 
-See general installation instructions for currently supported Linux versions. RHEL/CentOS/Ubuntu are all supported.
+See general installation instructions for currently supported Linux versions (subject to above Azure restrictions and general support restrictions.)
 
 1. **Virtual machines** -> `Create virtual machine`
 2. **Ubuntu 16.04 LTS** Please let us know if another OS is required
