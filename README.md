@@ -83,7 +83,7 @@ Proceed to the OS-specific instructions below.
 **Ubuntu 16.04**
 ```
     $ git clone https://github.com/graphistry/graphistry-cli.git
-    $ bash graphistry-cli/bootstrap.sh ubuntu
+    $ bash graphistry-cli/bootstrap.sh ubuntu-cuda9.2
 ```
 
 **RHEL 7.4 / CentOS 7**
