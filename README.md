@@ -137,11 +137,11 @@ Launch a GPU instance of Graphistry of either RHEL or Ubuntu. See the HW/SW docu
 Log into your Graphistry server and install the CLI:
 
 
-### Ubuntu
+### Ubuntu 16.04
 
 ```
     $ git clone https://github.com/graphistry/graphistry-cli.git
-    $ bash graphistry-cli/bootstrap.sh ubuntu
+    $ bash graphistry-cli/bootstrap.sh ubuntu-cuda9.2
 ```
 
 ### RHEL/Centos7
