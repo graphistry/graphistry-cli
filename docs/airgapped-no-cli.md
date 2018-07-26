@@ -47,10 +47,11 @@ Contents:
   * CPU: 8GB+ CPU RAM; recommended 4+ cores with 16+ GB RAM
   * GPU: CUDA-capable Nvidia GPU (Tesla, Pasal, Volta series) with 4GB+ RAM; recommended 12+ GB GPU RAM
 * Server configured for Nvidia-Docker:
-  * Docker (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/20-docker.sh
-  * CUDA 9.1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/30-CUDA.sh
-  * Nivida-Docker-1 (RHEL): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/rhel/40-nvidia-docker.sh
+  * Docker (Ubuntu): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/ubuntu-cuda9.2/20-docker.sh
+  * CUDA 9.2 (Ubuntu): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/ubuntu-cuda9.2/30-CUDA.sh
+  * Nivida-Docker-2 (Ubuntu): https://github.com/graphistry/graphistry-cli/blob/master/graphistry/bootstrap/ubuntu-cuda9.2/40-nvidia-docker.sh
   * _Alternatives_: Ubuntu, RHEL, CentOS -- https://github.com/graphistry/graphistry-cli/tree/master/graphistry/bootstrap
+  * Note: Graphistry works with both nvidia-docker-1 and nvidia-docker-2, just take care for CUDA drivers to match up
 * Browser: Chrome/Firefox with WebGL enabled
 
 
