@@ -144,7 +144,7 @@ http://####.com
 * Services pass initial healthchecks:
   * ``site.com/central/healthcheck``
   * ``site.com/pivot/healthcheck``
-  * ``site.com/worker/healthcheck``
+  * ``site.com/worker/10000/healthcheck``
 * Pages load: Visualization
   * ``site.com`` shows Graphistry homepage
   * ``site.com/graph/graph.html?dataset=Facebook`` clusters and renders a graph
