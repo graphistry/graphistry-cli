@@ -1,18 +1,18 @@
 
 # Debugging Container Networking
 
-The following tests may help pinpoint loading failures.
+The following tests may help pinpoint loading failures:
 
-## PREREQUISITES
+## Prerequisites
 
-Check the main tests:
+Check the main tests (https://github.com/graphistry/graphistry-cli)
 
 * All containers are running
 * Healthchecks passes
 
-## MONGO
+## Mongo container
 
-A. Host is running Mongo
+### A. Host is running Mongo
 
 ```
 docker exec MONGO_CONTAINER_ID /bin/bash -c "echo 'db.stats().ok' | mongo localhost/cluster -quiet"
@@ -22,7 +22,7 @@ docker exec MONGO_CONTAINER_ID /bin/bash -c "echo 'db.stats().ok' | mongo localh
 1
 ```
 
-B. Mongo has available and running workers
+### B. Mongo has workers
 
 ```
  docker exec  MONGO_CONTAINER_ID /bin/bash -c "echo 'db.node_monitor.find()' | mongo localhost/cluster -quiet"
@@ -35,42 +35,50 @@ B. Mongo has available and running workers
 { "_id" : ObjectId("5b4d72e0f160a28b5001a6ca"), "ip" : "localhost", "pid" : 13966, "port" : 10001, "active" : true, "updated" : ISODate("2018-07-30T16:18:31.205Z") }
 { "_id" : ObjectId("5b4d7306f160a28b5001a6cc"), "ip" : "localhost", "pid" : 14156, "port" : 10009, "active" : true, "updated" : ISODate("2018-07-30T16:18:31.717Z") }
 { "_id" : ObjectId("5b4d75fff160a28b5001a6d0"), "ip" : "localhost", "pid" : 17872, "port" : 10000, "active" : true, "updated" : ISODate("2018-07-30T16:18:30.618Z") }
+...
 ```
 
 
-## BROWSER
+## Browser
 
-A. Can read central:
+### A. Can read central:
 
-```http://labs.graphistry.com/central/healthcheck```
+```
+http://labs.graphistry.com/central/healthcheck
+```
 =>
-
 ```
 {"success":true,"lookup_id":"8469333535151313","uptime_ms":2553188560,"interval_ms":4677}
 ```
 
-B. Can receive central redirect:
+### B. Can receive central redirect:
 
-```curl -I labs.graphistry.com/graph/graph.html?dataset=Twitter```
+```
+curl -I labs.graphistry.com/graph/graph.html?dataset=Twitter
+```
 =>
 ```
 302 with location `/graph/graph.html?dataset=Twitter&workbook=<HASH>`
 ```
 
-C. Browser has web sockets enabled
+### C. Browser has web sockets enabled
 
 Passes test at https://www.websocket.org/echo.html
 
 
+## Viz container
 
-## VIZ_CONTAINER
+### A. Container has a running central server 
 
-A. The host gets a 302 on `docker exec 507092d84cd3 curl -I localhost:3000/graph/graph.html?dataset=Twitter`
-B. The host gets a 302 on `curl -I localhost:80/graph/graph.html?dataset=Twitter`
+The host gets a 302 on `docker exec 507092d84cd3 curl -I localhost:3000/graph/graph.html?dataset=Twitter`
 
-In both cases, the 302 result appends `...&workbook=HASH`.
+### B. Container server is externally accessible
 
-C. Can communicate with Mongo
+The host gets a 302 on `curl -I localhost:80/graph/graph.html?dataset=Twitter`
+
+In both A. and B. cases, the 302 result appends `...&workbook=HASH`.
+
+### C. Can communicate with Mongo
 
 First find mongo configuration for MONGO_DATABASE, MONGO_USERNAME, MONGO_PASSWORD:
 `docker exec  VIZ_CONTAINER_ID cat central-cloud-options.json` or `docker exec  VIZ_CONTAINER_ID ps -eafww | grep central`
