@@ -26,7 +26,8 @@ Contents:
 ~ $ tar -xvvf graphistry.tar.gz
 ~ $ docker load -i containers.tar
 
-### set pivot-config.json::graphistry.host, defaults ok for rest of (httpd,pivot,viz-app)-config.json
+### edit pivot-config.json::graphistry.host, defaults ok for rest of (httpd,pivot,viz-app)-config.json
+~ $ cp graphistry-cli/docs/config-files/*.json .
 ~ $ vi ~/pivot-config.json 
 
 ~ $ cd deploy && SHIPYARD=1 ./launch.sh
