@@ -1,7 +1,7 @@
 
 # Debugging Container Networking
 
-The following tests may help pinpoint loading failures:
+The following tests may help pinpoint loading failures.
 
 ## Prerequisites
 
@@ -14,18 +14,22 @@ Check the main tests (https://github.com/graphistry/graphistry-cli)
 
 ### A. Host is running Mongo
 
+*Note*: Database, collection initializated by `launch` (e.g., during `init`) and does not persist between runs.
+
 ```
-docker exec MONGO_CONTAINER_ID /bin/bash -c "echo 'db.stats().ok' | mongo localhost/cluster -quiet"
+docker exec monolith-network-mongo /bin/bash -c "echo 'db.stats().ok' | mongo localhost/cluster -quiet"
 ```
 => 
 ```
 1
 ```
 
-### B. Mongo has workers
+### B. Mongo has registered workers
+
+*Note*: Populated by `monolith-network-viz` on node process start
 
 ```
- docker exec  MONGO_CONTAINER_ID /bin/bash -c "echo 'db.node_monitor.find()' | mongo localhost/cluster -quiet"
+docker exec monolith-network-mongo /bin/bash -c "echo 'db.node_monitor.find()' | mongo localhost/cluster -quiet"
 ```
 => 10+ workers 
 ```
@@ -41,69 +45,147 @@ docker exec MONGO_CONTAINER_ID /bin/bash -c "echo 'db.stats().ok' | mongo localh
 
 ## Browser
 
-### A. Can read central:
+### A. Can access site:
 
+Browse to
 ```
-http://labs.graphistry.com/central/healthcheck
+curl http://MY_GRAPHISTRY_SERVER.com/central/healthcheck
 ```
 =>
 ```
-{"success":true,"lookup_id":"8469333535151313","uptime_ms":2553188560,"interval_ms":4677}
+{"success":true,"lookup_id":"<NUMBER>","uptime_ms":<NUMBER>,"interval_ms":<NUMBER>}
 ```
+
+### B. Browser has web sockets enabled
+
+Passes test at https://www.websocket.org/echo.html
+
+### C. Can follow central redirect:
+
+
+Open browser developer network analysis panel and visit
+
+```
+http://MY_GRAPHISTRY_SERVER.com/graph/graph.html?dataset=Twitter
+```
+=>
+```
+302 on `/graph/graph.html?dataset=Twitter
+200 on `/graph.graph.html?dataset=Twitter&workbook=<HASH>`
+Page UI loads (`vendor.<HASH>.css`, ...)
+Socket connects (`/worker/<NUMBER>/socket.io/?dataset=Twitter&...`)
+Dataset positions stream in (`/worker/<NUMBER>/vbo?id=<HASH>&buffer=curPoints`)
+```
+
+This call sequence stress a lot of the pipeline.
+
+## NGINX
+
+*Note* Assumes underlying containers are fulfilling these requests (see other tests)
+
+### A. Can server central routes
+
+```
+curl -s -I localhost/central/healthcheck | grep HTTP
+```
+=>
+```
+HTTP/1.1 200 OK
+```
+
 
 ### B. Can receive central redirect:
 
 ```
-curl -I labs.graphistry.com/graph/graph.html?dataset=Twitter
+curl -s -I localhost/graph/graph.html?dataset=Twitter | grep "HTTP\|Location"
 ```
 =>
 ```
-302 with location `/graph/graph.html?dataset=Twitter&workbook=<HASH>`
+HTTP/1.1 302 Found
+Location: /graph/graph.html?dataset=Twitter&workbook=<HASH>
 ```
 
-### C. Browser has web sockets enabled
+and
 
-Passes test at https://www.websocket.org/echo.html
+```
+curl -s -I localhost/graph/graph.html?dataset=Twitter  |  grep "HTTP\|Location"
+```
+=>
+```
+HTTP/1.1 302 Found
+Location: /graph/graph.html?dataset=Twitter&workbook=<HASH>
+```
+
+### C. Can serve worker routes
+
+```
+curl -s -I localhost/worker/10000/healthcheck | grep HTTP
+```
+=>
+```
+HTTP/1.1 200 OK
+```
 
 
 ## Viz container
 
 ### A. Container has a running central server 
 
-The host gets a 302 on `docker exec 507092d84cd3 curl -I localhost:3000/graph/graph.html?dataset=Twitter`
 
-### B. Container server is externally accessible
+```
+docker exec monolith-network-viz curl -s -I localhost:3000/central/healthcheck | grep HTTP
+```
+=>
+```
+HTTP/1.1 200 OK
+```
 
-The host gets a 302 on `curl -I localhost:80/graph/graph.html?dataset=Twitter`
+and
 
-In both A. and B. cases, the 302 result appends `...&workbook=HASH`.
+```
+docker exec monolith-network-viz curl -s -I localhost:3000/graph/graph.html?dataset=Twitter | grep "HTTP\|Location"
+```
+=>
+```
+HTTP/1.1 302 Found
+Location: /graph/graph.html?dataset=Twitter&workbook=<HASH>
+```
+
 
 ### C. Can communicate with Mongo
 
-First find mongo configuration for MONGO_DATABASE, MONGO_USERNAME, MONGO_PASSWORD:
-`docker exec  VIZ_CONTAINER_ID cat central-cloud-options.json` or `docker exec  VIZ_CONTAINER_ID ps -eafww | grep central`
+First find mongo configuration for MONGO_USERNAME and MONGO_PASSWORD:
+`docker exec monolith-network-viz cat central-cloud-options.json` or `docker exec  monolith-network-viz ps -eafww | grep central`
 
-Next check that mongo results are viewable:
+Plug those into `<MONGO_USERNAME>` and `<MONGO_PASSWORD>` below:
 
 ```
-docker exec -w /var/graphistry/packages/central VIZ_CONTAINER_ID node -e "x = require('mongodb').MongoClient.connect('mongodb://MONGO_USERNAMEMONGO_PASSWORD@mongo/cluster').then(function (db) { return db.db('cluster') }).then(function (db) { return db.collection('node_monitor').find() }).then(function (cursor) { return cursor.toArray() }).then(console.log.bind(null, 'ok'), console.error.bind(null, 'error'))"
+docker exec -w /var/graphistry/packages/central monolith-network-viz node -e "x = require('mongodb').MongoClient.connect('mongodb://<MONGO_USERNAME><MONGO_PASSWORD>@mongo/cluster').then(function (db) { return db.collection('node_monitor').find() }).then(function (cursor) { return cursor.toArray() }).then(console.log.bind(null, 'ok'), console.error.bind(null, 'error'))"
 ```
 
 =>
 ```
-ok [ { _id: 5b4d7049f160a28b5001a6bf,
+ok [ { _id: <HASH>,
     ip: 'localhost',
-    pid: 9867,
-    port: 10011,
+    pid: <NUMBER>,
+    port: <NUMBER>,
     active: true,
-    updated: 2018-07-30T17:44:35.112Z },
-  { _id: 5b4d727ff160a28b5001a6c3,
+    updated: <TIME> },
+  { _id: <HASH>,
     ip: 'localhost',
-    pid: 13325,
-    port: 10002,
+    pid: <NUMBER>,
+    port: <NUMBER>,
     active: true,
-    updated: 2018-07-30T17:44:36.763Z },
+    updated: <TIME> },
 ...
 ```
 
+### D. Has running workers
 
+```
+docker exec monolith-network-viz curl -s -I localhost:10000/healthcheck | grep HTTP
+```
+=>
+```
+HTTP/1.1 200 OK
+```
