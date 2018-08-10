@@ -18,6 +18,6 @@ sudo pkill -SIGHUP dockerd
 
 docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
 
-sudo echo -e "{\n    "default-runtime": "nvidia",\n    "runtimes": {\n        "nvidia": {\n            "path": "/usr/bin/nvidia-container-runtime",\n            "runtimeArgs": []\n        }\n    }\n}" > /etc/docker/daemon.json
+sudo echo -e "{\n    \"default-runtime\": \"nvidia\",\n    \"runtimes\": {\n        \"nvidia\": {\n            \"path\": \"/usr/bin/nvidia-container-runtime\",\n            \"runtimeArgs\": []\n        }\n    }\n}" > /etc/docker/daemon.json
 
 sudo service docker restart
