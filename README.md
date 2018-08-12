@@ -94,7 +94,26 @@ Proceed to the OS-specific instructions below.
     $ bash graphistry-cli/bootstrap.sh rhel
 ```
 
-Log off and back in (full restart not required.)
+**Restart environment**
+
+Log off and back in (full restart not required):  "`$ exit`", "`$ exit`"
+
+**_Warning: Skipping this step means `docker` service may not be available_**
+
+
+**Test environment**
+
+```
+    $ nvidia-docker run graphistry/cljs:1.1 nvidia-smi
+```
+
+===> Lists a GPU
+
+```
+    $ nvidia-docker run graphistry/cljs:1.1 npm test
+```
+===> `Ran`, `Success`
+
 
 Run
 -----
