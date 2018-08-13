@@ -1,24 +1,28 @@
 A CLI for Managing a Graphistry Deployment
 ------------------------------------------
 
-The Graphistry command-line interface supports installing, launching, and managing Graphistry. See the airgapped mode document for installation in airgapped settings.
+Graphistry administration is either via standard `docker-compose` commands or through the Graphistry command-line interface.
 
 ``graphistry`` supports multiple commands:
 
-
-* ``init`` Download, configure, and launch Graphistry
-* ``config`` Configure Graphistry relative to latest Graphistry online baseline
-* ``config_offline`` Configure Graphistry relative to offline baseline
 * ``exit`` Leave application. Ctrl-C or Ctrl-D works too.
 * ``keygen`` Create API key token
 * ``help`` Shows all CLI commands
-* ``launch`` Launch Graphistry based on local containers
-* ``load`` Load Graphistry from Container Archive
 * ``login`` Login to Graphistry
 * ``pull`` Pull docker containers
-* ``stop`` Stop All Graphistry Containers
+* Run non-interactive commands with ``-c``, such as ``graphistry -c stop``
 
-Run non-interactive commands with ``-c``, such as ``graphistry -c stop``.
+``docker-compose`` supports lifecycle commands:
+
+* `docker-compose up` Starts Graphistry; daemonize via `docker-compose up -d`
+* `docker-compose stop` (or ctrl-c) stops Graphistry
+* `docker-compose ps` Check status of each service
+
+``docker`` supports manipulation of individual services:
+* `docker ps` Lists IDs
+*`docker restart <CONTAINER>`
+* `docker status`
+* `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`)
 
 
 Contents
@@ -109,16 +113,19 @@ Log off and back in (full restart not required):  "`$ exit`", "`$ exit`"
 
 Tests pass for `test-10` through `test-40`.
 
-Run
------
+**Airgapped**
+
+If you were provided a tarball, manually load the containers inside:
+
 ```
-    $ graphistry
+docker load -i containers.tar
 ```
 
-* Press tab to see options
-* Run ``init`` for streamlined initial configuration & launch
-* See below for SSL setup, which we recommend for use with notebooks, embedding in web apps, and overall security.
-* For subsequent use, run ``launch`` and ``stop``
+Run
+-----
+
+* Interactive: `docker-compose up`
+* Daemon: `docker-compose up -d`
 
 
 Detailed Installation Instructions:
@@ -172,14 +179,6 @@ Log into your Graphistry server and install the CLI:
 
 
 
-Installation:
--------------
-
-1. The above commands will bootstrap your system and get the Graphistry cli ready. This will take a while.
-2. After they complete, follow the instructions and run ``graphistry``
-3. Now inside the Graphistry prompt, you can hit ``tab`` to see your options, but all you need to do to get Graphistry up and running is run the ``init`` command and answer the questions. Leave any blank that you are unsure about, and be ready to say which if you find launch issues.
-
-
 Additional Commands and Configuration
 ======================
 
@@ -189,17 +188,20 @@ Setup SSL:
 
 If you have SSL certificates, we recommend installing them: this improves security and enables Graphistry to embed into tools that also use HTTPs.
 
-1. Create folder `ssl/` as a sibling to `deploy`
-2. Place files ``ssl_certificate.pem`` and ``ssl_certificate_key.pem`` into folder ``ssl/`` .
+1. Edit `~/docker-compose.yml` to enable nginx ssl config (or define your own)
+2. Place files `ssl.crt`, `ssl.key`, `ssl_trusted_certificate.pem` into folder ``ssl/`` .
 3. Restart Graphistry
 
 Restarting:
 -----------
 
-* Run `graphistry -c stop` followed by `graphistry -c launch`
 * On reboot, you may need to first run:
   * `sudo systemctl start docker`
   * `sudo service nvidia-docker start`
+* If using daemons:
+  * `docker-compose restart`
+  * `docker-compose stop` and `docker-compose start`
+* Otherwise `docker-compose up`
 
 
 Upgrading:
@@ -209,30 +211,12 @@ Your version of Graphistry is determined by your cloud admin account and the ver
 
 ### Update to the latest container: Internet connected
 
-1. Stop the Graphistry server if it is running
-```
-    $ graphistry -c stop
-```
+1. Stop the Graphistry server if it is running: `docker-compose stop`
+2. Load the new containers (e.g., `docker load -i containers.tar`) 
+3. Edit any config (`docker-compose.yml` and `.env`)
+4. Restart Graphistry: `docker-compose up` (or `docker-compose up -d`)
 
-2. Update the CLI
-```
-    $ cd graphistry-cli
-    $ git pull
-    $ pip3 uninstall graphistry
-    $ python3.6 setup.py clean
-    $ pythpn3.6 setup.py install
-```    
-
-3. Update Graphistry and restart
-```
-    $ rm -rf ~/.config ##### Backup this folder and *.json
-    $ graphistry
-    >   pull
-    >   config_offline
-    >   load
-    >   launch
-```    
-Been ``load`` and ``launch``, you may want to load saved values from your backed up ``.config/`` and ``*.json`` into the generated ones.
+Between ``load`` and ``launch``, you may want to load saved values from your backed up ``.config/`` and ``*.json`` into the generated ones.
 
 
 Testing:
