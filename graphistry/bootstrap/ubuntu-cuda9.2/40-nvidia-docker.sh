@@ -16,7 +16,7 @@ sudo apt-get update
 sudo apt-get install -y nvidia-docker2
 sudo pkill -SIGHUP dockerd
 
-sudo docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
+docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
 
 sudo echo -e "{\n    \"default-runtime\": \"nvidia\",\n    \"runtimes\": {\n        \"nvidia\": {\n            \"path\": \"/usr/bin/nvidia-container-runtime\",\n            \"runtimeArgs\": []\n        }\n    }\n}" > /etc/docker/daemon.json
 
