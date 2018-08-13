@@ -182,6 +182,14 @@ Log into your Graphistry server and install the CLI:
 Additional Commands and Configuration
 ======================
 
+Connectors:
+----------
+Edit `.env` and restart Graphistry
+
+Passwords:
+---------
+Edit `.env` and restart Graphistry
+
 
 Setup SSL:
 ----------
@@ -194,6 +202,8 @@ If you have SSL certificates, we recommend installing them: this improves securi
 
 Restarting:
 -----------
+
+Graphistry automatically restarts in case of errors. In case of manual restart or reboot:
 
 * On reboot, you may need to first run:
   * `sudo systemctl start docker`
@@ -216,7 +226,7 @@ Your version of Graphistry is determined by your cloud admin account and the ver
 3. Edit any config (`docker-compose.yml` and `.env`)
 4. Restart Graphistry: `docker-compose up` (or `docker-compose up -d`)
 
-Between ``load`` and ``launch``, you may want to load saved values from your backed up ``.config/`` and ``*.json`` into the generated ones.
+You may want to backup `.env`, `.docker-compose.yml`, `.config/*`, `etc/ssl`, and `.pivotdb/*`.
 
 
 Testing:
