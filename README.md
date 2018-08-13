@@ -104,16 +104,10 @@ Log off and back in (full restart not required):  "`$ exit`", "`$ exit`"
 **Test environment**
 
 ```
-    $ nvidia-docker run graphistry/cljs:1.1 nvidia-smi
+    $ run-parts --regex "test*" graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2
 ```
 
-===> Lists a GPU
-
-```
-    $ nvidia-docker run graphistry/cljs:1.1 npm test
-```
-===> `Ran`, `Success`
-
+Tests pass for `test-10` through `test-40`.
 
 Run
 -----
