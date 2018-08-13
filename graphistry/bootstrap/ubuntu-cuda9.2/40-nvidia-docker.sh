@@ -21,3 +21,5 @@ sudo docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
 sudo sh -c 'echo "{\n    \"default-runtime\": \"nvidia\",\n    \"runtimes\": {\n        \"nvidia\": {\n            \"path\": \"/usr/bin/nvidia-container-runtime\",\n            \"runtimeArgs\": []\n        }\n    }\n}" > /etc/docker/daemon.json'
 
 sudo service docker restart
+
+sudo pip install docker-compose

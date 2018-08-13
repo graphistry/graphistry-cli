@@ -10,6 +10,7 @@ echo "======= " `basename "$0"`
 ensure_command docker --version
 ensure_command "/usr/local/cuda/bin/nvcc" "--version"
 ensure_command "nvidia-smi" "-L"
+ensure_command "docker-compose" "--version"
 
 
 if sudo docker run hello-world | grep "Hello"
