@@ -10,7 +10,6 @@ Skip installing the CLI if you have a Graphistry tarball.
 
 ``graphistry`` supports multiple commands:
 
-* ``keygen`` Create API key token
 * ``login`` Login to Graphistry
 * ``pull`` Pull docker containers (only use if no tarball)
 * ``help`` Shows all CLI commands
@@ -28,6 +27,8 @@ Skip installing the CLI if you have a Graphistry tarball.
 * `docker status`
 * `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`)
 
+Keygen:
+* `docker exec ubuntu_central_1 curl -s http://localhost:10000/api/internal/provision?text=MY_USER_NAME`
 
 Contents
 --------
