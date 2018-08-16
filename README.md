@@ -1,16 +1,20 @@
 A CLI for Managing a Graphistry Deployment
 ------------------------------------------
 
-Graphistry administration is either via standard `docker-compose` commands or through the Graphistry command-line interface.
+Graphistry administration is either via standard `docker-compose` commands or through the Graphistry command-line interface. 
+
+For convenience by cloud users on clean boxes with no Docker, Nvidia drivers, etc., we also provide OS bootstrap scripts. Skip installing the bootstrap if you already have setup your OS for nvidia-docker-2.
+
+Skip installing the CLI if you have a Graphistry tarball.
+
 
 ``graphistry`` supports multiple commands:
 
-* ``exit`` Leave application. Ctrl-C or Ctrl-D works too.
 * ``keygen`` Create API key token
-* ``help`` Shows all CLI commands
 * ``login`` Login to Graphistry
-* ``pull`` Pull docker containers
-* Run non-interactive commands with ``-c``, such as ``graphistry -c stop``
+* ``pull`` Pull docker containers (only use if no tarball)
+* ``help`` Shows all CLI commands
+* ``exit`` Leave CLI. Ctrl-C or Ctrl-D works too.
 
 ``docker-compose`` supports lifecycle commands:
 
@@ -49,6 +53,8 @@ Quick Start
 
 Bootstrap: Download the CLI and setup your Linux environment
 ------------------------------------------------------------
+
+For installing docker, docker-compose, CUDA drivers, and nvidia-docker. Skip to testing section if already setup.
 
 **AWS**
 
@@ -157,7 +163,7 @@ Linux:
 
 Launch a GPU instance of Graphistry of either RHEL or Ubuntu. See the HW/SW document for recommended system specifications. 
 
-Log into your Graphistry server and install the CLI:
+Log into your Graphistry server, install the CLI, and bootstrap system dependencies (docker, docker-compose, CUDA drivers, nvidia-docker). Skip the bootstrap if you have the system dependencies. Skip the CLI if you have the tarball.
 
 
 ### Ubuntu 16.04 LTS
