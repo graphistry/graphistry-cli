@@ -28,7 +28,7 @@ Skip installing the CLI if you have a Graphistry tarball.
 * `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`)
 
 Keygen:
-* `docker exec ubuntu_central_1 curl -s http://localhost:10000/api/internal/provision?text=MY_USER_NAME`
+* `docker-compose exec central curl -s http://localhost:10000/api/internal/provision?text=MY_USER_NAME`
 
 Contents
 --------
