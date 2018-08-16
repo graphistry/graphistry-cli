@@ -20,6 +20,7 @@ Skip installing the CLI if you have a Graphistry tarball.
 * `docker-compose up` Starts Graphistry; daemonize via `docker-compose up -d`
 * `docker-compose stop` (or ctrl-c) stops Graphistry
 * `docker-compose ps` Check status of each service
+* `docker-compose exec central curl -s http://localhost:10000/api/internal/provision?text=MY_USER_NAME` generate API key for a developer or notebook user
 
 ``docker`` supports manipulation of individual services:
 * `docker ps` Lists IDs
@@ -27,8 +28,6 @@ Skip installing the CLI if you have a Graphistry tarball.
 * `docker status`
 * `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`)
 
-Keygen:
-* `docker-compose exec central curl -s http://localhost:10000/api/internal/provision?text=MY_USER_NAME`
 
 Contents
 --------
