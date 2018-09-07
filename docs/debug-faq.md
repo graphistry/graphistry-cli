@@ -1,4 +1,6 @@
-Graphistry System Debugging FAQ
+# Graphistry System Debugging FAQ
+
+Issues sometimes occur during server start:
 
 ## List of Issues
 
