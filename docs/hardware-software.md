@@ -12,64 +12,80 @@ docker run --rm -it -v $PWD:/source jagregory/pandoc -s hardware-software.md -o 
 
 # Recommended Deployment Configurations: Client, Server Software, Server Hardware
 
-## Quick
+Graphistry ships as a Docker container that runs in a variety of Linux + Nvidia GPU environments:
+
+## Contents
+
+* Overview
+* Client
+* Server Software: Cloud, OS, Docker, Avoiding Root Users
+
+## Overview
 
 * **Client**: Chrome/Firefox from the last 3 years, WebGL enabled, and 100KB/s download ability
 * **Server**: 
-- x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), and 1+ Nvidia GPUs (K80 onwards) with 4+ GB RAM each (1+ GB per concurrent user)\
-- Docker / CUDA 9.2 / nvidia-docker-2
+- x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), and 1+ Nvidia GPUs (K80 onwards) with 4+ GB RAM each (1+ GB per concurrent user)
 - Recommend Ubuntu 16.04, 4+ CPU cores, 64GB+ CPU RAM, Nvidia Tesla or later
-
+- Docker / CUDA 9.2 / nvidia-docker-2
+ 
 
 ## Client
 
-The intuition is that a user can work with Graphistry if their environment supports Youtube, and even better, Netflix.
+A user's environment should support Graphistry if it supports Youtube, and even better, Netflix.
 
 The Graphistry client runs in standard browser configurations:
 
 * **Browser**: Chrome and Firefox from the last 3 years, and users regularly report success with other browsers like Safari.
 
-* **WebGL**: WebGL 1.0 is required. This started shipping ~5 years ago, and most client devices, including phones and tablets, support it. Both integrated and discrete graphic cards work, and for any vendor supporting WebGL.
+* **WebGL**: WebGL 1.0 is required. It is 7+ years old, so most client devices, including phones and tablets, support it. Graphistry runs fine on both integrated and discrete graphic cards, with especially large graphs working better on better GPUs.
 
-* **Network**: 100KB+/s download speeds, and we recommend 1MB/s if graphs with > 100K nodes and edges. 
+* **Network**: 100KB+/s download speeds, and we recommend 1MB+/s if often using graphs with 100K+ nodes and edges. 
 
 * **Operating System**: All.
 
-***Recommended***: Chrome from last 2 years and with a device from the last 4 years.
+***Recommended***: Chrome from last 2 years on a device from the last 4 years and a 1MB+/s network connection
 
 
 ## Server Software: Cloud, OS, Docker, Avoiding Root Users
 
-### Cloud
+Graphistry can run both on-premises and in the cloud on Amazon EC2, Google GCP, and Microsoft Azure.
 
-Graphistry runs on-premise and has been tested with Amazon EC2 and Microsoft Azure.
+### Cloud
 
 *Tested AWS Instances*:
 
-* P2.xl ***Recommended***
-* G2.2xl
+* P2
+* G3  ***Recommended for testing and initial workloads***
+* P3
 
 *Tested Azure Instances*:
 
-* NV6 ***Recommended***
+* NV6 ***Recommended for testing and initial workloads***
 * NC6
 
 See the hardware provisioning section to pick the right configuration for you.
 
 ### OS & Docker
 
-We regularly run on:
+Graphistry regularly runs on:
 
-* Ubuntu Xenial 16.04 LTS
-* RedHat RHEL 7.3 ***Recommended***
+* Ubuntu Xenial 16.04 LTS ***Recommended***
+* RedHat RHEL 7.3 
 
-Both support nvidia-docker.
+Both support nvidia-docker-2:
+
+* Docker
+* nvidia-docker-2
+* CUDA 9.2
+
+For cloud users, we maintain bootstrap scripts, and they are a useful reference for on-premises users.
+
 
 ### User: Root vs. Not
 
 Installing Docker, Nvidia drivers, and nvidia-docker currently all require root user permissions.
 
-After installation, Graphistry can be installed and run as an unprivileged user, with access to nvidia-docker is installed, Graphistry can be installed and run as a regular user.
+Graphistry can be installed and run as an unprivileged user as long as it have access to nvidia-docker.
 
 ## Server: Hardware Capacity Planning
 
@@ -88,9 +104,9 @@ A Graphistry server must support 1MB+/s per expected concurrent user. A moderate
 The following Nvidia GPUs are known to work with Graphistry:
 
 * Tesla: K40, K80, M40
-* Pascal/DGX: P100 ***Recommended***
+* DGX: P100, V100 ***Recommended***
 
-The GPU should provide 1+ GB of memory per concurrent user. For teams expecting to look at large datasets (1M-1B element graphs), we expect the consumable amount of memory per concurrent user to increase in 2018 by 100X, if desired.
+The GPU should provide 1+ GB of memory per concurrent user. 
 
 ### CPU Cores & CPU RAM
 
@@ -102,3 +118,13 @@ CPU cores & CPU RAM should be provisioned in proportion to the number of GPUs an
 ### CPU-Only
 
 For development purposes such as testing, a CPU-only mode (for machines without a GPU) is available.
+
+### Multi-GPU, Multi-Node, and Multi-Tenancy
+
+Graphistry 1.0 virtualizes a single GPU for shared use by multiple users.
+
+* When Graphistry is on a shared system, it is especially crucial to determine whether the system environment is ready for nvidia-docker-2, or needs potentially disruptive patching updates. Likewise, the CPU, GPU, and network resources assigned to the Graphistry instance (such as via Docker) should not be contended with from sibling applications. Such software is often not as isolatable.
+
+* Multitenancy via multiple GPUs: You can use more GPUs to handle more users and give more performance isolation between users. We recommend separating a few heavy users from many light users, and developers from non-developers.
+
+* Acceleration via multiple GPUs: Graphistry is investigating how to achieve higher speeds via multi-GPU acceleration, but the current benefits are only for multitenancy.
