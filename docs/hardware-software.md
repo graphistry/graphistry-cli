@@ -81,11 +81,15 @@ Both support nvidia-docker-2:
 For cloud users, we maintain bootstrap scripts, and they are a useful reference for on-premises users.
 
 
-### User: Root vs. Not
+### User: Root vs. Not, Permissions
 
 Installing Docker, Nvidia drivers, and nvidia-docker currently all require root user permissions.
 
 Graphistry can be installed and run as an unprivileged user as long as it have access to nvidia-docker.
+
+### Storage
+
+We recommend using backed-up network attached storage for persisting visualizations and investigations. Data volumes are negligible in practice, e.g., < $10/mo on AWS S3.
 
 ## Server: Hardware Capacity Planning
 
@@ -97,7 +101,11 @@ For teams doing single-purpose multi-year purchases, we generally recommend more
 
 ### Network
 
-A Graphistry server must support 1MB+/s per expected concurrent user. A moderately used team server may use a few hundred GB / month.
+A Graphistry server must support 1MB+/s per expected concurrent user. A moderately used team server may stream a few hundred GB / month.
+
+* The server should allow http/https access by users and ssh by the administrator.
+* TLS certificates can be installed (nginx)
+* The Graphistry server may invoke various database connectors: Those systems should enable firewall and credential access that authorizes authenticated remote invocations from the Graphistry server.
 
 ### GPUs & GPU RAM
 
@@ -115,9 +123,6 @@ CPU cores & CPU RAM should be provisioned in proportion to the number of GPUs an
 * CPU Cores: We recommend 4-6 x86 CPU cores per GPU
 * CPU RAM: We recommend 6 GB base memory and at least 16 GB total memory for a single GPU system. For balanced scaling, 3 GB per concurrent user or 3X the GPU RAM.
 
-### CPU-Only
-
-For development purposes such as testing, a CPU-only mode (for machines without a GPU) is available.
 
 ### Multi-GPU, Multi-Node, and Multi-Tenancy
 
