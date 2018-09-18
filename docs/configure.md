@@ -2,17 +2,20 @@
 
 Administrators can specify passwords, TLS/SSL, persist data across sessions, connect to databases, specify ontologies, and more. 
 
-## Three configuration files: .env, docker-compose.yml, and pivot.json
+## Four configurations: .env, docker-compose.yml, pivot.json, and etc/ssl/*
 
 * Graphistry is configured through a `.env` file, which is what you primarily edit
 * It can be used to enable a `data/pivot.json`, which supports the same commands, but is more convenient for heavier configurations such as json ontologies
 * The `docker-compose.yml` reads the `.env` file, and more advanced administrators may edit the yml file as well. Maintenance is easier if you never edit it.
+* TLS is via `etc/ssl/*`
 
 ## Backup your configuration
 
 Graphistry tarballs contain default `.env` and `docker-compose.yml`, so make sure you put them in safe places. 
 
 If you create `json` config files, such as a `data/config/pivot.json`, back them up too.
+
+If you configure `TLS`, backup `etc/ssl`.
 
 ## Persist user data across restarts
 
