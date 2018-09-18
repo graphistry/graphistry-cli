@@ -38,10 +38,8 @@ Contents
    * AWS
    * Linux
    * Installation
-* Additional Commands and Configuration
-   * Starting and stopping
-   * Updating
-   * SSL
+* Configuration
+* Restarting
 * Upgrading
 * Testing
 * Troubleshooting
@@ -184,30 +182,17 @@ Log into your Graphistry server, install the CLI, and bootstrap system dependenc
 ```
 
 
-
-Additional Commands and Configuration
+Configuration
 ======================
 
-Connectors:
-----------
-Edit `.env` and restart Graphistry
+See [config.md](https://github.com/graphistry/graphistry-cli/blob/master/docs/config.md) for connectors (Splunk, ElasticSearch, ...), passwords, ontology (colors, icons, sizes), TLS/SSL/HTTPS, backups to disk, and more.
 
-Passwords:
----------
-Edit `.env` and restart Graphistry
+**Recommended**: Setup `pivot` password, data persistence, and for embedded use like notebooks, TLS.
 
 
-Setup SSL:
-----------
 
-If you have SSL certificates, we recommend installing them: this improves security and enables Graphistry to embed into tools that also use HTTPs.
-
-1. Edit `~/docker-compose.yml` to enable nginx ssl config (or define your own)
-2. Place files `ssl.crt`, `ssl.key`, `ssl_trusted_certificate.pem` into folder ``ssl/`` .
-3. Restart Graphistry
-
-Restarting:
------------
+Restarting
+===========
 
 Graphistry automatically restarts in case of errors. In case of manual restart or reboot:
 
@@ -227,12 +212,12 @@ Your version of Graphistry is determined by your cloud admin account and the ver
 
 ### Update to the latest container: Internet connected
 
-1. Stop the Graphistry server if it is running: `docker-compose stop`
-2. Load the new containers (e.g., `docker load -i containers.tar`) 
-3. Edit any config (`docker-compose.yml` and `.env`)
-4. Restart Graphistry: `docker-compose up` (or `docker-compose up -d`)
+1. Backup any configuration and data: `.env`, `docker-compose.yml`, `data/*`, `etc/ssl`
+2. Stop the Graphistry server if it is running: `docker-compose stop`
+3. Load the new containers (e.g., `docker load -i containers.tar`) 
+4. Edit and reload any config (`docker-compose.yml`, `.env`, `data/*`, `etc/ssl`)
+5. Restart Graphistry: `docker-compose up` (or `docker-compose up -d`)
 
-You may want to backup `.env`, `.docker-compose.yml`, `.config/*`, `etc/ssl`, and `.pivotdb/*`.
 
 
 Testing:
@@ -283,13 +268,4 @@ Troubleshooting:
 Did you have issues with pulling containers and you know they are public? Sometimes `docker-py` gets confused if you have
 old containers or are running out of space. Clear out your containers, do a `docker logout` in your terminal and then try again.
 
-Thanks:
-=======
-
-A special thanks to `Jonathan Slenders <https://twitter.com/jonathan_s>` for
-creating `Python Prompt Toolkit <http://github.com/jonathanslenders/python-prompt-toolkit>`,
-which is quite literally the backbone library, that made this app possible.
-And the people who made `pgcli <https://github.com/dbcli/pgcli>` which I mostly wholesale copied to make this tool
-
-`Click <http://click.pocoo.org/>` is used for command line option parsing and printing error messages.
-
+See [further documentation](https://github.com/graphistry/graphistry-cli/blob/master/docs).
