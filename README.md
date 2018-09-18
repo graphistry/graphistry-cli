@@ -223,6 +223,17 @@ Your version of Graphistry is determined by your cloud admin account and the ver
 Testing:
 ========
 
+**Environment**
+
+If you downloaded the CLI:
+```
+run-parts --regex "test*" graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2
+```
+
+Note that these are _not_ deep tests of the environment.
+
+**Healthchecks**
+
 * Installation repositories are accessible:
   * ping www.github.com
   * ping shipyard.graphistry.com
@@ -260,7 +271,27 @@ Testing:
   * Can use the key to upload a visualization: https://graphistry.github.io/docs/legacy/api/0.9.2/api.html#curlexample
   * Can then open that visualization in a browser
 
+**Notebooks**
 
+Create the below notebook, fill in appropriate values for `GRAPHISTRY`. The expected result is a link, that when you click it, shows a graph with 3 nodes.
+
+```
+GRAPHISTRY = {
+    'server': 'my.server.com', #no http, just domain
+    'protocol': 'http',
+    'key':  'MY_API_KEY'
+}
+
+!pip install pandas
+import pandas as pd
+edges_df=pd.DataFrame({'src': [0,1,2], 'dest': [1,2,0]})
+
+!pip install graphistry
+import graphistry
+graphistry.register(**GRAPHISTRY)
+
+graphistry.bind(source='src', destination='dest').edges(edges_df).plot(render=False)
+```
 
 Troubleshooting:
 ================
