@@ -7,10 +7,7 @@ The document assumes light familiarity with how to provision a standard CPU virt
 
 Contents:
 
-  1. Pick Linux distribution
-    Ubuntu
-    Redhat
-    CentOS
+  1. Pick Linux distribution: Ubuntu 16.04 (Others supported, but not by our nvidia drivers bootstrapper)
   2. Configure instance
   3. General installation
 
@@ -29,7 +26,7 @@ Start with one of the following Linux distributions, and configure it using the 
   * G3 or P2: 200 GB, add a name tag, ssh/http/https; use & store an AWS keypair
   * Login: ssh -i ...private_key.pem ubuntu@public.dns
 
-**RHEL, CentOS temporarily not supported while conflicting nvidia-docker<>CUDA changes get fixed in the Linux ecosystem**
+**RHEL, CentOS temporarily not supported by our bootstrapper while conflicting nvidia-docker<>CUDA changes get fixed in the Linux ecosystem**
 
 
 # 2. Configure instance
