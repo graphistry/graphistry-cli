@@ -1,5 +1,5 @@
-Managing a Graphistry Deployment
-------------------------------------------
+# Managing a Graphistry Deployment
+
 
 ## Quick Install
 
@@ -26,8 +26,7 @@ docker load -i containers.tar
 | **Logs** 	|  `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`) 	|  	|
 
 
-Contents
---------
+## Contents
 
 * Instance & Environment Setup
    1. Prerequisites
@@ -38,6 +37,7 @@ Contents
      * Airgapped
    3. Linux Dependency Installation
    4. Graphistry Container Installation
+* Configuration
 * Maintenance
   * OS Restarts 
   * Upgrading
@@ -45,11 +45,11 @@ Contents
 * Troubleshooting
 
 
-Instance & Environment Setup
-===========
+# Instance & Environment Setup
 
-1. Prerequisites
--------------
+
+## 1. Prerequisites
+
 
 * Graphistry Docker container
 * Linux with `nvidia-docker-2`, `docker-compose`, and `CUDA 9.2`. Ubuntu 16.04 cloud users can use a Graphistry provided environment bootstrapping script.
@@ -58,8 +58,8 @@ Instance & Environment Setup
 
 For further information, see [Recommended Deployment Configurations: Client, Server Software, Server Hardware](https://github.com/graphistry/graphistry-cli/blob/master/docs/hardware-software.md).
 
-2. Instance Provisioning
-------------------
+## 2. Instance Provisioning
+
 
 ### AWS
 
@@ -110,8 +110,8 @@ See [Recommended Deployment Configurations: Client, Server Software, Server Hard
 Graphistry runs airgapped without any additional configuration. Pleae contact your systems representative for assistance with nvidia-docker-2 environment setup.
 
 
-3. Linux Dependency Installation
------------------------------
+## 3. Linux Dependency Installation
+
 
 If your environment already has `nvidia-docker-2`, `docker`, `docker-compose`, and `CUDA 9.2`, skip this section.
 
@@ -151,8 +151,7 @@ These tests run upon exiting the bootstrap. You can invoke them manually at any 
 
 Ensure tests pass for `test-10` through `test-40`.
 
-4. Graphistry Container Installation
-------------------------------------
+## 4. Graphistry Container Installation
 
 ```
 docker load -i containers.tar
@@ -165,8 +164,7 @@ For a demo, try going to `http://MY_SITE/graph/graph.html?dataset=Twitter`, and 
 
 
 
-Configuration
-======================
+# Configuration
 
 **Strongly Recommended**:
 
@@ -180,8 +178,7 @@ After testing a base install works, configure the following:
 See [configure.md](https://github.com/graphistry/graphistry-cli/blob/master/docs/configure.md) for connectors (Splunk, ElasticSearch, ...), passwords, ontology (colors, icons, sizes), TLS/SSL/HTTPS, backups to disk, and more.
 
 
-Maintenance
-===========
+# Maintenance
 
 ### OS Restarts
 
@@ -206,8 +203,7 @@ Graphistry automatically restarts in case of errors. In case of manual restart o
 
 
 
-Testing:
-========
+# Testing
 
 **Environment**
 
@@ -281,8 +277,7 @@ graphistry.bind(source='src', destination='dest').edges(edges_df).plot(render=Fa
 
 For further information about the Notebook client, see the OSS project [PyGraphistry](http://github.com/graphistry/pygraphistry) ( [PyPI](https://pypi.org/project/graphistry/) ).
 
-Troubleshooting
-================
+# Troubleshooting
 
 
 See [further documentation](https://github.com/graphistry/graphistry-cli/blob/master/docs).
