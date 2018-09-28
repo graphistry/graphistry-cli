@@ -14,4 +14,7 @@ docker run --rm -it -v $PWD/..:/source jagregory/pandoc --toc -V documentclass=r
 
 docker run --rm -it -v $PWD/..:/source jagregory/pandoc --toc -V documentclass=report -s docs/hardware-software.md -o docs/hardware-software.pdf
 
-ls -al readme.pdf hardware-software.pdf
+cp *.pdf ../dist/dist/docs/
+
+ls -al *.pdf
+ls -al ../dist/dist/docs/*.pdf
