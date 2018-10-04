@@ -1,5 +1,8 @@
 # Managing a Graphistry Deployment
 
+Welcome to Graphistry! The `graphistry-cli` repository contains 
+* Optional scripts to setup cloud Linux environment dependencies for Graphistry from scratch
+* Documentation for operating the Graphistry Docker container (install, configure, start/stop, & debug).
 
 ## Quick Install
 
@@ -13,10 +16,11 @@ bash graphistry-cli/bootstrap.sh ubuntu-cuda9.2
 docker load -i containers.tar
 ```
 
-## Commands
+## Quick Commands
 
 |  	|  	|  	|
 |--: |---	|---	|
+| **Install** 	| `docker load -i containers.tar` 	| Install the `containers.tar` Graphistry release from the current folder. You may need to first run `tar -xvvf my-graphistry-release.tar.gz`.	|
 | **Start (interactive)** 	| `docker-compose up` 	| Starts Graphistry, close with ctrl-c 	|
 | **Start (daemon)** 	| `docker-compose up -d` 	| Starts Graphistry as background process 	|
 | **Stop** 	| `docker-compose stop` 	| Stops Graphistry 	|
@@ -37,6 +41,7 @@ docker load -i containers.tar
      * Airgapped
    3. Linux Dependency Installation
    4. Graphistry Container Installation
+   5. Start!
 * Configuration
 * Maintenance
   * OS Restarts 
@@ -153,14 +158,19 @@ Ensure tests pass for `test-10` through `test-40`.
 
 ## 4. Graphistry Container Installation
 
+Load the Graphistry containers into your system's registry:
 ```
 docker load -i containers.tar
 ```
 
+
+## 5. Start
+
+Launch with `docker-compose up`, and stop with `ctrl-c`. To start as a background daemon, use `docker-compose up -d`.
+
 Congratulations, you have installed Graphistry!
 
 For a demo, try going to `http://MY_SITE/graph/graph.html?dataset=Twitter`, and compare to [the public version](https://labs.graphistry.com/graph/graph.html?dataset=Twitter).
-
 
 
 
