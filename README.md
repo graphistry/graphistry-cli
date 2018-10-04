@@ -1,60 +1,67 @@
-A CLI for Managing a Graphistry Deployment
-------------------------------------------
-
-Graphistry administration is either via standard `docker-compose` commands or through the Graphistry command-line interface. 
-
-For convenience by cloud users on clean boxes with no Docker, Nvidia drivers, etc., we also provide OS bootstrap scripts. Skip installing the bootstrap if you already have setup your OS for nvidia-docker-2.
-
-Skip installing the CLI if you have a Graphistry tarball.
+# Managing a Graphistry Deployment
 
 
-``graphistry`` supports multiple commands:
+## Quick Install
 
-* ``login`` Login to Graphistry
-* ``pull`` Pull docker containers (only use if no tarball)
-* ``help`` Shows all CLI commands
-* ``exit`` Leave CLI. Ctrl-C or Ctrl-D works too.
+```
+### Environment: Graphistry depends on nvidia-docker-2 and docker-compose
+### Sample environment configuration for Ubuntu 16.04 cloud environments:
+git clone https://github.com/graphistry/graphistry-cli.git
+bash graphistry-cli/bootstrap.sh ubuntu-cuda9.2
 
-``docker-compose`` supports lifecycle commands:
+### Install
+docker load -i containers.tar
+```
 
-* `docker-compose up` Starts Graphistry; daemonize via `docker-compose up -d`
-* `docker-compose stop` (or ctrl-c) stops Graphistry
-* `docker-compose ps` Check status of each service
-* `docker-compose exec central curl -s http://localhost:10000/api/internal/provision?text=MY_USER_NAME` generate API key for a developer or notebook user
+## Commands
 
-``docker`` supports manipulation of individual services:
-* `docker ps` Lists IDs
-*`docker restart <CONTAINER>`
-* `docker status`
-* `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`)
+|  	|  	|  	|
+|--: |---	|---	|
+| **Start (interactive)** 	| `docker-compose up` 	| Starts Graphistry, close with ctrl-c 	|
+| **Start (daemon)** 	| `docker-compose up -d` 	| Starts Graphistry as background process 	|
+| **Stop** 	| `docker-compose stop` 	| Stops Graphistry 	|
+| **Restart** 	| `docker restart <CONTAINER>` 	|  	|
+|  **Status** 	| `docker-compose ps`, `docker ps`, and `docker status` 	|  	|
+|  **API Key** 	| docker-compose exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME 	|  Generates API key for a developer or notebook user	|
+| **Logs** 	|  `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`) 	|  	|
 
 
-Contents
---------
+## Contents
 
-* Quick Start
-* Detailed Installation Instructions
-   * Prerequisites
-   * AWS
-   * Linux
-   * Installation
+* Instance & Environment Setup
+   1. Prerequisites
+   2. Instance Provisioning
+     * AWS
+     * Azure
+     * On-Premises
+     * Airgapped
+   3. Linux Dependency Installation
+   4. Graphistry Container Installation
 * Configuration
-* Restarting
-* Upgrading
+* Maintenance
+  * OS Restarts 
+  * Upgrading
 * Testing
 * Troubleshooting
-* Thanks
 
 
-Quick Start
-===========
+# Instance & Environment Setup
 
-Bootstrap: Download the CLI and setup your Linux environment
-------------------------------------------------------------
 
-For installing docker, docker-compose, CUDA drivers, and nvidia-docker. Skip to testing section if already setup.
+## 1. Prerequisites
 
-**AWS**
+
+* Graphistry Docker container
+* Linux with `nvidia-docker-2`, `docker-compose`, and `CUDA 9.2`. Ubuntu 16.04 cloud users can use a Graphistry provided environment bootstrapping script.
+* NVidia GPU: K80 or later. Recommended G3+ on AWS and NC Series on Azure.
+* Browser with Chrome or Firefox
+
+For further information, see [Recommended Deployment Configurations: Client, Server Software, Server Hardware](https://github.com/graphistry/graphistry-cli/blob/master/docs/hardware-software.md).
+
+## 2. Instance Provisioning
+
+
+### AWS
 
 * Launch an official AWS Ubuntu 16.04 LTS AMI using a ``g3+``or ``p*`` GPU instance. 
 * Use S3AllAccess permissions, and override default parameters for: 200GB disk
@@ -63,7 +70,10 @@ For installing docker, docker-compose, CUDA drivers, and nvidia-docker. Skip to 
 
 Proceed to the OS-specific instructions below.
 
-**Azure**
+For further information, see [full AWS installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/aws.md).
+
+
+### Azure
 
 * Launch an Ubuntu 16.04 LTS Virtual Machine with an ``NC*`` GPU compute SKU, e.g., NC6 (hdd)
 * Enable SSH/HTTP/HTTPS
@@ -88,111 +98,89 @@ $ lspci -vnn | grep VGA -A 12
 
 Proceed to the OS-specific instructions below.
 
-**Ubuntu 16.04 LTS**
+For further information, see [full Azure installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/azure.md).
+
+### On-Premises
+
+
+See [Recommended Deployment Configurations: Client, Server Software, Server Hardware](https://github.com/graphistry/graphistry-cli/blob/master/docs/hardware-software.md).
+
+### Airgapped
+
+Graphistry runs airgapped without any additional configuration. Pleae contact your systems representative for assistance with nvidia-docker-2 environment setup.
+
+
+## 3. Linux Dependency Installation
+
+
+If your environment already has `nvidia-docker-2`, `docker`, `docker-compose`, and `CUDA 9.2`, skip this section.
+
+
+### Ubuntu 16.04 LTS
 ```
     $ git clone https://github.com/graphistry/graphistry-cli.git
     $ bash graphistry-cli/bootstrap.sh ubuntu-cuda9.2
 ```
 
-**RHEL 7.4 / CentOS 7**
+### RHEL 7.4 / CentOS 7
 *Note: Temporarily not supported on AWS/Azure*
+
 ```
     $ sudo yum install -y git
     $ git clone https://github.com/graphistry/graphistry-cli.git 
     $ bash graphistry-cli/bootstrap.sh rhel
 ```
 
-**Restart environment**
+### After
 
 Log off and back in (full restart not required):  "`$ exit`", "`$ exit`"
 
 **_Warning: Skipping this step means `docker` service may not be available_**
 
+**_Warning: Skipping this step means Graphistry environment tests will not automatically run_**
 
-**Test environment**
+
+### Test environment
+
+
+These tests run upon exiting the bootstrap. You can invoke them manually at any time:
 
 ```
     $ run-parts --regex "test*" graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2
 ```
 
-Tests pass for `test-10` through `test-40`.
+Ensure tests pass for `test-10` through `test-40`.
 
-**Airgapped**
-
-If you were provided a tarball, manually load the containers inside:
+## 4. Graphistry Container Installation
 
 ```
 docker load -i containers.tar
 ```
 
-Run
------
+Congratulations, you have installed Graphistry!
 
-* Interactive: `docker-compose up`
-* Daemon: `docker-compose up -d`
-
-
-Detailed Installation Instructions:
-===================================
-
-The following walks you through launching and configuring your system environment, installing and configuring Graphistry, and launching Graphistry. Additional instructions for binary scans are available at the bottom.
-
-Prerequisites:
--------------
-* Linux (see below AMI versions) with an Nvidia GPU
-* Graphistry account and internet connection for initial system download
-
-Cloud:
-----------------------
-
-### AWS
-
-See [full AWS installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/aws.md).
-
-### Azure
-
-See [full Azure installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/azure.md).
-
-
-Linux:
-----------------------
-
-*Note: Temporarily, only Ubuntu 16.04 LTS supported on AWS/Azure*
-
-Launch a GPU instance of Graphistry of either RHEL or Ubuntu. See the HW/SW document for recommended system specifications. 
-
-Log into your Graphistry server, install the CLI, and bootstrap system dependencies (docker, docker-compose, CUDA drivers, nvidia-docker). Skip the bootstrap if you have the system dependencies. Skip the CLI if you have the tarball.
-
-
-### Ubuntu 16.04 LTS
-
-```
-    $ git clone https://github.com/graphistry/graphistry-cli.git
-    $ bash graphistry-cli/bootstrap.sh ubuntu-cuda9.2
-```
-
-### RHEL/Centos7
-
-*Note: Temporarily not supported on AWS/Azure*
-
-```
-    $ sudo yum install -y git
-    $ git clone https://github.com/graphistry/graphistry-cli.git 
-    $ bash graphistry-cli/bootstrap.sh rhel
-```
-
-
-Configuration
-======================
-
-See [config.md](https://github.com/graphistry/graphistry-cli/blob/master/docs/config.md) for connectors (Splunk, ElasticSearch, ...), passwords, ontology (colors, icons, sizes), TLS/SSL/HTTPS, backups to disk, and more.
-
-**Recommended**: Setup `pivot` password, data persistence, and for embedded use like notebooks, TLS.
+For a demo, try going to `http://MY_SITE/graph/graph.html?dataset=Twitter`, and compare to [the public version](https://labs.graphistry.com/graph/graph.html?dataset=Twitter).
 
 
 
-Restarting
-===========
+
+# Configuration
+
+**Strongly Recommended**:
+
+After testing a base install works, configure the following:
+
+* Setup `pivot` password
+* Setup data persistence folders in case of restarts
+* Generate API Key for developers & notebook users
+
+
+See [configure.md](https://github.com/graphistry/graphistry-cli/blob/master/docs/configure.md) for connectors (Splunk, ElasticSearch, ...), passwords, ontology (colors, icons, sizes), TLS/SSL/HTTPS, backups to disk, and more.
+
+
+# Maintenance
+
+### OS Restarts
 
 Graphistry automatically restarts in case of errors. In case of manual restart or reboot:
 
@@ -205,12 +193,7 @@ Graphistry automatically restarts in case of errors. In case of manual restart o
 * Otherwise `docker-compose up`
 
 
-Upgrading:
-==========
-
-Your version of Graphistry is determined by your cloud admin account and the version of the Graphistry CLI being used. The overall flow is: stop the running server, remove the old configuration and reinstall the relevant CLI,  configure the system, download any new containers, and launch.
-
-### Update to the latest container: Internet connected
+### Upgrading
 
 1. Backup any configuration and data: `.env`, `docker-compose.yml`, `data/*`, `etc/ssl`
 2. Stop the Graphistry server if it is running: `docker-compose stop`
@@ -220,8 +203,7 @@ Your version of Graphistry is determined by your cloud admin account and the ver
 
 
 
-Testing:
-========
+# Testing
 
 **Environment**
 
@@ -293,10 +275,9 @@ graphistry.register(**GRAPHISTRY)
 graphistry.bind(source='src', destination='dest').edges(edges_df).plot(render=False)
 ```
 
-Troubleshooting:
-================
+For further information about the Notebook client, see the OSS project [PyGraphistry](http://github.com/graphistry/pygraphistry) ( [PyPI](https://pypi.org/project/graphistry/) ).
 
-Did you have issues with pulling containers and you know they are public? Sometimes `docker-py` gets confused if you have
-old containers or are running out of space. Clear out your containers, do a `docker logout` in your terminal and then try again.
+# Troubleshooting
+
 
 See [further documentation](https://github.com/graphistry/graphistry-cli/blob/master/docs).

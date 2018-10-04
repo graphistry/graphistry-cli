@@ -19,7 +19,7 @@ If you configure `TLS`, backup `etc/ssl`.
 
 ## Persist user data across restarts
 
-We recommend persisting data to `${PWD}/data/{config/pivot.json,config/viz.json,investigatigations,viz}` or the same on a network mount, and running regular backups.
+We recommend persisting data to `${PWD}/data/config/{pivot.json,viz.json}` and `${PWD}/data/investigatigations,viz}`, or the same on a network mount, and running regular backups.
 
 Configure your `.env` and `docker-compose.yml` as follows:
 

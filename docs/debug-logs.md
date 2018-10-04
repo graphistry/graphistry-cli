@@ -51,7 +51,9 @@ Should report 32 workers that look like:
 Clear screen before starting the test session.
 
 
-5. Start test session: Navigate browser to `http://www.yourgraphistry.com/graph/graph.html?dataset=Facebook`
+5. Start test session: 
+
+Navigate browser to `http://www.yourgraphistry.com/graph/graph.html?dataset=Facebook`
 
 
 ## Nginx logs

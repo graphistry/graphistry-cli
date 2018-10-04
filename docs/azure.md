@@ -53,8 +53,8 @@ See general installation instructions for currently supported Linux versions (su
 
 1. Test login; see SSH command at `Overview` -> `Connect` -> `Login using VM Account`
 2. Check to make sure GPU is attached:
-```
 
+```
 $ lspci -vnn | grep VGA -A 12
 0000:00:08.0 VGA compatible controller [0300]: Microsoft Corporation Hyper-V virtual VGA [1414:5353] (prog-if 00 [VGA controller])
 	Flags: bus master, fast devsel, latency 0, IRQ 11
