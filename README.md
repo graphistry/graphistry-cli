@@ -186,7 +186,6 @@ Graphistry automatically restarts in case of errors. In case of manual restart o
 
 * On reboot, you may need to first run:
   * `sudo systemctl start docker`
-  * `sudo service nvidia-docker start`
 * If using daemons:
   * `docker-compose restart`
   * `docker-compose stop` and `docker-compose start`
