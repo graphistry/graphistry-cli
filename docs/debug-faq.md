@@ -37,7 +37,7 @@ Visualization page never returns or Nginx "504 Gateway Time-out" due to services
 ### Primary symptoms
 
 * Visualization page never returns or Nginx "504 Gateway Time-out" due to services failing to initialize GPU context. Potentially also "502".
-* Visualization loads and positions appear, but never starts clustering.
+* Visualization loads and positions appear, but never starts clustering, and browser console reports a web socket disconnect
 
 ### Correlated symptoms
 * `node` processes in `ubuntu_viz_1` container fail to run for more than 30s (check durations through `docker exec -it ubuntu_viz_1 ps "-aux"`)
@@ -46,14 +46,16 @@ Visualization page never returns or Nginx "504 Gateway Time-out" due to services
 * GPU tests fail
   * host
     * `nvidia-smi`
-    * See https://www.npmjs.com/package/@graphistry/cljs    
-      * _note_: Requires CL installed in host, which Graphistry normally does not require
+      * Failure: host has no GPU drivers
+    * Optional: See https://www.npmjs.com/package/@graphistry/cljs    
+      * _note_: Requires CL installed in host, which production use of Graphistry does not require
   * container
     * ./graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2/test-20-docker.sh 
     * ./graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2/test-30-CUDA.sh 
     * ./graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2/test-40-nvidia-docker.sh
     * nvidia-docker run --rm nvidia/cuda nvidia-smi
     * nvidia-docker exec -it ubuntu_viz_1 nvidia-smi
+      * If `run --rm nvidia/cuda` succeeds but `exec` fails, you likely need to update `/etc/docker/daemon.json` to add `nvidia-container-runtime`, and `sudo service docker restart`, and potentially clean stale images to make sure they use the right runtime
     * See https://www.npmjs.com/package/@graphistry/cljs
     * In container `ubuntu_viz_1`, create & run `/opt/graphistry/apps/lib/cljs/test/cl node test-nvidia.js`:
 ```
