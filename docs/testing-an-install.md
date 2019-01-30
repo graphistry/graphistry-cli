@@ -146,5 +146,26 @@ docker-compose up
 #### 4c.ii Persistence
 
 * Edit `docker-compose.yml` to uncomment `pivot`'s `volume` mounts
+* Edit...
 
+#### 4c.iii Splunk
+
+* Edit `.env` for `SPLUNK_HOST`, `SPLUNK_PORT`, `SPLUNK_USER`, `SPLUNK_KEY`
+* Run one pivot:
+```
+Pivot: Search: Splunk
+Query: *
+Max Results: 2
+Entities: *
+```
+  * Expect to see two orange nodes on the first line, connected to many nodes in the second
+
+#### 4d.iv Neo4j
+
+* Edit `.env` for `NEO4J_BOLT`, `NEO4J_USER`, `NEO4J_PASSWORD`
+* ...
+
+#### 4e. ELK
+
+#### 4f. VT 
 
