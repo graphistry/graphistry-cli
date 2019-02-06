@@ -162,9 +162,25 @@ Entities: *
 
 #### 4d.iv Neo4j
 
-* Edit `.env` for `NEO4J_BOLT`, `NEO4J_USER`, `NEO4J_PASSWORD`
-* ...
-
+* Edit `.env` for `NEO4J_BOLT` (`bolt://...:...`), `NEO4J_USER`, `NEO4J_PASSWORD`
+* Test status button in http://graphistry/pivot/connectors
+* Make a new investigation
+  * Pivot 1
+```
+Pivot: Search: Neo4j
+Query: MATCH (a)-[e*2]->(b) RETURN a,e,b
+Max Results: 10
+Entities: *
+```  
+  * Pivot 2
+```
+Pivot: Expand: Neo4j
+Depends on Pivot 1
+Max Results: 20
+Steps out: 1..1
+```  
+  * Run all: Gets values for both
+  
 #### 4e. ELK
 
 #### 4f. VT 
