@@ -134,7 +134,7 @@ Nodes: x y
   * Set each config in one go so you can test more quickly, vs start/stop. 
 * Run
 ```
-docker-compose down
+docker-compose stop
 docker-compose up
 ```
 
@@ -145,8 +145,9 @@ docker-compose up
 
 #### 4c.ii Persistence
 
-* Edit `docker-compose.yml` to uncomment `pivot`'s `volume` mounts
-* Edit...
+* Pivot should persist to `./data` already by default, no need to do anything
+* Edit `docker-compose.yml` to uncomment `viz`'s `volume` persistence mounts for `./data`
+* Run a pivot investigation and save: should see `data/{investigation,pivot,workbook_cache,data_cache}/*.json`
 
 #### 4c.iii Splunk
 
@@ -160,7 +161,7 @@ Entities: *
 ```
   * Expect to see two orange nodes on the first line, connected to many nodes in the second
 
-#### 4d.iv Neo4j
+#### 4c.iv Neo4j
 
 * Edit `.env` for `NEO4J_BOLT` (`bolt://...:...`), `NEO4J_USER`, `NEO4J_PASSWORD`
 * Test status button in http://graphistry/pivot/connectors
@@ -181,7 +182,16 @@ Steps out: 1..1
 ```  
   * Run all: Gets values for both
   
-#### 4e. ELK
+#### 4c. ELK, VT: Later
 
-#### 4f. VT 
+## 5. Test TLS Certificates
+
+AWS:
+* In EC2: Allocate an Elastic IP to your instance (may be optional)
+* In Route53: Assign a domain to your IP, ex: `mytest.graphistry.com`
+* If needed, run `DOMAIN=my.site.com ./scripts/letsencrypt.sh` and `./gen_dhparam.sh`
+* Follow `docker-compose.yml` instructions to enable:
+  * In `graphistry.conf` (pointed by `docker-compose.yml`), uncomment `ssl.conf` include on last line
+* Restart, check pages load
+* Try a notebook upload with `graphistry.register(...., protocol='https')`
 
