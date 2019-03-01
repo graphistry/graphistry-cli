@@ -7,13 +7,23 @@ Welcome to Graphistry! The `graphistry-cli` repository contains
 ## Quick Install
 
 ```
+############ Environment
 ### Environment: Graphistry depends on nvidia-docker-2 and docker-compose
-### Sample environment configuration for Ubuntu 16.04 cloud environments:
+### Option 1 (10min): Sample environment configuration for Ubuntu 16.04 cloud environments:
 git clone https://github.com/graphistry/graphistry-cli.git
 bash graphistry-cli/bootstrap.sh ubuntu-cuda9.2
+exit
+exit
+### Option 2 (2min): AWS AMI `Graphistry-RHEL-20180801` on a G3.4  in Oregon region
+ssh -i mykey ec2-user@my.site.com
+sudo service docker restart
 
+############ Install & Launch
 ### Install
+wget -O release.tar.gz "https://..."
+tar -xvvf release.tar.gz
 docker load -i containers.tar
+docker-compose up
 ```
 
 ## Quick Commands
