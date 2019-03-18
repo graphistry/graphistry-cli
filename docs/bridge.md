@@ -56,7 +56,7 @@ services:
     ...
     environment:
       #REQUIRED: Fill in with your server
-      - GRAPHISTRY_HOST=http://ec2-34-220-72-219.us-west-2.compute.amazonaws.com
+      - GRAPHISTRY_HOST=http://graphistry.mysite.com
       #LIKELY: Fill in for connectors this proxy provides
       - SPLUNK_USE_PROXY=true
       - SPLUNK_PROXY_KEY=my_key_2
