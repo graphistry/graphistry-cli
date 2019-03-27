@@ -24,9 +24,9 @@ Graphistry ships as a Docker container that runs in a variety of Linux + Nvidia 
 
 * **Client**: Chrome/Firefox from the last 3 years, WebGL enabled, and 100KB/s download ability
 * **Server**: 
-- x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), and 1+ Nvidia GPUs (K80 onwards) with 4+ GB RAM each (1+ GB per concurrent user)
-- Recommend Ubuntu 16.04, 4+ CPU cores, 64GB+ CPU RAM, Nvidia Tesla or later
-- Docker / CUDA 9.2 / nvidia-docker-2
+- Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), and 1+ Nvidia GPUs (P100 onwards) with 4+ GB RAM each (1+ GB per concurrent user)
+- Recommended: Ubuntu 16.04, 4+ CPU cores, 64GB+ CPU RAM, Nvidia Pascal or later (Volta, RTX, ...)
+- Docker / CUDA 10 / nvidia-docker-2
  
 
 ## Client
@@ -54,14 +54,12 @@ Graphistry can run both on-premises and in the cloud on Amazon EC2, Google GCP, 
 
 *Tested AWS Instances*:
 
-* P2
-* G3  ***Recommended for testing and initial workloads***
-* P3
+* P3 ***Recommended for testing and initial workloads***
 
 *Tested Azure Instances*:
 
-* NV6 ***Recommended for testing and initial workloads***
-* NC6
+* NV6v2 ***Recommended for testing and initial workloads***
+* NC6v2
 
 See the hardware provisioning section to pick the right configuration for you.
 
@@ -76,7 +74,7 @@ Both support nvidia-docker-2:
 
 * Docker
 * nvidia-docker-2
-* CUDA 9.2
+* CUDA 10
 
 For cloud users, we maintain bootstrap scripts, and they are a useful reference for on-premises users.
 
@@ -109,10 +107,10 @@ A Graphistry server must support 1MB+/s per expected concurrent user. A moderate
 
 ### GPUs & GPU RAM
 
-The following Nvidia GPUs are known to work with Graphistry:
+The following Nvidia GPUs, Pascal and later, are known to work with Graphistry:
 
-* Tesla: K40, K80, M40
-* DGX: P100, V100 ***Recommended***
+* P100, V100, RTX
+* DGX and DGX2
 
 The GPU should provide 1+ GB of memory per concurrent user. 
 
