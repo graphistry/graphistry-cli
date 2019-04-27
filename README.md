@@ -65,7 +65,7 @@ docker-compose up
 
 ## 1. Prerequisites
 
-
+* AWS Marketplace: Quota for GPU (P3.2+) in your region; ignore everything else below
 * Graphistry Docker container
 * Linux with `nvidia-docker-2`, `docker-compose`, and `CUDA 9.2`. Ubuntu 16.04 cloud users can use a Graphistry provided environment bootstrapping script.
 * NVidia GPU: K80 or later. Recommended G3+ on AWS and NC Series on Azure.
@@ -76,7 +76,12 @@ For further information, see [Recommended Deployment Configurations: Client, Ser
 ## 2. Instance Provisioning
 
 
-### AWS
+### AWS Marketplace
+
+* Use any of the recommended instance types (P3.2+)
+
+
+### AWS BYOL
 
 * Launch an official AWS Ubuntu 16.04 LTS AMI using a ``g3+``or ``p*`` GPU instance. 
 * Use S3AllAccess permissions, and override default parameters for: 200GB disk
@@ -199,6 +204,10 @@ See [configure.md](https://github.com/graphistry/graphistry-cli/blob/master/docs
 
 
 # Maintenance
+
+### AWS Marketplace
+
+See [AWS Marketplace Administration](https://github.com/graphistry/graphistry-cli/blob/master/docs/aws_marketplace.md)
 
 ### OS Restarts
 
