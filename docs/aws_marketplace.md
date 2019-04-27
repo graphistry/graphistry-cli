@@ -1,6 +1,6 @@
 # AWS Marketplace Administration
 
-The Graphistry marketplace instance is designed for secure and purely web-based use. However, command-line administration can be helpful. This document shares common marketplace tasks. See the surrounding docs for general CLI use. 
+The Graphistry marketplace instance is designed for secure and purely web-based use. However, command-line administration can be helpful. This document shares common marketplace tasks. See the [main docs](https://github.com/graphistry/graphistry-cli) for general CLI use. 
 
 Contents:
 
@@ -73,3 +73,7 @@ graphistry@d4afa8b7ced5:~$ go version
 ```
 go version go1.10.4 linux/amd64
 ```
+
+-----
+
+See [general installation](https://github.com/graphistry/graphistry-cli) for further information.
