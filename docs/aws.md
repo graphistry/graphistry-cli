@@ -4,6 +4,8 @@ Graphistry runs on AWS EC2. This document describes initial AWS virtual machine 
 
 The document assumes light familiarity with how to provision a standard CPU virtual machine in AWS. 
 
+For AWS Marketplace users, instead see [AWS Marketplace Administration](https://github.com/graphistry/graphistry-cli/blob/master/docs/aws_marketplace.md)
+
 
 Contents:
 
