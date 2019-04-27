@@ -4,17 +4,27 @@ The Graphistry marketplace instance is designed for secure and purely web-based 
 
 Contents:
 
+1. **Solve GPU availability errors**
 1. **Log in**
 1. **Docker**
 1. **Install Jupyter packages**
 
-## 1. Log in
+## 1. Solve GPU availability errors
+
+Upon trying to launch, Amazon may fail with an error about no available GPUs for two reasons:
+
+* Lack of GPU availability in the current region. In this case, try another valid GPU type, or launching in another region. For example, Virginia => Oregon. Keeping the GPU close to your users is a good idea to minimize latency.
+
+* Insufficient account quota. In this case, the error should also contain a link to increase your quota. Request `p3.2` (and above), and 1-2 for a primary region and 1-2 for a secondary region.
+
+
+## 2. Log in
 
 Log in using the key you provided at instance start and the public IP/domain:
 
 ```ssh -i my_key.pem ubuntu@MY_IP_HERE```
 
-##  2. Docker
+## 3. Docker
 
 Graphistry leverages `docker-compose` and `nvidia-docker2`. 
 
@@ -42,7 +52,7 @@ graphistry_streamgl-vgraph-etl_1     /tini -- /entrypoints/fast ...   Up (health
 graphistry_streamgl-viz_1            /tini -- /entrypoints/stre ...   Up             8080/tcp   
 ```
 
-## 3. Install Jupyter packages
+## 4. Install Jupyter packages
 
 By default, Jupyter users do not have `sudo`, restricting them to user-level installation like `pip`. For system-level actions, such as for installing `golang` and other tools, you can create interactive `root` user sessions:
 
