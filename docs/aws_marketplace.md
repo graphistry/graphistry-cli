@@ -29,9 +29,11 @@ Upon trying to launch, Amazon may fail with an error about no available GPUs for
 
 ## 3. Log in
 
-Log in using the key you provided at instance start and the public IP/domain:
+Log in using the key configured at AWS instance start and your instance's public IP/domain:
 
-```ssh -i my_key.pem ubuntu@MY_IP_HERE```
+```ssh -i my_key.pem ubuntu@MY_PUBLIC_IP_HERE```
+
+Many `ssh` clients may require you to first run `chmod 400 my_key.pem` or `chmod 644 my_key.pem` before running the above.
 
 ## 4. Docker
 
@@ -67,7 +69,7 @@ If you see `wheel` errors, you may need to run `pip3 install wheel` and restart 
 
 ## 6. Install native packages
 
-By default, Jupyter users do not have `sudo`, restricting them to user-level installation like `pip`. For system-level actions, such as for installing `golang` and other tools, you can create interactive `root` user sessions:
+By default, Jupyter users do not have `sudo`, restricting them to user-level installation like `pip`. For system-level actions, such as for installing `golang` and other tools, you can create interactive `root` user sessions in the Jupyter Docker container:
 
 
 **Admin:**
