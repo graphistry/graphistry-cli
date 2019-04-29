@@ -58,8 +58,11 @@ By default, Jupyter users do not have `sudo`, restricting them to user-level ins
 
 
 **Admin:**
+
+Note that `sudo` is unnecessary:
+
 ```
-ubuntu@ip-172-31-0-38:~/graphistry$ docker exec -t -u root graphistry_notebook_1 bash
+ubuntu@ip-172-31-0-38:~/graphistry$ docker exec -it -u root graphistry_notebook_1 bash
 root@d4afa8b7ced5:/home/graphistry# apt update 
 root@d4afa8b7ced5:/home/graphistry# apt install golang
 ```
