@@ -12,7 +12,9 @@ docker run --rm -it -v $PWD:/source jagregory/pandoc -s hardware-software.md -o 
 
 # Recommended Deployment Configurations: Client, Server Software, Server Hardware
 
-Graphistry ships as a Docker container that runs in a variety of Linux + Nvidia GPU environments:
+The recommended non-Enterprise configuration is AWS Marketplace for the server and comes fully configured.
+
+Graphistry Enterprise ships as a Docker container that runs in a variety of Linux + Nvidia GPU environments:
 
 ## Contents
 
@@ -65,6 +67,8 @@ See the hardware provisioning section to pick the right configuration for you.
 
 ### OS & Docker
 
+Graphistry runs preconfigured with a point-and-click launch on Amazon Marketplace. Please contact for the latest options for major cloud providers.
+
 Graphistry regularly runs on:
 
 * Ubuntu Xenial 16.04 LTS ***Recommended***
@@ -75,8 +79,6 @@ Both support nvidia-docker-2:
 * Docker
 * nvidia-docker-2
 * CUDA 10
-
-For cloud users, we maintain bootstrap scripts, and they are a useful reference for on-premises users.
 
 
 ### User: Root vs. Not, Permissions
@@ -124,7 +126,7 @@ CPU cores & CPU RAM should be provisioned in proportion to the number of GPUs an
 
 ### Multi-GPU, Multi-Node, and Multi-Tenancy
 
-Graphistry 1.0 virtualizes a single GPU for shared use by multiple users.
+Graphistry virtualizes a single GPU for shared use by multiple users.
 
 * When Graphistry is on a shared system, it is especially crucial to determine whether the system environment is ready for nvidia-docker-2, or needs potentially disruptive patching updates. Likewise, the CPU, GPU, and network resources assigned to the Graphistry instance (such as via Docker) should not be contended with from sibling applications. Such software is often not as isolatable.
 
