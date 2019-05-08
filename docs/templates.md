@@ -44,7 +44,7 @@ This URL: Instantiates template `453d190914cf9fa0`, names it `Phone-History-555-
 
 |  FIELD	        | OPTIONAL 	| DEFAULT 	                | FORMAT 	| NOTES 	|
 |--------------------:|-------	  |-------	                  |--------	|-------	|
-| **investigation** 	| required 	|   	                      | ID 	    | Get template ID from iits URL. Ex: 453d190914cf9fa0 	|
+| **investigation** 	| required 	|   	                      | ID 	    | Get template ID from its URL. Ex: 453d190914cf9fa0 	|
 | **name** 	          | optional 	| "Copy of [template name]" | String 	| Recommend using a short standard pattern to  group together ("[Phone History] ...") 	|
 | **time**	          | optional 	|  now	                    | Number or string 	| Epoch time (number) or best-effort if not a number. Ex: 1504401120 	|
 | **before** 	        | optional 	| -7d	                    	| [+/-][number][ms/s/min/h/d/w/mon/y] 	| Ex: -1d 	|
