@@ -8,7 +8,7 @@ These control aspects including:
 * Ontology: column->type mapping, colors, icons, sizes, ...
 * Prepopulated investigation steps
 
-For broader configuration information, see the [main configuration docs](docs/configure.md).
+For broader configuration information, see the [main configuration docs](configure.md).
 
 # Example
 
