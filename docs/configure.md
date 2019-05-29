@@ -2,12 +2,15 @@
 
 Administrators can specify passwords, TLS/SSL, persist data across sessions, connect to databases, specify ontologies, and more. 
 
+For a list of many investigation-oriented options, see their [settings reference page](configure-investigation.md).
+
 ## Four configurations: .env, docker-compose.yml, pivot.json, and etc/ssl/*
 
 * Graphistry is configured through a `.env` file, which is what you primarily edit
 * It can be used to enable a `data/pivot.json`, which supports the same commands, but is more convenient for heavier configurations such as json ontologies
 * The `docker-compose.yml` reads the `.env` file, and more advanced administrators may edit the yml file as well. Maintenance is easier if you never edit it.
 * TLS is via `etc/ssl/*`
+* Many of the `.env` and `docker-compose.yml` options are [detailed in a reference page](configure-investigation.md).
 
 ## Backup your configuration
 
