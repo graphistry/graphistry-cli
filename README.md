@@ -1,29 +1,37 @@
 # Managing a Graphistry Deployment
 
-Welcome to Graphistry! The `graphistry-cli` repository contains 
-* Optional scripts to setup cloud Linux environment dependencies for Graphistry from scratch
-* Documentation for operating the Graphistry Docker container (install, configure, start/stop, & debug).
+Welcome to Graphistry! Graphistry command-line administration is via standard docker-compose `.yml` / `.env` files and `nginx` configuration.
 
-## Quick Install
+The `graphistry-cli` repository contains 
+* Optional reference scripts to setup cloud Linux environment dependencies for Graphistry from scratch
+* Documentation for operating the Graphistry Docker container (install, configure, start/stop, & debug)
+* Documentation for configuring the software: `nginx`, connectors, and ontology
+
+## Quick install for Nvidia environments
 
 ```
 ############ Environment
-### Environment: Graphistry depends on nvidia-docker-2 and docker-compose
-### Option 1 (10min): Sample environment configuration for Ubuntu 16.04 cloud environments:
-git clone https://github.com/graphistry/graphistry-cli.git
-bash graphistry-cli/bootstrap.sh ubuntu-cuda9.2
-exit
-exit
-### Option 2 (2min): AWS AMI `Graphistry-RHEL-20180801` on a G3.4  in Oregon region
-ssh -i mykey ec2-user@my.site.com
-sudo service docker restart
+### Prereqs: Pascal+, nvidia-docker-2 and docker-compose file format 3
+###   AWS Nvidia Deep Learning AMIs have everything except needs to enable the default docker runtime
+$ sudo vim /etc/docker/daemon.json
+{
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+$ sudo systemctl restart docker ### without, may need `docker system prune -a && docker system prune --volumes`
+$ docker info | grep Default    ### => nvidia
 
 ############ Install & Launch
 ### Install
 wget -O release.tar.gz "https://..."
 tar -xvvf release.tar.gz
 docker load -i containers.tar
-docker-compose up
+docker-compose up -d
 ```
 
 ## Quick Commands
@@ -36,7 +44,7 @@ docker-compose up
 | **Stop** 	| `docker-compose stop` 	| Stops Graphistry 	|
 | **Restart** 	| `docker restart <CONTAINER>` 	|  	|
 |  **Status** 	| `docker-compose ps`, `docker ps`, and `docker status` 	|  	|
-|  **API Key** 	| docker-compose exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME 	|  Generates API key for a developer or notebook user	|
+|  **API Key** 	| docker-compose exec streamgl-vgraph-etl curl "http://0.0.0.0:8080/api/internal/provision?text=MYUSERNAME" 	|  Generates API key for a developer or notebook user	|
 | **Logs** 	|  `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`) 	|  	|
 
 
