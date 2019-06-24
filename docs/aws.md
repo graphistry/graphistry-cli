@@ -25,7 +25,7 @@ Start with one of the following Linux distributions, and configure it using the 
   * Find AMI for region https://cloud-images.ubuntu.com/locator/
   * Ex: Amazon AWS us-east-1 xenial 16.04 amd64 hvm-ssd 20180405 ami-6dfe5010 
   * Follow provisioning instructions from AWS install
-  * G3 or P2: 200 GB, add a name tag, ssh/http/https; use & store an AWS keypair
+  * P3.x (Pascal or later): 200 GB, add a name tag, ssh/http/https; use & store an AWS keypair
   * Login: ssh -i ...private_key.pem ubuntu@public.dns
 
 **RHEL, CentOS temporarily not supported by our bootstrapper while conflicting nvidia-docker<>CUDA changes get fixed in the Linux ecosystem**
@@ -33,7 +33,7 @@ Start with one of the following Linux distributions, and configure it using the 
 
 # 2. Configure instance
 
-* Instance: g3+ or p*
+* Instance: p*
 * 200GB+ RAM
 * Security groups: ssh, http, https
 
