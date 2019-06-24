@@ -7,12 +7,18 @@ The `graphistry-cli` repository contains
 * Documentation for operating the Graphistry Docker container (install, configure, start/stop, & debug)
 * Documentation for configuring the software: `nginx`, connectors, and ontology
 
-## Quick install for Nvidia environments
+## Quick start
+
+The fast install is to lauch the AWS Marketplace AMI, which turns on and runs with zero additional configuration necessary.
+
+## Manual install for Nvidia environments, including AWS
+
+**Launch & Configure Nvidia for Docker**
+[AWS Nvidia Ubuntu Deep Learning AMIs](https://aws.amazon.com/marketplace/seller-profile?id=c568fe05-e33b-411c-b0ab-047218431da9&ref=dtl_B076K31M1S) have everything except you need to enable the default docker runtime:
 
 ```
 ############ Environment
-### Prereqs: Pascal+, nvidia-docker-2 and docker-compose file format 3
-###   AWS Nvidia Deep Learning AMIs have everything except needs to enable the default docker runtime
+$ docker info | grep Default    ### => runc
 $ sudo vim /etc/docker/daemon.json
 {
     "default-runtime": "nvidia",
@@ -25,9 +31,12 @@ $ sudo vim /etc/docker/daemon.json
 }
 $ sudo systemctl restart docker ### without, may need `docker system prune -a && docker system prune --volumes`
 $ docker info | grep Default    ### => nvidia
+```
 
+**Install Graphistry container**
+
+```
 ############ Install & Launch
-### Install
 wget -O release.tar.gz "https://..."
 tar -xvvf release.tar.gz
 docker load -i containers.tar
@@ -84,13 +93,35 @@ For further information, see [Recommended Deployment Configurations: Client, Ser
 ## 2. Instance Provisioning
 
 
-### AWS Marketplace
+### AWS Marketplace (Recommended)
 
-* Use any of the recommended instance types (P3.2+)
+* Use any of the recommended instance types: P3.2+
+
+### AWS BYOL - From a new Nvidia AMI
+* Launch a base Nvidia Deep Learning Ubuntu AMI on a `p3.*` 
+* Use S3AllAccess permissions, and override default parameters for: 200GB disk
+* Enable SSH/HTTP/HTTPS in the security groups
+* SSH as ``ubuntu@[your ami]``
+* Set `nvidia` as the default docker run-time: 
+```
+$ docker info | grep Default    ### => runc
+$ sudo vim /etc/docker/daemon.json
+{
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+$ sudo systemctl restart docker ### without, may need `docker system prune -a && docker system prune --volumes`
+$ docker info | grep Default    ### => nvidia
+```
+* Follow `docker load` instructions up top.
 
 
-### AWS BYOL
-
+### AWS BYOL - From a base Linux AMI
 * Launch an official AWS Ubuntu 16.04 LTS AMI using a ``g3+``or ``p*`` GPU instance. 
 * Use S3AllAccess permissions, and override default parameters for: 200GB disk
 * Enable SSH/HTTP/HTTPS in the security groups
