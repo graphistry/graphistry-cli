@@ -52,10 +52,10 @@ docker-compose up -d
 | **Start (daemon)** 	| `docker-compose up -d` 	| Starts Graphistry as background process 	|
 | **Stop** 	| `docker-compose stop` 	| Stops Graphistry 	|
 | **Restart** 	| `docker restart <CONTAINER>` 	|  	|
-|  **Status** 	| `docker-compose ps`, `docker ps`, and `docker status` 	|  	|
+|  **Status** 	| `docker-compose ps`, `docker ps`, and `docker status` 	|  Status: Uptime, healthchecks, ...	|
 |  **API Key** 	| docker-compose exec streamgl-vgraph-etl curl "http://0.0.0.0:8080/api/internal/provision?text=MYUSERNAME" 	|  Generates API key for a developer or notebook user	|
 | **Logs** 	|  `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`) 	|  	|
-
+| **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (ex: user accounts), and start fresh .  |
 
 ## Contents
 
