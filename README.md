@@ -14,7 +14,7 @@ The `graphistry-cli` repository contains
 * Documentation for operating the Graphistry Docker container (install, configure, start/stop, & debug)
 * Documentation for configuring the software: `nginx`, connectors, and ontology
 
-## Manual Install for Nvidia Environments, Encluding AWS
+## Manual Install for Nvidia Environments, Including AWS
 
 **Install Graphistry container**
 
