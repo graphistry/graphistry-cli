@@ -1,6 +1,10 @@
-# AWS Marketplace Administration
+# Graphistry in AWS Marketplace
 
-The Graphistry marketplace instance is designed for secure and purely web-based use. However, command-line administration can be helpful. This document shares common marketplace tasks. See the [main docs](https://github.com/graphistry/graphistry-cli) for general CLI use. 
+Launching Graphistry in AWS Marketplace? [Get started](https://www.graphistry.com/blog/marketplace-tutorial) with the walkthrough tutorial and videos!
+
+## Advanced administration
+
+The Graphistry marketplace instance is designed for secure web-based use and administration. However, command-line administration can be helpful. This document shares common marketplace tasks. See the [main docs](https://github.com/graphistry/graphistry-cli) for general CLI use. 
 
 Contents:
 
