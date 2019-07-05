@@ -14,11 +14,12 @@ Contents:
 1. **Docker**
 1. **Install Python packages**
 1. **Install native packages**
+1. **Marketplace FAQ**
 
 
 ## 1. Recommended configuration
 
-* [Associate your AWS instance with an Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html#using-instance-addressing-eips-associating) or a domain. This 
+* [Associate your AWS instance with an Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html#using-instance-addressing-eips-associating) or a domain 
 * [Setup TLS](configure.md)
 
 
@@ -97,6 +98,20 @@ go version go1.10.4 linux/amd64
 ```
 
 
------
+## 7. Marketplace FAQ
+
+#### No site loads or there is an Nginx 404 error
+
+Wait a few minutes for the system to finish starting. If the problem persists for more than 5-10min, log in, run `docker ps`, and for each failing service, restart it. If problems persist further, please report the results of `docker logs <service>` to the Graphistry support team and we will help out.
+
+#### I lost my admin account
+
+See the `reset` command in the main README (requires logging in)
+
+#### I want to log into the server
+
+See section `log in`
+
+---
 
 See [general installation](https://github.com/graphistry/graphistry-cli) for further information.
