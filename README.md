@@ -1,19 +1,35 @@
 # Managing a Graphistry Deployment
 
-Welcome to Graphistry! Graphistry command-line administration is via standard docker-compose `.yml` / `.env` files and `nginx` configuration.
-
-The `graphistry-cli` repository contains 
-* Optional reference scripts to setup cloud Linux environment dependencies for Graphistry from scratch
-* Documentation for operating the Graphistry Docker container (install, configure, start/stop, & debug)
-* Documentation for configuring the software: `nginx`, connectors, and ontology
+Welcome to Graphistry! 
 
 ## Quick start
 
-The fast install is to lauch the AWS Marketplace AMI, which turns on and runs with zero additional configuration necessary.
+The fastest way to install, admininster, and use Graphistry is to [quick launch Graphistry from the AWS Marketplace](https://www.graphistry.com/get-started) (see [walkthrough tutorial & videos](https://www.graphistry.com/blog/marketplace-tutorial)). AWS Marketplace launches a Graphistry instance in your private cloud and runs with zero additional configuration necessary.
 
-## Manual install for Nvidia environments, including AWS
+## Advanced admininstration
 
-**Launch & Configure Nvidia for Docker**
+Graphistry supports advanced command-line administration via standard docker-compose `.yml` / `.env` files and `nginx` / `caddy` configuration.
+
+The `graphistry-cli` repository contains 
+* Documentation for operating the Graphistry Docker container (install, configure, start/stop, & debug)
+* Documentation for configuring the software: `nginx`, connectors, and ontology
+
+## Manual Install for Nvidia Environments, Encluding AWS
+
+**Install Graphistry container**
+
+If `nvidia` is already your `docker info | grep Default` runtime:
+
+```
+############ Install & Launch
+wget -O release.tar.gz "https://..."
+tar -xvvf release.tar.gz
+docker load -i containers.tar
+docker-compose up -d
+```
+
+**Docker: Launch & Configure Nvidia for Docker**
+
 [AWS Nvidia Ubuntu Deep Learning AMIs](https://aws.amazon.com/marketplace/seller-profile?id=c568fe05-e33b-411c-b0ab-047218431da9&ref=dtl_B076K31M1S) have everything except you need to enable the default docker runtime:
 
 ```
@@ -33,17 +49,10 @@ $ sudo systemctl restart docker ### without, may need `docker system prune -a &&
 $ docker info | grep Default    ### => nvidia
 ```
 
-**Install Graphistry container**
+The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) and [Nvidia Docker](https://github.com/NVIDIA/nvidia-docker) via `Docker Compose 3`, and ships with all other dependencies built in.
 
-```
-############ Install & Launch
-wget -O release.tar.gz "https://..."
-tar -xvvf release.tar.gz
-docker load -i containers.tar
-docker-compose up -d
-```
 
-## Quick Commands
+## Top Commands
 
 |  	|  	|  	|
 |--: |---	|---	|
