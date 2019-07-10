@@ -6,7 +6,7 @@ Welcome to Graphistry!
 
 The fastest way to install, admininster, and use Graphistry is to [quick launch Graphistry from the AWS Marketplace](https://www.graphistry.com/get-started) (see [walkthrough tutorial & videos](https://www.graphistry.com/blog/marketplace-tutorial)). AWS Marketplace launches a Graphistry instance in your private cloud and runs with zero additional configuration necessary.
 
-## Advanced admininstration
+## Advanced administration
 
 Graphistry supports advanced command-line administration via standard docker-compose `.yml` / `.env` files and `nginx` / `caddy` configuration.
 
