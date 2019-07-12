@@ -1,5 +1,13 @@
 # Threat Model
 
+Graphistry is largely a standard enterprise webapp and uses modern design patterns, infrastructure, tools, & frameworks.
+
+Interesting surface areas include: use of GPUs, Jupyter notebooks, and the distinctions between authenticated users (privileged analyst teams) vs. network users (shared visualization recipients.)
+
+Interesting infrastructure and controls include: Docker containers & networking & volumes, Nginx routing, and Django auth modules.
+
+The Embedding API is out of scope for this document.
+
 ## Assets
 * System
 * Connector config
@@ -28,6 +36,7 @@
 * Authenticated user: All web routes
 * Authenticated user: Notebooks, which exposes notebook data volume mount and allows arbitrary code in the (restricted) notebook container
 * Network user: Access to viz service and volume mounts
+* Individual tools & frameworks, especially Docker, Nginx, NodeJS/Fastify/Express, Python, Nvidia RAPIDS, & Jupyter
 
 ## Architecture: Defense-in-depth & trust boundaries
 * Dependencies are explicitly versioned, and regularly updated based on community scan warnings (npm audit, docker, ...)
@@ -37,4 +46,4 @@
 * Nginx container controls routes, including enforcing auth on public routes
 * Service runtimes are primarily in managed languagues that enforce memory isolation & additional process isolation
 * Where the app does support providing code, approach taken of either whitelisting (e.g., client query parameters), and app-level or ephemeral interpreters (vs. reusing persistent DBs)
-* HTTP activity logged
+* HTTP activity is logged
