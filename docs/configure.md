@@ -141,7 +141,6 @@ right up for you.
 ```
 
   nginx:
-    image: spengler.grph.xyz/release/nginx-proxy:2000
     ports:
       - 80:80
       - 443:443
