@@ -239,15 +239,6 @@ For a demo, try going to `http://MY_SITE/graph/graph.html?dataset=Twitter`, and 
 
 # Configuration
 
-**Strongly Recommended**:
-
-After testing a base install works, configure the following:
-
-* Setup `pivot` password
-* Setup data persistence folders in case of restarts
-* Generate API Key for developers & notebook users
-
-
 See [configure.md](https://github.com/graphistry/graphistry-cli/blob/master/docs/configure.md) for connectors (Splunk, ElasticSearch, ...), passwords, ontology (colors, icons, sizes), TLS/SSL/HTTPS, backups to disk, and more.
 
 
