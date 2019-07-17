@@ -1,12 +1,14 @@
 # Configure Investigations
 
-Many Graphistry investigation configurations can be set through environment variables (your `.env`), in your `pivot-config.json`, or in the admin panel.
+Many Graphistry investigation configurations can be set through environment variables (your `.env`), in your `.pivot-db/config/config.json`, or in the admin panel.
 
 These control aspects including:
 * Connector auth and defaults: Splunk, Neo4j, ...
 * Layouts
 * Ontology: column->type mapping, colors, icons, sizes, ...
 * Prepopulated investigation steps
+
+After editing, restart your server, or at least `pivot`.
 
 For broader configuration information, see the [main configuration docs](configure.md).
 
@@ -20,7 +22,7 @@ Via `.env`:
 GRAPHISTRY_LOG_LEVEL=DEBUG
 ```
 
-Via `pivot-config.json`:
+Via `config.json`:
 ```
 {
   "log": {
