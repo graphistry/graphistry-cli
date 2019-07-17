@@ -7,65 +7,22 @@ For a list of many investigation-oriented options, see their [settings reference
 ## Four configurations: .env, docker-compose.yml, pivot.json, and etc/ssl/*
 
 * Graphistry is configured through a `.env` file, which is what you primarily edit
-* It can be used to enable a `data/pivot.json`, which supports the same commands, but is more convenient for heavier configurations such as json ontologies
+* It can be used to enable a `.pivot-db/config/config.json`, which supports the same commands, but is more convenient for heavier configurations such as json ontologies
 * The `docker-compose.yml` reads the `.env` file, and more advanced administrators may edit the yml file as well. Maintenance is easier if you never edit it.
-* TLS is via `etc/ssl/*`
+* TLS is via editing `Caddyfile`([docs](https://caddyserver.com/docs/automatic-https), or being phased out, Nginx config (`etc/ssl/*`)
 * Many of the `.env` and `docker-compose.yml` options are [detailed in a reference page](configure-investigation.md).
 
 ## Backup your configuration
 
-Graphistry tarballs contain default `.env` and `docker-compose.yml`, so make sure you put them in safe places. 
+Graphistry tarballs contain default `.env` and `.pivot-db/config/config.json`, so make sure you put them in safe places and back them up.
 
-If you create `json` config files, such as a `data/config/pivot.json`, back them up too.
+If you configure `TLS`, backup `Caddyfile` or `etc/ssl`. 
 
-If you configure `TLS`, backup `etc/ssl`.
+If you edit `docker-compose.yml` (not encouraged), back that up too.
 
-## Persist user data across restarts
+## Backup your data
 
-We recommend persisting data to `${PWD}/data/config/{pivot.json,viz.json}` and `${PWD}/data/investigatigations,viz}`, or the same on a network mount, and running regular backups.
-
-Configure your `.env` and `docker-compose.yml` as follows:
-
-**data/config/{pivot,viz}.json**
-
-Create `data/config/pivot.json` and `data/config/viz.json` with the value `{}`:
-
-`mkdir -p data/config && echo "{}" > data/config/pivot.json && echo "{}" > data/config/viz.json`
-
-**.env**
-
-Eanble in `.env`:
-
-```
-GRAPHISTRY_CONFIG=./data/config
-GRAPHISTRY_INVESTIGATIONS=./data/investigations
-GRAPHISTRY_VIZ=./data/viz
-PIVOT_CONFIG_FILES=/opt/graphistry/config/pivot.json
-VIZ_CONFIG_FILES=/opt/graphistry/config/viz.json
-GRAPHISTRY_INVESTIGATIONS_CONTAINER_DIR=/opt/graphistry/apps/core/pivot/data
-GRAPHISTRY_VIZ_CONTAINER_DIR=/tmp/graphistry
-```
-
-These will enable reading of `data/config/{pivot,viz}.json` and write user data to `data/{investigations,viz}`.
-
-**docker-compose.yml**
-
-Enable in `docker-compose.yml` if not already there:
-
-```
-viz:
-    ...
-    volumes:
-      - ${GRAPHISTRY_VIZ}:${GRAPHISTRY_VIZ_CONTAINER_DIR}
-```
-and
-```
-pivot:
-    ...
-    volumes:
-       - ${GRAPHISTRY_CONFIG}:/opt/graphistry/config
-       - ${GRAPHISTRY_INVESTIGATIONS}:${GRAPHISTRY_INVESTIGATIONS_CONTAINER_DIR}
-```    
+See `/home/ubuntu/graphistry/data` (default in `docker-compose.yml`), `.pivot-db/investigations`, and `.pivot-db/pivots`
 
 
 ## Connectors
@@ -77,22 +34,12 @@ ES_HOST...
 SPLUNK...
 ```
 
-Finer-grained configurations are easier to setup and maintain via `data/config/pivot.json`. 
-
-Your Graphistry support engineer can provide examples.
-
-
-## Passwords
-
-Graphistry passwords are random across container runs so you likely want to override and keep.
-
-Uncomment and edit lines of `.env` for `PIVOT_PASSWORD_HASH` (see instructions in `.env`) for the password used on  `your-site.com/pivot`
-
-Your API keys should be stable across runs. If not, contact your Graphistry support engineer.
 
 ## Ontology
 
-Setup Graphistry for data persistence (see above), and then in `data/config/pivot.json`, add and configure the below.
+See [settings reference page](configure-investigation.md) for full options.
+
+Edit `.pivot-db/config/config.json` via the below and restart Graphistry:
 
 * Icons: Use Font Awesome 4 names ( https://fontawesome.com/v4.7.0/icons/ )
 * Colors: Use hex codes (`#vvvvvv`). To find hex values for different colors, you can use Graphistry's in-tool background color picker.
@@ -126,8 +73,16 @@ Setup Graphistry for data persistence (see above), and then in `data/config/pivo
 ```
 
 
-Nginx Config and SSL
+TLS: Caddyfile and Nginx Config
 --------------------
+
+To simplify credentials deployment, Graphistry is moving from Nginx to Caddy:
+
+### Caddyfile
+
+For automatic TLS (Let's Encrypt) and manual certs, [see official docs](https://caddyserver.com/docs/tls)
+
+### Nginx
 
 There are two helper ssl configs provided for you in the `./etc/nginx` folder.
 
