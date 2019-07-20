@@ -283,32 +283,18 @@ Note that these are _not_ deep tests of the environment.
 
 **Healthchecks**
 
-* Installation repositories are accessible:
-  * ping www.github.com
-  * ping shipyard.graphistry.com
-  * ping us.gcr.io
+* `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services
 * Nvidia infrastructure setup correctly
-  * `nvidia-smi` reports available GPUs
-  * `nvidia-docker run nvidia/cuda nvidia-smi` reports available GPUs
-  * `nvidia-docker run graphistry/cljs:1.1 npm test` reports success (see airgapped alternative as well)
-  * Using the image listed in `docker images`, running `nvidia-docker run us.gcr.io/psychic-expanse-187412/graphistry/release/viz-app:1024 nvidia-smi` reports available GPUs
-* Configurations were generated: 
-  * ``.config/graphistry/config.json``
-  * ``httpd-config.json``
-  * ``pivot-config.json``
-  * ``viz-app-config.json``
-* Services are running: ``docker ps`` reveals no restart loops on:
-  * ``monolith-network-nginx``
-  * ``monolith-network-pivot``
-  * ``monolith-network-viz``
-  * ``monolith-network-mongo``
-  * ``monolith-network-db-bu``
-  * ``monolith-network-pg``
+  * `nvidia-smi` reports available GPUs  
+  * `docker run --runtime=nvidia nvidia/cuda nvidia-smi` reports available GPUs
+  * `docker run --rm nvidia/cuda  nvidia-smi` reports available GPUs
+  * `docker run graphistry/cljs:1.1 npm test` reports success (see airgapped alternative as well)
+  * "docker run --rm grph/streamgl-gpu:`cat VERSION`-dev nvidia-smi" reports available GPUs
 * Services pass initial healthchecks:
   * ``site.com/central/healthcheck``
   * ``site.com/pivot/healthcheck``
   * ``site.com/worker/10000/healthcheck``
-* Pages load
+* Pages load when logged in
   * ``site.com`` shows Graphistry homepage
   * ``site.com/graph/graph.html?dataset=Facebook`` clusters and renders a graph
   * ``site.com/pivot`` loads a list of investigations
@@ -319,32 +305,10 @@ Note that these are _not_ deep tests of the environment.
   * Can generate an API key with the CLI: ``graphistry`` --> ``keygen``
   * Can use the key to upload a visualization: https://graphistry.github.io/docs/legacy/api/0.9.2/api.html#curlexample
   * Can then open that visualization in a browser
-
-**Notebooks**
-
-Create the below notebook, fill in appropriate values for `GRAPHISTRY`. The expected result is a link, that when you click it, shows a graph with 3 nodes.
-
-```
-GRAPHISTRY = {
-    'server': 'my.server.com', #no http, just domain
-    'protocol': 'http',
-    'key':  'MY_API_KEY'
-}
-
-!pip install pandas
-import pandas as pd
-edges_df=pd.DataFrame({'src': [0,1,2], 'dest': [1,2,0]})
-
-!pip install graphistry
-import graphistry
-graphistry.register(**GRAPHISTRY)
-
-graphistry.bind(source='src', destination='dest').edges(edges_df).plot(render=False)
-```
-
-For further information about the Notebook client, see the OSS project [PyGraphistry](http://github.com/graphistry/pygraphistry) ( [PyPI](https://pypi.org/project/graphistry/) ).
+* Notebooks
+  * Running the analyst notebook example generates running visualizations (see logged-in homepage)
+  * For further information about the Notebook client, see the OSS project [PyGraphistry](http://github.com/graphistry/pygraphistry) ( [PyPI](https://pypi.org/project/graphistry/) ).
 
 # Troubleshooting
-
 
 See [further documentation](https://github.com/graphistry/graphistry-cli/blob/master/docs).
