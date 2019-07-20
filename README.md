@@ -272,17 +272,6 @@ Graphistry automatically restarts in case of errors. In case of manual restart o
 
 # Testing
 
-**Environment**
-
-If you downloaded the CLI:
-```
-run-parts --regex "test*" graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2
-```
-
-Note that these are _not_ deep tests of the environment.
-
-**Healthchecks**
-
 * `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services
 * Nvidia infrastructure setup correctly
   * `nvidia-smi` reports available GPUs  
@@ -290,10 +279,6 @@ Note that these are _not_ deep tests of the environment.
   * `docker run --rm nvidia/cuda  nvidia-smi` reports available GPUs
   * `docker run graphistry/cljs:1.1 npm test` reports success (see airgapped alternative as well)
   * "docker run --rm grph/streamgl-gpu:`cat VERSION`-dev nvidia-smi" reports available GPUs
-* Services pass initial healthchecks:
-  * ``site.com/central/healthcheck``
-  * ``site.com/pivot/healthcheck``
-  * ``site.com/worker/10000/healthcheck``
 * Pages load when logged in
   * ``site.com`` shows Graphistry homepage
   * ``site.com/graph/graph.html?dataset=Facebook`` clusters and renders a graph
@@ -301,10 +286,6 @@ Note that these are _not_ deep tests of the environment.
   * ``site.com/pivot/connectors`` loads a list of connectors
   * ^^^ When clicking the ``Status`` button for each connector, it reports green
   *  Opening and running an investigation in ``site.com/pivot`` uploads and shows a graph
-* Data uploads
-  * Can generate an API key with the CLI: ``graphistry`` --> ``keygen``
-  * Can use the key to upload a visualization: https://graphistry.github.io/docs/legacy/api/0.9.2/api.html#curlexample
-  * Can then open that visualization in a browser
 * Notebooks
   * Running the analyst notebook example generates running visualizations (see logged-in homepage)
   * For further information about the Notebook client, see the OSS project [PyGraphistry](http://github.com/graphistry/pygraphistry) ( [PyPI](https://pypi.org/project/graphistry/) ).
