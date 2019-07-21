@@ -1,3 +1,0 @@
-postgres:9-alpine
-mongo:2
-graphistry/s3cmd-postgres:latest

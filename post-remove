@@ -1,4 +1,0 @@
-#!/bin/bash
-
-echo "Removing symlink to graphistry"
-rm /usr/local/bin/graphistry
