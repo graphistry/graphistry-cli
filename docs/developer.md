@@ -29,7 +29,7 @@ wget -O graphistry.tar.gz  "${PRESIGN_URL}" && tar -xvf graphistry.tar.gz && ./b
 ## Download the bundle from s3 with `curl`
 
 **get_s3_object.sh**
-```bash
+```
 #!/bin/sh
 file=graphistry.tar.gz
 bucket=your-bucket
