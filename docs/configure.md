@@ -15,20 +15,27 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 ## Further configuration: docker-compose.yml, Caddyfile, and etc/ssl/*
 
 * More advanced administrators may edit `docker-compose.yml` .  Maintenance is easier if you never edit it.
-* TLS is via editing `Caddyfile`([docs](https://caddyserver.com/docs/automatic-https), or being phased out, Nginx config (`etc/ssl/*`)
+* Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https) and mounting your certificates via `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker)). Caddy supports LetsEncrypt with automatic renewal, custom certificates and authorities, and self-signed certificates. Deprecated, you can also modify Nginx config (`etc/ssl/*`)
 
 ## Backup your configuration
 
-Graphistry tarballs contain default `.env` and `.pivot-db/config/config.json`, so make sure you put them in safe places and back them up.
+* Graphistry tarballs contain default `.env` and `.pivot-db/config/config.json`, so make sure you put them in safe places and back them up if edited
 
-If you configure `TLS`, backup `Caddyfile` or `etc/ssl`. 
+* TLS: If you configure `TLS`, backup `Caddyfile` (and likely `.caddy`) or if you use Nginx, `etc/ssl`. 
 
-If you edit `docker-compose.yml` (not encouraged), back that up too.
+* If you edit `docker-compose.yml` (not encouraged), back that up too.
 
 ## Backup your data
 
-See `/home/ubuntu/graphistry/data` (default in `docker-compose.yml`), `.pivot-db/investigations`, and `.pivot-db/pivots`
+* Graphistry: `/home/ubuntu/graphistry/data` (viz data and workbooks) and `.pivot-db` (investigations, pivots, templates, and json config)
 
+* Jupyter Notebooks: By default, notebooks are kept inside the Jupyter container. For a host-accessible access notebook folder, create `${PWD}/.notebooks` and mount it in `docker-compose.yml`:
+```
+  notebook:
+    volumes:
+      - ${PWD}/.notebooks:/home/graphistry/notebooks
+```
+New host-accessible folder will appear as a top-level folder `notebooks` in Jupyter upon restart. Include `${PWD}/.notebooks/` in your backups going fowards.
 
 ## Connectors
 
