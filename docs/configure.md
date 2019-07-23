@@ -15,7 +15,7 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 ## Further configuration: docker-compose.yml, Caddyfile, and etc/ssl/*
 
 * More advanced administrators may edit `docker-compose.yml` .  Maintenance is easier if you never edit it.
-* Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https) and mounting your certificates via `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker)). Caddy supports LetsEncrypt with automatic renewal, custom certificates and authorities, and self-signed certificates. Deprecated, you can also modify Nginx config (`etc/ssl/*`)
+* Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https)) and mounting your certificates via `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker)). Caddy supports LetsEncrypt with automatic renewal, custom certificates and authorities, and self-signed certificates. Deprecated, you can also modify Nginx config (`etc/ssl/*`)
 
 ## Backup your configuration
 
@@ -92,9 +92,9 @@ To simplify credentials deployment, Graphistry is moving from Nginx to Caddy:
 
 ### Caddyfile
 
-For automatic TLS (Let's Encrypt) and manual certs, [see official docs](https://caddyserver.com/docs/tls)
+For automatic TLS (Let's Encrypt) and manual certs, edit `Caddyfile` ([Caddy docs](https://caddyserver.com/docs/tls)) and mount your certs by editing `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker))
 
-### Nginx
+### Nginx (DEPRECATED)
 
 There are two helper ssl configs provided for you in the `./etc/nginx` folder.
 
