@@ -39,9 +39,9 @@ New host-accessible folder will appear as a top-level folder `notebooks` in Jupy
 
 ## Backup your users
 
-Graphistry currently requires manual `pgdump` and import of the `postgres` volumes. 
+By default, Graphistry currently requires manual `pgdump` and import of the `postgres` volumes. 
 
-To instead match the simpler future process
+To replicate the simpler future process of simply backing up `.postgres/`:
 
 1. Create user data folders;
 
@@ -60,7 +60,7 @@ mkdir -p .postgres/backups
     - .postgres/backup
 ```
 
-3. Going forward, simply backup `.postgres/` of a _stopped_ instance, or run provided migration scripts
+3. Going forward, simply backup `.postgres/`
 
 
 
