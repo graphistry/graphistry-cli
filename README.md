@@ -65,6 +65,7 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 |  **API Key** 	| docker-compose exec streamgl-vgraph-etl curl "http://0.0.0.0:8080/api/internal/provision?text=MYUSERNAME" 	|  Generates API key for a developer or notebook user	|
 | **Logs** 	|  `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`) 	|  Ex: Watch all logs, starting with the 20 most recent lines:  `docker-compose logs -f -t --tail=20`	|
 | **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (ex: user accounts), and start fresh .  |
+| **Create users** | Use Admin Panel (see [Create Users](docs/user-creation.md)) |
 
 ## Contents
 
