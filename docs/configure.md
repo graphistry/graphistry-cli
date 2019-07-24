@@ -37,6 +37,33 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 ```
 New host-accessible folder will appear as a top-level folder `notebooks` in Jupyter upon restart. Include `${PWD}/.notebooks/` in your backups going fowards.
 
+## Backup your users
+
+Graphistry currently requires manual `pgdump` and import of the `postgres` volumes. 
+
+To instead match the simpler future process
+
+1. Create user data folders;
+
+```
+mkdir -p .postgres/data
+mkdir -p .postgres/backups
+```
+
+2.  Modify `docker-compose.yml`:
+
+```
+  postgres:
+   ...
+    volumes:
+    - .postgres/data:/var/lib/postgresql/data
+    - .postgres/backup
+```
+
+3. Going forward, simply backup `.postgres/` of a _stopped_ instance, or run provided migration scripts
+
+
+
 ## Connectors
 
 Uncomment and edit lines of `.env` corresponding to your connector and restart Graphistry:
