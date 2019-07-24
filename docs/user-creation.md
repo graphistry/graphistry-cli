@@ -28,6 +28,13 @@
 
 Congrats, your user can now log in!
 
+## Provide API Keys
+
+* Every user gets an API key on their dashboard page
+* Additional API keys can be generated via [CLI commands](../README.md)
+* API keys are not currently revocable
+* To preserve API keys across installations, make sure to copy `.env`
+
 
 
 
