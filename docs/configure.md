@@ -1,8 +1,13 @@
 # Configuring Graphistry
 
-Administrators can specify passwords, TLS/SSL, persist data across sessions, connect to databases, specify ontologies, and more. 
+Administrators can add users, specify passwords, TLS/SSL, persist data across sessions, connect to databases, specify ontologies, and more. 
 
 For a list of many investigation-oriented options, see their [settings reference page](configure-investigation.md).
+
+## Add your team and provide API keys
+
+See [user creation docs](user-creation.md)
+
 
 ## Top configuration places: .env, .pivot-db/config/config.json
 
