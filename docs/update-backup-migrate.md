@@ -58,6 +58,16 @@ In practice, we recommend increasing service uptime nad minimizing administrator
   * Copy the Postgres data: see below
 * 	Run the usual installation and launch procedure: `docker load -i containers.tar`, ...
 
+### Special case: REST API clients - PyGraphistry & JavaScript
+
+REST API clients can often be directly from public repositories:
+
+* PyGraphistry: `pip` and `github`
+* React & JavaScript: `npm` and `github`
+
+See central release notes for when new client API features require updating the server.
+
+
 ### Special case: Postgres   
 
 
