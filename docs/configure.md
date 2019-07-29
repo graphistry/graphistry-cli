@@ -2,7 +2,9 @@
 
 Administrators can add users, specify passwords, TLS/SSL, persist data across sessions, connect to databases, specify ontologies, and more. 
 
-For a list of many investigation-oriented options, see their [settings reference page](configure-investigation.md).
+* For a list of many investigation-oriented options, see their [settings reference page](configure-investigation.md).
+
+* See [update, backup, & migration instructions](update-backup-migrate.md) for preserving configurations and  data across installations.
 
 ## Add your team and provide API keys
 
@@ -21,52 +23,6 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 
 * More advanced administrators may edit `docker-compose.yml` .  Maintenance is easier if you never edit it.
 * Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https)) and mounting your certificates via `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker)). Caddy supports LetsEncrypt with automatic renewal, custom certificates and authorities, and self-signed certificates. Deprecated, you can also modify Nginx config (`etc/ssl/*`)
-
-## Backup your configuration
-
-* Graphistry tarballs contain default `.env` and `.pivot-db/config/config.json`, so make sure you put them in safe places and back them up if edited
-
-* TLS: If you configure `TLS`, backup `Caddyfile` (and likely `.caddy`) or if you use Nginx, `etc/ssl`. 
-
-* If you edit `docker-compose.yml` (not encouraged), back that up too.
-
-## Backup your data
-
-* Graphistry: `/home/ubuntu/graphistry/data` (viz data and workbooks) and `.pivot-db` (investigations, pivots, templates, and json config)
-
-* Jupyter Notebooks: By default, notebooks are kept inside the Jupyter container. For a host-accessible access notebook folder, create `${PWD}/.notebooks` and mount it in `docker-compose.yml`:
-```
-  notebook:
-    volumes:
-      - ${PWD}/.notebooks:/home/graphistry/notebooks
-```
-New host-accessible folder will appear as a top-level folder `notebooks` in Jupyter upon restart. Include `${PWD}/.notebooks/` in your backups going fowards.
-
-## Backup your users
-
-By default, Graphistry currently requires manual `pgdump` and import of the `postgres` volumes. 
-
-To replicate the simpler future process of simply backing up `.postgres/`:
-
-1. Create user data folders;
-
-```
-mkdir -p .postgres/data
-mkdir -p .postgres/backups
-```
-
-2.  Modify `docker-compose.yml`:
-
-```
-  postgres:
-   ...
-    volumes:
-    - .postgres/data:/var/lib/postgresql/data
-    - .postgres/backup
-```
-
-3. Going forward, simply backup `.postgres/`
-
 
 
 ## Connectors
@@ -131,6 +87,7 @@ For automatic TLS (Let's Encrypt) and manual certs, edit `Caddyfile` ([Caddy doc
 There are two helper ssl configs provided for you in the `./etc/nginx` folder.
 
 **ssl.self-provided.conf**
+
 ```
 listen 443 ssl;
 # certs sent to the client in SERVER HELLO are concatenated in ssl_certificate
@@ -144,6 +101,7 @@ ssl_certificate_key        /etc/ssl/ssl.key;
 Notice the location and file names of the SSL keys and certs. Also the SSL include in the supplied `graphistry.conf`.
 
 **graphistry.conf**
+
 ```
 ...
     
@@ -177,6 +135,7 @@ If you uncomment the nginx volume mounts in the `docker-compose.yml` and supply 
 right up for you.
 
 **docker-compose.yml**
+
 ```
 
   nginx:

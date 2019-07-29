@@ -59,12 +59,13 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 | **Install** 	| `docker load -i containers.tar` 	| Install the `containers.tar` Graphistry release from the current folder. You may need to first run `tar -xvvf my-graphistry-release.tar.gz`.	|
 | **Start (interactive)** 	| `docker-compose up` 	| Starts Graphistry, close with ctrl-c 	|
 | **Start (daemon)** 	| `docker-compose up -d` 	| Starts Graphistry as background process 	|
+| **Start (namespaced)** 	| `docker-compose -p my_namespace up` 	| Starts Graphistry with a unique name (in case of multiple versions). NOTE: must modify volume names in `docker-compose.yml`. 	|
 | **Stop** 	| `docker-compose stop` 	| Stops Graphistry 	|
 | **Restart** 	| `docker restart <CONTAINER>` 	|  	|
 |  **Status** 	| `docker-compose ps`, `docker ps`, and `docker status` 	|  Status: Uptime, healthchecks, ...	|
 |  **API Key** 	| docker-compose exec streamgl-vgraph-etl curl "http://0.0.0.0:8080/api/internal/provision?text=MYUSERNAME" 	|  Generates API key for a developer or notebook user	|
 | **Logs** 	|  `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`) 	|  Ex: Watch all logs, starting with the 20 most recent lines:  `docker-compose logs -f -t --tail=20`	|
-| **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (ex: user accounts), and start fresh .  |
+| **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (including user accounts), and start fresh .  |
 | **Create users** | Use Admin Panel (see [Create Users](docs/user-creation.md)) |
 
 ## Contents
@@ -93,9 +94,10 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 ## 1. Prerequisites
 
 * AWS Marketplace: Quota for GPU (P3.2+) in your region; ignore everything else below
-* Graphistry Docker container
-* Linux with `nvidia-docker-2`, `docker-compose`, and `CUDA 9.2`. Ubuntu 16.04 cloud users can use a Graphistry provided environment bootstrapping script.
-* NVidia GPU: K80 or later. Recommended G3+ on AWS and NC Series on Azure.
+* On-prem: 
+    * Graphistry-provided tarball
+    * Linux with [Nvidia RAPIDS](https://rapids.ai) and [Nvidia Docker](https://github.com/NVIDIA/nvidia-docker) via `Docker Compose 3`
+    * RAPIDS-compatible NVidia GPU: Pascal or later. Recommended G3+ on AWS and NC Series on Azure.
 * Browser with Chrome or Firefox
 
 For further information, see [Recommended Deployment Configurations: Client, Server Software, Server Hardware](https://github.com/graphistry/graphistry-cli/blob/master/docs/hardware-software.md).
@@ -144,32 +146,20 @@ For further information, see [full AWS installation instructions](https://github
 
 ### Azure
 
-* Launch an Ubuntu 16.04 LTS Virtual Machine with an ``NC*`` GPU compute SKU, e.g., NC6 (hdd)
+* Launch an Ubuntu 16.04+ LTS Virtual Machine with an ``NCv2+`` or ``ND+`` GPU compute SKU
 * Enable SSH/HTTP/HTTPS
-* Check to make sure GPU is attached 
+* Ensure a GPU is attached:
 
 ```
+$ nvidia-smi
 $ lspci -vnn | grep VGA -A 12
-0000:00:08.0 VGA compatible controller [0300]: Microsoft Corporation Hyper-V virtual VGA [1414:5353] (prog-if 00 [VGA controller])
-	Flags: bus master, fast devsel, latency 0, IRQ 11
-	Memory at f8000000 (32-bit, non-prefetchable) [size=64M]
-	[virtual] Expansion ROM at 000c0000 [disabled] [size=128K]
-	Kernel driver in use: hyperv_fb
-	Kernel modules: hyperv_fb
-
-5dc5:00:00.0 3D controller [0302]: NVIDIA Corporation GK210GL [Tesla K80] [10de:102d] (rev a1)
-	Subsystem: NVIDIA Corporation GK210GL [Tesla K80] [10de:106c]
-	Flags: bus master, fast devsel, latency 0, IRQ 24, NUMA node 0
-	Memory at 21000000 (32-bit, non-prefetchable) [size=16M]
-	Memory at 1000000000 (64-bit, prefetchable) [size=16G]
-	Memory at 1400000000 (64-bit, prefetchable) [size=32M]
 ```
 
 Proceed to the OS-specific instructions below.
 
 For further information, see [full Azure installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/azure.md).
 
-### On-Premises
+### On-Prem
 
 
 See [Recommended Deployment Configurations: Client, Server Software, Server Hardware](https://github.com/graphistry/graphistry-cli/blob/master/docs/hardware-software.md).
@@ -181,44 +171,8 @@ Graphistry runs airgapped without any additional configuration. Pleae contact yo
 
 ## 3. Linux Dependency Installation
 
+The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) and [Nvidia Docker](https://github.com/NVIDIA/nvidia-docker) via `Docker Compose 3`, and ships with all other dependencies built in. See instructions in this document for making Nvidia the default Docker runtime via `daemon.json`.
 
-If your environment already has `nvidia-docker-2`, `docker`, `docker-compose`, and `CUDA 9.2`, skip this section.
-
-
-### Ubuntu 16.04 LTS
-```
-    $ git clone https://github.com/graphistry/graphistry-cli.git
-    $ bash graphistry-cli/bootstrap.sh ubuntu-cuda9.2
-```
-
-### RHEL 7.4 / CentOS 7
-*Note: Temporarily not supported on AWS/Azure*
-
-```
-    $ sudo yum install -y git
-    $ git clone https://github.com/graphistry/graphistry-cli.git 
-    $ bash graphistry-cli/bootstrap.sh rhel
-```
-
-### After
-
-Log off and back in (full restart not required):  "`$ exit`", "`$ exit`"
-
-**_Warning: Skipping this step means `docker` service may not be available_**
-
-**_Warning: Skipping this step means Graphistry environment tests will not automatically run_**
-
-
-### Test environment
-
-
-These tests run upon exiting the bootstrap. You can invoke them manually at any time:
-
-```
-    $ run-parts --regex "test*" graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2
-```
-
-Ensure tests pass for `test-10` through `test-40`.
 
 ## 4. Graphistry Container Installation
 
@@ -261,24 +215,18 @@ Graphistry automatically restarts in case of errors. In case of manual restart o
 * Otherwise `docker-compose up`
 
 
-### Upgrading
+### Upgrade, backup, and migrate
 
-1. Backup any configuration and data: `.env`, `docker-compose.yml`, `data/*`, `etc/ssl`
-2. Stop the Graphistry server if it is running: `docker-compose stop`
-3. Load the new containers (e.g., `docker load -i containers.tar`) 
-4. Edit and reload any config (`docker-compose.yml`, `.env`, `data/*`, `etc/ssl`)
-5. Restart Graphistry: `docker-compose up` (or `docker-compose up -d`)
-
-
+See [instructions to update, backup, and migrate](https://github.com/graphistry/graphistry-cli/blob/master/docs/update-backup-migrate.md)
 
 # Testing
 
 * `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services
 * Nvidia infrastructure setup correctly
-  * `nvidia-smi` reports available GPUs  
-  * `docker run --runtime=nvidia nvidia/cuda nvidia-smi` reports available GPUs
-  * `docker run --rm nvidia/cuda  nvidia-smi` reports available GPUs
-  * `docker run graphistry/cljs:1.1 npm test` reports success (see airgapped alternative as well)
+  * `nvidia-smi` reports available GPUs  <-- tests host drivers
+  * `docker run --runtime=nvidia nvidia/cuda nvidia-smi` reports available GPUs <-- tests Docker installation
+  * `docker run --rm nvidia/cuda  nvidia-smi` reports available GPUs <-- tests Docker defaults
+  * `docker run graphistry/cljs:1.1 npm test` reports success (see airgapped  <-- tests driver versioning)
   * "docker run --rm grph/streamgl-gpu:`cat VERSION`-dev nvidia-smi" reports available GPUs
 * Pages load when logged in
   * ``site.com`` shows Graphistry homepage
