@@ -22,6 +22,7 @@ docker run --rm -it -v $PWD/..:/source jagregory/pandoc --toc -V documentclass=r
 	docs/templates.md \
 	docs/testing-an-install.md \
 	docs/threatmodel.md \
+	docs/update-backup-migrate.md \
 	docs/user-creation.md \
 	-o readme.pdf
 
