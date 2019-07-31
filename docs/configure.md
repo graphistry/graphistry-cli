@@ -34,6 +34,56 @@ ES_HOST...
 SPLUNK...
 ```
 
+### Example: Splunk
+
+1. Create a restricted Splunk API user role from the Splunk Web UI
+
+* `Settings` -> `Users` -> `Add new`
+* Name: any, such as `graphistry_role`
+* For `capabilities`: `rest_properties get`, `rtsearch`, `search`
+* For `indexes`: Any that you want exposed to the investigtation team
+
+2. Create a restricted Splunk API user from the Splunk Web UI
+
+* `Settings` -> `Users` -> `Add new`
+* Record their name/pwd
+* Assign them to the role `graphistry_user` from step 1
+
+3. Configure Graphistry's `.env` with the Splunk server and user information:
+
+```
+### Required
+#SPLUNK_HOST=splunk.acme.org
+#SPLUNK_USER=admin
+#SPLUNK_KEY=...
+
+### Optional
+#SPLUNK_SCHEME=https
+#SPLUNK_PORT=8089
+#SPLUNK_WEB_PORT=443
+#SPLUNK_SUFFIX=/en-US
+#SPLUNK_CACHE_TIMEOUT=14400
+#SPLUNK_SEARCH_MAX_TIME=20
+#SPLUNK_USE_PROXY=false
+#SPLUNK_PROXY_KEY=...
+#SPLUNK_SERVER_KEY=...
+```
+
+4. Restart `graphistry`, or at least the `pivot` service:
+
+`docker-compose restart pivot`
+
+5. Test
+
+* In `/pivot/connectors`, Splunk should appear as a live connector, and clicking the status check should turn it green
+* Running a sample pivot with a Splunk query should return results
+
+6. Variants
+
+* Give your Graphistry implementation user increased permissions so they can embed Graphistry into existing dashbboard and notification systems, such as for embedded visualizations and quicklinks into contextual [investigation templates](templates.md)* Run a (Graphistry data bridge)[bridge.md], if available for your connector, which may help with cases such as firewalls preventing incoming connections from Graphistry to your database
+* Run a bastion server between Graphistry and your database, such as a new Splunk search head
+* Create fine-grained permissions by running multiple Graphistry virtual servers, with a new Splunk role per instance
+
 
 ## Ontology
 
