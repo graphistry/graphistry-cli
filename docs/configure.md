@@ -147,6 +147,24 @@ To simplify credentials deployment, Graphistry is moving from Nginx to Caddy:
 
 For automatic TLS (Let's Encrypt) and manual certs, edit `Caddyfile` ([Caddy docs](https://caddyserver.com/docs/tls)) and mount your certs by editing `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker))
 
+### Sample `Caddyfile` for free automatically-renewing LetsEncrypt TLS certificates
+
+```
+*.acme.org {
+  tls {
+    max_certs 100
+  }
+  proxy / nginx:80 {
+    websocket
+  }
+}
+:80 {
+  proxy / nginx:80 {
+    websocket
+  }
+}
+```
+
 ### Nginx (DEPRECATED)
 
 There are two helper ssl configs provided for you in the `./etc/nginx` folder.
