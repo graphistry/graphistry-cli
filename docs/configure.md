@@ -27,12 +27,34 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 
 ## Connectors
 
-Uncomment and edit lines of `.env` corresponding to your connector and restart Graphistry:
+Optionally, you can configure Graphistry to use database connectors. Graphistry will orchestrate cross-database query generation, pushing them down through the database API, and returning the combined results to the user. This means Graphistry can reuse your existing scaleout infrastructure and make its data more accessible to your users without requiring a second copy to be maintained. 
+
+
+### Security Notes 
+
+* Graphistry only needs `read only` access to the database
+* Only one system-wide connector can be used per database per Graphistry virtual server at this time. Ex: You can have Splunk user 1 + Neo4j user 2 on one running Graphistry container, and Splunk user 3 + Neo4j user 2 on another running Graphistry container.
+* [Templates](templates.md) and other embedding modes do not require further Graphistry configuration be beyond potentially API key generation. However, Graphistry implementors will still need access to external dashboards, APIs, etc., into which they'll be embedding Graphistry views.
+
+### Get started
+
+1. Uncomment and edit lines of `.env` corresponding to your connector and restart Graphistry:
 
 ```
 ES_HOST...
 SPLUNK...
 ```
+
+2. Restart `graphistry`, or at least the `pivot` service:
+
+`docker-compose restart` or `docker-compose restart pivot`
+
+3. Test
+
+* In `/pivot/connectors`, configured databases should appear in the live connectors section, and clicking the status check should turn them green
+* Running a sample investigation with a database query should return results
+
+
 
 ### Example: Splunk
 
@@ -69,16 +91,9 @@ SPLUNK...
 #SPLUNK_SERVER_KEY=...
 ```
 
-4. Restart `graphistry`, or at least the `pivot` service:
+4. Restart and test the connector as per above
 
-`docker-compose restart pivot`
-
-5. Test
-
-* In `/pivot/connectors`, Splunk should appear as a live connector, and clicking the status check should turn it green
-* Running a sample pivot with a Splunk query should return results
-
-6. Variants
+5. Variants
 
 * Give your Graphistry implementation user increased permissions so they can embed Graphistry into existing dashbboard and notification systems, such as for embedded visualizations and quicklinks into contextual [investigation templates](templates.md)* Run a (Graphistry data bridge)[bridge.md], if available for your connector, which may help with cases such as firewalls preventing incoming connections from Graphistry to your database
 * Run a bastion server between Graphistry and your database, such as a new Splunk search head
