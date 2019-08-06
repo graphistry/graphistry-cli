@@ -97,7 +97,7 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 * On-prem: 
     * Graphistry-provided tarball
     * Linux with [Nvidia RAPIDS](https://rapids.ai) and [Nvidia Docker](https://github.com/NVIDIA/nvidia-docker) via `Docker Compose 3`
-    * RAPIDS-compatible NVidia GPU: Pascal or later. Recommended G3+ on AWS and NC Series on Azure.
+    * RAPIDS-compatible NVidia GPU: Pascal or later. Recommended G3+ on AWS and NCv2+ Series on Azure.
 * Browser with Chrome or Firefox
 
 For further information, see [Recommended Deployment Configurations: Client, Server Software, Server Hardware](https://github.com/graphistry/graphistry-cli/blob/master/docs/hardware-software.md).
@@ -146,7 +146,7 @@ For further information, see [full AWS installation instructions](https://github
 
 ### Azure
 
-* Launch an Ubuntu 16.04+ LTS Virtual Machine with an ``NCv2+`` or ``ND+`` GPU compute SKU
+* Launch an Ubuntu 16.04+ LTS Virtual Machine with an ``NCv2+`` or ``ND+`` GPU compute SKU (Pascal+)
 * Enable SSH/HTTP/HTTPS
 * Ensure a GPU is attached:
 
