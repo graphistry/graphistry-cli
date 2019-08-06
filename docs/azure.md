@@ -1,5 +1,11 @@
 # Graphistry on Azure: Environment Setup Instructions
 
+**DEPRECATION WARNING**: 
+
+We no longer recommend manually installing drivers via the original Graphistry-maintained bootstrap scripts. Instead, we now recommend using deep learning and RAPIDS base images. These instructions will be updated to reflect the emerging community best practices here.
+
+# Deprecated instructions
+
 Graphistry runs on Azure. This document describes initial Azure virtual machine environment setup. From here, proceed to the general Graphistry installation instructions linked below. 
 
 The document assumes light familiarity with how to provision a standard CPU virtual machine in Azure. 
@@ -19,7 +25,7 @@ Subsequent reading: [General installation](https://github.com/graphistry/graphis
 ## Prerequisites: Azure GPU Quota
 You may need to make quota requests to add GPUs to each of your intended locations:
 
-* **Minimal GPU type**: NC6 (hdd) in your region
+* **Minimal GPU type**: NC6v2 (hdd) in your region
 * **Maximal GPU type**: N-Series, see general documentation for sizing considerations
 
 ### Testing if you already have GPU quota
@@ -33,7 +39,7 @@ For each location in which you want to run Graphistry:
 1. Start help ticket: `? (Help)` -> `Help + support` ->  `New support request`
 2. Fill out ticket
   1. **Basics**: `Quota` -> `<Your Subscription>` -> `Compute (cores/vCPUs)` -> `Next`
-  2. **Problem**: Specify location/SKU, e.g., `West US 2` or `East US` for `NC Series`
+  2. **Problem**: Specify location/SKU, e.g., `West US 2` or `East US` for `NCv2+ Series` and `ND+ Series`
   3. **Contact Information**: Fill out and submit
 
 Expect 1-3 days based on your requested `Severity` rating and who Azure assigns to your ticket
@@ -45,7 +51,7 @@ See general installation instructions for currently supported Linux versions (su
 1. **Virtual machines** -> `Create virtual machine`
 2. **Ubuntu 16.04 LTS** Please let us know if another OS is required
 3. **Basics**: As desired; make sure can login, such as by SSH public key; needs to be a region with GPU quota
-4. **Size**: GPU of all disk types, e.g., NC6 (hdd) is cheapest for development
+4. **Size**: GPU of all disk types, e.g., NC6v2 (hdd) is cheapest for development
 5. **Settings**: Open ports for administration (SSH) and usage (HTTP, HTTPS)
 6. **Summary**: Should say “`Validation passed`” at the top -> visually audit settings + hit `Create`
 
