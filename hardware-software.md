@@ -14,7 +14,7 @@ docker run --rm -it -v $PWD:/source jagregory/pandoc -s hardware-software.md -o 
 
 The recommended non-Enterprise configuration is AWS Marketplace for the server and comes fully configured.
 
-Graphistry Enterprise ships as a Docker container that runs in a variety of Linux + Nvidia GPU environments that are compatible with (NVIDIA RAPIDS)[https://rapids.ai/] with the (Nvidia Docker runtime)[https://github.com/NVIDIA/nvidia-docker]:
+Graphistry Enterprise ships as a Docker container that runs in a variety of Linux + Nvidia GPU environments that are compatible with [NVIDIA RAPIDS](https://rapids.ai/) with the [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker):
 
 ## Contents
 
@@ -27,10 +27,10 @@ Graphistry Enterprise ships as a Docker container that runs in a variety of Linu
 
 * **Client**: Chrome/Firefox from the last 3 years, WebGL enabled, and 100KB/s download ability
 * **Server**: 
-- Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), 150GB+ disk, and 1+ Nvidia GPUs (Pascal onwards for (NVIDIA RAPIDS)[https://rapids.ai/]) with 4+ GB RAM each (1+ GB per concurrent user)
+- Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), 150GB+ disk, and 1+ Nvidia GPUs (Pascal onwards for [NVIDIA RAPIDS](https://rapids.ai/)) with 4+ GB RAM each (1+ GB per concurrent user)
 - Recommended: Ubuntu 16.04/18.04 LTS, 4+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Volta, RTX, ...) with 12+GB GPU RAM
-- CUDA driver rated for (NVIDIA RAPIDS)[https://rapids.ai/] 
-- (Nvidia Docker runtime)[https://github.com/NVIDIA/nvidia-docker] set as default runtime for (docker-compose 1.20.0+)[https://docs.docker.com/release-notes/docker-compose/] (yml file format 3.4+)
+- CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) 
+- [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker) set as default runtime for [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+)
  
 
 ## Client
@@ -78,9 +78,9 @@ Graphistry regularly runs on:
 
 Both support Nvidia / Docker:
 
-* CUDA driver rated for (NVIDIA RAPIDS)[https://rapids.ai/] 
-* (Nvidia Docker *native* runtime)[https://github.com/NVIDIA/nvidia-docker]  (for after Docker 19.03)
-* (docker-compose 1.20.0+)[https://docs.docker.com/release-notes/docker-compose/] (yml file format 3.4+) with default runtime set as nvidia at time of launch
+* CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) 
+* [Nvidia Docker *native* runtime)(https://github.com/NVIDIA/nvidia-docker)  (for after Docker 19.03)
+* [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+) with default runtime set as nvidia at time of launch
 
 
 
@@ -112,7 +112,7 @@ A Graphistry server must support 1MB+/s per expected concurrent user. A moderate
 
 ### GPUs & GPU RAM
 
-Graphistry requires (NVIDIA RAPIDS)[https://rapids.ai/]-compatible  GPUs. The following GPUs, Pascal and later, are known to work with Graphistry:
+Graphistry requires [NVIDIA RAPIDS](https://rapids.ai/)-compatible  GPUs. The following GPUs, Pascal and later, are known to work with Graphistry:
 
 * P100, V100, RTX
 * ... Found both in DGX and DGX2
