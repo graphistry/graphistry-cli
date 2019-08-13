@@ -27,7 +27,7 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 
 ## Connectors
 
-Optionally, you can configure Graphistry to use database connectors. Graphistry will orchestrate cross-database query generation, pushing them down through the database API, and returning the combined results to the user. This means Graphistry can reuse your existing scaleout infrastructure and make its data more accessible to your users without requiring a second copy to be maintained. 
+Optionally, you can configure Graphistry to use database connectors. Graphistry will orchestrate cross-database query generation, pushing them down through the database API, and returning the combined results to the user. This means Graphistry can reuse your existing scaleout infrastructure and make its data more accessible to your users without requiring a second copy to be maintained. Some connectors further support use of a Graphistry data bridge for proxying requests between a Graphistry cloud server and an intermediate on-prem data bridge instead of directly connecting to on-prem API servers.
 
 
 ### Security Notes 
@@ -93,7 +93,11 @@ SPLUNK...
 
 4. Restart and test the connector as per above
 
-5. Variants
+### Data bridge
+
+In scenarios such as a Graphistry cloud server accessing on-prem API servers, an intermediate on-prem data bridge may be necessary. You can mix bridged and direct (default) connectors in the same Graphistry server. Learn more about the (Graphistry data bridge)[bridge.md].
+
+### Variants
 
 * Give your Graphistry implementation user increased permissions so they can embed Graphistry into existing dashbboard and notification systems, such as for embedded visualizations and quicklinks into contextual [investigation templates](templates.md)* Run a (Graphistry data bridge)[bridge.md], if available for your connector, which may help with cases such as firewalls preventing incoming connections from Graphistry to your database
 * Run a bastion server between Graphistry and your database, such as a new Splunk search head
