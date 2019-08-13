@@ -79,7 +79,7 @@ Graphistry regularly runs on:
 Both support Nvidia / Docker:
 
 * CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) 
-* [Nvidia Docker *native* runtime)(https://github.com/NVIDIA/nvidia-docker)  (for after Docker 19.03)
+* [Nvidia Docker *native* runtime](https://github.com/NVIDIA/nvidia-docker)  (for after Docker 19.03)
 * [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+) with default runtime set as nvidia at time of launch
 
 
