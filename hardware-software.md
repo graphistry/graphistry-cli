@@ -14,21 +14,23 @@ docker run --rm -it -v $PWD:/source jagregory/pandoc -s hardware-software.md -o 
 
 The recommended non-Enterprise configuration is AWS Marketplace for the server and comes fully configured.
 
-Graphistry Enterprise ships as a Docker container that runs in a variety of Linux + Nvidia GPU environments:
+Graphistry Enterprise ships as a Docker container that runs in a variety of Linux + Nvidia GPU environments that are compatible with (NVIDIA RAPIDS)[https://rapids.ai/] with the (Nvidia Docker runtime)[https://github.com/NVIDIA/nvidia-docker]:
 
 ## Contents
 
 * Overview
 * Client
 * Server Software: Cloud, OS, Docker, Avoiding Root Users
+* Server Hardware: Capacity Planning
 
 ## Overview
 
 * **Client**: Chrome/Firefox from the last 3 years, WebGL enabled, and 100KB/s download ability
 * **Server**: 
-- Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), and 1+ Nvidia GPUs (P100 onwards) with 4+ GB RAM each (1+ GB per concurrent user)
-- Recommended: Ubuntu 16.04, 4+ CPU cores, 64GB+ CPU RAM, Nvidia Pascal or later (Volta, RTX, ...)
-- Docker / CUDA 10 / nvidia-docker-2
+- Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), 150GB+ disk, and 1+ Nvidia GPUs (Pascal onwards for (NVIDIA RAPIDS)[https://rapids.ai/]) with 4+ GB RAM each (1+ GB per concurrent user)
+- Recommended: Ubuntu 16.04/18.04 LTS, 4+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Volta, RTX, ...) with 12+GB GPU RAM
+- CUDA driver rated for (NVIDIA RAPIDS)[https://rapids.ai/] 
+- (Nvidia Docker runtime)[https://github.com/NVIDIA/nvidia-docker] set as default runtime for (docker-compose 1.20.0+)[https://docs.docker.com/release-notes/docker-compose/] (yml file format 3.4+)
  
 
 ## Client
@@ -37,13 +39,13 @@ A user's environment should support Graphistry if it supports Youtube, and even 
 
 The Graphistry client runs in standard browser configurations:
 
-* **Browser**: Chrome and Firefox from the last 3 years, and users regularly report success with other browsers like Safari.
+* **Browser**: Chrome and Firefox from the last 3 years, and users regularly report success with other browsers
 
-* **WebGL**: WebGL 1.0 is required. It is 7+ years old, so most client devices, including phones and tablets, support it. Graphistry runs fine on both integrated and discrete graphic cards, with especially large graphs working better on better GPUs.
+* **WebGL**: WebGL 1.0 is required. It is 7+ years old, so most client devices, including phones and tablets, support it: check browser settings for enabling. Graphistry runs fine on both integrated and discrete graphic cards, with especially large graphs working better on better GPUs.
 
 * **Network**: 100KB+/s download speeds, and we recommend 1MB+/s if often using graphs with 100K+ nodes and edges. 
 
-* **Operating System**: All.
+* **Operating System**: All
 
 ***Recommended***: Chrome from last 2 years on a device from the last 4 years and a 1MB+/s network connection
 
@@ -71,27 +73,28 @@ Graphistry runs preconfigured with a point-and-click launch on Amazon Marketplac
 
 Graphistry regularly runs on:
 
-* Ubuntu Xenial 16.04 LTS ***Recommended***
-* RedHat RHEL 7.3 
+* Ubuntu Xenial 16.04+ LTS ***Recommended***
+* RedHat RHEL 7.4+
 
-Both support nvidia-docker-2:
+Both support Nvidia / Docker:
 
-* Docker
-* nvidia-docker-2
-* CUDA 10
+* CUDA driver rated for (NVIDIA RAPIDS)[https://rapids.ai/] 
+* (Nvidia Docker *native* runtime)[https://github.com/NVIDIA/nvidia-docker]  (for after Docker 19.03)
+* (docker-compose 1.20.0+)[https://docs.docker.com/release-notes/docker-compose/] (yml file format 3.4+) with default runtime set as nvidia at time of launch
+
 
 
 ### User: Root vs. Not, Permissions
 
-Installing Docker, Nvidia drivers, and nvidia-docker currently all require root user permissions.
+Installing Docker and Nvidia dependencies currently require root user permissions.
 
-Graphistry can be installed and run as an unprivileged user as long as it have access to nvidia-docker.
+Graphistry can be installed and run as an unprivileged user as long as it have access to docker and the nvidia runtime. 
 
 ### Storage
 
 We recommend using backed-up network attached storage for persisting visualizations and investigations. Data volumes are negligible in practice, e.g., < $10/mo on AWS S3.
 
-## Server: Hardware Capacity Planning
+## Server Hardware:  Capacity Planning
 
 Graphistry utilization increases with the number of concurrent visualizations and the sizes of their datasets. 
 Most teams will only have a few concurrent users and a few concurrent sessions per user. So, one primary server, and one spillover or dev server, gets a team far.
@@ -109,12 +112,12 @@ A Graphistry server must support 1MB+/s per expected concurrent user. A moderate
 
 ### GPUs & GPU RAM
 
-The following Nvidia GPUs, Pascal and later, are known to work with Graphistry:
+Graphistry requires (NVIDIA RAPIDS)[https://rapids.ai/]-compatible  GPUs. The following GPUs, Pascal and later, are known to work with Graphistry:
 
 * P100, V100, RTX
-* DGX and DGX2
+* ... Found both in DGX and DGX2
 
-The GPU should provide 1+ GB of memory per concurrent user. 
+The GPU should provide 1+ GB of memory per concurrent user. At 4GB of GPU RAM is required, and 12GB+ is recommended. 
 
 ### CPU Cores & CPU RAM
 
@@ -126,10 +129,25 @@ CPU cores & CPU RAM should be provisioned in proportion to the number of GPUs an
 
 ### Multi-GPU, Multi-Node, and Multi-Tenancy
 
-Graphistry virtualizes a single GPU for shared use by multiple users.
-
-* When Graphistry is on a shared system, it is especially crucial to determine whether the system environment is ready for nvidia-docker-2, or needs potentially disruptive patching updates. Likewise, the CPU, GPU, and network resources assigned to the Graphistry instance (such as via Docker) should not be contended with from sibling applications. Such software is often not as isolatable.
+Graphistry virtualizes a single GPU for shared use by multiple users and can vertically scale to multiple CPUs+GPUs on the same node for additional users. 
 
 * Multitenancy via multiple GPUs: You can use more GPUs to handle more users and give more performance isolation between users. We recommend separating a few heavy users from many light users, and developers from non-developers.
 
 * Acceleration via multiple GPUs: Graphistry is investigating how to achieve higher speeds via multi-GPU acceleration, but the current benefits are only for multitenancy.
+
+### HA
+
+Graphistry resiliency typically comes in multiple forms:
+
+* User separation: For larger deployments, we recommend separating developers (unpredictable), power users (many large graphs), and regular users (many small sessions).
+
+* Physical resource isolation: Graphistry can run on the same device as other software as long as they respect Graphistry's  CPU, GPU, and network resources. You can use Docker to limit Graphistry execution to specific CPU, GPU, and network resources. Check your other software to ensure that it can likewise be configured to not interfere with sibling workloads. 
+
+* Process isolation: You may run multiple Graphistry instances on the same node to increase resiliency between groups of users. This can be combined with same-node physical resource isolation. This increases resiliency up to hardware and driver failure. However, note that each Graphistry instance will consume 1.5GB+ of GPU RAM.
+
+* Logical separation & replication: You may want to further tune software replication factors. Graphistry runs as multiple containerized shared services with distinct internal replication modes and automatic restarts. Depending on the service, a software failure may impact live sessions of cotenant users or prevent service for 3s-1min.  Within a node, you may choose to either tune internal service replication or run multiple Graphistry instances.
+
+* Safe upgrades: Due to Graphistry's use of version-tagged Docker images and project-namespaceable docker-compose orchestrations, upgrades can be performed through:
+  * New instances (e.g., DNS switch): recommended, especially for cloud
+  * Installation of a concurrent version
+Contact support staff for migration information. 
