@@ -35,7 +35,7 @@ Graphistry now supports bridged connectors, which eases tasks like crossing from
 * Can be any string
 * Ex: Uisng your Graphistry server:
 
-`docker exec -it ec2-user_pivot_1 node_modules/uuid/bin/uuid v4` => `<my_key_1>`
+`docker-compose exec pivot /bin/bash -c "../../../node_modules/uuid/bin/uuid v4"` => `<my_key_1>`
 
 ### Graphistry GPU application server
 
