@@ -16,6 +16,14 @@ The `graphistry-cli` repository contains
 
 ## Manual Install for Nvidia Environments, Including AWS
 
+NOTE: Managed Graphistry instances do not require any of these steps.
+
+**Get Graphistry container**
+
+Download the latest distribution from the [release list](https://graphistry.zendesk.com/hc/en-us/articles/360033184174-Enterprise-Releases) on the support site. 
+
+If you were not already given an enterprise administrator account for the support site, please contact your Graphistry support staff.
+
 **Install Graphistry container**
 
 If `nvidia` is already your `docker info | grep Default` runtime:
