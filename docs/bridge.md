@@ -5,11 +5,15 @@ Graphistry supports bridged connectors, which eases tasks like crossing from a c
 ## Prerequisites
 
 * Standard Graphistry GPU application server (ex: cloud), with admin access
-* Data bridge docker container (bridge.tar)
+* Data bridge docker container. You can find `bridge.tar.gz` in your distribution's [release bundle](https://graphistry.zendesk.com/hc/en-us/articles/360033184174-Enterprise-Releases) and, for managed Graphistry users, by logging into the instance and scp'ing `/home/ubuntu/graphistry/bridge.tar.gz`. 
 * Server to use as a bridge (typically on-prem), with admin access
 - CPU-only OK
 - Linux:`docker` and `docker-compose`
 * Firewall permissions between DB <> bridge and bridge <> Graphistry
+
+## Updates
+
+Starting with `2.23.0`, you can use old bridge server versions with new Graphistry distributions. So updating your Graphistry application server, unless otherwise stated in the release note history, should keep working with your existing bridge server. The bridge server will automatically reconnect to the `GRAPHISTRY_HOST` its `connector.env` points to. 
 
 ## Architecture
 
