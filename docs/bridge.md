@@ -1,6 +1,6 @@
 # Graphistry Data Bridge for Proxying
 
-Graphistry now supports bridged connectors, which eases tasks like crossing from a cloud server to on-prem databases. It is designed to work with enterprise firewall policies such as HTTP-only and outgoing-only. Instead of Graphistry directly making requests against API servers, Graphistry sends the requests to the data bridge server, which then proxies the query and sends the results back. Graphistry can run a mixture of direct and bridged connectors.
+Graphistry supports bridged connectors, which eases tasks like crossing from a cloud server to on-prem databases. It is designed to work with enterprise firewall policies such as HTTP-only and outgoing-only. Instead of Graphistry directly making requests against API servers, Graphistry sends the requests to the data bridge server, which then proxies the query and sends the results back. Graphistry can run a mixture of direct and bridged connectors.
 
 ## Prerequisites
 
@@ -11,7 +11,7 @@ Graphistry now supports bridged connectors, which eases tasks like crossing from
 - Linux:`docker` and `docker-compose`
 * Firewall permissions between DB <> bridge and bridge <> Graphistry
 
-## Design
+## Architecture
 
 **Graphistry GPU application server**
 
@@ -23,9 +23,9 @@ Graphistry now supports bridged connectors, which eases tasks like crossing from
 * Separate install 
 * Proxies establish persistent outgoing http/https connections with your Graphistry server. This enables the server to quickly push queries to your proxy.
 
-## Keys
+## Key configuration
 
-* For each connector, generate unguessable UUIDs for the server and client - this enables either side to trust and revoke access
+* For each connector, set unguessable UUID strings for the server and client - this enables either side to trust and revoke access. These go in the bridge's `connector.env` and the main application server's `.env`
 * Revocation can occur by server or client due to use of 2 keys
 
 ## Example: Splunk
@@ -33,13 +33,11 @@ Graphistry now supports bridged connectors, which eases tasks like crossing from
 ### Generate a key
 
 * Can be any string
-* Ex: Uisng your Graphistry server:
-
-`docker-compose exec pivot /bin/bash -c "../../../node_modules/uuid/bin/uuid v4"` => `<my_key_1>`
+* Ex: Unguessable strings via `docker-compose exec pivot /bin/bash -c "../../../node_modules/uuid/bin/uuid v4"` => `<my_key_1>`
 
 ### Graphistry GPU application server
 
-* Configure: In `.env`, setup the Splunk connector and set it to use the data bridge server:
+* Configure: In `.env`, setup the Splunk connector as usual and then set `SPLUNK_USE_PROXY` and the two keys to proxy through a data bridge server:
 
 ```
 ### Splunk connector config
@@ -58,11 +56,11 @@ SPLUNK_PROXY_KEY=my_key_2
 
 The connector will start looking for the data bridge.
 
-* Test: In the connector settings panel of `/pivot/home`, click the `check status` button for the connector. It should report success and turn green upon successful key negotiation and connector access testing. 
+* Test: In the connector settings panel of `/pivot/home`, click the `check status` button for the connector. It should report success and turn green if it  successfully exchanges keys with your bridge and runs a proxied connector command
 
 ### Graphistry data bridge server
 
-Sample edits to `.env`:
+Edit `connector.env`:
 
 ```
 #REQUIRED: Fill in with your server
@@ -72,10 +70,9 @@ GRAPHISTRY_HOST=https://graphistry.mysite.com
 SPLUNK_USE_PROXY=true
 SPLUNK_PROXY_KEY=my_key_2
 SPLUNK_SERVER_KEY=my_key_1
-
-#STANDARD      
-GRAPHISTRY_LOG_LEVEL=DEBUG       
 ```
+
+If your Graphistry instance uses a non-standard prefix, set `GRAPHISTRY_MOUNT_POINT=/my_subdir`
 
 ## Install and launch data bridge
 
@@ -102,3 +99,13 @@ The data bridge will autoconnect to your Graphistry application server.
 
 See `test` section for the Graphistry GPU application server.
 
+5. Debug
+
+Enable the below in the data bridge's `connector.env` and restart it:
+
+```   
+DEBUG=*
+GRAPHISTRY_LOG_LEVEL=TRACE
+```
+
+Watch your bridge's logs and your app server's logs: `docker-compose logs -f -t --tail=1`
