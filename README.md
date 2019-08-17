@@ -14,13 +14,13 @@ The `graphistry-cli` repository contains
 * Documentation for operating the Graphistry Docker container (install, configure, start/stop, & debug)
 * Documentation for configuring the software: `nginx`, connectors, and ontology
 
-## Manual Install for Nvidia Environments, Including AWS
+## Manual Enterprise Install for Nvidia Environments, Including AWS
 
 NOTE: Managed Graphistry instances do not require any of these steps.
 
-**Get Graphistry container**
+**Get Graphistry Enterprise container**
 
-Download the latest distribution from the [release list](https://graphistry.zendesk.com/hc/en-us/articles/360033184174-Enterprise-Releases) on the support site. 
+Download the latest enterprise distribution from the [enterprise release list](https://graphistry.zendesk.com/hc/en-us/articles/360033184174-Enterprise-Releases) on the support site. 
 
 If you were not already given an enterprise administrator account for the support site, please contact your Graphistry support staff.
 
