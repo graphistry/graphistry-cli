@@ -181,6 +181,9 @@ Graphistry runs airgapped without any additional configuration. Pleae contact yo
 
 The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) and [Nvidia Docker](https://github.com/NVIDIA/nvidia-docker) via `Docker Compose 3`, and ships with all other dependencies built in. See instructions in this document for making Nvidia the default Docker runtime via `daemon.json`.
 
+We do not recommend manually installing dependencies. If you must manually install dependencies, see our [RHEL 7.6 sample](docs/rhel_7_6_setup.md), and contact our team.
+
+
 
 ## 4. Graphistry Container Installation
 
