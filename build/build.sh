@@ -19,6 +19,7 @@ docker run --rm -it -v $PWD/..:/source jagregory/pandoc --toc -V documentclass=r
 	docs/debug-logs.md \
 	docs/developer.md \
 	docs/nvidia-docker-in-docker.md \
+	docs/rhel_7_6_setup.md \
 	docs/templates.md \
 	docs/testing-an-install.md \
 	docs/threatmodel.md \
