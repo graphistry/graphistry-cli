@@ -24,6 +24,50 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 * More advanced administrators may edit `docker-compose.yml` .  Maintenance is easier if you never edit it.
 * Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https)) and mounting your certificates via `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker)). Caddy supports LetsEncrypt with automatic renewal, custom certificates and authorities, and self-signed certificates. Deprecated, you can also modify Nginx config (`etc/ssl/*`)
 
+### Setup free Automatic TLS
+
+Caddy supports [free automatic TLS](https://caddyserver.com/docs/automatic-https) as long as your site meets the listed conditions.  
+
+Sample `Caddyfile`:
+```
+https://*.website.org:443 {
+  tls {
+    max_certs 100
+  }
+  proxy / nginx:80 {
+    websocket
+  }
+}
+```
+
+### Setup custom certs
+
+* Place your certs in `./.caddy/my.crt` and `./.caddy/my.key`
+* Modify `Caddyfile`:
+
+```
+https://your.site.ngo:443 {
+  tls /root/.caddy/my.crt /root/.caddy/my.key
+  proxy / nginx:80 {
+    websocket
+  }
+}
+```
+
+Note the use of a fully qualified domain name in the first line, and that the file paths are for the `caddy` container's file system, not the host file system
+
+### Debugging TLS
+
+Custom TLS setups often fail due to the certificate, OS, network, Caddy config, and file permissions. To perform isolated checks on each, try:
+
+* Test the certificate
+* Test a [standalone Caddy static file server](https://www.baty.net/2018/using-caddy-for-serving-static-content/)
+* ... Including on another box, if OS/network issues are suspected
+* Check the logs of `docker-compose logs -f -t caddy nginx`
+* Test whether the containers are up and ports match via `docker-compose ps`, `curl`, and `curl` from within a docker container (so within the docker network namespace)
+
+If problems persist, please reach out to your Graphistry counterparts. Additional workarounds are possible.
+
 
 ## Connectors
 
