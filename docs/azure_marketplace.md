@@ -1,0 +1,137 @@
+# Graphistry in Azure Marketplace
+
+## Basic administration
+
+* [Create users](user-creation.md)
+* [Generate API keys](../README.md) for individuals without accounts
+* Turn server on-and-off in the Azure Console via **stop** and **start**
+* [Advanced configuration](configure.md)
+* [Update, backup, and migrate](update-backup-migrate.md)
+  * To simplify administration and limit downtime, we recommend creating a new Marketplace instance, copying data snapshots to it and loading it in, and switching DNS to the new instance only when tested
+
+## Common marketpace administration
+
+The Graphistry marketplace instance is designed for secure web-based use and administration. However, command-line administration can be helpful. This document shares common marketplace tasks. See the [main docs](https://github.com/graphistry/graphistry-cli) for general CLI use. 
+
+Contents:
+
+1. **Azure special notes**
+1. **Recommended configuration**
+1. **Solve GPU availability errors**
+1. **Command-line Login**
+1. **Docker**
+1. **Install Python packages**
+1. **Install native packages**
+1. **Marketplace FAQ**
+
+
+### 1. Azure special notes
+
+* Install path: `/var/graphistry`
+* Root: Docker for Azure currently requires `sudo`
+
+### 2. Recommended configuration
+
+* Public ports:
+  * HTTP, HTTPS, and SSH
+  * In restricted environments, constrain networking to a a safelist, e.g., VPN, and optional, [change logging drivers](https://docs.docker.com/config/containers/logging/configure/) to stop Graphistry from recieving maintenace logs
+* Assign a static IP or DNS entry to your Graphistry instance 
+* [Setup TLS](configure.md)
+
+
+### 3. Solve GPU availability errors
+
+Upon trying to pick a VM size or launching, Azure may fail for several reasons:
+
+* Insufficient account quota. Solve by requesting increased GPU / vCPU core capacity in your target launch region and extra regions for dev and contention periods. From your Azure Portal, go to  `? (Help)` -> `Help + support` -> `New support request` -> `Service and subscription (Quotas)` ([link](https://portal.azure.com/#blade/Microsoft_Azure_Support/HelpAndSupportBlade/overview)).  Request quota for multiple `NC6s_v2` or `NC6_v3`s in appropriate [regions that have them](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=virtual-machines).
+
+* Lack of GPU availability in the current region. In this case, try another valid GPU type in the current region, or launch in another region. Keeping the GPU close to your users is a good idea to minimize latency.
+
+
+### 3. Command-line Login
+
+Logging in is configured at Azure instance start and uses your instance's public IP/domain, custom username, and choice of password or SSH key:
+
+```ssh -i my_key.pem my_username@MY_PUBLIC_IP_HERE```
+
+Many `ssh` clients may require you to first run `chmod 400 my_key.pem` or `chmod 644 my_key.pem` before running the above.
+
+### 4. Docker
+
+Graphistry leverages `docker-compose` and the Azure image preconfigures the `nvidia` runtime for `docker`.  Note that Graphistry in Azure requires `sudo`.
+
+```
+cd /var/graphistry
+sudo docker-compose ps
+```
+
+=>
+
+```
+               Name                             Command                  State                        Ports                  
+-----------------------------------------------------------------------------------------------------------------------------
+graphistry_celerybeat_1              /entrypoint bash /start-ce ...   Up             8080/tcp                                
+graphistry_celeryworker_1            /entrypoint bash /start-ce ...   Up             8080/tcp                                
+graphistry_forge-etl_1               /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
+graphistry_nexus_1                   /entrypoint /bin/sh -c bas ...   Up             8080/tcp                                
+graphistry_nginx_1                   nginx -g daemon off;             Up             0.0.0.0:443->443/tcp, 0.0.0.0:80->80/tcp
+graphistry_notebook_1                /bin/sh -c graphistry_api_ ...   Up             8080/tcp                                
+graphistry_postgres_1                docker-entrypoint.sh postgres    Up             5432/tcp, 8080/tcp                      
+graphistry_redis_1                   docker-entrypoint.sh redis ...   Up             6379/tcp, 8080/tcp                      
+graphistry_streamgl-datasets_1       /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
+graphistry_streamgl-gpu_1            /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
+graphistry_streamgl-sessions_1       /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
+graphistry_streamgl-svg-snapshot_1   /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
+graphistry_streamgl-vgraph-etl_1     /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
+graphistry_streamgl-viz_1            /tini -- /entrypoints/stre ...   Up             8080/tcp   
+```
+
+*Note*: Precise set of containers changes across versions
+
+### 5. Install Python packages
+
+If you see `wheel` errors, you may need to run `pip install wheel` and restart your Jupyter kernel.
+
+### 6. Install native packages
+
+By default, Jupyter users do not have `sudo`, restricting them to user-level installation like `pip`. For system-level actions, such as for installing `golang` and other tools, you can create interactive `root` user sessions by logging into the Jupyter Docker container:
+
+
+**Admin:**
+
+Note that `sudo` is unnecessary:
+
+```
+ubuntu@ip-172-31-0-38:~/graphistry$ docker exec -it -u root graphistry_notebook_1 bash
+root@d4afa8b7ced5:/home/graphistry# apt update 
+root@d4afa8b7ced5:/home/graphistry# apt install golang
+```
+
+**User:**
+```
+ubuntu@ip-172-31-0-38:~/graphistry$ docker exec -it  graphistry_notebook_1 bash
+graphistry@d4afa8b7ced5:~$ go version
+```
+=>
+```
+go version go1.10.4 linux/amd64
+```
+
+
+### 7. Marketplace FAQ
+
+#### No site loads or there is an Nginx 404 error
+
+Wait a few minutes for the system to finish starting. If the problem persists for more than 5-10min, log in, run `docker ps`, and for each failing service, restart it. If problems persist further, please report the results of `docker logs <service>` to the Graphistry support team and we will help out.
+
+#### I lost my admin account
+
+See the `reset` command in the main README. Requires logging in, and will delete all users, but no data.
+
+#### I want to log into the server
+
+See section `login`
+
+---
+
+See [general installation](https://github.com/graphistry/graphistry-cli) for further information.
