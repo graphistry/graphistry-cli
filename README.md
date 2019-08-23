@@ -154,7 +154,7 @@ For further information, see [full AWS installation instructions](https://github
 
 ### Azure
 
-* Launch an Ubuntu 16.04+ LTS Virtual Machine with an ``NCv2+`` or ``ND+`` GPU compute SKU (Pascal+)
+* Launch an Ubuntu 16.04+ LTS Virtual Machine with an ``NC6s_v2+`` GPU compute SKU (Pascal+)
 * Enable SSH/HTTP/HTTPS
 * Ensure a GPU is attached:
 
@@ -165,7 +165,7 @@ $ lspci -vnn | grep VGA -A 12
 
 Proceed to the OS-specific instructions below.
 
-For further information, see [full Azure installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/azure.md).
+For further information, see [full Azure Marketplace installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/azure_marketplace.md) and [manual enterprise Azure installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/azure.md).
 
 ### On-Prem
 
