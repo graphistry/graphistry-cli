@@ -1,8 +1,12 @@
-# Graphistry on Azure: Environment Setup Instructions
+# Graphistry on Azure: Manual Environment Setup Instructions
+
 
 **DEPRECATION WARNING**: 
 
-We no longer recommend manually installing drivers via the original Graphistry-maintained bootstrap scripts. Instead, we now recommend using deep learning and RAPIDS base images. These instructions will be updated to reflect the emerging community best practices here.
+Get started more quickly and securely with [Graphistry in Azure Marketplace](azure_marketplace.md).
+
+We no longer recommend manually installing drivers via the original Graphistry-maintained bootstrap scripts. Instead, we now recommend using [Graphistry in Azure Marketplace](azure_marketplace.md) which has been preconfigured, and for advanced manual enterprise users, to use the [MS DSVM (Ubuntu) base image](https://docs.microsoft.com/en-us/azure/machine-learning/data-science-virtual-machine/dsvm-ubuntu-intro).
+
 
 # Deprecated instructions
 
@@ -84,4 +88,8 @@ $ lspci -vnn | grep VGA -A 12
 Login to your instance (see **Test login** above) and use the instructions for [general installation](https://github.com/graphistry/graphistry-cli).
 
 For steps involving an IP address, see needed IP value at Azure console in `Overview` -> `Public IP address`
+
+Special notes:
+* MS DSVM (Ubuntu) locates docker in `/data/docker`, requiring modifying `daemon.json` to include `"graph": "/data/docker"` in addition to the `nvidia` default runtime
+* MS DSVM requires `sudo` for Docker commands
 
