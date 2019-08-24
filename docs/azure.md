@@ -91,5 +91,23 @@ For steps involving an IP address, see needed IP value at Azure console in `Over
 
 Special notes:
 * MS DSVM (Ubuntu) locates docker in `/data/docker`, requiring modifying `daemon.json` to include `"graph": "/data/docker"` in addition to the `nvidia` default runtime
+
+```
+$ docker info | grep Default    ### => runc
+$ sudo vim /etc/docker/daemon.json
+{
+    "graph": "/data/docker",
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+$ sudo systemctl restart docker ### without, may need `docker system prune -a && docker system prune --volumes`
+$ sudo docker info | grep Default    ### => nvidia
+```
+
 * MS DSVM requires `sudo` for Docker commands
 
