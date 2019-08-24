@@ -157,27 +157,16 @@ For further information, see [full AWS installation instructions](https://github
 
 ### Azure BYOL - From a new Nvidia Image
 
-* Launch Microsoft Data Science Virtual Machine (Ubuntu) "DSVM" on a `NC6s_v2+*` GPU compute image (Pascal+) 
+* Launch Nvidia GPU Cloud Image (Ubuntu) "Nvidia NGC" on a `NC6s_v2+*` GPU compute image (Pascal+) 
 * Set a user / login method of your choice
 * Enable SSH/HTTP/HTTPS
 * SSH as ``[your user]@[your ip]``
-* Set `nvidia` as the default docker run-time and `/data/docker` for your images: 
+* Install docker-compose
 ```
-$ docker info | grep Default    ### => runc
-$ sudo vim /etc/docker/daemon.json
-{
-    "graph": "/data/docker",
-    "default-runtime": "nvidia",
-    "runtimes": {
-        "nvidia": {
-            "path": "nvidia-container-runtime",
-            "runtimeArgs": []
-        }
-    }
-}
-$ sudo systemctl restart docker ### without, may need `docker system prune -a && docker system prune --volumes`
-$ sudo docker info | grep Default    ### => nvidia
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 ```
+
 * Follow `docker load` instructions up top, except use `sudo`
 
 
