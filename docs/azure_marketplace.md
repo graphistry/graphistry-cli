@@ -28,7 +28,6 @@ Contents:
 ### 1. Azure special notes
 
 * Install path: `/var/graphistry`
-* Root: Docker for Azure currently requires `sudo`
 
 ### 2. Recommended configuration
 
@@ -48,7 +47,7 @@ Upon trying to pick a VM size or launching, Azure may fail for several reasons:
 * Lack of GPU availability in the current region. In this case, try another valid GPU type in the current region, or launch in another region. Keeping the GPU close to your users is a good idea to minimize latency.
 
 
-### 3. Command-line Login
+### 4. Command-line Login
 
 Logging in is configured at Azure instance start and uses your instance's public IP/domain, custom username, and choice of password or SSH key:
 
@@ -56,13 +55,13 @@ Logging in is configured at Azure instance start and uses your instance's public
 
 Many `ssh` clients may require you to first run `chmod 400 my_key.pem` or `chmod 644 my_key.pem` before running the above.
 
-### 4. Docker
+### 5. Docker
 
 Graphistry leverages `docker-compose` and the Azure image preconfigures the `nvidia` runtime for `docker`.  Note that Graphistry in Azure requires `sudo`.
 
 ```
 cd /var/graphistry
-sudo docker-compose ps
+docker-compose ps
 ```
 
 =>
@@ -88,11 +87,11 @@ graphistry_streamgl-viz_1            /tini -- /entrypoints/stre ...   Up        
 
 *Note*: Precise set of containers changes across versions
 
-### 5. Install Python packages
+### 6. Install Python packages
 
 If you see `wheel` errors, you may need to run `pip install wheel` and restart your Jupyter kernel.
 
-### 6. Install native packages
+### 7. Install native packages
 
 By default, Jupyter users do not have `sudo`, restricting them to user-level installation like `pip`. For system-level actions, such as for installing `golang` and other tools, you can create interactive `root` user sessions by logging into the Jupyter Docker container:
 
@@ -118,7 +117,7 @@ go version go1.10.4 linux/amd64
 ```
 
 
-### 7. Marketplace FAQ
+### 8. Marketplace FAQ
 
 #### No site loads or there is an Nginx 404 error
 
