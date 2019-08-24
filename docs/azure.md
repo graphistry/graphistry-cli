@@ -5,7 +5,7 @@
 
 Get started more quickly and securely with [Graphistry in Azure Marketplace](azure_marketplace.md).
 
-We no longer recommend manually installing drivers via the original Graphistry-maintained bootstrap scripts. Instead, we now recommend using [Graphistry in Azure Marketplace](azure_marketplace.md) which has been preconfigured, and for advanced manual enterprise users, to use the [MS DSVM (Ubuntu) base image](https://docs.microsoft.com/en-us/azure/machine-learning/data-science-virtual-machine/dsvm-ubuntu-intro).
+We no longer recommend manually installing drivers via the original Graphistry-maintained bootstrap scripts. Instead, we now recommend using [Graphistry in Azure Marketplace](azure_marketplace.md) which has been preconfigured, and for advanced manual enterprise users, to use the [Nvidia GPU Container (Ubuntu) "Nvidia NGC" base image](https://docs.nvidia.com/ngc/ngc-azure-vmi-release-notes/index.html).
 
 
 # Deprecated instructions
@@ -89,25 +89,13 @@ Login to your instance (see **Test login** above) and use the instructions for [
 
 For steps involving an IP address, see needed IP value at Azure console in `Overview` -> `Public IP address`
 
-Special notes:
-* MS DSVM (Ubuntu) locates docker in `/data/docker`, requiring modifying `daemon.json` to include `"graph": "/data/docker"` in addition to the `nvidia` default runtime
+Install docker-compose:
 
 ```
-$ docker info | grep Default    ### => runc
-$ sudo vim /etc/docker/daemon.json
-{
-    "graph": "/data/docker",
-    "default-runtime": "nvidia",
-    "runtimes": {
-        "nvidia": {
-            "path": "nvidia-container-runtime",
-            "runtimeArgs": []
-        }
-    }
-}
-$ sudo systemctl restart docker ### without, may need `docker system prune -a && docker system prune --volumes`
-$ sudo docker info | grep Default    ### => nvidia
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 ```
 
-* MS DSVM requires `sudo` for Docker commands
+NGC already sets the default docker runtime to nvidia for you (`/etc/docker/daemon.json`).
 
+From here, you can perform a general installation.
