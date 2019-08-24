@@ -115,7 +115,7 @@ For further information, see [Recommended Deployment Configurations: Client, Ser
 
 ### AWS Marketplace (Recommended)
 
-* Use any of the recommended instance types: P3.2+
+* Quota for any of the recommended instance types in your desired regions: P3.2+
 
 ### AWS BYOL - From a new Nvidia AMI
 * Launch a base Nvidia Deep Learning Ubuntu AMI on a `p3.*` 
@@ -151,17 +151,35 @@ Proceed to the OS-specific instructions below.
 
 For further information, see [full AWS installation instructions](https://github.com/graphistry/graphistry-cli/blob/master/docs/aws.md).
 
+### Azure Marketplace
 
-### Azure
+* Quota for any of the recommended instance types in your desired regions: NC6s_v2+
 
-* Launch an Ubuntu 16.04+ LTS Virtual Machine with an ``NC6s_v2+`` GPU compute SKU (Pascal+)
+### Azure BYOL - From a new Nvidia Image
+
+* Launch Microsoft Data Science Virtual Machine (Ubuntu) "DSVM" on a `NC6s_v2+*` GPU compute image (Pascal+) 
+* Set a user / login method of your choice
 * Enable SSH/HTTP/HTTPS
-* Ensure a GPU is attached:
+* SSH as ``[your user]@[your ip]``
+* Set `nvidia` as the default docker run-time and `/data/docker` for your images: 
+```
+$ docker info | grep Default    ### => runc
+$ sudo vim /etc/docker/daemon.json
+{
+    "graph": "/data/docker",
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+$ sudo systemctl restart docker ### without, may need `docker system prune -a && docker system prune --volumes`
+$ sudo docker info | grep Default    ### => nvidia
+```
+* Follow `docker load` instructions up top, except use `sudo`
 
-```
-$ nvidia-smi
-$ lspci -vnn | grep VGA -A 12
-```
 
 Proceed to the OS-specific instructions below.
 
