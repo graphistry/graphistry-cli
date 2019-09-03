@@ -4,7 +4,7 @@ Welcome to Graphistry!
 
 ## Quick start
 
-The fastest way to install, admininster, and use Graphistry is to [quick launch Graphistry from the AWS Marketplace](https://www.graphistry.com/get-started) (see [walkthrough tutorial & videos](https://www.graphistry.com/blog/marketplace-tutorial)). AWS Marketplace launches a Graphistry instance in your private cloud and runs with zero additional configuration necessary.
+The fastest way to install, admininster, and use Graphistry is to [quick launch Graphistry from the AWS Marketplace and Azure Marketplace](https://www.graphistry.com/get-started) (see [walkthrough tutorial & videos](https://www.graphistry.com/blog/marketplace-tutorial)). This launches a Graphistry instance in your private cloud and runs with zero additional configuration necessary.
 
 ## Advanced administration
 
@@ -153,7 +153,9 @@ For further information, see [full AWS installation instructions](https://github
 
 ### Azure Marketplace
 
-* Quota for any of the recommended instance types in your desired regions: NC6s_v2+
+You can [one-click launch Graphistry in Azure Marketplace](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/graphistry.graphistry-core-2-24-9) 
+
+* Requirements: Quota for any of the recommended instance types in your desired regions: NC6s_v2+
 
 ### Azure BYOL - From a new Nvidia Image
 
@@ -241,10 +243,12 @@ See [instructions to update, backup, and migrate](https://github.com/graphistry/
 
 * `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services
 * Nvidia infrastructure setup correctly
+  * `docker run hello-world` reports a message <-- tests Docker installation
   * `nvidia-smi` reports available GPUs  <-- tests host drivers
-  * `docker run --runtime=nvidia nvidia/cuda nvidia-smi` reports available GPUs <-- tests Docker installation
+  * `docker run --gpus nvidia/cuda nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
+  * `docker run --runtime=nvidia nvidia/cuda nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
   * `docker run --rm nvidia/cuda  nvidia-smi` reports available GPUs <-- tests Docker defaults
-  * `docker run graphistry/cljs:1.1 npm test` reports success (see airgapped  <-- tests driver versioning)
+  * `docker run graphistry/cljs:1.1 npm test` reports success  <-- tests driver versioning
   * "docker run --rm grph/streamgl-gpu:`cat VERSION`-dev nvidia-smi" reports available GPUs
 * Pages load when logged in
   * ``site.com`` shows Graphistry homepage
