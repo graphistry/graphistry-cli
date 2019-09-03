@@ -1,5 +1,7 @@
 # Graphistry in Azure Marketplace
 
+You can now securely run Graphistry in your private Azure account with one click by launching [Graphistry in Azure Marketplace](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/graphistry.graphistry-core-2-24-9)!
+
 ## Basic administration
 
 * [Create users](user-creation.md)
@@ -27,6 +29,7 @@ Contents:
 
 ### 1. Azure special notes
 
+* Pick an NCv2-series or NCv3-series GPU, such as an NC6s v2, from an [Azure GPU-capable region near you](https://azure.microsoft.com/en-us/global-infrastructure/services/) 
 * Install path: `/var/graphistry`
 
 ### 2. Recommended configuration
