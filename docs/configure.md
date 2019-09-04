@@ -6,6 +6,8 @@ Administrators can add users, specify passwords, TLS/SSL, persist data across se
 
 * See [update, backup, & migration instructions](update-backup-migrate.md) for preserving configurations and  data across installations.
 
+* For advanced Python notebook and application configuration, see [PyGraphistry configuration](configure-pygraphistry.md).
+
 ## Add your team and provide API keys
 
 See [user creation docs](user-creation.md)

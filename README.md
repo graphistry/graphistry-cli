@@ -214,7 +214,7 @@ For a demo, try going to `http://MY_SITE/graph/graph.html?dataset=Twitter`, and 
 
 # Configuration
 
-See [configure.md](https://github.com/graphistry/graphistry-cli/blob/master/docs/configure.md) for connectors (Splunk, ElasticSearch, ...), passwords, ontology (colors, icons, sizes), TLS/SSL/HTTPS, backups to disk, and more.
+See [configure.md](https://github.com/graphistry/graphistry-cli/blob/master/docs/configure.md) for connectors (Splunk, ElasticSearch, ...), passwords, ontology (colors, icons, sizes), TLS/SSL/HTTPS, backups to disk, notebooks, multiple proxy layers, and more.
 
 
 # Maintenance
