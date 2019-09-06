@@ -12,9 +12,9 @@ docker run --rm -it -v $PWD:/source jagregory/pandoc -s hardware-software.md -o 
 
 # Recommended Deployment Configurations: Client, Server Software, Server Hardware
 
-The recommended non-Enterprise configuration is AWS Marketplace for the server and comes fully configured.
+The recommended server configuration is [AWS Marketplace](./docs/aws_marketplace.md) and [Azure Marketplace](./docs/azure_marketplace.md) with instance types noted on those screens. The one-click launcher deploys a fully preconfigured instance.
 
-Graphistry Enterprise ships as a Docker container that runs in a variety of Linux + Nvidia GPU environments that are compatible with [NVIDIA RAPIDS](https://rapids.ai/) with the [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker):
+Graphistry Enterprise also ships as a Docker container that runs in Linux Nvidia GPU environments that are compatible with [NVIDIA RAPIDS](https://rapids.ai/) and the [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker). It is often   run in the cloud as well.
 
 ## Contents
 
@@ -25,10 +25,10 @@ Graphistry Enterprise ships as a Docker container that runs in a variety of Linu
 
 ## Overview
 
-* **Client**: Chrome/Firefox from the last 3 years, WebGL enabled, and 100KB/s download ability
+* **Client**: Chrome/Firefox from the last 3 years, WebGL enabled (1.0+), and 100KB/s download ability
 * **Server**: 
 - Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), 150GB+ disk, and 1+ Nvidia GPUs (Pascal onwards for [NVIDIA RAPIDS](https://rapids.ai/)) with 4+ GB RAM each (1+ GB per concurrent user)
-- Recommended: Ubuntu 16.04/18.04 LTS, 4+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Volta, RTX, ...) with 12+GB GPU RAM
+- Recommended: Ubuntu 18.04 LTS, 4+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Volta, RTX, ...) with 12+GB GPU RAM
 - CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) 
 - [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker) set as default runtime for [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+)
  
@@ -58,18 +58,20 @@ Graphistry can run both on-premises and in the cloud on Amazon EC2, Google GCP, 
 
 *Tested AWS Instances*:
 
-* P3 ***Recommended for testing and initial workloads***
+* P3.2 ***Recommended for testing and initial workloads***
 
 *Tested Azure Instances*:
 
-* NV6v2 ***Recommended for testing and initial workloads***
-* NC6v2
+* NC6s_v2 ***Recommended for testing and initial workloads***
+* NC6s_v3
 
 See the hardware provisioning section to pick the right configuration for you.
 
+Please contact for discussion of multi-GPU scenarios.
+
 ### OS & Docker
 
-Graphistry runs preconfigured with a point-and-click launch on Amazon Marketplace. Please contact for the latest options for major cloud providers.
+Graphistry runs preconfigured with a point-and-click launch on Amazon Marketplace. 
 
 Graphistry regularly runs on:
 
@@ -80,15 +82,16 @@ Both support Nvidia / Docker:
 
 * CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) 
 * [Nvidia Docker *native* runtime](https://github.com/NVIDIA/nvidia-docker)  (for after Docker 19.03)
-* [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+) with default runtime set as nvidia at time of launch
+* [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+) with default runtime set as `nvidia` at time of launch
 
+See [Ubuntu 18.04 LTS manual configuration](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6 manual configuration](./rhel_7_6_setup) for an example of setting up Nvidia for containerized use on Linux. Marketplace deployments come preconfigured with the latest working drivers and security patches.
 
 
 ### User: Root vs. Not, Permissions
 
 Installing Docker and Nvidia dependencies currently require root user permissions.
 
-Graphistry can be installed and run as an unprivileged user as long as it have access to docker and the nvidia runtime. 
+Graphistry can be installed and run as an unprivileged user as long as it has access to Docker and the Nvidia runtime. 
 
 ### Storage
 
