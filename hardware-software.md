@@ -84,7 +84,7 @@ Both support Nvidia / Docker:
 * [Nvidia Docker *native* runtime](https://github.com/NVIDIA/nvidia-docker)  (for after Docker 19.03)
 * [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+) with default runtime set as `nvidia` at time of launch
 
-See [Ubuntu 18.04 LTS manual configuration](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6 manual configuration](./rhel_7_6_setup) for an example of setting up Nvidia for containerized use on Linux. Marketplace deployments come preconfigured with the latest working drivers and security patches.
+See [Ubuntu 18.04 LTS manual configuration](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6 manual configuration](./rhel_7_6_setup.md) for an example of setting up Nvidia for containerized use on Linux. Marketplace deployments come preconfigured with the latest working drivers and security patches.
 
 
 ### User: Root vs. Not, Permissions
