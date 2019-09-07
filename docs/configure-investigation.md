@@ -113,33 +113,46 @@ After setting these, restart your server.
         }
     },
     "ontology": {
-        "icons": {
-            "doc": "JSON dictionary from entity type to icon name:\n                { \"myType\": \"car\", ... }",
-            "format": "object",
-            "default": {},
-            "arg": "icons",
-            "env": "GRAPHISTRY_ICONS"
+        icons: {
+            doc: `JSON dictionary from entity type to icon name:
+                { "myType": "car", ... }`,
+            format: Object,
+            default: {},
+            arg: 'icons',
+            env: 'GRAPHISTRY_ICONS'
         },
-        "colors": {
-            "doc": "JSON dictionary from entity type to color hex code:\n                { \"myType\": \"#FF0000\", ... }",
-            "format": "object",
-            "default": {},
-            "arg": "colors",
-            "env": "GRAPHISTRY_COLORS"
+        colors: {
+            doc: `JSON dictionary from entity type to color hex code:
+                { "myType": "#FF0000", ... }`,
+            format: Object,
+            default: {},
+            arg: 'colors',
+            env: 'GRAPHISTRY_COLORS'
         },
-        "sizes": {
-            "doc": "JSON dictionary from entity type to size integers (1-1000), with Graphistry using 40/80/100/150:\n                { \"myType\": 100, ... }",
-            "format": "object",
-            "default": {},
-            "arg": "sizes",
-            "env": "GRAPHISTRY_SIZES"
-        },
-        "products": {
-            "doc": "JSON dictionary of per-product encodings:\n              {\n                myProduct1: {\n                    ? productIdentifier: {\"field1\": \"value1\", ...}, // index selector\n                    ? fieldsBlacklist: [ \"field1\", ... ], //exclude from data extraction\n                    ? attributesBlacklist: [ \"field1\", ... ], //exclude from entity drilldown\n                    ? entitiesBlacklist: [ \"field1\", ... ], //exclude from generated nodes\n                    ? defaultFields: [ \"field1\", ... ], //populate dropdowns\n                    ? desiredEntities: [ \"field1\", ...], //default nodes\n                    ? desiredAttributes: [ \"field1\", ...], //default drilldowns\n                    ? colTypes: { \"col1\": \"type1\", ... } //what node type to generate from a column\n                }, \n                ... }",
-            "format": "object",
-            "default": {},
-            "arg": "products",
-            "env": "GRAPHISTRY_PRODUCTS"
+        sizes: {
+            doc: `JSON dictionary from entity type to size integers (1-1000), with Graphistry using 40/80/100/150:
+                { "myType": 100, ... }`,
+            format: Object,
+            default: {},
+            arg: 'sizes',
+            env: 'GRAPHISTRY_SIZES'
+        },        
+        products: {
+            doc: `JSON list of per-product dictionaries:
+              [{"name": "myProduct1",
+                ? productIdentifier: {"field1": "value1", ...}, // index selector
+                ? fieldsBlacklist: [ "field1", ... ], //exclude from data extraction
+                ? attributesBlacklist: [ "field1", ... ], //exclude from entity drilldown
+                ? entitiesBlacklist: [ "field1", ... ], //exclude from generated nodes
+                ? defaultFields: [ "field1", ... ], //populate dropdowns
+                ? desiredEntities: [ "field1", ...], //default nodes
+                ? desiredAttributes: [ "field1", ...], //default drilldowns
+                ? colTypes: { "col1": "type1", ... } //what node type to generate from a column
+            }, ...]`,
+            format: Object,
+            default: {},
+            arg: 'products',
+            env: 'GRAPHISTRY_PRODUCTS'
         }
     },
     "pivotApp": {

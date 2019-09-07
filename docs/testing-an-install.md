@@ -1,6 +1,6 @@
 # Manual inspection of all key running components
 
-Takes about 5-10min
+Takes about 5-10min. See `Quick Testing` below for an expedited variant.
 
 ## 0. Start
 
@@ -94,6 +94,8 @@ If you cannot do **3a**, test from the host via `curl` or `wget`:
 ```
 
 * Get API key
+
+Login and get the API key from your dashboard homepage, or run the following:
 
 ```
 docker-compose exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME
@@ -195,3 +197,30 @@ AWS:
 * Restart, check pages load
 * Try a notebook upload with `graphistry.register(...., protocol='https')`
 
+## 6 Quick Testing
+
+* `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services
+
+* If a GPU service is unhealthy, the typical cause is an unhealthy   Nvidia environment. Pinpoint the misconfiguration through the following progression:
+  * `docker run hello-world` reports a message <-- tests Docker installation
+  * `nvidia-smi` reports available GPUs  <-- tests host drivers
+  * `docker run --gpus nvidia/cuda nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
+  * `docker run --runtime=nvidia nvidia/cuda nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
+  * `docker run --rm nvidia/cuda  nvidia-smi` reports available GPUs <-- tests Docker defaults
+  * `docker run graphistry/cljs:1.1 npm test` reports success  <-- tests driver versioning
+  * "docker run --rm grph/streamgl-gpu:`cat VERSION`-dev nvidia-smi" reports available GPUs
+
+* Pages load when logged in
+  * ``site.com`` shows Graphistry homepage and is stylized <-- Static assets are functioning
+  * ``site.com/graph/graph.html?dataset=Facebook`` clusters and renders a graph
+    * If the page loads but the graph is empty, see above instructions for testing Nvidia environment
+    * Check browser console logs for WebGL errors
+    * Check browser and network logs for Websocket errors, which may require a change in `Caddy` reverse proxying
+* Notebooks
+  * Running the analyst notebook example generates running visualizations (see logged-in homepage)
+  * For further information about the Notebook client, see the OSS project [PyGraphistry](http://github.com/graphistry/pygraphistry) ( [PyPI](https://pypi.org/project/graphistry/) ).
+* Investigations
+  * ``site.com/pivot`` loads
+  * ``site.com/pivot/connectors`` loads a list of connectors
+    * When clicking the ``Status`` button for each connector, it reports green. Check error reported in UI or docker logs (`docker compose logs -f -t pivot`): likely configuration issues such as password, URL domain vs fqdn, or firewall.
+  *  Opening and running an investigation in ``site.com/pivot`` uploads and shows a graph

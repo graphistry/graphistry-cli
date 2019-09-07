@@ -2,6 +2,10 @@
 
 Launching Graphistry in AWS Marketplace? [Get started](https://www.graphistry.com/blog/marketplace-tutorial) with the walkthrough tutorial and videos!
 
+## Instance Type
+
+Pick a `P3.2+` GPU instance in your region. Graphistry requires a Nvidia RAPIDS compatible GPU, whose minimal requirement is a Pascal-generation GPU or later.
+
 ## Basic administration
 
 * [Create users](user-creation.md)
@@ -27,10 +31,10 @@ Contents:
 
 
 ### 1. Recommended configuration
-
+ 
 * [Associate your AWS instance with an Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html#using-instance-addressing-eips-associating) or a domain 
 * [Setup TLS](configure.md)
-* In restricted environments, constrain networking to a a safelist, e.g., VPN, and optional, [change logging drivers](https://docs.docker.com/config/containers/logging/configure/) to stop Graphistry from recieving maintenace logs
+* In restricted environments, constrain networking to a safelist, e.g., VPN, and optional, [change logging drivers](https://docs.docker.com/config/containers/logging/configure/) to stop Graphistry from recieving maintenace logs
 
 
 ### 2. Solve GPU availability errors
