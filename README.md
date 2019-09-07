@@ -8,7 +8,7 @@ This documentation cover system administration. See the **Further reading** sect
 
 #### Support
 
-Email, Zoom, Slack, phone, tickets -- we encourage using the [Graphistry support channel](https://graphistry.com/support) that works best for you. We want you and your users to succeed! 
+Email, Zoom, Slack, phone, tickets -- we encourage using the [Graphistry support channel](https://www.graphistry.com/support) that works best for you. We want you and your users to succeed! 
 
 
 #### Quick launch
@@ -69,7 +69,7 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 
 **Manual environment setup**
 
-See sample [Ubuntu 18.04 TLS](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6](rhel_7_6_setup.md) environment setup scripts for Nvidia drivers, Docker, nvidia-docker runtime, and docker-compose. 
+See sample [Ubuntu 18.04 TLS](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6](./docs/rhel_7_6_setup.md) environment setup scripts for Nvidia drivers, Docker, nvidia-docker runtime, and docker-compose. 
 
 Please contact Graphistry staff for environment automation options. 
 
@@ -107,6 +107,6 @@ docker-compose up -d
   * [Configure PyGraphistry and notebooks](docs/configure-pygraphistry.md)
 * Maintain
   * On unconfigured instance reboots, you may need to first run `sudo systemctl start docker`
-  * [Updates, backups, and migrations](docs/update-backup-migration.md)
+  * [Update, backup, and migrate](docs/update-backup-migrate.md)
 * Test:
   * [Testing an install](docs/testing-an-install.md)
