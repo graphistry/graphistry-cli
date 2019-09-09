@@ -162,15 +162,15 @@ Edit `.pivot-db/config/config.json` via the below and restart Graphistry:
 ```
 {
     "ontology": {
-        "products": {
-            "myOntologyName": {
+        "products": [{
+            "myOntology1": {
                 "colTypes": {
                     "src_ip": "ip",
                     "dest_ip": "ip",
                     "myEventColumnName": "myTypeTag"
                 }
             }
-        },
+        }],
         "icons": {
             "ip": "laptop",
             "myTypeTag": "fighter-jet"
