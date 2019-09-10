@@ -113,3 +113,11 @@ GRAPHISTRY_LOG_LEVEL=TRACE
 ```
 
 Watch your bridge's logs and your app server's logs: `docker-compose logs -f -t --tail=1`
+
+## Docker
+
+The bridge is a standard minimal Docker container (alpine):
+
+* Login as root (user 0): `docker exec -it -u 0 <container_id>`
+* Install packages as root: `apt add curl`
+* Watch logs via `docker-compose logs -f -t --tail=1`
