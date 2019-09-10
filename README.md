@@ -58,7 +58,7 @@ Login to server:
 | **Logs** 	|  `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`) 	|  Ex: Watch all logs, starting with the 20 most recent lines:  `docker-compose logs -f -t --tail=20`	|
 | **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (including user accounts), and start fresh .  |
 | **Create Users** | Use Admin Panel (see [Create Users](docs/user-creation.md)) |
-| **Restart Docker Daemon** | `sudo systemctl reload docker` | Use when changing `/etc/docker/daemon.json`, ... |
+| **Restart Docker Daemon** | `sudo systemctl restart docker` | Use when changing `/etc/docker/daemon.json`, ... |
 
 
 ## Manual enterprise install
