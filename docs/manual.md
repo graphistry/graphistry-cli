@@ -33,16 +33,15 @@ For further information, see [Recommended Deployment Configurations: Client, Ser
 
 Skip almost all of these steps by instead running through [AWS Marketplace](aws_marketplace.md) and [Azure Marketplace](azure_marketplace.md).
 
-### AWS & Azure BYOL
+### AWS, Azure, & GCP BYOL
 
 * **Start from an Nvidia instace**
 <br>You can skip most of the steps by starting with an Nvidia NGC or Tensorflow instance. 
-  * These still typically require installing `docker-compose`, setting `daemon.json` to default to the `nvidia-docker` runtime, and restarting `docker`.
+  * These still typically require installing `docker-compose` (and testing it), setting `/etc/docker/daemon.json` to default to the `nvidia-docker` runtime, and restarting `docker` (and testing it). See end of [RHEL 7.6](rhel_7_6_setup.md) and [Ubuntu 18.04 LTS](ubuntu_18_04_lts_setup.md) sample scripts for install and test instruction.
 * **Start from raw Ubuntu/RHEL**
-<br>You can build from scratch by picking a fully unconfigured starting point and following the On-Prem instructions.
+<br>You can build from scratch by picking a fully unconfigured starting point and following the [RHEL 7.6](rhel_7_6_setup.md) and [Ubuntu 18.04 LTS](ubuntu_18_04_lts_setup.md) On-Prem Sample instructions. Contact Graphistry staff for automation script assistance if also applicable.
 
 ### On-Prem
-
 
 See [Recommended Deployment Configurations: Client, Server Software, Server Hardware](../hardware-software.md).
 
