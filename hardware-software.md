@@ -52,18 +52,42 @@ The Graphistry client runs in standard browser configurations:
 
 ## Server Software: Cloud, OS, Docker, Avoiding Root Users
 
-Graphistry can run both on-premises and in the cloud on Amazon EC2, Google GCP, and Microsoft Azure.
+Graphistry is modern container software and thus can be flexibly deployed. You can run via graphistry.com, on-prem, prebuilt via your cloud provider's marketplace, and self-automated in your cloud (Amazon EC2, Google GCP, and Microsoft Azure). 
+
+### Hosted (Alpha)
+
+You can access Graphistry as an account at Graphistry Cloud (graphistry.com):
+
+* Isolated tier: Avoid administration costs but still guarantee dedicated & isolated resources by running managed by Graphistry
+* Shared tier: Save money by running on shared resources
+* In alpha - contact for further information
 
 ### Cloud
 
 *Tested AWS Instances*:
 
-* P3.2 ***Recommended for testing and initial workloads***
+* P3.2+ ***Recommended for testing and initial workloads***
+
+AWS support includes Marketplace, prebuilt AMIs / BYOL, and from-source automation
+Pricing: http://ec2instances.info ($1.4K+/mo at time of writing)
 
 *Tested Azure Instances*:
 
 * NC6s_v2 ***Recommended for testing and initial workloads***
 * NC6s_v3
+
+Azure support includes Marketplace, prebuilt VHDs / BYOL, and from-source automation
+Pricing: https://azure.microsoft.com/en-us/pricing/calculator/  ($960+/mo at time of writing)
+
+*Tested GCP Instances*:
+
+* P100 ***Recommended for testing and initial workloads***
+* V100
+* Likely: T4
+* Likely with staff support: P4
+
+GCP support includes BYOL; contact for automation reference scripts & roadmap details
+Pricing: https://cloud.google.com/compute/gpus-pricing ($440+/mo at time of writing)
 
 See the hardware provisioning section to pick the right configuration for you.
 
