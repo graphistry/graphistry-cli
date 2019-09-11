@@ -5,17 +5,17 @@ Launching Graphistry in AWS Marketplace? [Get started](https://www.graphistry.co
 ## Get it now!
 
 1. Marketplace home: Click **Continue to subscribe**, **Continue to Configuration**
-  - Do not *Configure contract* as that sets an annual prepay
+    - Do not *Configure contract* as that sets an annual prepay
 2. Page **Configure this software**: 
-  - **Region:** Select an AWS region with GPUs such as US East or Oregon
-  - You may need to request capacity for your account to run GPUs
-  - Do not *Configure contract* as that sets an annual prepay
-  - Click **Continue to launch**
+    - **Region:** Select an AWS region with GPUs such as US East or Oregon
+    - You may need to request capacity for your account to run GPUs
+    - Do not *Configure contract* as that sets an annual prepay
+    - Click **Continue to launch**
 3. Page **Launch this software**:
-  - **EC2 Instance Type**: Pick p3.2xlarge (1 V100 GPU) or larger as Graphistry/RAPIDS require a Pascal or later GPU
-  - **VPC Settings, Subnet Settings**: Pick something that your browser/client can access (http/https/ssh) and can speak to your DB
-  - **Key Pair Settings**: Reuse or create a Key Pair so you can SSH to the commandline for administration
-  - Click **Launch**
+    - **EC2 Instance Type**: Pick p3.2xlarge (1 V100 GPU) or larger as Graphistry/RAPIDS require a Pascal or later GPU
+    - **VPC Settings, Subnet Settings**: Pick something that your browser/client can access (http/https/ssh) and can speak to your DB
+    - **Key Pair Settings**: Reuse or create a Key Pair so you can SSH to the commandline for administration
+    - Click **Launch**
 4. Go to the public IP in a browser and refresh until the login screen loads, create the first user (admin) account, and start graphing!
 
 
