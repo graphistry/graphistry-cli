@@ -6,9 +6,9 @@ You can now securely run Graphistry in your private Azure account with one click
 
 1. Click **create** (vs. **Start with a pre-set configuration**)
 1. Fill  most VM settings as usual: Resource group, VM Name, and User + SSH Key / Password
-  - **Region**: Pick a GPU-capable region in which you have GPU quota (see below), such as East US and West US 2
-  - **Size**: Select **NC6s_v2** or **NC6s_v3** (and not v1 series of *NC6s*)
-  - If asked, publicly expose (for incoming connections) `http` (80), `https` (443), and `ssh` (22)
+    - **Region**: Pick a GPU-capable region in which you have GPU quota (see below), such as East US and West US 2
+    - **Size**: Select **NC6s_v2** or **NC6s_v3** (and not v1 series of *NC6s*)
+    - If asked, publicly expose (for incoming connections) `http` (80), `https` (443), and `ssh` (22)
 1. Click **Review and create** and then **Create**
 1. Go to the public IP, refresh the page until it has fully loaded, create the first user (= admin) account, and start graphing!
 
