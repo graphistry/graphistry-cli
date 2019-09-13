@@ -38,12 +38,15 @@ The admin guide covers:
 
 Graphistry supports advanced command-line administration via standard `docker-compose`, `.yml` / `.env` files, and `caddy` reverse-proxy configuration.
 
-Login to server:
+### Login to server
 
-* AWS: `ssh -i [your_key].pem ubuntu@[your_public_ip]`
-* Azure: `ssh -i [your_key].pem [your_user]@[your_public_ip]` or `ssh [your_user]@[your_public_ip]` (pwd-based)
-* On-prem / BYOL: Contact your admin
+| Image | Command |
+|--: |:-- |
+| **AWS** | `ssh -i [your_key].pem ubuntu@[your_public_ip]` |
+| **Azure** | `ssh -i [your_key].pem [your_user]@[your_public_ip]` <br> `ssh [your_user]@[your_public_ip]` (pwd-based) |
+| **On-prem / BYOL** | Contact your admin |
 
+### CLI commands
 
 |  TASK	| COMMAND 	| NOTES 	|
 |--: |:---	|:---	|
@@ -68,17 +71,17 @@ NOTE: Managed Graphistry instances do not require any of these steps.
 The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) and [Nvidia Docker](https://github.com/NVIDIA/nvidia-docker) via `Docker Compose 3`, and ships with all other dependencies built in.
 
 
-**Manual environment setup**
+### Manual environment setup
 
 See sample [Ubuntu 18.04 TLS](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6](./docs/rhel_7_6_setup.md) environment setup scripts for Nvidia drivers, Docker, nvidia-docker runtime, and docker-compose. 
 
 Please contact Graphistry staff for environment automation options. 
 
-**Manual Graphistry container download**
+### Manual Graphistry container download
 
 Download the latest enterprise distribution from the [enterprise release list](https://graphistry.zendesk.com/hc/en-us/articles/360033184174-Enterprise-Releases) on the support site.  Please contact your Graphistry support staff for access if not available.
 
-**Manual Graphistry container installation**
+### Manual Graphistry container installation
 
 If `nvidia` is already your `docker info | grep Default` runtime:
 
