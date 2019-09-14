@@ -4,13 +4,23 @@ Updates, backups, and migrations involve manipulating [configurations](configure
 
 ## Install multiple releases
 
-**We recommend the following folder structure:**
+### New servers vs. reuse
+
+For simpler operation and improved uptime, we recommend creating new servers vs. upgrading existing ones. Likewise, only delete instances when a more recent backup is available.
+
+
+### Folder structure
+
+If reusing the same server, we recommend the following structure:
 
 ```
-graphistry/releases/v1.3.2/
-graphistry/releases/v2.10.5/
+graphistry/releases/<VERSION_1>/
+graphistry/releases/<VERSION_2>/
 ...
 ```
+
+Each instance will include file `VERSION` and tag its images with that.
+
 
 **If running concurrent versions of the same release:**
 
@@ -31,6 +41,17 @@ docker-compose -p my_unique_name up -d
 
 ## The config and data files
 
+### v2.25+:
+
+Configuration and user data live in two places:
+
+1. `data/`: Flatfiles safe for copying
+2. The `postgres` container service: migrations handled via `pgdump`-based tooling
+
+Graphistry internal configuration also lives in `.env` and `docker-compose.yml`. If you find yourself editing those, please let the Graphistry team know why so we can lessen the need for that.
+
+### v2.24 and earlier
+
 * **Local**:  Configuration and certain data is kept at the root of the installed release 
   * `.env`, `Caddyfile`, `.caddy`, `etc/ssl`, `.pivot-db`
   * Edits to `docker-compose.yml` (not recommeded)
@@ -40,61 +61,56 @@ docker-compose -p my_unique_name up -d
   * `sudo ls -al /var/lib/docker/volumes | grep postgres`
       * => `<version>_postgres_data`, `<version>_postgres_backups`
 
-## Update
+## Update an installation
 
 NOTE: Check release version history for any special instructions.
 
-Graphistry maintains backwards-compatibility around data. New versions automatically handle migration issues around database and file format data conversions. Administrators are responsible for backing up and loading in the old data.
+Graphistry maintains backwards-compatibility around data. New versions automatically handle migration issues around database and file format data conversions. Administrators are responsible for backing up and loading in the old data. The exception is configuration files, which are still stabilizing in 2.X.
 
-In practice, we recommend increasing service uptime nad minimizing administrator effort by doing installs on fresh cloud instances. However, you can generally reuse the box.
+In practice, we recommend increasing service uptime and minimizing administrator effort by doing installs on fresh cloud instances. However, you can generally reuse the box.
 
- doing new installs on new instances, and instead m
+### 2.25+
 
+On your new Graphistry instance, run the `etc/scripts/migrate.sh` to copy your older instance's state into the new instance. The script is safe to run between two instances on the same or different servers.
 
-* Put new release in a new folder
-* Snapshsot the old instance, and ideally, while it is stopped
-  * `old_release $ docker-compose stop`
-  * Copy local config and data files into the new install folder
-  * Copy the Postgres data: see below
-* 	Run the usual installation and launch procedure: `docker load -i containers.tar`, ...
+#### Steps
 
-### Special case: REST API clients - PyGraphistry & JavaScript
+The rough recommended sequence is:
 
-REST API clients can often be directly from public repositories:
+  * Test the new server primarily around GPU health
+  * Run `migrate.sh` from the new server
+  * Migration and backup information will be stored as `migration/` and `data.backup/`
+  * Merge logic follows `rsync -a` merge rules for `data/` flatfiles and full replacement for `postgres` tables (users, ...)
+  * The new instance will be restarted
+  * Test the new server
+  * When happy, switch DNS from the older instance to the new, and archive the old instance
 
-* PyGraphistry: `pip` and `github`
-* React & JavaScript: `npm` and `github`
+An alternative approach that prioritizes integrity over uptime is to stop the old server at the beginning of the sequence.
 
-See central release notes for when new client API features require updating the server.
+#### migrate.sh
 
-
-### Special case: Postgres   
-
-
-**Option A: Postgres-managed data migration:**
-
-The safest approach is to use `pgdump` to backup and `psql` to restore. See `.env` for `postgres` user/password/db configurations:
-
+Example: Migrate from AWS Marketplace instance `old.site.ngo` to `new.site.ngo`, with both using the same `key.pem`:
 
 ```
-old_release $ docker-compose exec postgres  /usr/bin/pg_dump  -U graphistry graphistry | gzip -9 > backup.sql.gz
- 
-new_release $ docker-compose docker exec postgres psql -U graphistry graphistry < backup.sql
+ubuntu@new.site.ngo:~/graphistry$ KEY="~/.ssh/key.pem" FROM=ubuntu@old.site.ngo TO=ubuntu@new.site.ngo ./etc/scripts/migrate.sh
 ```
 
+Example: Migrate between two instances on the same box:
 
-**Option B: Direct file system copy:**
-  
-If the underlying `postgres` container and your system environment have not changed, you may be able to simply copy the volumes:
-  
 ```
-cp -rp /var/lib/docker/volumes/<version_1>_postgres_data /var/lib/docker/volumes/<version_2>_postgres_data
-cp -rp /var/lib/docker/volumes/<version_1>_postgres_backups /var/lib/docker/volumes/<version_2>_postgres_backups
+ubuntu@site.ngo:~/graphistry$ KEY="~/.ssh/key.pem" FROM=ubuntu@old.site.ngo FROM_PATH="/home/old/graphistry" TO=ubuntu@site.ngo TO_PATH="/home/new/graphistry" ./etc/scripts/migrate.sh
 ```
 
-See the [Docker-managed instructions](https://docs.docker.com/v17.03/engine/tutorials/dockervolumes/#backup-restore-or-migrate-data-volumes) to do the same.
+### 2.24 and older
 
+Manually copy data/config files according to the [migration table](https://graphistry.zendesk.com/hc/en-us/articles/360035207474) . For edits to `.env`, separate them out to user file `custom.env`. See `migrate.sh` for handling postgres user table information.
 
 ## Backup & Migrate
 
-Same as update.
+Same as update. Running `migate.sh` on a new server will result in backups of `data/` flatfiles and the `postgres` service. Alternatively, you can manually copy `data/` and inspect `migrate.sh` for how to run `pgdump` with docker.
+
+## Data Bridge
+
+* Manually copy `connector.env` from the old bridge instance to the new
+* In general, you can mix and match bridge/server combinations. Check the [version release histories](https://graphistry.zendesk.com/hc/en-us/articles/360033184174-Enterprise-Release-List-Downloads) for any violations of this rule.
+
