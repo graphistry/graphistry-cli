@@ -1,6 +1,6 @@
 # Graphistry Data Bridge for Proxying
 
-Graphistry supports bridged connectors, which eases tasks like crossing from a cloud server to on-prem databases. It is designed to work with enterprise firewall policies such as HTTP-only and outgoing-only. Instead of Graphistry directly making requests against API servers, Graphistry sends the requests to the data bridge server, which then proxies the query and sends the results back. Graphistry can run a mixture of direct and bridged connectors.
+Graphistry supports bridged connectors, which eases tasks like crossing from a cloud server to on-prem databases. It is designed to work with enterprise firewall policies: it runs as an out-going connection over HTTP/HTTPS. Instead of Graphistry directly making requests against your API servers, Graphistry sends the requests to the data bridge server, which then proxies the query and sends the results back. Graphistry can run a mixture of direct and bridged connectors.
 
 ## Prerequisites
 
@@ -103,16 +103,15 @@ The data bridge will autoconnect to your Graphistry application server.
 
 See `test` section for the Graphistry GPU application server.
 
-5. Debug
+## Restart sequence for re-pairing
 
-Enable the below in the data bridge's `connector.env` and restart it:
+The bridge and main server, upon interruption, will try regain the previous connection. This increases resiliency for typical interruptions: you do not need to do anything. 
 
-```   
-DEBUG=*
-GRAPHISTRY_LOG_LEVEL=TRACE
-```
+Re-pairing is automatic, but takes a bit more work:
 
-Watch your bridge's logs and your app server's logs: `docker-compose logs -f -t --tail=1`
+1. Stop the bridge: It needs to create a new connection, not resume a session
+1. Restart the server: This resets and frees up the connector slot for the next client
+1. Restart the bridge
 
 ## Docker
 
@@ -121,3 +120,37 @@ The bridge is a standard minimal Docker container (alpine):
 * Login as root (user 0): `docker exec -it -u 0 <container_id>`
 * Install packages as root: `apt add curl`
 * Watch logs via `docker-compose logs -f -t --tail=1`
+
+## Debugging
+
+### Logs
+
+Modify `connector.env` and restart the bridge:
+
+```   
+DEBUG=*
+GRAPHISTRY_LOG_LEVEL=TRACE
+```
+
+Watch your bridge's logs and your app server's logs: `docker-compose logs -f -t --tail=1`
+
+
+### Diagnose
+
+* Check your bridge logs 
+* Try using `curl` inside and outside of the bridge container (you may need to install via `apk`/`apt`)
+* It's DNS.  It's always DNS. If curl fails inside Docker but not outside:
+  * Identify your host's DNS server, such as by inspecting `/etc/resolv.conf`
+  * Update your bridge's `docker-compose.yml`:
+
+```
+services:
+  bridge:
+    ...
+    dns:
+      - "<MY.DNS.SERVER>"
+```    
+
+    
+
+
