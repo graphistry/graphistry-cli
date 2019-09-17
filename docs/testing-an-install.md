@@ -200,6 +200,15 @@ AWS:
 ## 6 Quick Testing
 
 * `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services
+  * check `docker-compose logs`, `docker-compose logs <service>`, `docker-compose logs -f -t --tail=100 service`
+  * unhealthy `streamgl`, `gpu`, `viz`: likely GPU driver issue
+    * GPU is not the default runtime in `/etc/docker/deamon.json` (`docker info | grep Default`)
+    * `OpenlCL` Initialization error: GPU drivers insufficently setup
+    * `NVRTC error: NVRTC_ERROR_INVALID_OPTION`: Check GPU/drivers for RAPIDS compatiblility
+    * `forge-etl`: restart the service (bad start) or RAPIDS-incompatible GPU/drivers
+  * unhealthy `pivot`: likely config file issue
+  * unhealthy `nginx`, `nexus`, `caddy`: 
+    * likely config file issue, unable to start due to other upstream services, or public ports are already taken
 
 * If a GPU service is unhealthy, the typical cause is an unhealthy   Nvidia environment. Pinpoint the misconfiguration through the following progression:
   * `docker run hello-world` reports a message <-- tests Docker installation
