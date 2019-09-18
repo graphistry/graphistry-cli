@@ -50,7 +50,7 @@ The Graphistry client runs in standard browser configurations:
 ***Recommended***: Chrome from last 2 years on a device from the last 4 years and a 1MB+/s network connection
 
 
-## Server Software: Cloud, OS, Docker, Avoiding Root Users
+## Server Software: Hosted, Cloud, Virtualization, OS, Docker, Avoiding Root Users
 
 Graphistry is modern container software and thus can be flexibly deployed. You can run via graphistry.com, on-prem, prebuilt via your cloud provider's marketplace, and self-automated in your cloud (Amazon EC2, Google GCP, and Microsoft Azure). 
 
@@ -93,9 +93,13 @@ See the hardware provisioning section to pick the right configuration for you.
 
 Please contact for discussion of multi-GPU scenarios.
 
+### Virtualization
+
+Graphistry works with Nutanix and likely other NGC/RAPIDS-capable virtualization environments. Please contact our team for further information.
+
 ### OS & Docker
 
-Graphistry runs preconfigured with a point-and-click launch on Amazon Marketplace. 
+Graphistry runs preconfigured with a point-and-click launch on Amazon Marketplace and Azure Marketplace and prebuilt images for the same. 
 
 Graphistry regularly runs on:
 
