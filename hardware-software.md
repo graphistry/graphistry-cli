@@ -95,7 +95,7 @@ Please contact for discussion of multi-GPU scenarios.
 
 ### Virtualization
 
-Graphistry works with Nutanix and likely other NGC/RAPIDS-capable virtualization environments. Please contact our team for further information.
+Graphistry works with Nutanix and likely other NGC/RAPIDS-capable virtualization environments. Please contact our team for further information. The surrounding HW/SW requirements still apply.
 
 ### OS & Docker
 
