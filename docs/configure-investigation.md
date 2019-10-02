@@ -1,11 +1,11 @@
 # Configure Investigations
 
-Many Graphistry investigation configurations can be set through environment variables (your `.env`), in your `.pivot-db/config/config.json`, or in the admin panel.
+Many Graphistry investigation configurations can be set through environment variables (your `data/config/custom.env`), in your `config/pivot-db/config/config.json`, or in the admin panel.
 
 These control aspects including:
 * Connector auth and defaults: Splunk, Neo4j, ...
 * Layouts
-* Ontology: column->type mapping, colors, icons, sizes, ...
+* Ontology: See [main custom ontology docs](configure-ontology.md)
 * Prepopulated investigation steps
 
 After editing, restart your server, or at least `pivot`.
@@ -31,10 +31,15 @@ Via `config.json`:
 }
 ```
 
-After setting these, restart your server.
+After setting these, restart your server:
+
+* Full: `user@server.com : /var/graphistry $ docker-compose stop && docker-compose up -d`
+* Pivot: `user@server.com : /var/graphistry $ docker-compose stop nginx pivot && docker-compose up -d`
 
 
 # Schema
+
+See also: [main ontology docs](configure-ontology.md)
 
 ```
 {
