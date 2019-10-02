@@ -152,25 +152,28 @@ In scenarios such as a Graphistry cloud server accessing on-prem API servers, an
 
 ## Ontology
 
-See [settings reference page](configure-investigation.md) for full options.
+See [custom ontology extensions](configure-ontology.md) and [settings reference page](configure-investigation.md) for full options.
 
-Edit `.pivot-db/config/config.json` via the below and restart Graphistry:
+Edit `data/pivot-db/config/config.json` via the below and restart Graphistry:
 
 * Icons: Use Font Awesome 4 names ( https://fontawesome.com/v4.7.0/icons/ )
-* Colors: Use hex codes (`#vvvvvv`). To find hex values for different colors, you can use Graphistry's in-tool background color picker.
+* Colors: Use hex codes (`#vvvvvv`). To find hex values for different colors, you can use Graphistry's in-tool background color picker
+* Sizes: Use integers between 10 and 200
+* New types: specify string mappings between source column names and the types of generated nodes
 
 ```
 {
     "ontology": {
-        "products": [{
-            "myOntology1": {
+        "products": [
+            {
+                "name": "my_custom_types_1",
                 "colTypes": {
                     "src_ip": "ip",
                     "dest_ip": "ip",
                     "myEventColumnName": "myTypeTag"
                 }
             }
-        }],
+        ],
         "icons": {
             "ip": "laptop",
             "myTypeTag": "fighter-jet"
