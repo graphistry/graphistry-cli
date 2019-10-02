@@ -13,10 +13,10 @@ Administrators can add users, specify passwords, TLS/SSL, persist data across se
 See [user creation docs](user-creation.md)
 
 
-## Top configuration places: .env, .pivot-db/config/config.json
+## Top configuration places: data/config/custom.env, data/pivot-db/config/config.json
 
-* Graphistry is primarily configured through a `.env` file
-* Richer ontology configuration is optionally via `.pivot-db/config/config.json`. Many relevant options are [detailed in a reference page](configure-investigation.md).
+* Graphistry is primarily configured through file `data/config/custom.env`
+* Richer ontology configuration is optionally via `data/pivot-db/config/config.json`. Many relevant options are [detailed in a reference page](configure-investigation.md).
 
 Between edits, restart one or all Graphistry services: `docker-compose stop`  and `docker-compose up -d`
 
@@ -84,16 +84,16 @@ Optionally, you can configure Graphistry to use database connectors. Graphistry 
 
 ### Get started
 
-1. Uncomment and edit lines of `.env` corresponding to your connector and restart Graphistry:
+1. Edit lines of `data/config/custom.env` corresponding to your connector and restart Graphistry (see `.env` for commented out examples):
 
 ```
-ES_HOST...
-SPLUNK...
+ES_HOST=...
+SPLUNK_HOST=...
 ```
 
 2. Restart `graphistry`, or at least the `pivot` service:
 
-`docker-compose restart` or `docker-compose restart pivot`
+`docker-compose stop && docker-compose up -d` or `docker-compose stop nginx pivot && docker-compose up -d`
 
 3. Test
 
@@ -117,7 +117,7 @@ SPLUNK...
 * Record their name/pwd
 * Assign them to the role `graphistry_user` from step 1
 
-3. Configure Graphistry's `.env` with the Splunk server and user information:
+3. Configure Graphistry's `custom.env` with the Splunk server and user information:
 
 ```
 ### Required
