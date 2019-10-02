@@ -137,8 +137,17 @@ Watch your bridge's logs and your app server's logs: `docker-compose logs -f -t 
 
 ### Diagnose
 
-* Check your bridge logs 
-* Try using `curl` inside and outside of the bridge container (you may need to install via `apk`/`apt`)
+* Check your bridge server and Sraphistry server logs (see above) 
+* Try using `curl` both inside and outside of the bridge container (you may need to install via `apk`/`apt`)
+
+```
+docker run -it --rm bridge_bridge_1 /bin/sh
+root $ apk add curl
+root $ curl -u admin:changeme -k https://<my_splunk>:8089/services/search/jobs -d search="search *"
+root $ curl -u admin:changeme -k https://<my_splunk>:8089/services/search/jobs/<my_sid_here>
+root $ curl -u admin:changeme -k https://<my_splunk>:8089/services/search/jobs/
+```
+
 * It's DNS.  It's always DNS. If curl fails inside Docker but not outside:
   * Identify your host's DNS server, such as by inspecting `/etc/resolv.conf`
   * Update your bridge's `docker-compose.yml`:
