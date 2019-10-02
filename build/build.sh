@@ -13,6 +13,7 @@ docker run --rm -it -v $PWD/..:/source jagregory/pandoc --toc -V documentclass=r
 	docs/bridge.md \
 	docs/browser.md \
 	docs/configure-investigation.md \
+	docs/configure-ontology.md \
 	docs/configure-pygraphistry.md \
 	docs/configure.md \
 	docs/debug-container-networking.md \
