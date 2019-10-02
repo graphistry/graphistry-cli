@@ -106,9 +106,10 @@ docker-compose up -d
   * [Configure main system](docs/configure.md): TLS/SSL/HTTPS, backups to disk, multiple proxy layers, and more
     * [AWS Marketplace quickstart](docs/aws_marketplace.md)
     * [Azure Marketplace quickstart](docs/azure_marketplace.md)
-  * Configure [investigations](docs/configure-investigation.md) and the [Graphistry Data Bridge](docs/bridge.md): Connectors, ontology, automations, and more
+  * Configure [investigations](docs/configure-investigation.md) and the [Graphistry Data Bridge](docs/bridge.md): Connectors,  automations, and more
   * [Configure users](docs/user-creation.md)
   * [Configure PyGraphistry and notebooks](docs/configure-pygraphistry.md)
+  * [Extend ontology with custom types](docs/configure-ontology.md)
 * Maintain
   * On unconfigured instance reboots, you may need to first run `sudo systemctl start docker`
   * [Update, backup, and migrate](docs/update-backup-migrate.md)
