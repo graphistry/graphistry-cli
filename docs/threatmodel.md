@@ -13,11 +13,12 @@ The Embedding API is out of scope for this document.
 * Connector config
 * Authored investigations + templates + visualizations
 * Notebooks
+* Logs
 
-## Role hierarchy with asset access levels (read/write)
-* Admins: DB connector config
-* Analyst team: cases/templates/notebooks
-* Network user: visualizations
+## Role hierarchy with asset access
+* Admins: DB connector config (r/w/x), logs (r/w)
+* Analyst team: connectors (r/x), cases/templates/notebooks (r/w/x), visualizations (r/w/x)
+* Network user: visualizations (r/x)
 
 ## Authentication
 * Web access: pluggable web auth (nginx/django)
@@ -29,7 +30,7 @@ The Embedding API is out of scope for this document.
 * Network user: Generated visualizations shared via web keys with any network-connected user, with options for  read-only and read+write
 
 ## Attack surfaces:
-* HW+OS: Out of scope
+* HW+OS: Out of scope (contact for data-at-rest)
 * Supply chain: Delivered binary & packaged dependencies
 * Logs
 * Web auth
@@ -47,3 +48,6 @@ The Embedding API is out of scope for this document.
 * Service runtimes are primarily in managed languagues that enforce memory isolation & additional process isolation
 * Where the app does support providing code, approach taken of either whitelisting (e.g., client query parameters), and app-level or ephemeral interpreters (vs. reusing persistent DBs)
 * HTTP activity is logged
+
+## Additional Notes
+Contact your SE about additional security configuration at the OS/HW level and ensuring system configuration (log forwarding, configuring/disabling user analytics, ...). Likewise, we are always happy to discuss security feature requests.
