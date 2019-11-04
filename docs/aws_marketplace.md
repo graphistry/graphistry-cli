@@ -7,7 +7,7 @@ Launching Graphistry in AWS Marketplace? [Get started](https://www.graphistry.co
 1. Marketplace home: Click **Continue to subscribe**, **Continue to Configuration**
     - Do not *Configure contract* as that sets an annual prepay
 2. Page **Configure this software**: 
-    - **Region:** Select an AWS region with GPUs such as US East or Oregon
+    - **Region:** Select an AWS region with GPUs such as US East or Oregon (see [AWS availability of p3.* instances](https://ec2instances.info/))
     - You may need to request capacity for your account to run GPUs
     - Do not *Configure contract* as that sets an annual prepay
     - Click **Continue to launch**
