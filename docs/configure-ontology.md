@@ -10,7 +10,12 @@ Graphistry supports out-of-the-box ontologies of common systems:
 * ElasticSearch model
 * Various vendor-specific models, such as FireEye HX/NX/iSIGHT and AWS CloudWatch
 
-## The ontology's 4 mappings
+## Define custom ontologies
+
+1. Edit `data/investigations/config/config.json` as per below
+2. Restart docker service `pivot`: `docker-compose restart pivot`
+
+## The ontology's 5 mappings
 
 The ontology defines:
 
@@ -18,7 +23,7 @@ The ontology defines:
   * Default icon: string name supported by [Font Awesome 4](https://fontawesome.com/v4.7.0/icons/), such as [user-o](https://fontawesome.com/v4.7.0/icon/user-o)
   * Default color: string hex value, such as `#F00` for red
   * Default size: number, typically between 10 and 200
-  * Node/edge title: based on column name (`{titles: {byField: ["user", "id", "pointTitle", "edgeTitle"]}}`) or mapping of type-to-column-column (`{titles: {byType: {"geo": "city", "user": "name"}}}`) 
+  * Displayed title: prioritized cascade based on entity type and available column names
 * New types:
 For the automatic table -> graph transform (aka hypergraph transform), the mapping from _table column names_ to _node entity types_.
   
