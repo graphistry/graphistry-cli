@@ -77,7 +77,6 @@ If problems persist, please reach out to your Graphistry counterparts. Additiona
 
 Optionally, you can configure Graphistry to use database connectors. Graphistry will orchestrate cross-database query generation, pushing them down through the database API, and returning the combined results to the user. This means Graphistry can reuse your existing scaleout infrastructure and make its data more accessible to your users without requiring a second copy to be maintained. Some connectors further support use of the [Graphistry data bridge](bridge.md) for proxying requests between a Graphistry cloud server and an intermediate on-prem data bridge instead of directly connecting to on-prem API servers.
 
-
 ### Security Notes 
 
 * Graphistry only needs `read only` access to the database
@@ -154,52 +153,23 @@ In scenarios such as a Graphistry cloud server accessing on-prem API servers, an
 
 ## Ontology
 
-See [custom ontology extensions](configure-ontology.md) and [settings reference page](configure-investigation.md) for full options.
+See [custom ontology extensions](configure-ontology.md) and [settings reference page](configure-investigation.md) for full options. Topics include controlling:
 
-Edit `data/pivot-db/config/config.json` via the below and restart Graphistry:
+* Map Column -> Type
+* Map Type -> color, icon, size
+* Map node/edge titles
 
-* New types: specify string mappings between source column names and the types of generated nodes
-* Icons: Use Font Awesome 4 names ( https://fontawesome.com/v4.7.0/icons/ )
-* Colors: Use hex codes (`#vvvvvv`). To find hex values for different colors, you can use Graphistry's in-tool background color picker
-* Sizes: Use integers between 10 and 200
-* Titles: For a node/edge of a given `type`, which attribute to use, otherwise, what attributes in general to use, otherwise `pointTitle`/`edgeTitle`/the ID.
+## Performance
 
-```
-{
-    "ontology": {
-        "products": [
-            {
-                "name": "my_custom_types_1",
-                "colTypes": {
-                    "src_ip": "ip",
-                    "dest_ip": "ip",
-                    "myEventColumnName": "myTypeTag"
-                }
-            }
-        ],
-        "icons": {
-            "ip": "laptop",
-            "myTypeTag": "fighter-jet"
-        },
-        "sizes": {
-            "ip": 800,
-            "myTypeTag": 100
-        },
-        "colors": {
-            "ip": "#FF0000",
-            "myTypeTag": "#000000"
-        },
-        "titles": {
-            "byType": {
-                "person": "col_Firstname",
-                "geo": "address",
-                "myType": "myCol"
-            }
-            "byField": [ "src_ip", "dest_ip", "anotherCol", "pointTitle", "edgeTitle" ]
-        }
-    }
-}
-```
+See also [deployment planning](deployment-planning.md) and [hw/sw planning](hardware-software.md). 
+
+Several common performance tunings are:
+
+* Monitoring GPU use via `nvidia-smi`-based compute/memory tools and standard CPU monitors
+* Running one Graphistry install in a server with multiple CPUs and GPUs. Graphistry automatically uses the available resources, and admins can restrict consumption via docker configurations
+* Check `LOG_LEVEL` and `GRAPHISTRY_LOG_LEVEL` (`data/config/custom.env`) is set to `INFO` or `ERROR`
+* Running multiple API servers by fronting a sticky-session load balancer (nginx, caddy) over multiple Graphistry servers
+* For especially low or high memory settings, setting `STREAMGL_NUM_WORKERS` (clustering) and `FORGE_NUM_WORKERS` (analytics) in `data/config/custom.env` and checking the result against achieved GPU+CPU performance. We recommend a number between 4-8 per GPU and 1-2 per CPU.
 
 
 TLS: Caddyfile
