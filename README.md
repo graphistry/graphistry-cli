@@ -99,7 +99,6 @@ docker-compose up -d
   * Architecture: [Deployment architecture planning guide](docs/deployment-planning.md)
   * Capacity: [Hardware/software requirements](hardware-software.md)
 * Install:
-  * 
   * [Manual Graphistry Installation](docs/manual.md) for non-marketplace / non-hosted: 
   <br>AWS BYOL, Azure BYOL, On-Prem (RHEL/Ubuntu), & Air-Gapped
 * Configure
