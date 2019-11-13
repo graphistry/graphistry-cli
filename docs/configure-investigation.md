@@ -22,7 +22,7 @@ Via `.env`:
 GRAPHISTRY_LOG_LEVEL=DEBUG
 ```
 
-Via `config.json`:
+Via `data/investigations/config/config.json`:
 ```
 {
   "log": {
@@ -158,6 +158,23 @@ See also: [main ontology docs](configure-ontology.md)
             default: {},
             arg: 'products',
             env: 'GRAPHISTRY_PRODUCTS'
+        },
+        titles: {
+            byType: {
+                doc: `JSON dictionary from entity type to field name:
+                    { "myType": "myField", ... }`,
+                format: Object,
+                default: {},
+                arg: 'titles_by_type',
+                env: 'GRAPHISTRY_TITLES_BY_TYPE'
+            },
+            byField: {
+                doc: `Array of case-sensitive titles to use, highest-priority first. If no matches, use edgeTitle, pointTitle, else the ID.`,
+                format: Array,
+                default: ['label', 'name', 'title', "Label", "Name", "Title"],
+                arg: 'titles_by_field',
+                env: 'GRAPHISTRY_TITLES_BY_FIELD'
+            }
         }
     },
     "pivotApp": {
@@ -258,6 +275,20 @@ See also: [main ontology docs](configure-ontology.md)
             "arg": "neo4j-password",
             "env": "NEO4J_PASSWORD",
             "sensitive": true
+        },
+        searchMaxTime: {
+            doc: 'Maximum time (in seconds) allowed for executing a Neo4j search query.',
+            format: Number,
+            default: 20,
+            arg: 'neo4j-search-max-time',
+            env: 'NEO4J_SEARCH_MAX_TIME'
+        },
+        metadata: {
+            doc: 'Transaction metadata',
+            format: Object,
+            default: undefined,
+            arg: 'neo4j-metadata',
+            env: 'NEO4J_METADATA'
         }
     },
     "elasticsearch": {
@@ -377,6 +408,13 @@ See also: [main ontology docs](configure-ontology.md)
             "default": 20,
             "arg": "splunk-search-max-time",
             "env": "SPLUNK_SEARCH_MAX_TIME"
+        },
+        "other": {
+            doc: 'Unsafe: Arbitrary additional paramemters to send to Splunk JavaScript SDK connector initialization',
+            format: Object,
+            default: {},
+            arg: 'splunk-other',
+            env: 'SPLUNK_OTHER'
         }
     }
 }
