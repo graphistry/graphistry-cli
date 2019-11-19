@@ -146,8 +146,10 @@ Macro variables are of two types:
       "name": "filterPost",
       "defaultValue": "head { *max }
     },
-	 ...
-```  
+    ...
+
+    ```  
+
 
 * **config**
 
@@ -155,7 +157,7 @@ Macro variables are of two types:
   
   Expands to the current value of the corresponding named configuration parameter, or throws an error if no such parameter or it is marked as sensitive
   
-  ```
+```
 {
   "id": "expand-splunk-searchhead",
   "name": "Splunk: Expand on searchhead",
@@ -165,7 +167,7 @@ Macro variables are of two types:
         "name": "filter",
         "defaultValue": "search host={ .splunk.host }"
       },
-      ...
+      ...      
 ```  
 
 
@@ -196,7 +198,7 @@ The power of new parameters comes through macros. For example, an IP search pivo
 
 File `config/pivot-db/config/config.json`:
 
-  ```
+```
 {
   "systemTemplates": {
     "pivots": [
@@ -222,7 +224,7 @@ File `config/pivot-db/config/config.json`:
 		        "isVisible": false
 		      },
 		      ...
-  ```
+```
 
 This pivot removes the need for users to know Splunk queries when doing IP searches!
 
