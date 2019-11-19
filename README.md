@@ -95,20 +95,25 @@ docker-compose up -d
 
 ## Further reading
 
-* Plan a deployment:
+* Plan a deployment
   * Architecture: [Deployment architecture planning guide](docs/deployment-planning.md)
   * Capacity: [Hardware/software requirements](hardware-software.md)
-* Install:
+* Install
   * [Manual Graphistry Installation](docs/manual.md) for non-marketplace / non-hosted: 
   <br>AWS BYOL, Azure BYOL, On-Prem (RHEL/Ubuntu), & Air-Gapped
 * Configure
-  * [Configure main system](docs/configure.md): TLS/SSL/HTTPS, backups to disk, multiple proxy layers, and more
-    * [AWS Marketplace quickstart](docs/aws_marketplace.md)
-    * [Azure Marketplace quickstart](docs/azure_marketplace.md)
-  * Configure [investigations](docs/configure-investigation.md) and the [Graphistry Data Bridge](docs/bridge.md): Connectors,  automations, and more
-  * [Configure users](docs/user-creation.md)
-  * [Configure PyGraphistry and notebooks](docs/configure-pygraphistry.md)
-  * [Extend ontology with custom types](docs/configure-ontology.md)
+  * [System settings](docs/configure.md): 
+    <br/>TLS/SSL/HTTPS, backups to disk, multiple proxy layers, and more
+      * [Add users](docs/user-creation.md)
+      * [AWS Marketplace quickstart](docs/aws_marketplace.md)
+      * [Azure Marketplace quickstart](docs/azure_marketplace.md)
+  * Content: 
+      * [Investigations (connectors)](docs/configure-investigation.md)
+      * [Ontology](docs/configure-ontology.md): Types, colors, icons, sizes, and more 
+      * [Custom pivots](docs/configure-custom-pivots.md): Streamline common investigation steps
+      * The [Graphistry Data Bridge](docs/bridge.md): Go between cloud <> on-prem
+  * [PyGraphistry and notebooks](docs/configure-pygraphistry.md)
+
 * Maintain
   * On unconfigured instance reboots, you may need to first run `sudo systemctl start docker`
   * [Update, backup, and migrate](docs/update-backup-migrate.md)

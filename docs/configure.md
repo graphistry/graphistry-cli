@@ -16,7 +16,7 @@ See [user creation docs](user-creation.md)
 ## Top configuration places: data/config/custom.env, data/pivot-db/config/config.json
 
 * Graphistry is primarily configured through file `data/config/custom.env`
-* Richer ontology configuration is optionally via `data/pivot-db/config/config.json`. Many relevant options are [detailed in a reference page](configure-investigation.md).
+* Connector, ontology, and pivot configuration is optionally via `data/pivot-db/config/config.json`. Many relevant options are [detailed in a reference page](configure-investigation.md).
 
 Between edits, restart one or all Graphistry services: `docker-compose stop`  and `docker-compose up -d`
 
@@ -158,6 +158,10 @@ See [custom ontology extensions](configure-ontology.md) and [settings reference 
 * Map Column -> Type
 * Map Type -> color, icon, size
 * Map node/edge titles
+
+## Pivots
+
+Every connector comes with a base set of pivots. See [custom pivots](configure-custom-pivots.md) for teaching Graphistry new pivots based on existing connectors and pivots.
 
 ## Performance
 
