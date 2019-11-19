@@ -3,9 +3,11 @@
 Many Graphistry investigation configurations can be set through environment variables (your `data/config/custom.env`), in your `config/pivot-db/config/config.json`, or in the admin panel.
 
 These control aspects including:
+
 * Connector auth and defaults: Splunk, Neo4j, ...
 * Layouts
 * Ontology: See [main custom ontology docs](configure-ontology.md)
+* Custom pivots: See [main custom pivot docs](configure-custom-pivots.md)
 * Prepopulated investigation steps
 
 After editing, restart your server, or at least `pivot`.
