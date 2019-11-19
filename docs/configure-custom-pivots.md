@@ -136,7 +136,7 @@ Macro variables are of two types:
 
   Example:
 
-  ```
+```
 {
   "id": "expand-splunk-ip",
   "name": "Splunk: Expand by IP",
@@ -148,7 +148,7 @@ Macro variables are of two types:
     },
     ...
 
-    ```  
+```  
 
 
 * **config**
