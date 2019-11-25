@@ -10,10 +10,14 @@ Graphistry supports out-of-the-box ontologies of common systems:
 * ElasticSearch model
 * Various vendor-specific models, such as FireEye HX/NX/iSIGHT and AWS CloudWatch
 
+See below for the list of built-in types they map to.
+
 ## Define custom ontologies
 
 1. Edit `data/investigations/config/config.json` as per below
 2. Restart docker service `pivot`: `docker-compose restart pivot`
+
+Generally, you can limit the amount of work by mapping custom column names to built-in types, and thereby reuse their preconfigured settings.
 
 ## The ontology's 5 mappings
 
@@ -39,7 +43,7 @@ Ex: For Splunk users wanting support for a new product, provide the output of
 * select all columns in the Field Selector
 * download the CSV
 
-### New types
+### Add new types
 
 For example, to create a new node type `ip`, 
 
@@ -68,7 +72,7 @@ For example, to create a new node type `ip`,
 
 ```user@server.com:/var/graphistry $ docker-compose stop pivot nginx && docker-compose up -d```
 
-### Default node/edge titles
+### Override default node/edge titles
 
 Graphistry picks the displayed title for each node and edge through the first match on the following cascade:
 
@@ -96,7 +100,7 @@ Ex:
 ```
 
 
-### New hypergraph transforms
+### Configure new columns / new hypergraph transforms
 
 The existing ontology may already have all the types you want, but a new data source may have columns that need to be mapped into it.
 
@@ -125,8 +129,44 @@ For example, to recognize `src_ip` and `dest_ip` columns as both generating `ip`
 ```
 user@server.com:/var/graphistry $ docker-compose stop pivot nginx && docker-compose up -d
 ```
-         
-         
+
+## Built-in types
+The current set of built-in types is below. Upon system start, Graphistry emits the list of `Ontology types` for your installed version. You can also add your own (see above).
+
+We recommend using built-in types when possible. Each type comes with a built-in color, icon, size, and mappings from common data sources to it. This saves you work now, and as more connectors become supported and new features are added, you will automatically benefit from them in the future as well.
+
+```
+[
+    "actor", "agent", "alert", "amazon", "amex", "arn", "asn", "availabilityzone", 
+    "baidu", "bucket", 
+    "cidr", "city", "cloud", "cny", "code", "container", "continent", "cookie", "count", "country", 
+    "direction", "discover", "domain", "domainReputation", 
+    "email", "error", "eur", "event", "extension", 
+    "facebook", "file", "filePath", "filepath", "flag", "flickr", 
+    "gateway", "gbp", "geo", "github", "google", "googleplus", "group", 
+    "hash", "hashReputation", "host", "httpMethod", "httpmethod", 
+    "id", "ils", "image", "inr", "instagram", "instance", "ip", "ipReputation", 
+    "jcb", "jpy", 
+    "key", "krw", 
+    "language", "linkedin", "log", 
+    "mac", "machine_type", "machinetype", "mastercard", "medium", "message", "money", 
+    "name", "netbios", "networkinterface", "number", 
+    "organization", "os", 
+    "packer", "path", "payload", "paypal", "phone", "pinterest", "pod", "port", "process", "program", "protocol", 
+    "qq", "quora", 
+    "reddit", "role", "rub", 
+    "score", "size", "skype", "slack", "snapchat", "state", "stripe", "subnet", 
+    "tag", "telegram", "time", "timezone", "toolkit", "try", "tumblr", "twitch", "twitter", 
+    "uri", "urifragment", "uripath", "uriquery", "url", "urlReputation", "usd", "user", "useragent", 
+    "vendor", "version", "vine", "visa", "volume", "vpc", 
+    "wechat", "weibo", "whatsapp", 
+    "xbt", 
+    "yahoo", "youtube"
+]
+```
+
+
+
 ## Testing your ontology
 
 1. Syntax errors: 
