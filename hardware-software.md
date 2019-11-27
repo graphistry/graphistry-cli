@@ -12,6 +12,9 @@ docker run --rm -it -v $PWD:/source jagregory/pandoc -s hardware-software.md -o 
 
 # Recommended Deployment Configurations: Client, Server Software, Server Hardware
 
+
+This document focused on technical requirements. See the [deployment planning article](docs/deployment-planning.md) for  broader considerations such as capacity planning.
+
 The recommended server configuration is [AWS Marketplace](./docs/aws_marketplace.md) and [Azure Marketplace](./docs/azure_marketplace.md) with instance types noted on those screens. The one-click launcher deploys a fully preconfigured instance.
 
 Graphistry Enterprise also ships as a Docker container that runs in Linux Nvidia GPU environments that are compatible with [NVIDIA RAPIDS](https://rapids.ai/) and the [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker). It is often   run in the cloud as well.
@@ -41,7 +44,7 @@ The Graphistry client runs in standard browser configurations:
 
 * **Browser**: Chrome and Firefox from the last 3 years, and users regularly report success with other browsers
 
-* **WebGL**: WebGL 1.0 is required. It is 7+ years old, so most client devices, including phones and tablets, support it: check browser settings for enabling. Graphistry runs fine on both integrated and discrete graphic cards, with especially large graphs working better on better GPUs.
+* **WebGL**: WebGL 1.0 is required. It is 8+ years old and browsers support non-GPU software rendering, so most client devices, including phones and tablets, support it: check browser settings for enabling. Graphistry runs fine on both integrated and discrete graphic cards, with bigger graphs working better on bigger GPUs.
 
 * **Network**: 100KB+/s download speeds, and we recommend 1MB+/s if often using graphs with 100K+ nodes and edges. 
 
