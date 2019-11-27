@@ -12,7 +12,7 @@ Launching Graphistry in AWS Marketplace? [Get started](https://www.graphistry.co
     - Do not *Configure contract* as that sets an annual prepay
     - Click **Continue to launch**
 3. Page **Launch this software**:
-    - **EC2 Instance Type**: Pick p3.2xlarge (1 V100 GPU) or larger as Graphistry/RAPIDS require a Pascal or later GPU
+    - **EC2 Instance Type**: Pick g4dn.2xlarge+ (8 vCPU + 1 T4 GPU) / p3.2xlarge+ (8 vCPU + 1 V100 GPU) or larger as Graphistry/RAPIDS require a Pascal or later GPU. For single-user testing, you can pick g4dn.xlarge (4 vCPU + 1 T4 GPU).
     - **VPC Settings, Subnet Settings**: Pick something that your browser/client can access (http/https/ssh) and can speak to your DB
     - **Key Pair Settings**: Reuse or create a Key Pair so you can SSH to the commandline for administration
     - Click **Launch**
@@ -79,22 +79,22 @@ docker-compose ps
 =>
 
 ```
-               Name                             Command                  State                        Ports                  
------------------------------------------------------------------------------------------------------------------------------
-graphistry_celerybeat_1              /entrypoint bash /start-ce ...   Up             8080/tcp                                
-graphistry_celeryworker_1            /entrypoint bash /start-ce ...   Up             8080/tcp                                
-graphistry_forge-etl_1               /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
-graphistry_nexus_1                   /entrypoint /bin/sh -c bas ...   Up             8080/tcp                                
-graphistry_nginx_1                   nginx -g daemon off;             Up             0.0.0.0:443->443/tcp, 0.0.0.0:80->80/tcp
-graphistry_notebook_1                /bin/sh -c graphistry_api_ ...   Up             8080/tcp                                
-graphistry_postgres_1                docker-entrypoint.sh postgres    Up             5432/tcp, 8080/tcp                      
-graphistry_redis_1                   docker-entrypoint.sh redis ...   Up             6379/tcp, 8080/tcp                      
-graphistry_streamgl-datasets_1       /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
-graphistry_streamgl-gpu_1            /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
-graphistry_streamgl-sessions_1       /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
-graphistry_streamgl-svg-snapshot_1   /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
-graphistry_streamgl-vgraph-etl_1     /tini -- /entrypoints/fast ...   Up (healthy)   8080/tcp                                
-graphistry_streamgl-viz_1            /tini -- /entrypoints/stre ...   Up             8080/tcp   
+            Name                           Command                   State                              Ports                       
+------------------------------------------------------------------------------------------------------------------------------------
+compose_caddy_1                 /bin/parent caddy --conf / ...   Up               2015/tcp, 0.0.0.0:443->443/tcp, 0.0.0.0:80->80/tcp
+compose_forge-etl-python_1      /tini -- /entrypoints/etl- ...   Up (unhealthy)   8080/tcp                                          
+compose_forge-etl_1             /tini -- /entrypoints/pm2. ...   Up (healthy)     8080/tcp                                          
+compose_nexus_1                 /entrypoint /bin/bash -c b ...   Up               8000/tcp                                          
+compose_nginx_1                 nginx -g daemon off;             Up               80/tcp, 8080/tcp                                  
+compose_notebook_1              /tini -g -- /bin/bash -c s ...   Up               8080/tcp                                          
+compose_pivot_1                 /tini -- /entrypoints/stre ...   Up (healthy)     8080/tcp                                          
+compose_postgres_1              docker-entrypoint.sh postgres    Up               5432/tcp, 8080/tcp                                
+compose_redis_1                 docker-entrypoint.sh redis ...   Up               6379/tcp, 8080/tcp                                
+compose_streamgl-gpu_1          /tini -- /entrypoints/fast ...   Up (healthy)     8080/tcp                                          
+compose_streamgl-sessions_1     /tini -- /entrypoints/fast ...   Up (healthy)     8080/tcp                                          
+compose_streamgl-vgraph-etl_1   /tini -- /entrypoints/fast ...   Up (healthy)     8080/tcp                                          
+compose_streamgl-viz_1          /tini -- /entrypoints/stre ...   Up               8080/tcp   
+ 
 ```
 
 *Note*: Precise set of containers changes across versions
@@ -110,12 +110,13 @@ By default, Jupyter users do not have `sudo`, restricting them to user-level ins
 
 **Admin:**
 
-Note that `sudo` is unnecessary:
+Note that `sudo` is unnecessary within the container:
 
 ```
 ubuntu@ip-172-31-0-38:~/graphistry$ docker exec -it -u root graphistry_notebook_1 bash
 root@d4afa8b7ced5:/home/graphistry# apt update 
 root@d4afa8b7ced5:/home/graphistry# apt install golang
+root@d4afa8b7ced5:/home/graphistry# source activate rapids && conda install pyarrow
 ```
 
 **User:**
