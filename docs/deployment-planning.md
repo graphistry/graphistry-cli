@@ -97,7 +97,7 @@ Understanding Graphistry's architecture may help you make your deployment archit
   - Jupyter is installed as part of Graphistry Core
   - External notebooks may also be used via Graphistry API
 
-# 4. Planning for Multi-Year and RAPIDS Scaleout
+## 4. Planning for Multi-Year and RAPIDS Scaleout
 
 Graphistry helped start and integrates the growing RAPIDS GPU computing ecosystem. Many Graphistry deployments work fine with only Graphistry on one GPU and using its connectors to CPU infrastructure, and horizontally or vertically scaling as the number of analysts increases. However, as RAPIDS matures and is able to do more, the new usage modes benefit from a different kind of planning.
 
