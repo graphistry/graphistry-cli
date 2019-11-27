@@ -69,7 +69,8 @@ You can access Graphistry as an account at Graphistry Cloud (graphistry.com):
 
 *Tested AWS Instances*:
 
-* P3.2+ ***Recommended for testing and initial workloads***
+* G4DN.xlarge ***Recommended for testing and single user***
+* G4DN.2xlarge+ / P3.2+ ***Recommended for team use***
 
 AWS support includes Marketplace, prebuilt AMIs / BYOL, and from-source automation
 Pricing: http://ec2instances.info ($1.4K+/mo at time of writing)
