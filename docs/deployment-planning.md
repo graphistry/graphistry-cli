@@ -2,7 +2,7 @@
 
 You can architect your deployment based on usage mode and environment constraints. We recommend starting with AWS/Azure Marketplace for most projects.
 
-The following documents describe **common Graphistry configurations**, examples of **which configuration may make sense for you**, and **Graphistry's components**.
+The following documents describe **common Graphistry configurations**, examples of **which configuration may make sense for you**, **Graphistry's components**, and **planning for multi-year and RAPIDS scaleout**.
 
 Related:
 
@@ -97,4 +97,8 @@ Understanding Graphistry's architecture may help you make your deployment archit
   - Jupyter is installed as part of Graphistry Core
   - External notebooks may also be used via Graphistry API
 
-# 
+# 4. Planning for Multi-Year and RAPIDS Scaleout
+
+Graphistry helped start and integrates the growing RAPIDS GPU computing ecosystem. Many Graphistry deployments work fine with only Graphistry on one GPU and using its connectors to CPU infrastructure, and horizontally or vertically scaling as the number of analysts increases. However, as RAPIDS matures and is able to do more, the new usage modes benefit from a different kind of planning.
+
+RAPIDS is increasingly able to connect to any data source, including flatfiles, and support multi-GPU + multi-node compute over them. Instead of planning in terms of the number of concurrent analyst sessions as in standard Graphistry, it becomes useful to consider the total raw data size or the size of the typical data extract. GPUs work best when all the data fits in GPU memory, or for larger datasets, when big network connections or multiple smaller ones are made available. It is still the early days of RAPIDS, so we recommend discussing with a member of our team.
