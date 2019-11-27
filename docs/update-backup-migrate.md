@@ -87,19 +87,44 @@ The rough recommended sequence is:
 
 An alternative approach that prioritizes integrity over uptime is to stop the old server at the beginning of the sequence.
 
-#### migrate.sh
+#### migrate.sh: Work across distinct servers
 
-Example: Migrate from AWS Marketplace instance `old.site.ngo` to `new.site.ngo`, with both using the same `key.pem`:
+
+Example: `migrate.sh` to go from AWS Marketplace instance `old.site.ngo` to `new.site.ngo`, with both using the same `key.pem`:
+
+1. Launch the new server to initialize Postgres
+
+2. From the new server, run 
 
 ```
 ubuntu@new.site.ngo:~/graphistry$ KEY="~/.ssh/key.pem" FROM=ubuntu@old.site.ngo TO=ubuntu@new.site.ngo ./etc/scripts/migrate.sh
 ```
 
-Example: Migrate between two instances on the same box:
+3. The script will start by testing the remote access; address ssh key sharing as need.
+
+
+4. Upon success, test the new server, stop and archive the old one, and update the DNS for your users. If on AWS, see also the `update-dns.sh` script
+
+
+#### migrate-local.sh: Work on the same server
+
+Example: `migrate-local.sh` to add a new Graphistry version to an existing Graphistry server
+
+1. Launch the new Docker instance to initialize Postgres. The caddy/nginx services will likely fail due to the web ports being already claimed: that is OK.
+
+2.  From the new Docker instance folder, run
 
 ```
-ubuntu@site.ngo:~/graphistry$ KEY="~/.ssh/key.pem" FROM=ubuntu@old.site.ngo FROM_PATH="/home/old/graphistry" TO=ubuntu@site.ngo TO_PATH="/home/new/graphistry" ./etc/scripts/migrate.sh
+ubuntu@site.ngo:~/graphistry_new$ FROM_PATH="/var/old_graphistry" ./etc/scripts/migrate.sh
 ```
+
+See the script header for additional options such as on `sudo` file permissions.
+
+3. Test the new system works.
+
+4. If on a memory-limited system, delete the version's docker container, volumes, images, and persisted files (`data/*`)
+
+
 
 ### 2.24 and older
 
