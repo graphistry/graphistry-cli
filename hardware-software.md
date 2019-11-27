@@ -182,3 +182,7 @@ Graphistry resiliency typically comes in multiple forms:
   * New instances (e.g., DNS switch): recommended, especially for cloud
   * Installation of a concurrent version
 Contact support staff for migration information. 
+
+### RAPIDS
+
+Graphistry RAPIDS support can be used for more than investigation visualization and automation. See the deploy planning docs for [how to think about RAPIDS and GPUs as core compute infrastructure](docs/deployment-planning.md#4-planning-for-multi-year-and-rapids-scaleout).
