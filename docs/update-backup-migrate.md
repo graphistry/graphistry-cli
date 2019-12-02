@@ -71,7 +71,7 @@ In practice, we recommend increasing service uptime and minimizing administrator
 
 ### 2.25+
 
-On your new Graphistry instance, run the `etc/scripts/migrate.sh` to copy your older instance's state into the new instance. The script is safe to run between two instances on the same or different servers.
+On your new Graphistry instance, run the `etc/scripts/migrate.sh` or `etc/scripts/migrate-local.sh` to copy your older install's state into the new install. The first script is for running between different servers and the second for different installs on the same server.
 
 #### Steps
 
