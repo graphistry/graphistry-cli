@@ -103,7 +103,7 @@ docker-compose up -d
   <br>AWS BYOL, Azure BYOL, On-Prem (RHEL/Ubuntu), & Air-Gapped
 * Configure
   * [System settings](docs/configure.md): 
-    <br/>TLS/SSL/HTTPS, backups to disk, multiple proxy layers, and more
+    <br/>TLS/SSL/HTTPS, performance, logging, backups to disk, multiple proxy layers, and more
       * [Add users](docs/user-creation.md)
       * [AWS Marketplace quickstart](docs/aws_marketplace.md)
       * [Azure Marketplace quickstart](docs/azure_marketplace.md)
