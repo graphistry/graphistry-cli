@@ -173,7 +173,11 @@ Several common performance tunings are:
 * Running one Graphistry install in a server with multiple CPUs and GPUs. Graphistry automatically uses the available resources, and admins can restrict consumption via docker configurations
 * Check `LOG_LEVEL` and `GRAPHISTRY_LOG_LEVEL` (`data/config/custom.env`) is set to `INFO` or `ERROR`
 * Running multiple API servers by fronting a sticky-session load balancer (nginx, caddy) over multiple Graphistry servers
-* For especially low or high memory settings, setting `STREAMGL_NUM_WORKERS` (clustering) and `FORGE_NUM_WORKERS` (analytics) in `data/config/custom.env` and checking the result against achieved GPU+CPU performance. We recommend a number between 4-8 per GPU and 1-2 per CPU.
+* Add environment variables to `data/config/custom.env` based on available CPU/GPU cores and memory:
+  * GPU live clustering: `STREAMGL_NUM_WORKERS`, defaults to `4`, recommend 1 per 4GB GPU 
+  * GPU/CPU analytics:`FORGE_NUM_WORKERS`, defaults to `1`, recommend 1 per 4 GB GPU
+  * CPU network streaming and limited analytics: `STREAMGL_JS_NUM_WORKERS`, defaults to `max`, recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS`
+  * CPU upload handlers: `PM2_MAX_WORKERS`, defaults to `max`, recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS`
 
 
 TLS: Caddyfile
