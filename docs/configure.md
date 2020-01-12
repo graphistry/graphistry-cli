@@ -176,7 +176,7 @@ Several common performance tunings are:
 * Add environment variables to `data/config/custom.env` based on available CPU/GPU cores and memory:
   * GPU live clustering: `STREAMGL_NUM_WORKERS`, defaults to `4`, recommend 1 per 4GB GPU 
   * GPU/CPU analytics:`FORGE_NUM_WORKERS`, defaults to `1`, recommend 1 per 4 GB GPU
-  * CPU network streaming and limited analytics: `STREAMGL_JS_NUM_WORKERS`, defaults to `max`, recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS`
+  * CPU network streaming and limited analytics: `STREAMGL_CPU_NUM_WORKERS`, defaults to `max`, recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS` (GPU sibling)
   * CPU upload handlers: `PM2_MAX_WORKERS`, defaults to `max`, recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS`
 
 
