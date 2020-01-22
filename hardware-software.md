@@ -31,7 +31,7 @@ Graphistry Enterprise also ships as a Docker container that runs in Linux Nvidia
 * **Client**: Chrome/Firefox from the last 3 years, WebGL enabled (1.0+), and 100KB/s download ability
 * **Server**: 
 - Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), 150GB+ disk, and 1+ Nvidia GPUs (Pascal onwards for [NVIDIA RAPIDS](https://rapids.ai/)) with 4+ GB RAM each (1+ GB per concurrent user)
-- Recommended: Ubuntu 18.04 LTS, 4+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Volta, RTX, ...) with 12+GB GPU RAM
+- Recommended: Ubuntu 18.04 LTS, 8+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Tesla, Turing, Volta, RTX, ...) with 12+GB GPU RAM
 - CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) 
 - [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker) set as default runtime for [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+)
  
@@ -134,7 +134,9 @@ We recommend using backed-up network attached storage for persisting visualizati
 Graphistry utilization increases with the number of concurrent visualizations and the sizes of their datasets. 
 Most teams will only have a few concurrent users and a few concurrent sessions per user. So, one primary server, and one spillover or dev server, gets a team far.
 
-For teams doing single-purpose multi-year purchases, we generally recommend more GPUs and more memory: As Graphistry adds further scaling features, users will be able to upload more data and burst to more devices. 
+For teams doing single-purpose multi-year purchases, we generally recommend more GPUs and more memory: As Graphistry adds further scaling features, users will be able to upload more data and burst to more devices.
+
+Developer systems should match the minimum requirements, though GPU memory can go down to 2GB (recommended: 4GB+).
 
 
 ### Network
@@ -147,19 +149,23 @@ A Graphistry server must support 1MB+/s per expected concurrent user. A moderate
 
 ### GPUs & GPU RAM
 
-Graphistry requires [NVIDIA RAPIDS](https://rapids.ai/)-compatible  GPUs. The following GPUs, Pascal and later, are known to work with Graphistry:
+Graphistry requires [NVIDIA RAPIDS](https://rapids.ai/)-compatible  GPUs. The following GPUs, Pascal and later (Pascal, Tesla, Turing, Volta, RTX) are known to work with Graphistry:
 
 * P100, V100, RTX
 * ... Found both in DGX and DGX2
 
-The GPU should provide 1+ GB of memory per concurrent user. At 4GB of GPU RAM is required, and 12GB+ is recommended. 
+The GPU should provide 1+ GB of memory per concurrent user. At 4GB of GPU RAM is required, and 12GB+ is recommended. For help evaluating GPUs, we recommend reaching out to the Graphistry team or the [RAPIDS.ai community](https://rapids.ai/community.html).
 
 ### CPU Cores & CPU RAM
 
 CPU cores & CPU RAM should be provisioned in proportion to the number of GPUs and users:
 
-* CPU Cores: We recommend 4-6 x86 CPU cores per GPU
-* CPU RAM: We recommend 6 GB base memory and at least 16 GB total memory for a single GPU system. For balanced scaling, 3 GB per concurrent user or 3X the GPU RAM.
+* CPU Cores: 
+  * Minimum: 4
+  * Recommended: 8+, with 4-8 x86 CPU cores per GPU
+* CPU RAM: 
+  * Minimum: 16GB
+  * Recommended: 16GB + 2-3X GPU RAM or 1-3 GB per concurrent user
 
 
 ### Multi-GPU, Multi-Node, and Multi-Tenancy
