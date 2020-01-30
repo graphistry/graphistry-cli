@@ -140,6 +140,57 @@ SPLUNK_HOST=...
 
 4. Restart and test the connector as per above. You can test the underlying Splunk API configuration by running `https://splunk.host.name.here:8089/services/search/jobs/export  -d search="search * | head 3" -d output_mode=csv` from your local Splunk server and your Graphistry server.
 
+### Example: Neo4j
+
+1. Configure Graphistry's `data/pivot-db/config/config.json` with the Neo4j server and user information:
+
+```
+{
+    ...
+    {
+      "neo4j": {
+        "user": "neo4j",
+        "password": "myneo4juser",
+        "bolt": "bolt://my.neo4j.com:4687"
+    }
+    ...
+}
+```
+
+For faster start, or to be explicit about schema, or avoid start issues, you may choose to skip schema inference and optionally provide your own:
+
+```
+{
+    ...
+    "neo4j": {
+        "user": "neo4j",
+        "password": "myneo4juser",
+        "bolt": "bolt://my.neo4j.com:4687",
+        "searchMaxTime": 5000,
+        "schema": {
+            "inferSchema": true,
+            "labelProperties": {
+                "MyLabel1": [ "my_field_1", "my_field_2" ],
+                "MyLabel2": [ "my_field_1", "my_field_3" ],
+                "MyLabel3": [ ]
+            },
+            "relationshipProperties": {
+                "MY_RELN_1": [ "my_field_4" ],
+                "MY_RELN_2": []
+            },
+            "defaultTimeIndex": {
+                "nodeProperties": ["my_field2"]
+            }
+        }
+    }
+    ...
+}
+```
+
+
+2. Restart and test the connector as per above. In-tool, you can test the connection status for the connector panel by clicking the 'check status' button for the Neo4j connector. If there is an error, you can further test your Neo4j database network connectivity by trying a Graphistry Jupyter notebook demo for Neo4j to connect to Neo4j from the notebook.
+
+
 ### Data bridge
 
 In scenarios such as a Graphistry cloud server accessing on-prem API servers, an intermediate on-prem data bridge may be necessary. You can mix bridged and direct (default) connectors in the same Graphistry server. Learn more about the [Graphistry data bridge](bridge.md).
