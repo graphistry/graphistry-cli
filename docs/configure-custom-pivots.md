@@ -191,7 +191,7 @@ You can add new UI parameters as well. For example, you can create a new pivot t
       ...
 ``` 
 
-## Example: Combining new parameters with macros
+## Example: Splunk - Combining new parameters with macros
 
 The power of new parameters comes through macros. For example, an IP search pivot can be reduced to a single user-visible parameter:
 
@@ -229,3 +229,36 @@ File `config/pivot-db/config/config.json`:
 This pivot removes the need for users to know Splunk queries when doing IP searches!
 
 
+## Example - Neo4j - Combining new parameters with macros
+
+The following example reuses the Neo4j `search-neo4j` (Cypher query) pivot, where instead of forcing users to write raw Cypher queries for a common domain name lookup, they can just use a new `Domain` text entry button. Note the creation of a new input (`domain`) and the underlying `query` is set to `"isVisible": "false"` and uses the macro `{ *domain }`.
+
+```
+{
+  "systemTemplates": {
+    "pivots": [
+            {
+                "id": "amass-domain-to-asn",
+                "name": "Amass: Domain->ASNs",
+                "template": "search-neo4j-neo4j-connector",
+                "parameters": [
+                    {
+                        "name": "domain",
+                        "inputType": "text",
+                        "label": "Domain:",
+                        "isVisible": true,
+                        "defaultValue": "site.com"
+                    },
+                    {
+                        "name": "query",
+                        "isVisible": false,
+                        "defaultValue": "MATCH (a)-[r:DOMAIN { domain: \"{ *domain }\" }]-(b) RETURN a, r, b"
+                    },
+                    {
+                        name: "max",
+                        defaultValue: 2000
+                    }
+                ]
+            },
+	    ...
+```	    
