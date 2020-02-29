@@ -2,6 +2,8 @@
 
 Investigation templates bring a lightweight form of automation to investigations. They work just like regular investigations, except they add a few key features that, combined with existing investigation features, unlock useful workflows.
 
+For even friendlier templates that analysts are more comfortable tweaking, consider replacing individual pivots [custom pivots](configure-custom-pivots.md). 
+
 **Contents**
 1. Sample workflows
 1. Create a template
