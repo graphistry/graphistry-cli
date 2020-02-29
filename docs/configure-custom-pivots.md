@@ -2,7 +2,7 @@
 
 Graphistry supports creating new pivots. Adding custom pivots simplifies accessing new data sources and taking common actions. We strongly recommend leveraging custom pivots to simplify use for new and busy users!
 
-The pivot system is constantly improving, so if you have requests or challenges, please do not hesitate to reach out.
+The pivot system is constantly improving, so if you have requests or challenges, please do not hesitate to reach out. Combine custom pivots into sequences by [creating investigation templates](templates.md) from directly within the UI.
 
 ## Concepts and architecture
 
