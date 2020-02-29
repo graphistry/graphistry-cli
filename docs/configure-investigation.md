@@ -12,7 +12,7 @@ These control aspects including:
 
 After editing, restart your server, or at least `pivot`.
 
-For broader configuration information, see the [main configuration docs](configure.md).
+For broader configuration information, see the [main configuration docs](configure.md). Create [custom investigation templates](templates.md) directly from within the UI.
 
 # Example
 
