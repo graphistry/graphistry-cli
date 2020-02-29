@@ -108,9 +108,10 @@ docker-compose up -d
       * [AWS Marketplace quickstart](docs/aws_marketplace.md)
       * [Azure Marketplace quickstart](docs/azure_marketplace.md)
   * Content: 
-      * [Investigations (connectors)](docs/configure-investigation.md)
-      * [Ontology](docs/configure-ontology.md): Types, colors, icons, sizes, and more 
-      * [Custom pivots](docs/configure-custom-pivots.md): Streamline common investigation steps
+      * [Investigations connectors](docs/configure-investigation.md): Splunk, Neo4j, and more
+      * [Investigation templates](docs/templates.md): Save, reuse, link, and embed workflows
+      * [Custom pivots](docs/configure-custom-pivots.md): Streamline common investigation steps with simplified UIs
+      * [Ontology](docs/configure-ontology.md): Add new types and customize colors, icons, sizes, and more 
       * The [Graphistry Data Bridge](docs/bridge.md): Go between cloud <> on-prem
   * [PyGraphistry and notebooks](docs/configure-pygraphistry.md)
 
