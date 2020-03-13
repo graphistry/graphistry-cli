@@ -7,7 +7,7 @@ You can now securely run Graphistry in your private Azure account with one click
 1. Click **create** (vs. **Start with a pre-set configuration**)
 1. Fill  most VM settings as usual: Resource group, VM Name, and User + SSH Key / Password
     - **Region**: Pick a GPU-capable region in which you have GPU quota (see below), such as East US and West US 2
-    - **Size**: Select **NC6s_v2** or **NC6s_v3** (and not v1 series of *NC6s*)
+    - **Size**: Select **NC6s_v2** or **NC6s_v3** (and *not* v1 series of *NC6s*)
     - If asked, publicly expose (for incoming connections) `http` (80), `https` (443), and `ssh` (22)
 1. Click **Review and create** and then **Create**
 1. Go to the public IP, refresh the page until it has fully loaded, create the first user (= admin) account, and start graphing!
@@ -16,6 +16,7 @@ Please [reach out](https://www.graphistry.com/support) to our team if we can hel
 
 ## Basic administration
 
+* [Security: Enable auto-TLS and restrict network access](configure-security.md)
 * [Create users](user-creation.md)
 * [Generate API keys](../README.md) for individuals without accounts
 * Turn server on-and-off in the Azure Console via **stop** and **start**
@@ -43,6 +44,7 @@ Contents:
 
 * Pick an NCv2-series or NCv3-series GPU, such as an NC6s v2, from an [Azure GPU-capable region near you](https://azure.microsoft.com/en-us/global-infrastructure/services/) 
 * Install path: `/var/graphistry`
+* If many uploads are expected, you may benefit from attaching a managed disk; contact Graphistry staff for automation scripts
 
 ### 2. Recommended configuration
 
@@ -50,7 +52,7 @@ Contents:
   * HTTP, HTTPS, and SSH
   * In restricted environments, constrain networking to a a safelist, e.g., VPN, and optional, [change logging drivers](https://docs.docker.com/config/containers/logging/configure/) to stop Graphistry from recieving maintenace logs
 * Assign a static IP or DNS entry to your Graphistry instance 
-* [Setup TLS](configure.md)
+* [Setup TLS](configure.md) and [restrict ports](configure-security.md)
 
 
 ### 3. Solve GPU availability errors

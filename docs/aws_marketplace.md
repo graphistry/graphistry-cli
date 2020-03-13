@@ -21,6 +21,7 @@ Launching Graphistry in AWS Marketplace? [Get started](https://www.graphistry.co
 
 ## Basic administration
 
+* [Security: Enable auto-TLS and restrict network access](docs/configure-security.md)
 * [Create users](user-creation.md)
 * [Generate API keys](../README.md) for individuals without accounts
 * Turn server on-and-off via AWS Console via **stop** and **start**
@@ -47,8 +48,9 @@ Contents:
  
 * [Associate your AWS instance with an Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html#using-instance-addressing-eips-associating) or a domain 
 * [Setup TLS](configure.md)
-* In restricted environments, constrain networking to a safelist, e.g., VPN, and optional, [change logging drivers](https://docs.docker.com/config/containers/logging/configure/) to stop Graphistry from recieving maintenace logs
-
+* In restricted environments, constrain networking to a safelist, e.g., VPN, and optional, [change logging drivers](https://docs.docker.com/config/containers/logging/configure/) to stop Graphistry from recieving maintenace logs. See [recommended port restrictions](configure-security.md).
+* [Setup TLS](configure.md)
+* If expecting many uploads, attach a managed disk. Contact Graphistry staff for automation assistance.
 
 ### 2. Solve GPU availability errors
 
