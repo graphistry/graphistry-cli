@@ -2,51 +2,103 @@
 
 Graphistry is largely a standard enterprise webapp and uses modern design patterns, infrastructure, tools, & frameworks.
 
-Interesting surface areas include: use of GPUs, Jupyter notebooks, and the distinctions between authenticated users (privileged analyst teams) vs. network users (shared visualization recipients.)
+Interesting surface areas include: frontend & backend (app + system), the network, exported logs, the use of GPUs, and the distinctions between authenticated users (privileged analyst teams) vs. network users (shared visualization recipients. Beyond the scope of this document is securing non-Graphistry systems, e.g., data science notebooks or your own database.
 
-Interesting infrastructure and controls include: Docker containers & networking & volumes, Nginx routing, and Django auth modules.
+Useful infrastructure controls include: your network controls (cloud and firewall), your database's security controls, and in Graphistry, the account system, the API token system, the configurable reverse proxy, Docker containers/networking/volumes, and for custom scenarios, the auth modules.
 
-The Embedding API is out of scope for this document.
+## Attacker capabilities
 
-## Assets
-* System
-* Connector config
-* Authored investigations + templates + visualizations
-* Notebooks
-* Logs
+Self-hosted Graphistry is built with standard enterprise web attackers:
 
-## Role hierarchy with asset access
-* Admins: DB connector config (r/w/x), logs (r/w)
-* Analyst team: connectors (r/x), cases/templates/notebooks (r/w/x), visualizations (r/w/x)
-* Network user: visualizations (r/x)
+* Network attackers that are unauthenticated
+* Compromised non-admin users accounts and API tokens
+
+The threat model excludes:
+
+* QoS attacks - contact for Graphistry Cloud which we manage
+* Admin takeovers at the level of the server or account system
+* Database attacks through misconfigured connectors, e.g., giving a Splunk analyst the ability to QoS attack Splunk through overly broad connector permissions
+
+## Role Hierarchy: Graphistry 1.0 vs. 2.0
+
+The 2.0 release (2019) expands from single-admin & untrusted web users to account-based:
+
+#### 1.0 (< 2019): Publishers and Viewers
+Aimed at both dedicated developer embedding scenarios and small trusted team settings where a trusted group of publishers (admins) analyzes data and publishes results to general network users.
+
+* Admins:
+  * Cases and Templates: Full - create, write, read, run
+  * Visualizations: Full - create, write, read, run, share
+* Viewers (web users):
+  * Visualizations: read, copy-on-write
+
+#### 2.0 (>= 2019): Admins, Users, and Viewers
+The 2.0 release expands authentication and authorization options for common shared enterprise analyst tool settings:
+
+* OS System admin: Full access
+* Account admin: 
+  * Full: Connector config, logs, cases, templates, visualizations, accounts, Jupyter notebook account
+  * Cases & Templates are prioritized for safe User-level access in 2020
+* User: 
+  * Visualization (owned): create, read, run, edit, share
+  * Visualization (shared): receive, read, run, copy-on-edit, share
+  * Shared Jupyter notebook account: full
+* Viewer: 
+  * Visualization (shared): receive, read, run, copy-on-edit, share
+  * Viewers are *unauthenticated*; control at level of the reverse proxy or your network
+
+
+## Assets to protect
+* OS and logs
+* System configuration, including optional database and API connectors
+* User account data
+* User API tokens
+* User-authored visualizations, investigations, and templates
+* Optional: notebooks when using the Graphistry-provided Jupyter instance
+
 
 ## Authentication
-* Web access: pluggable web auth (nginx/django)
-* OS access: owner-controlled; recommend firewall restricts to http/https/ssh
 
-## Authorization:
-* Admins: OS access secured by owner (recommend: firewall + SSH key)
-* Analyst: Web login (enabled by admin), all analysts share web-based investigations & automations & notebooks
-* Network user: Generated visualizations shared via web keys with any network-connected user, with options for  read-only and read+write
+### Web
+* TLS: Auto-TLS (LE) or custom cert
+* JWT authentication for Browser Sessions and REST API tokens
+* JWT token maps to account & role: Admin, User, Viewer (= unauthenticated)
 
-## Attack surfaces:
+### System
+
+* OS access: Owner-controlled
+
+
+## Attack surfaces
+* Supply chain: Packaged dependencies, binary delivery
 * HW+OS: Out of scope (contact for data-at-rest)
-* Supply chain: Delivered binary & packaged dependencies
-* Logs
+* Exported logs
+* Reverse proxy (Caddy, Nginx)
 * Web auth
-* Authenticated user: All web routes
+* Authenticated user: All web routes in case of a non-admin compromise
 * Authenticated user: Notebooks, which exposes notebook data volume mount and allows arbitrary code in the (restricted) notebook container
 * Network user: Access to viz service and volume mounts
-* Individual tools & frameworks, especially Docker, Nginx, NodeJS/Fastify/Express, Python, Nvidia RAPIDS, & Jupyter
+* Individual tools & frameworks, especially Docker, Caddy/Nginx, NodeJS, Python, Nvidia RAPIDS, & Jupyter
 
-## Architecture: Defense-in-depth & trust boundaries
-* Dependencies are explicitly versioned, and regularly updated based on community scan warnings (npm audit, docker, ...)
-* Software delivered via signed AWS S3 URL or cloud AMI/Marketplace
-* Config: App reads from environment variable or config mounts. Explicit schema tags sensitive values, and app respects those tags when emitting to logs or the UI.
-* Isolated docker services with configured volume mounts: Resources are physically seperated, including limiting which mounts are exposed to the services exposed to network users vs. authenticated app regions.
-* Nginx container controls routes, including enforcing auth on public routes
+## Architecture: Defense-in-depth
+* Dependencies:
+  * Explicit versioning
+  * Regular automatic scanning: npm audit, docker, ...
+  * Regular version updates
+* Delivery:
+   * Software delivered via signed AWS S3 URL or cloud AMI/Marketplace
+* Config: 
+  * Sensitive configs are marked and considered when logged
+  * App reads from environment variable or config mounts
+  * Warning: Graphistry logs are secured for levels INFO+; do not store logs in TRACE and DEBUG modes
+* Docker and GPU isolation:
+  * Provides isolation from exploits reaching the OS
+  * Audit volume mounts and GPU configuration flags for sharing preferences
+* Reverse proxy & firewalls
+  * Proxy: We use a 2 layer scheme: outward is the small and friendly Caddy system for admins (ex: TLS & sinkholes), and inner is Nginx for app control (ex: JWT enforcement)
+  * Firewall: Enterprise and cloud firewall settings are typically used to control Viewer-level access (ex: VPN-only) and System access (ex: SSH)
 * Service runtimes are primarily in managed languagues that enforce memory isolation & additional process isolation
-* Where the app does support providing code, approach taken of either whitelisting (e.g., client query parameters), and app-level or ephemeral interpreters (vs. reusing persistent DBs)
+  * Where the app does support user-generated code, the app uses conservative safelists (vs blacklists) and one-time sandboxed interpreters
 * HTTP activity is logged
 
 ## Additional Notes

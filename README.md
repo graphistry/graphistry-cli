@@ -98,12 +98,14 @@ docker-compose up -d
 * Plan a deployment
   * Architecture: [Deployment architecture planning guide](docs/deployment-planning.md)
   * Capacity: [Hardware/software requirements](hardware-software.md)
+  * Security: [Recommended hardening](docs/configure-security.md) and [threat model](docs/threatmodel.md)
 * Install
   * [Manual Graphistry Installation](docs/manual.md) for non-marketplace / non-hosted: 
   <br>AWS BYOL, Azure BYOL, On-Prem (RHEL/Ubuntu), & Air-Gapped
 * Configure
   * [System settings](docs/configure.md): 
     <br/>TLS/SSL/HTTPS, performance, logging, backups to disk, multiple proxy layers, and more
+      * [Security: Enable auto-TLS and restrict network access](docs/configure-security.md)
       * [Add users](docs/user-creation.md)
       * [AWS Marketplace quickstart](docs/aws_marketplace.md)
       * [Azure Marketplace quickstart](docs/azure_marketplace.md)
