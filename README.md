@@ -48,20 +48,23 @@ Graphistry supports advanced command-line administration via standard `docker-co
 
 ### CLI commands
 
+All likely require `sudo`. Run from where your `docker-compose.yml` file is located:  `/home/ubuntu/graphistry` (AWS), `/var/graphistry` (Azure), or `/var/graphistry/<releases>/<version>` (recommended on-prem).
+
 |  TASK	| COMMAND 	| NOTES 	|
 |--: |:---	|:---	|
 | **Install** 	| `docker load -i containers.tar` 	| Install the `containers.tar` Graphistry release from the current folder. You may need to first run `tar -xvvf my-graphistry-release.tar.gz`.	|
 | **Start <br>interactive** 	| `docker-compose up` 	| Starts Graphistry, close with ctrl-c 	|
 | **Start <br>daemon** 	| `docker-compose up -d` 	| Starts Graphistry as background process 	|
-| **Start <br>namespaced** 	| `docker-compose -p my_namespace up` 	| Starts Graphistry with a unique name (in case of multiple versions). NOTE: must modify volume names in `docker-compose.yml`. 	|
+| **Start <br>namespaced** (experimental) 	| `docker-compose -p my_namespace up` 	| Starts Graphistry with a unique name (in case of multiple versions). NOTE: must modify volume names in `docker-compose.yml`. 	|
 | **Stop** 	| `docker-compose stop` 	| Stops Graphistry 	|
 | **Restart** 	| `docker restart <CONTAINER>` 	|  	|
 |  **Status** 	| `docker-compose ps`, `docker ps`, and `docker status` 	|  Status: Uptime, healthchecks, ...	|
+| **GPU Status** | `nvidia-smi` | See GPU processes, compute/memory consumption, and driver.  Ex: `watch -n 1.5 nvidia-smi` |
 |  **API Key** 	| docker-compose exec streamgl-vgraph-etl curl "http://0.0.0.0:8080/api/internal/provision?text=MYUSERNAME" 	|  Generates API key for a developer or notebook user	|
-| **Logs** 	|  `docker logs <CONTAINER>` (or `docker exec -it <CONTAINER>` followed by `cd /var/log`) 	|  Ex: Watch all logs, starting with the 20 most recent lines:  `docker-compose logs -f -t --tail=20`	|
-| **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (including user accounts), and start fresh .  |
+| **Logs** 	|  `docker-compose logs <CONTAINER>` 	|  Ex: Watch all logs, starting with the 20 most recent lines:  `docker-compose logs -f -t --tail=20 forge-etl-python`	. You likely need to switch Docker to use the local json logging driver by  deleting the two default managed Splunk log driver options in `/etc/docker/daemon.json` and then restarting the `docker` daemon (see below). |
+| **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (including the user account dataabase!), and start fresh .  |
 | **Create Users** | Use Admin Panel (see [Create Users](docs/user-creation.md)) |
-| **Restart Docker Daemon** | `sudo systemctl restart docker` | Use when changing `/etc/docker/daemon.json`, ... |
+| **Restart Docker Daemon** | `sudo service docker restart` | Use when changing `/etc/docker/daemon.json`, ... |
 
 
 ## Manual enterprise install
