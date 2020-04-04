@@ -2,6 +2,8 @@
 
 Takes about 5-10min. See `Quick Testing` below for an expedited variant.
 
+To test your base Docker environment for GPU RAPIDS (but not docker-compose), [see the main docs](../README.md#test-your-environment-setup)
+
 ## 0. Start
 
 * Put the container in `/var/home/my_user/releases/my_release_1`: Ensures relative paths work, and good persistence hygiene across upgrades
