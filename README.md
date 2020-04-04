@@ -73,6 +73,20 @@ NOTE: Managed Graphistry instances do not require any of these steps.
 
 The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) and [Nvidia Docker](https://github.com/NVIDIA/nvidia-docker) via `Docker Compose 3`, and ships with all other dependencies built in.
 
+### Test your environment setup
+
+
+You can test your GPU environment via Graphistry's [base RAPIDS Docker image on DockerHub](https://hub.docker.com/r/graphistry/graphistry-blazing):
+
+```
+root @ host $ sudo docker run --rm -it graphistry/graphistry-blazing:latest /bin/bash
+root @ graphistry-blazing $ source activate rapids
+rapids @ graphistry-blazing $ python3
+> import cudf
+> cudf.DataFrame({'x': [2, 4, 6]})['x'].sum()
+12
+```
+
 
 ### Manual environment setup
 
