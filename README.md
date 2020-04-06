@@ -79,14 +79,12 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 You can test your GPU environment via Graphistry's [base RAPIDS Docker image on DockerHub](https://hub.docker.com/r/graphistry/graphistry-blazing):
 
 ```
-root @ host $ sudo docker run --rm -it graphistry/graphistry-blazing:v2.29.2 /bin/bash
-root @ graphistry-blazing $ source activate rapids
-rapids @ graphistry-blazing $ python3
-> import cudf
-> cudf.DataFrame({'x': [2, 4, 6]})['x'].sum()
-12
+ sudo docker run --rm -it graphistry/graphistry-blazing:v2.29.2 /bin/bash -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""
 ```
-
+=>
+```
+3
+```
 
 ### Manual environment setup
 
