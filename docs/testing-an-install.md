@@ -4,7 +4,9 @@ Takes about 5-10min. See `Quick Testing` below for an expedited variant.
 
 To test your base Docker environment for GPU RAPIDS (but not docker-compose), [see the main docs](../README.md#test-your-environment-setup)
 
-## 0. Start
+For logs throughout your session, you can run `docker-compose logs -f -t --tail=1` and `docker-compose logs -f -t --tail=1 SOME_SERVICE_NAME` to see the effects of your activities. Modify `custom.env` to increase `GRAPHISTRY_LOG_LEVEL` and `LOG_LEVEL` to `DEBUG` for increased logging, and `/etc/docker/daemon.json` to use log driver `json-file` for local logs.
+
+## 1. Start
 
 * Put the container in `/var/home/my_user/releases/my_release_1`: Ensures relative paths work, and good persistence hygiene across upgrades
 * Go time!
@@ -13,13 +15,18 @@ docker load -i containters.tar
 docker-compose up
 ```
 
-## 1. Static assets
+* Check health status via `docker ps`. Check resource consumption via `docker stats`, `nvidia-smi`, and `htop`
+* Check `data/config/custom.env` has system-local keys (ex: `STREAMGL_SECRET_KEY`) with fallback to `.env`
 
-* Go to http://graphistry
-* Expect to see something similar to http://labs.graphistry.com
-* Good way to check for TLS and container load failures
 
-## 2. Visualization of preloaded dataset 
+## 2. Basic web servers and networking
+
+* Check `caddy` and `nginx`: Go to http://graphistry/healthz via your browser or curl: should return status code`200`
+* Check `nexus` for auth, admin, docs, static resources, and API gateway: 
+  * Go to http://graphistry
+  * Should be a login page or your user dashboard
+
+## 3. GPU visual analysis of preloaded dataset 
 
 * Go to http://graphistry/graph/graph.html?dataset=Facebook
   * Can also get by point-and-clicking if URL is uncertain: http://graphistry -> `Learn More` -> (the page)
@@ -27,18 +34,19 @@ docker-compose up
   * If points do not load, or appear and freeze, likely issues with GPU init (driver) or websocket (firewall)
   * Can also be because preloaded datasets are unavailable: not provided, or externally mounted data sources
     * In this case, use ETL test, and ensure clustering runs for a few seconds (vs. just initial pageload)
-  
-## 3a. Test `/etl` and PyGraphistry
+* Check `docker-compose logs -f -t --tail=1` and `docker ps` in case config or GPU driver issues
+
+## 4a. Test `/etl` uploads, Jupyter, and the PyGraphistry client API
 
 Do via notebook if possible, else `curl`
 
-* Get API key by running from host:
+* Get API key by logging into your user's dashboard, or generating a new one using host access:
 
 ```
 docker-compose exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME
 ```
 
-* Install PyGraphistry and check recent version number (Latest: https://pypi.org/project/graphistry/)
+* Install PyGraphistry and check recent version number (Latest: https://pypi.org/project/graphistry/), or use the provided `/notebook` install:
 
 ```
 !pip install graphistry -q
@@ -60,7 +68,7 @@ df = pd.DataFrame({'s': [0,1,2], 'd': [1,2,0]})
 graphistry.bind(source='s', destination='d').plot(df)
 ```
 
-## 3b. Test `/etl` by commandline
+## 4b. Test `/etl` by commandline
 
 If you cannot do **3a**, test from the host via `curl` or `wget`:
 
@@ -114,13 +122,13 @@ curl -H "Content-type: application/json" -X POST -d @samplegraph.json https://la
   * check the GPU iteratively clusters
 
 
-## 4. Test pivot
+## 5. Test pivot
 
-### 4a. Basic
+### 5a. Basic
 * Test it loads at http://graphistry/pivot
 * Connector page only shows WHOIS and HTTP pivots (http://graphistry/pivot/connectors), and clicking them returns green
 
-### 4b. Investigation page
+### 5b. Investigation page
 
 * Starts empty at http://graphistry/pivot/home
 * Pressing `+` creates a new untitled investigations
@@ -132,31 +140,31 @@ Nodes: x y
   * Expect to see a graph with 1 event node, and 2 connected entity nodes `1` and `b`
 ```
 
-### 4c. Configurations
+### 5c. Configurations
 
-* Edit `.env` and `docker-compose.yml` as per below
+* Edit `data/config/custom.env` and `docker-compose.yml` as per below
   * Set each config in one go so you can test more quickly, vs start/stop. 
 * Run
 ```
 docker-compose stop
 docker-compose up
 ```
+165
 
-#### 4c.i Password
 
-* Edit `.env` to uncomment `PIVOT_PASSWORD=something`
-* Going to http://graphistry/pivot should now challenge for `graphistry` / `something`
-
-#### 4c.ii Persistence
+#### 4c.i Persistence
 
 * Pivot should persist to `./data` already by default, no need to do anything
 * Edit `docker-compose.yml` to uncomment `viz`'s `volume` persistence mounts for `./data`
 * Run a pivot investigation and save: should see `data/{investigation,pivot,workbook_cache,data_cache}/*.json`
 
-#### 4c.iii Splunk
+#### 4c.ii Splunk
 
-* Edit `.env` for `SPLUNK_HOST`, `SPLUNK_PORT`, `SPLUNK_USER`, `SPLUNK_KEY`
-* Run one pivot:
+* Edit `data/custom/custom.env` for `SPLUNK_HOST`, `SPLUNK_PORT`, `SPLUNK_USER`, `SPLUNK_KEY`
+* Restart the `/pivot` service: `docker-compose restart pivot`
+* In `/pivot/connectors`, the `Live Connectors` should list `Splunk`, and clicking `Status` will test logging in
+* In `Investigations and Templates`, create a new investigation:
+  * Create and run one pivot:
 ```
 Pivot: Search: Splunk
 Query: *
@@ -186,17 +194,14 @@ Steps out: 1..1
 ```  
   * Run all: Gets values for both
   
-#### 4c. ELK, VT: Later
-
 ## 5. Test TLS Certificates
 
-AWS:
-* In EC2: Allocate an Elastic IP to your instance (may be optional)
-* In Route53: Assign a domain to your IP, ex: `mytest.graphistry.com`
-* If needed, run `DOMAIN=my.site.com ./scripts/letsencrypt.sh` and `./gen_dhparam.sh`
-* Follow `docker-compose.yml` instructions to enable:
-  * In `graphistry.conf` (pointed by `docker-compose.yml`), uncomment `ssl.conf` include on last line
-* Restart, check pages load
+Cloud:
+* In EC2/Azure: Allocate an Elastic/Static IP to your instance (may be optional)
+* In Route53/DNS: Assign a domain to your IP, ex: `mytest.graphistry.com`
+* Unlikely: If needed, run `DOMAIN=my.site.com ./scripts/letsencrypt.sh` and `./gen_dhparam.sh`
+* Modify `data/config/Caddyfile` to use your domain name
+* Restart `docker-compose restart caddy`, check pages load
 * Try a notebook upload with `graphistry.register(...., protocol='https')`
 
 ## 6 Quick Testing
@@ -220,8 +225,11 @@ AWS:
   * `docker run --rm nvidia/cuda  nvidia-smi` reports available GPUs <-- tests Docker defaults
   * `docker run graphistry/cljs:1.1 npm test` reports success  <-- tests driver versioning
   * "docker run --rm grph/streamgl-gpu:`cat VERSION`-dev nvidia-smi" reports available GPUs
-
-* Pages load when logged in
+* Healthchecks
+  * ``healthz``: caddy and nginx
+  * ``streamgl/health``  
+  * ``pivot/health``
+* Pages load
   * ``site.com`` shows Graphistry homepage and is stylized <-- Static assets are functioning
   * ``site.com/graph/graph.html?dataset=Facebook`` clusters and renders a graph
     * If the page loads but the graph is empty, see above instructions for testing Nvidia environment
