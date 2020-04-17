@@ -6,9 +6,9 @@ The Graphistry ontology is a set of mappings that guide automatic visualization 
 
 Graphistry supports out-of-the-box ontologies of common systems:
 
-* Splunk CIM model
-* ElasticSearch model
-* Various vendor-specific models, such as FireEye HX/NX/iSIGHT and AWS CloudWatch
+* SIEM Models: Much of Splunk CIM, ArcSight CEF, and ElasticSearch Common Schema
+* Vendor-specific models, such as FireEye HX/NX/iSIGHT, AWS CloudWatch, and WinLog
+* Classifying IPs as internal vs. external by RFC 1918
 
 See below for the list of built-in types they map to.
 
@@ -19,9 +19,11 @@ See below for the list of built-in types they map to.
 
 Generally, you can limit the amount of work by mapping custom column names to built-in types, and thereby reuse their preconfigured settings.
 
-## The ontology's 5 mappings
+## Ontology types
 
-The ontology defines:
+### Primary
+
+Key `ontology` defines:
 
 * For each type, such as `user`:
   * Default icon: string name supported by [Font Awesome 4](https://fontawesome.com/v4.7.0/icons/), such as [user-o](https://fontawesome.com/v4.7.0/icon/user-o)
@@ -30,7 +32,11 @@ The ontology defines:
   * Displayed title: prioritized cascade based on entity type and available column names
 * New types:
 For the automatic table -> graph transform (aka hypergraph transform), the mapping from _table column names_ to _node entity types_.
-  
+
+### Secondary
+
+Additional settings exist such specific to individual layouts and connectors
+
   
 ## How to extend the ontology
 
@@ -165,6 +171,21 @@ We recommend using built-in types when possible. Each type comes with a built-in
 ]
 ```
 
+## Layouts and IPs
+
+Layouts have additional options. The most common to modify is to flag values for being "inside" in the network map layout.
+
+You can put any regular expression here:
+
+```
+
+  "layouts": {
+    "network": {
+        "ipInternalAcceptList": ['/10\.*/', '/127.0.0.1/']
+    }
+  },
+
+```
 
 
 ## Testing your ontology
