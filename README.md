@@ -11,9 +11,25 @@ This documentation cover system administration. See the **Further reading** sect
 Email, Zoom, Slack, phone, tickets -- we encourage using the [Graphistry support channel](https://www.graphistry.com/support) that works best for you. We want you and your users to succeed! 
 
 
-#### Quick launch
+#### Quick launch: Managed
 
-The fastest way to start using Graphistry is to quick launch a private preconfigured Graphistry instance from the [AWS and Azure marketplaces](https://www.graphistry.com/get-started). They run within your cloud provider account and therefore facilitate experimentation with real data. These docs will still be helpful for advanced configuration and maintenance. See [AWS launch walkthrough tutorial & videos](https://www.graphistry.com/blog/marketplace-tutorial).
+The fastest way to start using Graphistry is to quick launch a private preconfigured Graphistry instance from the [AWS and Azure marketplaces](https://www.graphistry.com/get-started). They run within your cloud provider account and therefore facilitate experimentation with real data. These docs will still be helpful for advanced configuration and maintenance. See [AWS launch walkthrough tutorial & videos](https://www.graphistry.com/blog/marketplace-tutorial). Then proceed to step 4.
+
+#### Quick launch: Manual
+
+1. Install if not already available from the folder with `containers.tar`, and likely using `sudo`:
+
+```
+/var/graphistry $ docker load -i containers.tar
+```
+
+2. Launch from the folder with `docker-compose.yml` if not already up, and likely using `sudo`:
+
+```
+/var/graphistry $ docker-compose up -d
+```
+
+3. Go to `http://localhost`
 
 
 ## Advanced administration
@@ -45,20 +61,6 @@ Graphistry supports advanced command-line administration via standard `docker-co
 | **AWS** | `ssh -i [your_key].pem ubuntu@[your_public_ip]` |
 | **Azure** | `ssh -i [your_key].pem [your_user]@[your_public_ip]` <br> `ssh [your_user]@[your_public_ip]` (pwd-based) |
 | **On-prem / BYOL** | Contact your admin |
-
-### Getting started
-
-Install if not already available from the folder with `containers.tar`, and likely with `sudo`:
-
-```
-docker load -i containers.tar
-```
-
-Launch from the folder with `docker-compose.yml`, and likely with `sudo`:
-
-```
-docker-compose up -d
-```
 
 ### CLI commands
 
