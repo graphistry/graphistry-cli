@@ -46,6 +46,20 @@ Graphistry supports advanced command-line administration via standard `docker-co
 | **Azure** | `ssh -i [your_key].pem [your_user]@[your_public_ip]` <br> `ssh [your_user]@[your_public_ip]` (pwd-based) |
 | **On-prem / BYOL** | Contact your admin |
 
+### Getting started
+
+Install if not already available from the folder with `containers.tar`, and likely with `sudo`:
+
+```
+docker load -i containers.tar
+```
+
+Launch from the folder with `docker-compose.yml`, and likely with `sudo`:
+
+```
+docker-compose up -d
+```
+
 ### CLI commands
 
 All likely require `sudo`. Run from where your `docker-compose.yml` file is located:  `/home/ubuntu/graphistry` (AWS), `/var/graphistry` (Azure), or `/var/graphistry/<releases>/<version>` (recommended on-prem).
