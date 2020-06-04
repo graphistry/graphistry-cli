@@ -225,10 +225,11 @@ Cloud:
   * `docker run --rm nvidia/cuda  nvidia-smi` reports available GPUs <-- tests Docker defaults
   * `docker run graphistry/cljs:1.1 npm test` reports success  <-- tests driver versioning
   * "docker run --rm grph/streamgl-gpu:`cat VERSION`-dev nvidia-smi" reports available GPUs
-* Healthchecks
-  * ``healthz``: caddy and nginx
+* Healthchecks (also reported via `docker ps`)
+  * ``healthz``: caddy, nginx
+  * ``ht/``: postgres, nexus
   * ``streamgl/health``  
-  * ``pivot/health``
+  * ``pivot/health``: pivot
 * Pages load
   * ``site.com`` shows Graphistry homepage and is stylized <-- Static assets are functioning
   * ``site.com/graph/graph.html?dataset=Facebook`` clusters and renders a graph
