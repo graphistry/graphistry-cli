@@ -22,16 +22,22 @@ Graphistry's built-in Jupyter server comes with a predefined `graphistry.config`
 
 ## Settings
 
+### General
 | Setting | Default | Type | Description
 |---|---|---|---|
-| `api` | 1 | `1` _JSON_ <br> `2` _protobuf_ <br>` 3` (contact: Arrow) | Upload format and wire protocol |
-| `api_key` | `None` | string | |
+| `api` | 1 | `1` _JSON_ <br> `2` _protobuf_ <br>` 3` (recommended: JWT+Arrow) | Upload format and wire protocol |
 | `certificate_validation` | `True` | boolean | Unsafe: Disable to allow ignore TLS failures such as for known-faulty CAs |
 | `client_protocol_hostname` | `None` | FQDN, including protocol, for overriding `protocol` and `hostname` for what URL is used in browsers from displaying visualizations |
-| `dataset_prefix` | `"PyGraphistry/"` | string | Prefix on upload location |
-| `hostname` | `"labs.graphistry.com"` | string | Domain (and optional path) for where to upload data and load visualizations
+| `hostname` | `"hub.graphistry.com"` | string | Domain (and optional path) for where to upload data and load visualizations
 | `protocol` | `"https"` | `"https"` or `"http"` | |
 
+### 1.0 API (DEPRECATED)
+
+Deprecated 1.0 API option (api=1, api=2)
+
+| Setting | Default | Type | Description
+| `api_key` | `None` | string | *deprecated* |
+| `dataset_prefix` | `"PyGraphistry/"` | string | *deprecated* Prefix on upload location |
 
 
 ## Usage Modes
@@ -56,7 +62,7 @@ Note: Setup of the environment lets developers and analysts skip manually config
 Global module settings can be defined via `register()`:
 
 ```
-register(key=None, server=None, protocol=None, api=None, certificate_validation=None, ...)
+register(api=3, username='...', password='...', server=None, protocol=None, api=None, certificate_validation=None, ...)
 ```
 
 See PyGraphistry docs for individual connectors such as `.bolt(...)` and `.tigergraph(...)`.
@@ -65,7 +71,7 @@ See PyGraphistry docs for individual connectors such as `.bolt(...)` and `.tiger
 
 ```
 import graphistry
-graphistry.register(key='MY_API_KEY', protocol='http', server='my.server.com')
+graphistry.register(api=3, username='...', password='...', protocol='http', server='my.server.com')
 
 g = graphistry.bolt({'server': 'bolt://...', 'auth': ('my_user', 'my_pwd')})
 
@@ -76,16 +82,22 @@ g.cypher("MATCH (a)-[b]->(c) RETURN a,b,c LIMIT 100000").plot()
 
 ### Environment variables
 
+#### General
 | Graphistry Setting | Environment Variable | Description |
 |:---|:---|:---|
-| `api_key` | `GRAPHISTRY_API_KEY` ||
 | `api_version` | `GRAPHISTRY_API_VERSION` ||
 | `certificate_validation` | `GRAPHISTRY_CERTIFICATE_VALIDATION` ||
 | `client_protocol_hostname` | `GRAPHISTRY_CLIENT_PROTOCOL_HOSTNAME` ||
-| `dataset_prefix` | `GRAPHISTRY_DATASET_PREFIX` ||
 | `hostname` | `GRAPHISTRY_HOSTNAME` ||
 | `protocol` | `GRAPHISTRY_PROTOCOL` ||
 | | `PYGRAPHISTRY_CONFIG` | Absolute path of `graphistry.config`
+
+#### 1.0 API (DEPRECATED)
+
+| Graphistry Setting | Environment Variable | Description |
+|:---|:---|:---|
+| `api_key` | `GRAPHISTRY_API_KEY` ||
+| `dataset_prefix` | `GRAPHISTRY_DATASET_PREFIX` ||
 
 There are multiple common ways to set environment variables:
 
@@ -118,10 +130,10 @@ If you are using Graphistry's built-in Jupyter server, it autoconfigures `PYGRAP
 
 ```
 import graphistry
-graphistry.register(api=2)
+graphistry.register(api=3, username='..', password='...')
 ```
 
-### Preset an API key for all system users
+### Preset a 1.0 API key for all system users
 
 Create Python-readable `/etc/graphistry/.pygraphistry`:
 ```
@@ -136,13 +148,15 @@ For Jupyter notebooks, you may want to create per-user login `.pygraphistry` fil
 
 ###  Different URLs for internal upload vs external viewing
 
+In scenarios like Graphistry running on a notebook server, you may prefer to send uploads to a local host (`http://localhost`, `http://nginx`, ...), and tell browser client viewers to use a separate, public host and subpath (`http://graphistry.site.ngo/graphistry`):
+
 ```
 import os
 import graphistry
 
 ### Internal URL: PyGraphistry app -> Graphistry Server
 GRAPHISTRY_HOSTNAME_PROTOCOL='https'
-os.environ['GRAPHISTRY_HOSTNAME'] = "10.0.0.20"
+os.environ['GRAPHISTRY_HOSTNAME'] = "localhost"
 
 ### External URL: Webpage iframe URL -> Graphistry Server
 os.environ['GRAPHISTRY_CLIENT_PROTOCOL_HOSTNAME'] = "https://graph.site.ngo/graphistry"
