@@ -33,7 +33,7 @@ Graphistry Enterprise also ships as a Docker container that runs in Linux Nvidia
 - Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), 150GB+ disk, and 1+ Nvidia GPUs (Pascal onwards for [NVIDIA RAPIDS](https://rapids.ai/)) with 4+ GB RAM each (1+ GB per concurrent user)
 - Recommended: Ubuntu 18.04 LTS, 8+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Tesla, Turing, Volta, RTX, ...) with 12+GB GPU RAM
 - CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) 
-- [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker) set as default runtime for [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+)
+- [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker) set as default runtime for [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.5+)
  
 
 ## Client
