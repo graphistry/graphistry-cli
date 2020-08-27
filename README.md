@@ -29,7 +29,10 @@ The fastest way to start using Graphistry is to quick launch a private preconfig
 /var/graphistry $ docker-compose up -d
 ```
 
-3. Go to `http://localhost`
+3. Test: Go to `http://localhost`
+
+* Try a visualization like http://localhost/graph/graph.html?dataset=Facebook&play=5000&splashAfter=false (first viz load may be slow as just-in-time code gets warmed up for each worker)
+* Create an account (first gets admin rights), and try running a prebuilt Jupyter Notebook or using an API key on your dashboard
 
 
 ## Advanced administration
@@ -123,6 +126,26 @@ tar -xvvf release.tar.gz
 docker load -i containers.tar
 docker-compose up -d
 ```
+
+
+## FAQ
+
+* Can Graphistry run locally? Yes - both air-gapped and on the same server
+
+* Can Graphistry run on OS X / Windows - Analysts can use any modern browsers on any OS and even on small devices like phones; the server requires Linux (Ubuntu, RHEL, ...) with a GPU
+
+* How do I try it out?
+  * Notebook/API users can get a free account on [Graphistry Hub](https://www.graphistry.com/get-started)
+  * You can interact with pregenerated live visualizations on the [PyGraphistry gallery](https://github.com/graphistry/pygraphistry)
+  * If you have a private sample CSV/XLS/etc., you can [spin up a private server in your AWS/Azure account](https://www.graphistry.com/get-started) and turn it off when done 
+
+* The server is slow to start, is it broken?
+  * The server may take 1-3min to start; check the health status of each service with `sudo docker ps`
+  * By default, Graphistry has 4 RAPIDS workers (service `etl-server-python`) that perform just-in-time GPU compilation, meaning the first load on each is slow
+  * ... Subsequent use of those workers are fast for new datasets (code is already compiled), and subsequent reloads of recent datasets are extra fast (cached)
+
+* Can I add extra security layers? Yes -- see the hardening section for configuring areas like TLS, and contact the team for assistance with more custom/experimental layers like SSO
+
 
 ## Further reading
 
