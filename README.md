@@ -130,7 +130,15 @@ docker-compose up -d
 
 ## FAQ
 
-* Can Graphistry run locally? Yes - both air-gapped and on the same server
+* Where are the docs? See this [GitHub repository](https://github.com/graphistry/graphistry-cli) for admin docs and [Graphistry Hub docs](http://hub.graphistry.com/docs) (or http://your_graphistry/docs) for analyst and developer docs
+
+* Can Graphistry run locally? Yes - both in air-gapped environments (e.g., headless on-prem server) and as a Linux-based analyst workstation 
+
+* Can Graphistry run in the cloud? Yes - privately via AWS/Azure marketplace or as a self-managed docker-compose system, and contact Graphistry for upcoming Graphistry-managed tiers as part of Graphistry Hub 
+
+* Do I need a GPU for Graphistry? Clients do not need a GPU, just WebGL enabled (ex: software emulation). The server requires an Nvidia GPU that is Pascal or later (T4, P100, V100, A100, RTX, ...).
+
+* Can Graphistry use multiple GPUs / nodes? Graphistry takes advantage of multiple GPUs & CPUs on the same node to handle more users (vertical scaling) and its notebook environments helper running custom user code to use multi-GPU (e.g., dask-cudf). It does not currently support horizontal scaling. For high availability, contact staff for guidance on configuration tips.   
 
 * Can Graphistry run on OS X / Windows - Analysts can use any modern browsers on any OS and even on small devices like phones; the server requires Linux (Ubuntu, RHEL, ...) with a GPU
 
