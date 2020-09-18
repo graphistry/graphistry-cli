@@ -81,7 +81,7 @@ All likely require `sudo`. Run from where your `docker-compose.yml` file is loca
 | **GPU Status** | `nvidia-smi` | See GPU processes, compute/memory consumption, and driver.  Ex: `watch -n 1.5 nvidia-smi` |
 |  **API Key** 	| docker-compose exec streamgl-vgraph-etl curl "http://0.0.0.0:8080/api/internal/provision?text=MYUSERNAME" 	|  Generates API key for a developer or notebook user	|
 | **Logs** 	|  `docker-compose logs <CONTAINER>` 	|  Ex: Watch all logs, starting with the 20 most recent lines:  `docker-compose logs -f -t --tail=20 forge-etl-python`	. You likely need to switch Docker to use the local json logging driver by  deleting the two default managed Splunk log driver options in `/etc/docker/daemon.json` and then restarting the `docker` daemon (see below). |
-| **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (including the user account dataabase!), and start fresh .  |
+| **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (including the user account database!), and start fresh .  |
 | **Create Users** | Use Admin Panel (see [Create Users](docs/user-creation.md)) |
 | **Restart Docker Daemon** | `sudo service docker restart` | Use when changing `/etc/docker/daemon.json`, ... |
 | **Jupyter shell**| `docker exec -it -u root graphistry_notebook_1 bash` | Use for admin tasks like global package installs |
