@@ -84,6 +84,7 @@ All likely require `sudo`. Run from where your `docker-compose.yml` file is loca
 | **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (including the user account dataabase!), and start fresh .  |
 | **Create Users** | Use Admin Panel (see [Create Users](docs/user-creation.md)) |
 | **Restart Docker Daemon** | `sudo service docker restart` | Use when changing `/etc/docker/daemon.json`, ... |
+| **Jupyter shell**| `docker exec -it -u root graphistry_notebook_1 bash` | Use for admin tasks like global package installs |
 
 
 ## Manual enterprise install
