@@ -107,12 +107,12 @@ Graphistry runs preconfigured with a point-and-click launch on Amazon Marketplac
 
 Graphistry regularly runs on:
 
-* Ubuntu Xenial 16.04+ LTS ***Recommended***
+* Ubuntu Xenial 16.04 LTS, Bionic 18.04 LTS ***Recommended***
 * RedHat RHEL 7.4+
 
 Both support Nvidia / Docker:
 
-* CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) 
+* CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) (CUDA 10.2+ for RAPIDS 0.16+)
 * [Nvidia Docker *native* runtime](https://github.com/NVIDIA/nvidia-docker)  (for after Docker 19.03)
 * [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+) with default runtime set as `nvidia` at time of launch
 
@@ -128,6 +128,8 @@ Graphistry can be installed and run as an unprivileged user as long as it has ac
 ### Storage
 
 We recommend using backed-up network attached storage for persisting visualizations and investigations. Data volumes are negligible in practice, e.g., < $10/mo on AWS S3.
+
+Docker application volumes consume roughly 30GB.
 
 ## Server Hardware:  Capacity Planning
 
@@ -165,7 +167,7 @@ CPU cores & CPU RAM should be provisioned in proportion to the number of GPUs an
   * Recommended: 8+, with 4-8 x86 CPU cores per GPU
 * CPU RAM: 
   * Minimum: 16GB
-  * Recommended: 16GB + 2-3X GPU RAM or 1-3 GB per concurrent user
+  * Recommended: 16GB single user and +2 GB per concurrent user
 
 
 ### Multi-GPU, Multi-Node, and Multi-Tenancy
