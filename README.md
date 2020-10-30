@@ -31,26 +31,19 @@ The fastest way to start using Graphistry is to quick launch a private preconfig
 
 3. Test: Go to `http://localhost`
 
-* Try a visualization like http://localhost/graph/graph.html?dataset=Facebook&play=5000&splashAfter=false (first viz load may be slow as just-in-time code gets warmed up for each worker)
-* Create an account (first gets admin rights), and try running a prebuilt Jupyter Notebook or using an API key on your dashboard
+* Try a visualization like http://localhost/graph/graph.html?dataset=Facebook&play=5000&splashAfter=false 
+  * **Warning**: First viz load may be slow (1min) as RAPIDS generates **just-in-time** code for each GPU worker upon first encounter
+* Create an account, and then try running a prebuilt Jupyter Notebook from the dashboard!
+  * The first account gets an admin role, upon which account self-registration closes. Admins can then invite users or open self-registration. See [User Creation](docs/user-creation.md) for more information.
 
 
 ## Advanced administration
 
-The admin guide covers:
- 
-* Deployment planning: 
-  * Architecture selection: Hosted, cloud marketplaces, cloud, on-prem, hybrid, and air-gapped
-  * Capacity planning and software requirements
-* Installation & testing
-* Configuration
-* Operation
-* Backup, maintenance, and upgrades
+This admin guide covers deployment planning, installation and testing, configuration, operation, and maintenance. See links at the bottom of the page for each.
 
+**Cloud Marketplace Admins**: Your system comes preinstalled, so you can skip those instructions. Congrats!
 
-**Cloud Marketplace Admins**: You can focus exclusively on sections on capacity planning, optional configurations, and optional maintenance, . Congrats!
-
-**Manul Install Admins**: The use of GPU computing makes administration a bit different than other software. Graphistry ships batteries-included to make operations close to what you'd expect of modern containerized software. However, this includes setup of Nvidia drivers, Docker, docker-compose, and the nvidia-docker runtime.
+**Manul Install Admins**: The use of GPU computing and docker containers is still new to many teams. Graphistry ships batteries-included to make operations close to what you'd expect of modern containerized software. However, you are still responsible for setting up the host environment for Graphistry's containers, namely, setup of Nvidia drivers, Docker,  docker-compose, and enabling GPUs in the docker daemon.
 
 
 ## Top commands
@@ -63,6 +56,7 @@ Graphistry supports advanced command-line administration via standard `docker-co
 |--: |:-- |
 | **AWS** | `ssh -i [your_key].pem ubuntu@[your_public_ip]` |
 | **Azure** | `ssh -i [your_key].pem [your_user]@[your_public_ip]` <br> `ssh [your_user]@[your_public_ip]` (pwd-based) |
+| **Google** | `gcloud compute [your_instance] ssh` |
 | **On-prem / BYOL** | Contact your admin |
 
 ### CLI commands
@@ -133,20 +127,33 @@ docker-compose up -d
 
 * Where are the docs? See this [GitHub repository](https://github.com/graphistry/graphistry-cli) for admin docs and [Graphistry Hub docs](http://hub.graphistry.com/docs) (or http://your_graphistry/docs) for analyst and developer docs
 
-* Can Graphistry run locally? Yes - both in air-gapped environments (e.g., headless on-prem server) and as a Linux-based analyst workstation 
+* Where do I get help? Whether community chat, email, tickets, a call, or even a training, [pick the most convienent option](https://www.graphistry.com/support)
 
-* Can Graphistry run in the cloud? Yes - privately via AWS/Azure marketplace or as a self-managed docker-compose system, and contact Graphistry for upcoming Graphistry-managed tiers as part of Graphistry Hub 
+* Can Graphistry run in the cloud? Yes - privately both via a [preconfigured AWS/Azure marketplace](https://www.graphistry.com/get-started) and as a self-managed docker binary. Contact our team for upcoming managed Graphistry Hub cloud tiers.
 
-* Do I need a GPU for Graphistry? Clients do not need a GPU, just WebGL enabled (ex: software emulation). The server requires an Nvidia GPU that is Pascal or later (T4, P100, V100, A100, RTX, ...).
+* Can Graphistry run privately? 
+  * On-prem, including air-gapped, as a team backend server or a Linux-based analyst workstation, via docker image
+  * Cloud, via prebuilt marketplace instance
+  * Cloud, via docker image
 
-* Can Graphistry use multiple GPUs / nodes? Graphistry takes advantage of multiple GPUs & CPUs on the same node to handle more users (vertical scaling) and its notebook environments helper running custom user code to use multi-GPU (e.g., dask-cudf). It does not currently support horizontal scaling. For high availability, contact staff for guidance on configuration tips.   
+* How do I do license management? Graphistry does not require software-managed license registration, we can just work with your procurement team on self-reported use
 
-* Can Graphistry run on OS X / Windows - Analysts can use any modern browsers on any OS and even on small devices like phones; the server requires Linux (Ubuntu, RHEL, ...) with a GPU
+* Do I need a GPU on the client? No, clients do not need a GPU. They do need WebGL enabled, such as Chrome's non-GPU software emulation mode. If some of your users are on extremely limited environments, e.g., worse than a modern phone, or you have extremely powerful GPUs you would like to share, users report great experiences with GPU VDI technologies.
+
+* Do I need a GPU on the server? Yes, the server requires an Nvidia GPU that is Pascal or later (T4, P100, V100, A100, RTX, ...). 
+
+* Can Graphistry use multiple GPUs and multiple servers? 
+  * Graphistry visualizations take advantage of multiple GPUs & CPUs on the same server to handle more users
+  * Graphistry-managed Jupyter notebooks enable users to run custom GPU code, where each user may run multi-GPU tasks (e.g., via dask-cudf and BlazingSQL)
+  * For high availability configuration and operation, contact staff for additional guidance
+  * For many-node deployment and multi-GPU visualization acceleration, contact staff for roadmap
+
+* Can I use Graphistry from OS X / Windows? Yes, analysts can use any modern browser on any modern OS such as Chrome on Windows and Firefox on OS X, and even on small devices like Android phones and Apple tablets. The server requires Linux (Ubuntu, RHEL, ...) with a GPU. A self-contained analyst workstation would be Linux based.
 
 * How do I try it out?
   * Notebook/API users can get a free account on [Graphistry Hub](https://www.graphistry.com/get-started)
-  * You can interact with pregenerated live visualizations on the [PyGraphistry gallery](https://github.com/graphistry/pygraphistry)
-  * If you have a private sample CSV/XLS/etc., you can [spin up a private server in your AWS/Azure account](https://www.graphistry.com/get-started) and turn it off when done 
+  * Interact with pregenerated live visualizations on the [PyGraphistry gallery](https://github.com/graphistry/pygraphistry)
+  * If you have a private sample CSV/XLS/etc., you can [spin up a private server in your AWS/Azure account](https://www.graphistry.com/get-started) and turn it off when done, and [our team is happy to help](https://www.graphistry.com/support)
 
 * The server is slow to start, is it broken?
   * The server may take 1-3min to start; check the health status of each service with `sudo docker ps`
