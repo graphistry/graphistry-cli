@@ -41,7 +41,7 @@ The fastest way to start using Graphistry is to quick launch a private preconfig
 
 This admin guide covers deployment planning, installation and testing, configuration, operation, and maintenance. See links at the bottom of the page for each.
 
-**Cloud Marketplace Admins**: Your system comes preinstalled, so you can skip those instructions. Congrats!
+**Cloud Marketplace Admins**: Your system comes preinstalled, so you can skip install steps and focus on customization and operation. Congrats!
 
 **Manul Install Admins**: The use of GPU computing and docker containers is still new to many teams. Graphistry ships batteries-included to make operations close to what you'd expect of modern containerized software. However, you are still responsible for setting up the host environment for Graphistry's containers, namely, setup of Nvidia drivers, Docker,  docker-compose, and enabling GPUs in the docker daemon.
 
