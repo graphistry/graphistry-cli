@@ -102,7 +102,7 @@ You can test your GPU environment via Graphistry's [base RAPIDS Docker image on 
 
 ### Manual environment setup
 
-See sample [Ubuntu 18.04 TLS](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6](./docs/rhel_7_6_setup.md) environment setup scripts for Nvidia drivers, Docker, nvidia-docker runtime, and docker-compose. 
+See sample [Ubuntu 18.04 TLS](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6](./docs/rhel_7_6_setup.md) environment setup scripts for Nvidia drivers, Docker, nvidia-docker runtime, and docker-compose. See [Testing an Install](docs/testing-an-install.md) for environment testing.
 
 Please contact Graphistry staff for environment automation options. 
 
@@ -154,6 +154,8 @@ docker-compose up -d
   * Notebook/API users can get a free account on [Graphistry Hub](https://www.graphistry.com/get-started)
   * Interact with pregenerated live visualizations on the [PyGraphistry gallery](https://github.com/graphistry/pygraphistry)
   * If you have a private sample CSV/XLS/etc., you can [spin up a private server in your AWS/Azure account](https://www.graphistry.com/get-started) and turn it off when done, and [our team is happy to help](https://www.graphistry.com/support)
+
+* How can I test if my GPU supports Graphistry and my GPU environment is setup properly? Graphistry only requires a [RAPIDS-compatible](https://www.rapids.ai) Docker environment, so you can use the community resources for that. In addition, see [Testing an Install](docs/testing-an-install.md).
 
 * The server is slow to start, is it broken?
   * The server may take 1-3min to start; check the health status of each service with `sudo docker ps`
