@@ -205,7 +205,7 @@ Cloud:
   * Restart `docker-compose restart caddy`, check pages load
 * Try a notebook upload with `graphistry.register(...., protocol='https')`
 
-## 6 Quick Testing
+## 6 Quick Testing and Test GPU
 
 * `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services
   * check `docker-compose logs`, `docker-compose logs <service>`, `docker-compose logs -f -t --tail=100 service`
@@ -218,8 +218,8 @@ Cloud:
   * unhealthy `nginx`, `nexus`, `caddy`: 
     * likely config file issue, unable to start due to other upstream services, or public ports are already taken
 
-* If a GPU service is unhealthy, the typical cause is an unhealthy Nvidia host or Nvidia container environment setup. Pinpoint the misconfiguration through the following progression:
-  * `docker run hello-world` reports a message <-- tests Docker installation
+* If a GPU service is unhealthy, the typical cause is an unhealthy Nvidia host or Nvidia container environment setup. Pinpoint the misconfiguration through the following progression, or run as part of `etc/scripts/test-gpu.sh` (Graphistry 2.33+):
+  * `docker run hello-world` reports a message <-- tests CPU Docker installation
   * `nvidia-smi` reports available GPUs  <-- tests host has a GPU configured with expected GPU driver version number
   * `docker run --gpus nvidia/cuda nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
   * `docker run --runtime=nvidia nvidia/cuda nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
@@ -227,7 +227,7 @@ Cloud:
   * "docker run --rm graphistry/graphistry-blazing:`cat VERSION`-dev nvidia-smi" reports available GPUs (public base image) <- tests Graphistry container CUDA versions are compatible with host versions
   * "docker run --rm graphistry/etl-server-python:`cat VERSION`-dev nvidia-smi" reports available GPUs (application image)
   * Repeat the docker tests, but with `cudf` execution. Ex:
-    `docker run --rm -it graphistry/etl-server-python:v2.29.2 /bin/bash -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""`
+    `docker run --rm -it --entrypoint=/bin/bash graphistry/etl-server-python:`cat VERSION` -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""` <-- tests Nvidia RAPIDS  (VERSION is your Graphistry version)
   * `docker run graphistry/cljs:1.1 npm test` reports success  <-- tests driver versioning, may be a faulty test however
 * Health checks
   * CLI: Check `docker ps` for per-service status, may take 1-2min for services to connect and warm up
