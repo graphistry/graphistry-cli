@@ -93,12 +93,15 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 You can test your GPU environment via Graphistry's [base RAPIDS Docker image on DockerHub](https://hub.docker.com/r/graphistry/graphistry-blazing):
 
 ```
- sudo docker run --rm -it graphistry/graphistry-blazing:v2.29.2 /bin/bash -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""
+docker run --rm -it --entrypoint=/bin/bash graphistry/graphistry-blazing:latest -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""
 ```
+
 =>
 ```
 3
 ```
+
+See [GPU testing](docs/testing-an-install.md#6-quick-testing-and-test-gpu) to identify individual issues.
 
 ### Manual environment setup
 
@@ -159,7 +162,8 @@ docker-compose up -d
 
 * The server is slow to start, is it broken?
   * The server may take 1-3min to start; check the health status of each service with `sudo docker ps`
-  * By default, Graphistry has 4 RAPIDS workers (service `etl-server-python`) that perform just-in-time GPU compilation, meaning the first load on each is slow
+  * By default, Graphistry has 4 RAPIDS workers (service `etl-server-python`) that perform just-in-time GPU compilation, meaning the first load on each is slow.
+  * ... System start and the first visualization load per process might be sped up by ensuring Docker is using a native diff driver (see [performance tuning](docs/performance-tuning.md))
   * ... Subsequent use of those workers are fast for new datasets (code is already compiled), and subsequent reloads of recent datasets are extra fast (cached)
 
 * Can I add extra security layers? Yes -- see the hardening section for configuring areas like TLS, and contact the team for assistance with more custom/experimental layers like SSO
