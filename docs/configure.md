@@ -216,7 +216,7 @@ Every connector comes with a base set of pivots. See [custom pivots](configure-c
 
 ## Performance
 
-See [performance tuning][performance-tuning.md]
+See [performance tuning](performance-tuning.md)
 
 TLS: Caddyfile
 --------------------
