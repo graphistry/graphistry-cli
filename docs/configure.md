@@ -216,22 +216,7 @@ Every connector comes with a base set of pivots. See [custom pivots](configure-c
 
 ## Performance
 
-See also [deployment planning](deployment-planning.md) and [hw/sw planning](hardware-software.md). 
-
-Several common performance tunings are:
-
-* Monitoring GPU use via `nvidia-smi`-based compute/memory tools and standard CPU monitors
-* Running one Graphistry install in a server with multiple CPUs and GPUs. Graphistry automatically uses the available resources, and admins can restrict consumption via docker configurations
-* Check `LOG_LEVEL` and `GRAPHISTRY_LOG_LEVEL` (`data/config/custom.env`) is set to `INFO` or `ERROR`
-* Running multiple API servers by fronting a sticky-session load balancer (nginx, caddy) over multiple Graphistry servers
-* Add environment variables to `data/config/custom.env` based on available CPU/GPU cores and memory:
-  * Default configuration aims to saturate a 1 GB (16 GB RAM) / 8 core (16 GB RAM) system
-  * GPU live clustering: `STREAMGL_NUM_WORKERS`, defaults to `4`, recommend 1 per 4GB GPU and 4 GB CPU
-  * GPU/CPU analytics:`FORGE_NUM_WORKERS`, defaults to `1`, recommend 1 per 4 GB GPU and 4 GB CPU
-  * CPU network streaming and limited analytics: `STREAMGL_CPU_NUM_WORKERS`, defaults to `max`, recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS` (GPU sibling)
-  * CPU upload handlers: `PM2_MAX_WORKERS`, defaults to `max`, recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS`
-* If oversubscription is due to too many users running clustering, decrease `GRAPH_PLAY_TIMEOUTMS` from one minute, such as 30 seconds (30000 milliseconds)
-
+See [performance tuning][performance-tuning.md]
 
 TLS: Caddyfile
 --------------------
