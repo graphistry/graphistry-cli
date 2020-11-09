@@ -68,7 +68,7 @@ All likely require `sudo`. Run from where your `docker-compose.yml` file is loca
 | **Install** 	| `docker load -i containers.tar` 	| Install the `containers.tar` Graphistry release from the current folder. You may need to first run `tar -xvvf my-graphistry-release.tar.gz`.	|
 | **Start <br>interactive** 	| `docker-compose up` 	| Starts Graphistry, close with ctrl-c 	|
 | **Start <br>daemon** 	| `docker-compose up -d` 	| Starts Graphistry as background process 	|
-| **Start <br>namespaced** (experimental) 	| `docker-compose -p my_namespace up` 	| Starts Graphistry with a unique name (in case of multiple versions). NOTE: must modify volume names in `docker-compose.yml`. 	|
+| **Start <br>namespaced (concurrent)** 	| `docker-compose -p my_unique_namespace up` 	| Starts Graphistry in a specific namespace. Enables running multiple independent instances of Graphistry. NOTE: Must modify Caddy service in `docker-compose.yml` to use non-conflicting public ports. 	|
 | **Stop** 	| `docker-compose stop` 	| Stops Graphistry 	|
 | **Restart** 	| `docker restart <CONTAINER>` 	|  	|
 |  **Status** 	| `docker-compose ps`, `docker ps`, and `docker status` 	|  Status: Uptime, healthchecks, ...	|
@@ -150,6 +150,8 @@ docker-compose up -d
   * Graphistry-managed Jupyter notebooks enable users to run custom GPU code, where each user may run multi-GPU tasks (e.g., via dask-cudf and BlazingSQL)
   * For high availability configuration and operation, contact staff for additional guidance
   * For many-node deployment and multi-GPU visualization acceleration, contact staff for roadmap
+
+* Can I run multiple instances of Graphistry? Yes, see the command section for running in an isolated namespace. This is primarily for testing and in-place upgrading. If your goal is for Graphistry to use multiple CPUs and GPUs, it already does so automatically, so you can launch as usual.
 
 * Can I use Graphistry from OS X / Windows? Yes, analysts can use any modern browser on any modern OS such as Chrome on Windows and Firefox on OS X, and even on small devices like Android phones and Apple tablets. The server requires Linux (Ubuntu, RHEL, ...) with a GPU. A self-contained analyst workstation would be Linux based.
 
