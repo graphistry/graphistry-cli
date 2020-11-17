@@ -1,8 +1,14 @@
 # Ubuntu 18.04 LTS manual configuration
 
+For latest test version of scripts, see your Graphistry release's folder `etc/scripts`.
+
+# Warning
+
 We do *not* recommend manually installing the environment dependencies. Instead, use a Graphistry-managed Cloud Marketplace instance, a prebuilt cloud image, or another partner-supplied starting point.
 
-However, sometimes a manual installation is necessary.
+However, sometimes a manual installation is necessary. Use this script as a reference. For more recent versions, check your Graphistry distribution's `etc/scripts` folder, and its links to best practices.
+
+# About
 
 The reference script below was last tested with an Azure Ubuntu 18.04 LTS  AMI on NC series. 
 
