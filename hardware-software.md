@@ -67,28 +67,33 @@ You can access Graphistry as an account at Graphistry Cloud (graphistry.com):
 
 ### Cloud
 
-*Tested AWS Instances*:
+*Supported AWS Instances*:
 
-* G4DN.xlarge ***Recommended for testing and single user***
-* G4DN.2xlarge+ / P3.2+ / P4+ ***Recommended for team use***
+* g4dn.xlarge (T4) ***Recommended for testing and single user***
+* g4dn.2xlarge+ / P3.2+ (V100) / P4+ (A100) ***Recommended for team use***
 
 AWS support includes Marketplace, prebuilt AMIs / BYOL, and from-source automation
 Pricing: http://ec2instances.info ($1.4K+/mo at time of writing)
 
-*Tested Azure Instances*:
+*Supported Azure instances*:
 
-* NC6s_v2 ***Recommended for testing and initial workloads***
-* NC6s_v3
+* NC6s_v2+ (P100) ***Recommended for testing and initial workloads***
+* NC6s_v3+ (V100)
+* ND (P40) **Not recommended**
+* NDv2 (V100)
+* Experimental: T4 and A100
 
 Azure support includes Marketplace, prebuilt VHDs / BYOL, and from-source automation
 Pricing: https://azure.microsoft.com/en-us/pricing/calculator/  ($960+/mo at time of writing)
 
 *Tested GCP Instances*:
 
-* P100 ***Recommended for testing and initial workloads***
+Use instance type `n1` and attach one of the following GPUs:
+
+* P100 ***Recommended for team use***
 * V100
-* Likely: T4
-* Likely with staff support: P4
+* T4 ***Recommended for testing and single user***
+* Experimental: A100
 
 GCP support includes BYOL; contact for automation reference scripts & roadmap details
 Pricing: https://cloud.google.com/compute/gpus-pricing ($440+/mo at time of writing)
@@ -107,14 +112,14 @@ Graphistry runs preconfigured with a point-and-click launch on Amazon Marketplac
 
 Graphistry regularly runs on:
 
-* Ubuntu Xenial 16.04 LTS, Bionic 18.04 LTS ***Recommended***
+* Ubuntu 18.04 LTS+ ***Recommended***
 * RedHat RHEL 7.4+
 
 Both support Nvidia / Docker:
 
 * CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) (CUDA 10.2+ for RAPIDS 0.16+)
 * [Nvidia Docker *native* runtime](https://github.com/NVIDIA/nvidia-docker)  (for after Docker 19.03)
-* [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.4+) with default runtime set as `nvidia` at time of launch
+* [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.6+) with default runtime set as `nvidia` at time of launch
 
 See [Ubuntu 18.04 LTS manual configuration](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6 manual configuration](./rhel_7_6_setup.md) for an example of setting up Nvidia for containerized use on Linux. Marketplace deployments come preconfigured with the latest working drivers and security patches.
 
