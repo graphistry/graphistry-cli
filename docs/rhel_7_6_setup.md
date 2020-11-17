@@ -1,11 +1,16 @@
 # Red Hat Enterprise Linux 7.6 (RHEL) manual configuration
 
+For latest test version of scripts, see your Graphistry release's folder `etc/scripts`.
+
+# Warning
+
 We do *not* recommend manually installing the environment dependencies. Instead, use a Graphistry-managed Cloud Marketplace instance, a prebuilt cloud image, or another partner-supplied starting point.
 
-However, sometimes a manual installation is necessary, or to otherwise run on RHEL instead of the provided Ubuntu AMIs. 
+However, sometimes a manual installation is necessary. Use this script as a reference. For more recent versions, check your Graphistry distribution's `etc/scripts` folder, and its links to best practices.
+
+# About
 
 The reference script below was last tested with an AWS RHEL 7.6 2019 AMI on a P3.2 (V100) and Nvidia RAPIDS 0.7. 
-
 
 * EPEL 7
 * Nvidia driver 430.40
