@@ -30,8 +30,8 @@ Graphistry Enterprise also ships as a Docker container that runs in Linux Nvidia
 
 * **Client**: Chrome/Firefox from the last 3 years, WebGL enabled (1.0+), and 100KB/s download ability
 * **Server**: 
-- Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), 150GB+ disk, and 1+ Nvidia GPUs (Pascal onwards for [NVIDIA RAPIDS](https://rapids.ai/)) with 4+ GB RAM each (1+ GB per concurrent user)
-- Recommended: Ubuntu 18.04 LTS, 8+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Tesla, Turing, Volta, RTX, ...) with 12+GB GPU RAM
+- Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), 150GB+ disk, and 1+ Nvidia GPUs (Pascal onwards for [NVIDIA RAPIDS](https://rapids.ai/)) with 4+ GB RAM each (1+ GB per concurrent user), 64 GB disk
+- Recommended: Ubuntu 18.04 LTS, 8+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Tesla, Turing, Volta, RTX, ...) with 12+GB GPU RAM and 100GB+ disk
 - CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) 
 - [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker) set as default runtime for [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.5+)
  
@@ -66,6 +66,8 @@ You can access Graphistry as an account at Graphistry Cloud (graphistry.com):
 * In alpha - contact for further information
 
 ### Cloud
+
+For all of the below, ensure ports 22, 80, 443, and 100GB+ disk
 
 *Supported AWS Instances*:
 
@@ -132,9 +134,9 @@ Graphistry can be installed and run as an unprivileged user as long as it has ac
 
 ### Storage
 
-We recommend using backed-up network attached storage for persisting visualizations and investigations. Data volumes are negligible in practice, e.g., < $10/mo on AWS S3.
+* Recommended: Network-attached storage for persisting visualizations and investigations.
 
-Docker application volumes consume roughly 30GB.
+* Recommended: 100GB+ (10-20GB for airgapped docker images + 3x for swap)
 
 ## Server Hardware:  Capacity Planning
 
@@ -158,10 +160,10 @@ A Graphistry server must support 1MB+/s per expected concurrent user. A moderate
 
 Graphistry requires [NVIDIA RAPIDS](https://rapids.ai/)-compatible  GPUs. The following GPUs, Pascal and later (Pascal, Tesla, Turing, Volta, RTX) are known to work with Graphistry:
 
-* P100, V100, RTX
+* T4, P100, V100, RTX, A100
 * ... Found both in DGX and DGX2
 
-The GPU should provide 1+ GB of memory per concurrent user. At 4GB of GPU RAM is required, and 12GB+ is recommended. For help evaluating GPUs, we recommend reaching out to the Graphistry team or the [RAPIDS.ai community](https://rapids.ai/community.html).
+The GPU should provide 1+ GB of memory per concurrent user. A minimum of 4GB of GPU RAM is required, and 12GB+ is recommended. For help evaluating GPUs, we recommend reaching out to the Graphistry team or the [RAPIDS.ai community](https://rapids.ai/community.html).
 
 ### CPU Cores & CPU RAM
 
