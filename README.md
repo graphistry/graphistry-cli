@@ -117,7 +117,7 @@ Download the latest enterprise distribution from the [enterprise release list](h
 
 If `nvidia` is already your `docker info | grep Default` runtime:
 
-```
+```bash
 ############ Install & Launch
 wget -O release.tar.gz "https://..."
 tar -xvvf release.tar.gz
@@ -169,6 +169,14 @@ docker-compose up -d
   * ... Subsequent use of those workers are fast for new datasets (code is already compiled), and subsequent reloads of recent datasets are extra fast (cached)
 
 * Can I add extra security layers? Yes -- see the hardening section for configuring areas like TLS, and contact the team for assistance with more custom/experimental layers like SSO
+
+* Can I run on another port? Yes -- modify `docker-compose.yml`'s service `caddy:`, such as for 80 to instead be 8888:
+```yml
+    ports:
+      - 8888:80
+    expose:
+      - "8888"
+```
 
 
 ## Further reading
