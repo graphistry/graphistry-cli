@@ -26,6 +26,10 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 * More advanced administrators may edit `docker-compose.yml` .  Maintenance is easier if you never edit it.
 * Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https)) and mounting your certificates via `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker)). Caddy supports LetsEncrypt with automatic renewal, custom certificates and authorities, and self-signed certificates. 
 
+## TLS
+
+We encourage everyone to use HTTPS over HTTP, especially through the automatic TLS option
+
 ### Setup free Automatic TLS
 
 Caddy supports [free automatic TLS](https://caddyserver.com/docs/automatic-https) as long as your site meets the listed conditions.  
@@ -71,6 +75,30 @@ Custom TLS setups often fail due to the certificate, OS, network, Caddy config, 
 * Test whether the containers are up and ports match via `docker-compose ps`, `curl`, and `curl` from within a docker container (so within the docker network namespace)
 
 If problems persist, please reach out to your Graphistry counterparts. Additional workarounds are possible.
+
+
+## Reverse proxy
+
+Graphistry routes all public traffic through Docker container Caddy, so you generally modify Docker settings for service `caddy:` in `docker-compose.yml` (or `data/config/custom.env`)  or Caddy settings in `data/config/Caddyfile`.
+
+### Change public port
+
+If `80` / `443` are already taken, such as when running multiple Graphistry instances on the same box, you may want to change to another port. For example, to expose public port `8888` for Graphistry's HTTP traffic instead of `80`, configure `docker-compose.yml` to map it as follows:
+
+```yml
+  caddy:
+    ...
+    expose:
+      - "8888"
+    ports:
+      - 8888:80
+```      
+
+### Reuse Graphistry reverse proxy and JWT auth as a bastion for other services
+
+You can configure the Caddy service to also reverse proxy additional services, including requiring their users to log in with Graphistry account credentials. 
+
+For an example of both public and log-required proxies, see the [graph-app-kit sample](https://github.com/graphistry/graph-app-kit/blob/master/src/caddy/full.Caddyfile).
 
 
 ## Connectors
