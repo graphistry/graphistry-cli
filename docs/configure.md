@@ -115,7 +115,7 @@ Optionally, you can configure Graphistry to use database connectors. Graphistry 
 
 1. Edit lines of `data/config/custom.env` corresponding to your connector and restart Graphistry (see `.env` for commented out examples):
 
-```
+```bash
 ES_HOST=...
 SPLUNK_HOST=...
 ```
@@ -148,11 +148,11 @@ SPLUNK_HOST=...
 
 3. Configure Graphistry's `custom.env` with the Splunk server and user information:
 
-```
+```bash
 ### Required
-#SPLUNK_HOST=splunk.acme.org
-#SPLUNK_USER=admin
-#SPLUNK_KEY=...
+SPLUNK_HOST=splunk.acme.org
+SPLUNK_USER=admin
+SPLUNK_KEY=...
 
 ### Optional
 #SPLUNK_SCHEME=https
@@ -172,24 +172,20 @@ SPLUNK_HOST=...
 
 1. Configure Graphistry's `data/pivot-db/config/config.json` with the Neo4j server and user information:
 
-```
+```json
 {
-    ...
-    {
-      "neo4j": {
+    "neo4j": {
         "user": "neo4j",
         "password": "myneo4juser",
         "bolt": "bolt://my.neo4j.com:4687"
     }
-    ...
 }
 ```
 
 For faster start, or to be explicit about schema, or avoid start issues, you may choose to skip schema inference and optionally provide your own:
 
-```
+```json
 {
-    ...
     "neo4j": {
         "user": "neo4j",
         "password": "myneo4juser",
@@ -211,7 +207,6 @@ For faster start, or to be explicit about schema, or avoid start issues, you may
             }
         }
     }
-    ...
 }
 ```
 
