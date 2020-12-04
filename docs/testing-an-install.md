@@ -205,7 +205,7 @@ Cloud:
   * Restart `docker-compose restart caddy`, check pages load
 * Try a notebook upload with `graphistry.register(...., protocol='https')`
 
-## 6 Quick Testing and Test GPU
+## 6. Quick Testing and Test GPU
 
 * `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services
   * check `docker-compose logs`, `docker-compose logs <service>`, `docker-compose logs -f -t --tail=100 service`
@@ -218,7 +218,7 @@ Cloud:
   * unhealthy `nginx`, `nexus`, `caddy`: 
     * likely config file issue, unable to start due to other upstream services, or public ports are already taken
 
-* If a GPU service is unhealthy, the typical cause is an unhealthy Nvidia host or Nvidia container environment setup. Pinpoint the misconfiguration through the following progression, or run as part of `etc/scripts/test-gpu.sh` (Graphistry 2.33+):
+* If a GPU service is unhealthy, the typical cause is an unhealthy Nvidia host or Nvidia container environment setup. Pinpoint the misconfiguration through the following progression, or run as part of `etc/scripts/test-gpu.sh` (Graphistry 2.33+). For on-prem users, your `container.tar` load will import Nvidia's official `nvidia/cuda` container used by Graphistry your version, which can aid pinpointing ecosystem issues outside of Graphistry (v2.33.20+).
   * `docker run hello-world` reports a message <-- tests CPU Docker installation
   * `nvidia-smi` reports available GPUs  <-- tests host has a GPU configured with expected GPU driver version number
   * `docker run --gpus nvidia/cuda nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
