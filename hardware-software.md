@@ -176,14 +176,20 @@ You will still need to install Nvidia drivers and Docker into the host environme
 Graphistry runs out-of-the-box without network access
 
 
-### GPUs & GPU RAM
+### GPUs, GPU RAM, GPU drivers
 
-Graphistry requires [NVIDIA RAPIDS](https://rapids.ai/)-compatible  GPUs. The following GPUs, Pascal and later (Pascal, Tesla, Turing, Volta, RTX) are known to work with Graphistry:
+Graphistry requires [NVIDIA RAPIDS](https://rapids.ai/)-compatible  GPUs. If you can make a RAPIDS Docker container work, Graphistry should also work. 
+
+The following GPUs, Pascal and later (Pascal, Tesla, Turing, Volta, RTX) are known to work with Graphistry:
 
 * T4, P100, V100, RTX, A100
-* ... Found both in DGX and DGX2
+* ... Found in DGX, DGX2, and AWS/Azure/GCP
 
-The GPU should provide 1+ GB of memory per concurrent user. A minimum of 4GB of GPU RAM is required, and 12GB+ is recommended. For help evaluating GPUs, we recommend reaching out to the Graphistry team or the [RAPIDS.ai community](https://rapids.ai/community.html).
+The GPU should provide 1+ GB of memory per concurrent user. A minimum of 4GB of GPU RAM is required, and 12GB+ is recommended. Lower is possible for development. For help evaluating GPUs, we recommend reaching out to the Graphistry team or the [RAPIDS.ai community](https://rapids.ai/community.html).
+
+RAPIDS requires specific Nvidia drivers. Graphistry releases align with [Nvidia RAPIDS.ai](https://rapids.ai/) releases, so pick drivers compatible with the RAPIDS.ai distribution from the same time period. At time of writing, this would be CUDA 10.2 -- 11.0.
+
+If also using a hypervisor, the hypervisor GPU driver should match the guest OS GPU driver, and due to vGPUs not currently supporting CUDA Unified Memory, set `RMM_ALLOCATOR=default` in Graphistry setting file `data/config/custom.env`.
 
 ### CPU Cores & CPU RAM
 
