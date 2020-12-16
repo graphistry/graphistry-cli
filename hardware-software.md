@@ -106,7 +106,15 @@ Please contact for discussion of multi-GPU scenarios.
 
 ### Virtualization
 
-Graphistry works with Nutanix and likely other NGC/RAPIDS-capable virtualization environments. Please contact our team for further information. The surrounding HW/SW requirements still apply.
+Graphistry works with VMWare, Nutanix, and likely other NGC/RAPIDS-capable virtualization environments. Please contact our team for further information. The surrounding HW/SW requirements still apply.
+
+* You will need to install the same-version Nvidia driver in both the hypervisor and guest OS, and depending on virtualization approach, managed Nvidia vGPU licensing
+
+* Nvidia vGPU virtualization does not currently support CUDA Unified Memory, so configure Graphistry setting `RMM_ALLOCATOR=default` in `data/config/custom.env`
+
+* You may additionally consider also using separate VDI servers for accelerating the frontend (WebGL) experience as well, if you have excess GPU capacity on hardware better than available on client devices 
+
+Running Graphistry in hypervisors is less common, so we recommend contacting staff for this path.
 
 ### OS & Docker
 
@@ -115,13 +123,14 @@ Graphistry runs preconfigured with a point-and-click launch on Amazon Marketplac
 Graphistry regularly runs on:
 
 * Ubuntu 18.04 LTS+ ***Recommended***
-* RedHat RHEL 7.4+
+* Red Hat (RHEL) 7.x, 8.x: Contact staff for reference Docker environment setup scripts (via Centos 7)
 
 Both support Nvidia / Docker:
 
 * CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) (CUDA 10.2+ for RAPIDS 0.16+)
 * [Nvidia Docker *native* runtime](https://github.com/NVIDIA/nvidia-docker)  (for after Docker 19.03)
-* [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.6+) with default runtime set as `nvidia` at time of launch
+* [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.6+) 
+  * Ensure the default Docker runtime set as `nvidia` at time of launch (check: `docker info | grep -i runtime` => default `nvidia`)
 
 See [Ubuntu 18.04 LTS manual configuration](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6 manual configuration](./rhel_7_6_setup.md) for an example of setting up Nvidia for containerized use on Linux. Marketplace deployments come preconfigured with the latest working drivers and security patches.
 
@@ -155,6 +164,17 @@ A Graphistry server must support 1MB+/s per expected concurrent user. A moderate
 * The server should allow http/https access by users and ssh by the administrator.
 * TLS certificates can be installed (nginx)
 * The Graphistry server may invoke various database connectors: Those systems should enable firewall and credential access that authorizes authenticated remote invocations from the Graphistry server.
+
+#### Air-gapped installation
+
+Graphistry simplifies air-gapped installation. It ships as self-contained Docker image tarballs. 
+
+You will still need to install Nvidia drivers and Docker into the host environment. For Red Hat 8.x, contact staff for reference scripts for generating offline installers for these dependencies.
+
+#### Air-gapped operation
+
+Graphistry runs out-of-the-box without network access
+
 
 ### GPUs & GPU RAM
 
