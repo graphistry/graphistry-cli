@@ -229,6 +229,7 @@ Cloud:
   * Repeat the docker tests, but with `cudf` execution. Ex:
     `docker run --rm -it --entrypoint=/bin/bash graphistry/etl-server-python:`cat VERSION` -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""` <-- tests Nvidia RAPIDS  (VERSION is your Graphistry version)
   * `docker run graphistry/cljs:1.1 npm test` reports success  <-- tests driver versioning, may be a faulty test however
+  * If running in a hypervisor, ensure `RMM_ALLOCATOR=default` in `data/config/custom.env`, and check the startup logs of `docker-compose logs -f -t --tail=1000 forge-etl-python` that `cudf` / `cupy` / `BlazingSQL` are respecting that setting (`LOG_LEVEL=INFO`)
 * Health checks
   * CLI: Check `docker ps` for per-service status, may take 1-2min for services to connect and warm up
     * Per-service checks run every ~30s after a ~1min initialization delay, with several retries before capped restart
