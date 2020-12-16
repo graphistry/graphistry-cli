@@ -138,8 +138,13 @@ docker-compose up -d
   * On-prem, including air-gapped, as a team backend server or a Linux-based analyst workstation, via docker image
   * Cloud, via prebuilt marketplace instance
   * Cloud, via docker image
-
-* How do I do license management? Graphistry does not require software-managed license registration, we can just work with your procurement team on self-reported use
+  
+* Can Graphistry run in ...
+  * A VM: Yes, including VMWare vSphere, Nutanix AHV, and anywhere else Nvidia RAPIDS.ai runs. Just set `RMM_ALLOCATOR=default` in your `data/config/custom.env` to avoid relying on CUDA Unified Memory, which vGPUs do not support.
+  * Ubuntu / Red Hat / ... : Yes, just ensure the Nvidia Docker runtime is set as the default for docker-compose. We can assist with reference environment bootstrap scripts.
+  
+* How do I do license management? 
+  * Graphistry does not require software-managed license registration, we can work with your procurement team on self-reported use
 
 * Do I need a GPU on the client? No, clients do not need a GPU. They do need WebGL enabled, such as Chrome's non-GPU software emulation mode. If some of your users are on extremely limited environments, e.g., worse than a modern phone, or you have extremely powerful GPUs you would like to share, users report great experiences with GPU VDI technologies.
 
