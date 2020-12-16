@@ -44,6 +44,12 @@ Graphistry deployments generally follow one of these patterns:
 <br>Graphistry, Inc. runs and manages your Graphistry account, with a choice of shared and isolated tiers:
   * Isolated tier: Useful when it is difficult to one-click launch on the Marketplace or procure/setup on-prem hardware
   * Shared tier: Useful if you want the cost savings and expect limited use
+  
+5. **Virtual machine**
+  Graphistry can run in a virtual machine (VMWare, Nutanix, ...) that shares its GPU(s) with other virtual machines:
+  * Graphistry will still run as a Docker container in the VM
+  * Depending on the hypervisor, you can pick different vGPU sharing modes, and further partition within the VM via Docker settings
+  * vGPUs do not currently support CUDA Unified Memory, so you must configure Graphistry setting `RMM_ALLOCATOR=default` in `data/config/custom.env`
 
 
 ## 2. Picking a Configuration
