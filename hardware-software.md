@@ -13,7 +13,7 @@ docker run --rm -it -v $PWD:/source jagregory/pandoc -s hardware-software.md -o 
 # Recommended Deployment Configurations: Client, Server Software, Server Hardware
 
 
-This document focused on technical requirements. See the [deployment planning article](docs/deployment-planning.md) for  broader considerations such as capacity planning.
+This document focused on technical requirements. See the [deployment planning article](docs/deployment-planning.md) for broader considerations such as capacity planning.
 
 The recommended server configuration is [AWS Marketplace](./docs/aws_marketplace.md) and [Azure Marketplace](./docs/azure_marketplace.md) with instance types noted on those screens. The one-click launcher deploys a fully preconfigured instance.
 
@@ -106,7 +106,7 @@ Please contact for discussion of multi-GPU scenarios.
 
 ### Virtualization
 
-Graphistry works with VMWare, Nutanix, and likely other NGC/RAPIDS-capable virtualization environments. Please contact our team for further information. The surrounding HW/SW requirements still apply.
+Graphistry [works with VMWare, Nutanix, and likely other NGC/RAPIDS-capable virtualization environments](docs/vGPU.md). Please contact our team for further information. The surrounding HW/SW requirements still apply.
 
 * You will need to install the same-version Nvidia driver in both the hypervisor and guest OS, and depending on virtualization approach, managed Nvidia vGPU licensing
 
