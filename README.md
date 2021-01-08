@@ -140,7 +140,7 @@ docker-compose up -d
   * Cloud, via docker image
   
 * Can Graphistry run in ...
-  * A VM: Yes, including VMWare vSphere, Nutanix AHV, and anywhere else Nvidia RAPIDS.ai runs. Just set `RMM_ALLOCATOR=default` in your `data/config/custom.env` to avoid relying on CUDA Unified Memory, which vGPUs do not support.
+  * A VM: [Yes, including VMWare vSphere, Nutanix AHV, and anywhere else Nvidia RAPIDS.ai runs](docs/vGPU.md). Just set `RMM_ALLOCATOR=default` in your `data/config/custom.env` to avoid relying on CUDA Unified Memory, which vGPUs do not support.
   * Ubuntu / Red Hat / ... : Yes, just ensure the Nvidia Docker runtime is set as the default for docker-compose. We can assist with reference environment bootstrap scripts.
   
 * How do I do license management? 
