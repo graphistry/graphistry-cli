@@ -193,6 +193,7 @@ docker-compose up -d
 * Install
   * [Manual Graphistry Installation](docs/manual.md) for non-marketplace / non-hosted: 
   <br>AWS BYOL, Azure BYOL, On-Prem (RHEL/Ubuntu), & Air-Gapped
+  * [Nvidia vGPU virtualization support](docs/vGPU.md)
 * Configure
   * [System settings](docs/configure.md): 
     <br/>TLS/SSL/HTTPS, performance, logging, backups to disk, multiple proxy layers, and more
