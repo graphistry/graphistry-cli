@@ -50,6 +50,7 @@ Graphistry deployments generally follow one of these patterns:
   * Graphistry will still run as a Docker container in the VM
   * Depending on the hypervisor, you can pick different vGPU sharing modes, and further partition within the VM via Docker settings
   * vGPUs do not currently support CUDA Unified Memory, so you must configure Graphistry setting `RMM_ALLOCATOR=default` in `data/config/custom.env`
+  * See our [more detailed vGPU docs](vGPU.md)
 
 
 ## 2. Picking a Configuration
