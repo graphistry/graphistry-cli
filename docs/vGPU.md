@@ -4,7 +4,7 @@ Graphistry is designed to run on virtual GPUs using Nvidia's vGPU capabilities. 
 
 If you are installing on such a system, we are happy to help, so please reach out.
 
-## Architectural considerations: You may not need vGPUs
+## Architectural considerations: You may not want vGPUs
 
 A bare installation may be sufficient, meaning you can skip the complexity of using vGPUs:
 
@@ -18,6 +18,7 @@ A bare installation may be sufficient, meaning you can skip the complexity of us
 * Isolate Graphistry from other GPU software
   * Docker allows picking which GPUs + CPUs are used
   * ... For both sharing and isolation
+* Nvidia vGPUs do not yet support Uniform CPU/GPU memory sharing, which causes RAPIDS processes to crash on bigger-than-GPU memory use instead of transparently spilling
 
 Longer-term, Graphistry is aiming to push most/all GPU use to [Dask](https://docs.dask.org/en/latest/gpu.html), which adds even more flexibility for resource sharing.
 
@@ -57,6 +58,8 @@ In the case of multi-GPU systems, you can use different partition sizes on diffe
 
 Supporting vGPUs means setting up a Nvidia license manager server, GPU-capable hypervisor, a GPU-capable guest OS, and making them work together. Almost all other environment configuration is the same as regular self-hosted Graphistry setup.
 
+There is also a 1 line change for making Graphistry work with vGPUs.
+
 #### Licensing server
 
 Setup an Nvidia licensing server and use it to generate and download a license. It must stay on while using your vGPU as the license gets dynamically checked.
@@ -72,6 +75,10 @@ Install hypervisor GPU drivers from the vGPU software version
 Install guest OS GPU drivers from the vGPU software version
 
 [Configure a local license file](https://docs.nvidia.com/grid/latest/grid-licensing-user-guide/index.html#licensing-grid-software-linux-config-file) at `/etc/nvidia/gridd.conf`. Take care to specify vGPU profile vCS (C) / Quadro vDWS and the right license manager server. Restart the local daemon via `sudo service nvidia-gridd restart` and check the logs to ensure it's working: `sudo grep gridd /var/log/messages`.
+
+#### Graphistry
+
+Set `RMM_ALLOCATOR=default` in your `data/config/custom.env` to avoid relying on CUDA Unified Memory for handling bigger-than-memory workloads, which Nvidia vGPUs do not currently support.
 
 ## Hyperviser-specific options
 
