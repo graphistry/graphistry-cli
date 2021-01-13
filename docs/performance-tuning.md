@@ -33,8 +33,11 @@ Graphistry automatically uses the available resources (see monitoring section)
 
 ## OS and VM configuration
 
-* Check `docker info` reports `Native Overlay Diff: true`
 * Ensure virtualization layers are providing required resources
+* Check `docker info` reports `Native Overlay Diff: true`
+* Ensure docker downloads, containers, and volumes are somewhere with space
+  * Cloud VMs often have massive scratchpads, such as `/mnt` in Azure, which is good for downloads and testing
+  * Docker: Modify where containers and their volumes are stored via [daemon.json's graph setting](https://stackoverflow.com/questions/24309526/how-to-change-the-docker-image-installation-directory/34731550#34731550)
 
 ## Graphistry application-level configuration
 
