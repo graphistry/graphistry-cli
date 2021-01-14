@@ -16,7 +16,7 @@ Launching Graphistry in AWS Marketplace? [Get started](https://www.graphistry.co
     - **VPC Settings, Subnet Settings**: Pick something that your browser/client can access (http/https/ssh) and can speak to your DB
     - **Key Pair Settings**: Reuse or create a Key Pair so you can SSH to the commandline for administration
     - Click **Launch**
-4. Go to the public IP in a browser and refresh until the login screen loads, create the first user (admin) account, and start graphing!
+4. Go to the public IP in a browser and refresh until the login screen loads, login with `admin` / `i-YourAWSInstanceID`, and start graphing!
 
 
 ## Basic administration
@@ -75,7 +75,7 @@ Graphistry leverages `docker-compose` and the AWS Marketplace AMI preconfigures 
 
 ```
 cd ~/graphistry
-docker-compose ps
+sudo docker-compose ps
 ```
 
 =>
@@ -140,7 +140,7 @@ Wait a few minutes for the system to finish starting. If the problem persists fo
 
 #### I lost my admin account
 
-See the `reset` command in the main README. Requires logging in, and will delete all users, but no data.
+See the `reset` command in the main README. Requires SSH'ing in, and will delete all users, but not data.
 
 #### I want to log into the server
 
