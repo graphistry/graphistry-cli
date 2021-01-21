@@ -166,7 +166,7 @@ SPLUNK_KEY=...
 #SPLUNK_SERVER_KEY=...
 ```
 
-4. Restart and test the connector as per above. You can test the underlying Splunk API configuration by running `https://splunk.host.name.here:8089/services/search/jobs/export  -d search="search * | head 3" -d output_mode=csv` from your local Splunk server and your Graphistry server.
+4. Restart and test the connector as per above. You can test the underlying Splunk API configuration by running `curl -u admin:changme  https://splunk.host.name.here:8089/services/search/jobs/export  -d search="search * | head 3" -d output_mode=csv` from your local Splunk server and your Graphistry server.
 
 ### Example: Neo4j
 
