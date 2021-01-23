@@ -132,7 +132,13 @@ Both support Nvidia / Docker:
 * [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.6+) 
   * Ensure the default Docker runtime set as `nvidia` at time of launch (check: `docker info | grep -i runtime` => default `nvidia`)
 
-See [Ubuntu 18.04 LTS manual configuration](./docs/ubuntu_18_04_lts_setup.md) and [RHEL 7.6 manual configuration](./rhel_7_6_setup.md) for an example of setting up Nvidia for containerized use on Linux. Marketplace deployments come preconfigured with the latest working drivers and security patches.
+Common Docker tweaks:
+
+* [sudo-less Docker](https://docs.docker.com/engine/install/linux-postinstall/): Create a Docker group and make a service account in that group
+* [Set a TMPDIR](https://stackoverflow.com/questions/38747082/docker-container-has-no-tmpdir-environmental-variable)
+* Save Docker images to a larger mount by [setting the data-root](https://docs.docker.com/config/daemon/systemd/#custom-docker-daemon-options)
+
+See your Graphistry distribution's folder `etc/scripts/bootstrap` for Ubuntu, Red Hat, and air-gapped reference installers. Marketplace deployments come preconfigured with the latest working drivers and security patches.
 
 
 ### User: Root vs. Not, Permissions
@@ -162,7 +168,7 @@ Developer systems should match the minimum requirements, though GPU memory can g
 A Graphistry server must support 1MB+/s per expected concurrent user. A moderately used team server may stream a few hundred GB / month.
 
 * The server should allow http/https access by users and ssh by the administrator.
-* TLS certificates can be installed (nginx)
+* TLS certificates can be installed (Caddyfile)
 * The Graphistry server may invoke various database connectors: Those systems should enable firewall and credential access that authorizes authenticated remote invocations from the Graphistry server.
 
 #### Air-gapped installation
