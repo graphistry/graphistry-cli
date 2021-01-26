@@ -20,8 +20,10 @@ For futher information, see:
 ## Out-of-the-box config
 
 * First user to create an account is the Admin
+  * Cloud-specific deployments may tailor secure initialization, such as AWS defaulting to `admin` / `i-instanceID`
 * Admins then create other users and with differing role levels: Admin, User, Inactive
-* Sessions are protected with JWT tokens - TLS recommended
+* Sessions are protected with JWT tokens and HTTP-only CSRF tokens
+  * TLS recommended
 * Visualizations are shared as web keys
 
 ## Recommended network config: TLS, IPs, Ports
