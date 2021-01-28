@@ -60,8 +60,8 @@ The 2.0 release expands authentication and authorization options for common shar
 ## Authentication
 
 ### Web
-* TLS: Auto-TLS (LE) or custom cert
-* JWT authentication for Browser Sessions and REST API tokens
+* TLS: Auto-TLS (LE) or custom cert 
+* JWT authentication for Browser Sessions (HTTP-only headers) and REST API tokens
 * JWT token maps to account & role: Admin, User, Viewer (= unauthenticated)
 
 ### System
@@ -91,15 +91,19 @@ The 2.0 release expands authentication and authorization options for common shar
   * Sensitive configs are marked and considered when logged
   * App reads from environment variable or config mounts
   * Warning: Graphistry logs are secured for levels INFO+; do not store logs in TRACE and DEBUG modes
-* Docker and GPU isolation:
+* Networking: Reverse proxy, firewalls, TLS
+  * Firewall: Enterprise and cloud firewall settings are typically used to control Viewer-level access (ex: VPN-only) and System access (ex: SSH)
+  * Bastion: We use a two-layer scheme: outward is the small and friendly Caddy system for admins (ex: TLS & sinkholes), and inner is Nginx for app control (ex: JWT enforcement)
+  * TLS is necessary for avoiding MITM
+* Isolation: Docker, GPU, services
   * Provides isolation from exploits reaching the OS
   * Audit volume mounts and GPU configuration flags for sharing preferences
-* Reverse proxy & firewalls
-  * Proxy: We use a 2 layer scheme: outward is the small and friendly Caddy system for admins (ex: TLS & sinkholes), and inner is Nginx for app control (ex: JWT enforcement)
-  * Firewall: Enterprise and cloud firewall settings are typically used to control Viewer-level access (ex: VPN-only) and System access (ex: SSH)
-* Service runtimes are primarily in managed languagues that enforce memory isolation & additional process isolation
-  * Where the app does support user-generated code, the app uses conservative safelists (vs blacklists) and one-time sandboxed interpreters
-* HTTP activity is logged
+  * Services are primarily in managed languagues that enforce memory isolation & additional process isolation
+  * Where the app does support user-generated code, the app uses conservative safelists and one-time sandboxed interpreters, except for BSQL
+* HTTP activity can be logged
+* Client
+  * User-supplied code is generally prohibited, and the few exceptions are via safelists, e.g, image tags
+  * HTTP-only authorization headers and CSRF tokens
 
 ## Additional Notes
 Contact your SE about additional security configuration at the OS/HW level and ensuring system configuration (log forwarding, configuring/disabling user analytics, ...). Likewise, we are always happy to discuss security feature requests.
