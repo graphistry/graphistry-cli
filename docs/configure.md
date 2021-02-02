@@ -26,9 +26,13 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 * More advanced administrators may edit `docker-compose.yml` .  Maintenance is easier if you never edit it.
 * Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https)) and mounting your certificates via `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker)). Caddy supports LetsEncrypt with automatic renewal, custom certificates and authorities, and self-signed certificates. 
 
+## SSO
+
+Contact staff for setting up social logins to GitHub/Google, and support for exposing additional SSO layers to further social logins and/or internal systems like LDAP.
+
 ## TLS
 
-We encourage everyone to use HTTPS over HTTP, especially through the automatic TLS option
+We encourage everyone to use HTTPS over HTTP, especially through the automatic TLS option, for [securing authentication](authentication.md)
 
 ### Setup free Automatic TLS
 
