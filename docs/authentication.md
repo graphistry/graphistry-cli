@@ -4,7 +4,7 @@ This document covers Graphistry's authentication system with respect to architec
 
 It also touches on coarse authorization decisions where relevant. However, authorization is generally beyond the scope of this document.
 
-See also [security hardening](configure-security.md), [general configuration](configure.md), [manual user account creation](user-creation.md), and [threat model](threadmodel.md).
+See also [security hardening](configure-security.md), [general configuration](configure.md), [manual user account creation](user-creation.md), and [threat model](threatmodel.md).
 
 ## Architecture
 
