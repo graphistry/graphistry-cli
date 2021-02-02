@@ -13,6 +13,7 @@ For futher information, see:
 
 * [Overall system configuration](configure.md)
 * [Security threat model](threatmodel.md)
+* [Authentication](authentication.md)
 * [Deployment planning](deployment-planning.md)
 * [Capacity planning](../hardware-software.md)
 
