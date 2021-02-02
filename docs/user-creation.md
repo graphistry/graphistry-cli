@@ -1,5 +1,7 @@
 # User Creation
 
+See also [general configuration](configure.md) and [authentication](authentication.md)
+
 ## Account Creation Model
 
 * Graphistry temporarily starts with **Open Registration**
@@ -34,7 +36,7 @@ Congrats, your user can now log in!
 ## Provide API Keys
 
 * Every user gets an API key on their dashboard page
-* Additional API keys can be generated via [CLI commands](../README.md)
+* Additional API keys can be generated via [CLI commands](../README.md), and better, [JWT endpoints](https://hub.graphistry.com/docs/api/1/rest/auth/#auth2)
 * API keys are not currently revocable
 * To preserve API keys across installations, make sure to copy `.env`
 
