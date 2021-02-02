@@ -189,7 +189,7 @@ docker-compose up -d
 * Plan a deployment
   * Architecture: [Deployment architecture planning guide](docs/deployment-planning.md)
   * Capacity: [Hardware/software requirements](hardware-software.md)
-  * Security: [Recommended hardening](docs/configure-security.md) and [threat model](docs/threatmodel.md)
+  * Security: [Recommended hardening](docs/configure-security.md), [threat model](docs/threatmodel.md), [authentication](docs/authentication.md)
 * Install
   * [Manual Graphistry Installation](docs/manual.md) for non-marketplace / non-hosted: 
   <br>AWS BYOL, Azure BYOL, On-Prem (RHEL/Ubuntu), & Air-Gapped
