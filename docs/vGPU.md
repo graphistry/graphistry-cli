@@ -24,6 +24,8 @@ Longer-term, Graphistry is aiming to push most/all GPU use to [Dask](https://doc
 
 ## GPU Virtualization configuration planning
 
+Plan licensing and driver versons first, as mistakes may require starting over.
+
 Most likely, you'll want vGPU profile 8Q with vGPU 10.2 -- vGPU 11.0 drivers:
 
 **GPU Driver**
@@ -74,7 +76,9 @@ Install hypervisor GPU drivers from the vGPU software version
 
 Install guest OS GPU drivers from the vGPU software version
 
-[Configure a local license file](https://docs.nvidia.com/grid/latest/grid-licensing-user-guide/index.html#licensing-grid-software-linux-config-file) at `/etc/nvidia/gridd.conf`. Take care to specify vGPU profile vCS (C) / Quadro vDWS and the right license manager server. Restart the local daemon via `sudo service nvidia-gridd restart` and check the logs to ensure it's working: `sudo grep gridd /var/log/messages`.
+[Configure a local license file](https://docs.nvidia.com/grid/latest/grid-licensing-user-guide/index.html#licensing-grid-software-linux-config-file) at `/etc/nvidia/gridd.conf`. Take care to specify vGPU profile vCS (C) / Quadro vDWS (Q) and the right license manager server. Restart the local daemon via `sudo service nvidia-gridd restart`. 
+
+To confirm license activation, check the license status in `nvidia-smi -q` and debug logs (`sudo grep gridd /var/log/messages`)
 
 #### Graphistry
 
