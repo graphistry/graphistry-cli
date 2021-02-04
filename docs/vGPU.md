@@ -4,6 +4,8 @@ Graphistry is designed to run on virtual GPUs using Nvidia's vGPU capabilities. 
 
 If you are installing on such a system, we are happy to help, so please reach out.
 
+In general, running Graphistry with a hypervisor requires either no special configuration, or with a vGPU, a 1-line setting in `data/config/custom.env`. However, vGPU environment installation may take considerably more planning and effort when unfamiliar. In particular, for steps around vGPU planning, vGPU provisioning, vGPU licensing, vGPU driver installation, and surrounding testing and troubleshooting.
+
 ## Architectural considerations: You may not want vGPUs
 
 We recommend checking whether you want *baremetal OS*, *hypervisor with a passthrough GPU driver*, or *hypervisor with a vGPU driver*.
