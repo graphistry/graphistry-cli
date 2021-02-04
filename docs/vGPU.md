@@ -6,9 +6,11 @@ If you are installing on such a system, we are happy to help, so please reach ou
 
 ## Architectural considerations: You may not want vGPUs
 
-A bare installation may be sufficient, meaning you can skip the complexity of using vGPUs:
+We recommend checking whether you want *baremetal OS*, *hypervisor with a passthrough GPU driver*, or *hypervisor with a vGPU driver*.
 
-* Hypervisors: If only 1 GPU user, you can expose it in passthrough mode
+A *baremetal OS* (no hypervisor) or *passthrough driver* (hypervisor with non-vGPU driver) configuration may be sufficient, meaning you can skip the complexity of using vGPU drivers and licensing:
+
+* Hypervisors: If only 1 dedicated GPU application, or multiple applications running in the same guest OS, you can expose it in passthrough mode
 * Scaling users through multiple GPUs:
   * Graphistry already automatically uses all GPUs exposed to it, primarily for scaling to more user sessions
   * New APIs are starting to use multi-GPUs for acceleration as well
@@ -90,6 +92,18 @@ Set `RMM_ALLOCATOR=default` in your `data/config/custom.env` to avoid relying on
 ## Hyperviser-specific options
 
 See official docs and support forums for guidance specific to your hypervisor.
+
+### Nutanix
+
+Follow the standard Graphistry + vGPU instructions
+
+Helpful links and configurations:
+
+* Drivers: Download a hypervisor + guest OS driver pair from [an Nvidia.com vGPU account](https://nvid.nvidia.com/siteminderagent/forms/login.fcc) that comes with your hardware purchase. Nutanix does not provide the drivers.
+* OS: Ubuntu 18.04 LTS (plain). Do **not** use the listed Snap-based add-on for Docker.
+* Docs: Check [main Nutanix.com Nvidia docs](https://portal.nutanix.com/page/documents/details?targetId=AHV-Admin-Guide-v5_19:ahv-gpu-support-on-ahv-c.html) and [supporting Nvidia.com Nutanux docs](https://docs.nvidia.com/grid/10.0/grid-vgpu-release-notes-nutanix-ahv/index.html)
+
+
 
 ## Testing
 
