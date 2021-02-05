@@ -40,6 +40,8 @@ You will install a hypervisor GPU driver in the hypervisor and a guest OS GPU dr
 
 * The driver's CUDA version must be [RAPIDS-compatible](https://rapids.ai/start.html): 10.2 -- 11.0 at time of writing
 
+* Use officially sanctioned drivers. Google Cloud hosts MD5-matched [guest OS drivers](https://cloud.google.com/compute/docs/gpus/grid-drivers-table).
+
 **Virtualization features**: C (vCS)
 
 Nvidia vGPUs have different labels (A, B, C, Q, ...) that correspond with enabled features.
@@ -101,10 +103,9 @@ Follow the standard Graphistry + vGPU instructions
 
 Helpful links and configurations:
 
-* Drivers: Download a hypervisor + guest OS driver pair from [an Nvidia.com vGPU account](https://nvid.nvidia.com/siteminderagent/forms/login.fcc) that comes with your hardware purchase. Nutanix does not provide the drivers.
+* Drivers: Download a hypervisor + guest OS driver pair from [an Nvidia.com vGPU account](https://nvid.nvidia.com/siteminderagent/forms/login.fcc) that comes with your hardware purchase. Alternatively, if allowed, Nutanix provides [hypervisor drivers](https://portal.nutanix.com/page/downloads?product=ahv&bit=NVIDIA) and Google Cloud hosts [guest OS drivers](https://cloud.google.com/compute/docs/gpus/grid-drivers-table).
 * OS: Ubuntu 18.04 LTS (plain). Do **not** use the listed Snap-based add-on for Docker.
 * Docs: Check [main Nutanix.com Nvidia docs](https://portal.nutanix.com/page/documents/details?targetId=AHV-Admin-Guide-v5_19:ahv-gpu-support-on-ahv-c.html) and [supporting Nvidia.com Nutanux docs](https://docs.nvidia.com/grid/10.0/grid-vgpu-release-notes-nutanix-ahv/index.html)
-
 
 
 ## Testing
