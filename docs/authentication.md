@@ -8,7 +8,10 @@ See also [security hardening](configure-security.md), [general configuration](co
 
 ## Architecture
 
-Graphistry authentication uses 3 standard web layers:
+Graphistry authentication uses standard web software layers:
+
+* Container: Docker / docker-compose
+  * Determine ports for http and/or https
 
 * Reverse proxy: Caddy (`caddy`)
   * Web and API calls are initially reverse-proxied through reverse proxy Docker service `caddy`
