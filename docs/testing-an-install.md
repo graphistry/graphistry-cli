@@ -2,9 +2,11 @@
 
 Takes about 5-10min. See `Quick Testing` below for an expedited variant.
 
-To test your base Docker environment for GPU RAPIDS (but not docker-compose), [see the main docs](../README.md#test-your-environment-setup)
+Most of the testing and inspection is standard for Docker-based web apps: `docker` commands, health check URLs, and optional manual smoke tests. GPU testing and debugging involves additional steps.
 
-For logs throughout your session, you can run `docker-compose logs -f -t --tail=1` and `docker-compose logs -f -t --tail=1 SOME_SERVICE_NAME` to see the effects of your activities. Modify `custom.env` to increase `GRAPHISTRY_LOG_LEVEL` and `LOG_LEVEL` to `DEBUG` for increased logging, and `/etc/docker/daemon.json` to use log driver `json-file` for local logs.
+* To test your base Docker environment for GPU RAPIDS (but not docker-compose), [see the main docs](../README.md#test-your-environment-setup) and the more in-depth GPU testing section below.
+
+* For logs throughout your session, you can run `docker-compose logs -f -t --tail=1` and `docker-compose logs -f -t --tail=1 SOME_SERVICE_NAME` to see the effects of your activities. Modify `custom.env` to increase `GRAPHISTRY_LOG_LEVEL` and `LOG_LEVEL` to `DEBUG` for increased logging, and `/etc/docker/daemon.json` to use log driver `json-file` for local logs.
 
 NOTE: Below tests use the deprecated 1.0 REST upload API.
 
@@ -13,17 +15,52 @@ NOTE: Below tests use the deprecated 1.0 REST upload API.
 * Put the container in `/var/home/my_user/releases/my_release_1`: Ensures relative paths work, and good persistence hygiene across upgrades
 * Go time!
 ```
-docker load -i containters.tar
+docker load -i containers.tar
 docker-compose up
 ```
 
-* Check health status via `docker ps`. Check resource consumption via `docker stats`, `nvidia-smi`, and `htop`
+* Check health status via `docker ps` or via the [health check REST APIs](https://hub.graphistry.com/docs/api/2/rest/health/#healthchecks). Check resource consumption via `docker stats`, `nvidia-smi`, and `htop`:
+
+```
+CONTAINER ID        IMAGE                                    COMMAND                  CREATED             STATUS                            PORTS                                                          NAMES
+a52806c712bb        graphistry/etl-server-python:v2.35.3     "/entrypoints/rapids…"   11 hours ago        Up 11 hours (healthy)             8786-8787/tcp                                                  graphistry_dask-scheduler_1
+0ba4a03e1f43        graphistry/etl-server-python:v2.35.3     "/entrypoints/rapids…"   11 hours ago        Up 11 hours                       8080/tcp                                                       graphistry_dask-cuda-worker_1
+4a07de869949        graphistry/streamgl-nginx:v2.35.3        "/docker-entrypoint.…"   11 hours ago        Up 11 hours (healthy)             80/tcp, 8080/tcp                                               graphistry_nginx_1
+df5c24ec02d6        graphistry/etl-server-python:v2.35.3     "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_forge-etl-python_1
+c50439a52ef2        graphistry/jupyter-notebook:v2.35.3      "/tini -g -- /bin/ba…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_notebook_1
+e0079b0b7b42        graphistry/graphistry-nexus:v2.35.3      "/entrypoint /bin/ba…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_nexus_1
+2e5b69c3c771        graphistry/graphistry-pivot:v2.35.3      "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_pivot_1
+cc40df2578f2        willfarrell/autoheal:v0.7.0              "/docker-entrypoint …"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_autoheal_1
+c1948372ed31        graphistry/caddy:v2.35.3                 "caddy run --config …"   11 hours ago        Up 8 minutes (health: starting)   0.0.0.0:80->80/tcp, 2019/tcp, 0.0.0.0:443->443/tcp, 8080/tcp   graphistry_caddy_1
+d35de5ccfe9f        graphistry/streamgl-viz:v2.35.3          "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_streamgl-viz_1
+4937beda66cb        redis:6.0.5                              "docker-entrypoint.s…"   11 hours ago        Up 11 hours (healthy)             6379/tcp, 8080/tcp                                             graphistry_redis_1
+3190b1739afa        graphistry/etl-server:v2.35.3            "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_forge-etl_1
+f98d7f50f590        graphistry/streamgl-sessions:v2.35.3     "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_streamgl-sessions_1
+931ed208c943        graphistry/streamgl-vgraph-etl:v2.35.3   "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_streamgl-vgraph-etl_1
+63dee80cb1c9        graphistry/streamgl-gpu:v2.35.3          "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_streamgl-gpu_1
+d50ac889f22b        graphistry/graphistry-postgres:v2.35.3   "docker-entrypoint.s…"   11 hours ago        Up 11 hours (healthy)             5432/tcp, 8080/tcp                                             graphistry_postgres_1
+```
+
+| Type | Containers |
+| ---: | :--- |
+| Proxies | `caddy`, `nginx` |
+| Infra | `autoheal` |
+| Web (DB/CMS/accounts) | `nexus` `postgres`, `redis` |
+| GPU services | `streamgl-gpu` <br/> image `graphistry/etl-server-python`: `forge-etl-python`, `dask-scheduler`, `dask-cuda-worker` |
+| JS viz services | `streamgl-viz` (heavy), `streamgl-sessions`, `streamgl-vgraph-etl` |
+| Investigation automation | `pivot` (heavy) |
+| Jupyter notebooks | `notebook` (heavy) |
+   
+* It is safe to reset any individual container **except** `postgres`, which is stateful: `docker-compose up -d --force-recreate --no-deps some_ephemeral_container`
+
+* For any unhealthy container, such as stuck in a restart loop, check `docker-compose logs -f -t --tail=1000 that_service`. To further diagnose, potentially increase the system log level (edit `data/config/custom.env` to have `LOG_LEVEL=DEBUG`, `GRAPHISTRY_LOG_LEVEL=DEBUG`) and restart the unhealthy container.
+
 * Check `data/config/custom.env` has system-local keys (ex: `STREAMGL_SECRET_KEY`) with fallback to `.env`
 
 
 ## 2. Basic web servers and networking
 
-* Check `caddy` and `nginx`: Go to https://graphistry/healthz via your browser or curl: should return status code`200`
+* Check `caddy` and `nginx`: Check https://graphistry/caddy/health/ (caddy) and http://hub.graphistry.com/healthz (nginx) via your browser or curl: should return status code `200`
 * Check `nexus` for auth, admin, docs, static resources, and API gateway: 
   * Go to https://graphistry
   * Should be a login page or your user dashboard
@@ -33,10 +70,11 @@ docker-compose up
 * Go to your https://graphistry/graph/graph.html?dataset=Facebook
   * Can also get by point-and-clicking if URL is uncertain: http://graphistry -> `Learn More` -> (the page)
 * Expect to see something similar to https://hub.graphistry.com/graph/graph.html?dataset=Facebook
-  * If points do not load, or appear and freeze, likely issues with GPU init (driver) or websocket (firewall)
+  * The first system load (per GPU worker) will be slow due to GPU JIT warmup; wait 30s-1min and refresh if the page loads but no graph is shown
+  * If points still do not load, or appear and freeze, likely issues with GPU init (driver) or websocket (firewall)
   * Can also be because preloaded datasets are unavailable: not provided, or externally mounted data sources
     * In this case, use ETL test, and ensure clustering runs for a few seconds (vs. just initial pageload)
-* Check `docker-compose logs -f -t --tail=1` and `docker ps` in case config or GPU driver issues
+* Check `docker-compose logs -f -t --tail=1` and `docker ps` in case config or GPU driver issues, especially for GPU services
 
 ## 4a. Test 1.0 API uploads, Jupyter, and the PyGraphistry client API
 
