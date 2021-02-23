@@ -17,11 +17,14 @@ The fastest way to start using Graphistry is to quick launch a private preconfig
 
 #### Quick launch: Manual
 
-1. Install if not already available from the folder with `containers.tar`, and likely using `sudo`:
+1. Install if not already available from the folder with `containers.tar.gz`, and likely using `sudo`:
 
 ```
-/var/graphistry $ docker load -i containers.tar
+/var/graphistry $ docker load -i containers.tar.gz
 ```
+
+Note: In previous versions (< `v2.35`), the file was `containers.tar`
+
 
 2. Launch from the folder with `docker-compose.yml` if not already up, and likely using `sudo`:
 
@@ -65,7 +68,7 @@ All likely require `sudo`. Run from where your `docker-compose.yml` file is loca
 
 |  TASK	| COMMAND 	| NOTES 	|
 |--: |:---	|:---	|
-| **Install** 	| `docker load -i containers.tar` 	| Install the `containers.tar` Graphistry release from the current folder. You may need to first run `tar -xvvf my-graphistry-release.tar.gz`.	|
+| **Install** 	| `docker load -i containers.tar.gz` 	| Install the `containers.tar.gz` Graphistry release from the current folder. You may need to first run `tar -xvvf my-graphistry-release.tar.gz`.	|
 | **Start <br>interactive** 	| `docker-compose up` 	| Starts Graphistry, close with ctrl-c 	|
 | **Start <br>daemon** 	| `docker-compose up -d` 	| Starts Graphistry as background process 	|
 | **Start <br>namespaced (concurrent)** 	| `docker-compose -p my_unique_namespace up` 	| Starts Graphistry in a specific namespace. Enables running multiple independent instances of Graphistry. NOTE: Must modify Caddy service in `docker-compose.yml` to use non-conflicting public ports, and likewise change global volumes to be independent. 	|
@@ -121,7 +124,7 @@ If `nvidia` is already your `docker info | grep Default` runtime:
 ############ Install & Launch
 wget -O release.tar.gz "https://..."
 tar -xvvf release.tar.gz
-docker load -i containers.tar
+docker load -i containers.tar.gz
 docker-compose up -d
 ```
 
