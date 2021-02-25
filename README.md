@@ -32,12 +32,15 @@ Note: In previous versions (< `v2.35`), the file was `containers.tar`
 /var/graphistry $ docker-compose up -d
 ```
 
+Note: Takes 1-3 min, and around 5 min, `docker ps` should report all services as `healthy`
+
 3. Test: Go to `http://localhost`
 
-* Try a visualization like http://localhost/graph/graph.html?dataset=Facebook&play=5000&splashAfter=false 
-  * **Warning**: First viz load may be slow (1min) as RAPIDS generates **just-in-time** code for each GPU worker upon first encounter
 * Create an account, and then try running a prebuilt Jupyter Notebook from the dashboard!
   * The first account gets an admin role, upon which account self-registration closes. Admins can then invite users or open self-registration. See [User Creation](docs/user-creation.md) for more information.
+
+* Try a visualization like http://localhost/graph/graph.html?dataset=Facebook&play=5000&splashAfter=false 
+  * **Warning**: First viz load may be slow (1 min) as RAPIDS generates **just-in-time** code for each GPU worker upon first encounter, and/or require a page refresh
 
 
 ## Advanced administration
@@ -73,13 +76,14 @@ All likely require `sudo`. Run from where your `docker-compose.yml` file is loca
 | **Start <br>daemon** 	| `docker-compose up -d` 	| Starts Graphistry as background process 	|
 | **Start <br>namespaced (concurrent)** 	| `docker-compose -p my_unique_namespace up` 	| Starts Graphistry in a specific namespace. Enables running multiple independent instances of Graphistry. NOTE: Must modify Caddy service in `docker-compose.yml` to use non-conflicting public ports, and likewise change global volumes to be independent. 	|
 | **Stop** 	| `docker-compose stop` 	| Stops Graphistry 	|
-| **Restart** 	| `docker restart <CONTAINER>` 	|  	|
-|  **Status** 	| `docker-compose ps`, `docker ps`, and `docker status` 	|  Status: Uptime, healthchecks, ...	|
-| **GPU Status** | `nvidia-smi` | See GPU processes, compute/memory consumption, and driver.  Ex: `watch -n 1.5 nvidia-smi` |
-|  **API Key** 	| docker-compose exec streamgl-vgraph-etl curl "http://0.0.0.0:8080/api/internal/provision?text=MYUSERNAME" 	|  Generates API key for a developer or notebook user	|
+| **Restart (soft)** 	| `docker restart <CONTAINER>` 	| Soft restart. May also need to restart service `nginx`. 	|
+| **Restart (hard)** 	| `docker up -d --force-recreate --no-deps <CONTAINER>` 	|  Restart with fresh state. May also need to restart service `nginx`.	|
+| **Reset**     | `docker-compose down -v && docker-compose up -d` | Stop Graphistry, remove all internal state (including the user account database!), and start fresh .  |
+| **Status** 	 | `docker-compose ps`, `docker ps`, and `docker status` 	|  Status: Uptime, healthchecks, ...	|
+| **GPU Status** | `nvidia-smi` | See GPU processes, compute/memory consumption, and driver.  Ex: `watch -n 1.5 nvidia-smi`. Also, `docker run --rm -it nvidia/cuda:latest nvidia-smi` for in-container test. |
+| **1.0 API Key** | docker-compose exec streamgl-vgraph-etl curl "http://0.0.0.0:8080/api/internal/provision?text=MYUSERNAME" 	|  Generates API key for a developer or notebook user	(1.0 API is deprecated)|
 | **Logs** 	|  `docker-compose logs <CONTAINER>` 	|  Ex: Watch all logs, starting with the 20 most recent lines:  `docker-compose logs -f -t --tail=20 forge-etl-python`	. You likely need to switch Docker to use the local json logging driver by  deleting the two default managed Splunk log driver options in `/etc/docker/daemon.json` and then restarting the `docker` daemon (see below). |
-| **Reset**     | `docker-compose down -v && docker-compose up` | Stop Graphistry, remove all internal state (including the user account database!), and start fresh .  |
-| **Create Users** | Use Admin Panel (see [Create Users](docs/user-creation.md)) |
+| **Create Users** | Use Admin Panel (see [Create Users](docs/user-creation.md)) or `etc/scripts/rest` |
 | **Restart Docker Daemon** | `sudo service docker restart` | Use when changing `/etc/docker/daemon.json`, ... |
 | **Jupyter shell**| `docker exec -it -u root graphistry_notebook_1 bash` then `source activate rapids` | Use for admin tasks like global package installs |
 
