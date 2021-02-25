@@ -13,7 +13,9 @@ Email, Zoom, Slack, phone, tickets -- we encourage using the [Graphistry support
 
 #### Quick launch: Managed
 
-The fastest way to start using Graphistry is to quick launch a private preconfigured Graphistry instance from the [AWS and Azure marketplaces](https://www.graphistry.com/get-started). They run within your cloud provider account and therefore facilitate experimentation with real data. These docs will still be helpful for advanced configuration and maintenance. See [AWS launch walkthrough tutorial & videos](https://www.graphistry.com/blog/marketplace-tutorial). 
+[AWS and Azure marketplaces](https://www.graphistry.com/get-started): The fastest way to start using Graphistry is to quick launch a preconfigured private Graphistry instance on [AWS and Azure marketplaces](https://www.graphistry.com/get-started)
+
+It runs in your private cloud provider account and is configured to autostart. See [AWS launch walkthrough tutorial & videos](https://www.graphistry.com/blog/marketplace-tutorial) and linked guides for optional post-launch configuration and maintenance.
 
 #### Quick launch: Manual
 
@@ -34,7 +36,11 @@ docker-compose up -d
 
 Note: Takes 1-3 min, and around 5 min, `docker ps` should report all services as `healthy`
 
-**3. Test:** Go to `http://localhost`
+**3. Test:**  Go to 
+
+```
+http://localhost
+```
 
 * Create an account, and then try running a prebuilt Jupyter Notebook from the dashboard!
   * The first account gets an admin role, upon which account self-registration closes. Admins can then invite users or open self-registration. See [User Creation](docs/user-creation.md) for more information.
