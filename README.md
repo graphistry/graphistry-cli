@@ -17,24 +17,24 @@ The fastest way to start using Graphistry is to quick launch a private preconfig
 
 #### Quick launch: Manual
 
-1. Install if not already available from the folder with `containers.tar.gz`, and likely using `sudo`:
+**1. Install** if not already available from the folder with `containers.tar.gz`, and likely using `sudo`:
 
-```
-/var/graphistry $ docker load -i containers.tar.gz
+```bash
+docker load -i containers.tar.gz
 ```
 
 Note: In previous versions (< `v2.35`), the file was `containers.tar`
 
 
-2. Launch from the folder with `docker-compose.yml` if not already up, and likely using `sudo`:
+**2. Launch** from the folder with `docker-compose.yml` if not already up, and likely using `sudo`:
 
-```
-/var/graphistry $ docker-compose up -d
+```bash
+docker-compose up -d
 ```
 
 Note: Takes 1-3 min, and around 5 min, `docker ps` should report all services as `healthy`
 
-3. Test: Go to `http://localhost`
+**3. Test:** Go to `http://localhost`
 
 * Create an account, and then try running a prebuilt Jupyter Notebook from the dashboard!
   * The first account gets an admin role, upon which account self-registration closes. Admins can then invite users or open self-registration. See [User Creation](docs/user-creation.md) for more information.
