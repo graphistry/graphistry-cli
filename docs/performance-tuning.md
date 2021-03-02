@@ -50,6 +50,7 @@ Graphistry automatically uses the available resources (see monitoring section)
       * `RMM_ALLOCATOR`: `default` or `managed` (default)
       * `RMM_POOL`: `TRUE` (default) or `FALSE`
       * `RMM_INITIAL_POOL_SIZE`: None or # bytes (default: `33554432` for 32MB)
+      * `RMM_MAXIMUM_POOL_SIZE`: None or # bytes (default: None, meaning full GPU)
       * `RMM_ENABLE_LOGGING`: `TRUE` or `FALSE` (default)
   * CPU network streaming and limited analytics: `STREAMGL_CPU_NUM_WORKERS`, defaults to `max`, recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS` (GPU sibling)
   * CPU upload handlers: `PM2_MAX_WORKERS`, defaults to `max`, recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS`
