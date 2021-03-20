@@ -8,6 +8,7 @@ Read on for:
 * Recommended network config (Admin)
 * Connector configuration (Admin)
 * Safely using Graphistry APIs (Developer)
+* Air gapping
 
 For futher information, see:
 
@@ -81,3 +82,15 @@ Check if your database or API supports restricted roles. For example, when Graph
 * Pay attention to data movement to improve performance and limit attack opportunities:
   * Prefer server<>server APIs for data uploads
   * Prefer client<>client APIs for user interactions
+
+# Air gapping
+
+Some environments require operation without access to the public internet
+
+* Graphistry works out-of-the-box without public internet access
+* Your browser must be able to connect to your Graphistry server, and if using data connectors, your Graphistry server must be able to connect to your data sources
+* Optional, enable the explicit air gap mode
+  * Effect: This disables optional components like our support integration use the public internet
+  * Benefit: Increase privacy, and potentially avoid usage slowdowns from waiting on non-responsive requests
+  * Method 1: Before first system start, in your `data/config/custom.env`, set `AIR_GAPPED=1`
+  * Method 2: User -> Admin portal -> Settings -> Config -> Check IS_AIR_GAPPED and save
