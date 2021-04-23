@@ -110,7 +110,9 @@ Helpful links and configurations:
 
 ## Testing
 
-Typical checks:
+### Script
+
+In your configured VM, after loading the Graphistry containers, go to your Graphistry release folder and run `./test-gpu.sh`. For more information on what this does, see [quick testing and test-gpu](docs/testing-an-install.md#6-quick-testing-and-test-gpu).
 
 ### Hypevisor
 
@@ -119,20 +121,24 @@ Typical checks:
 ### Guest OS
 
 * GPU: `nvidia-smi` should report a GPU of the expected driver version
-* License: Nvidia logs: `sudo grep gridd /var/log/messages`
+* Nvidia license server approval: `sudo grep gridd /var/log/messages`
+* See above `test-gpu.sh`
 
-### Hypervisor
-* See regular Graphistry testing docs, especially around docker GPU configuration
+### Docker
+
+* See above `test-gpu.sh`
 
 ## Common errors
 
-* CUDA-incapable vGPU profile
-* No GPU driver
+* No GPU driver in hypervisor / guest VM
+* Mismatching GPU driver between hypervisor / guest VM; use a supplied pair
 * RAPIDS-incompatible GPU driver version
-* Unlicensed GPU
-* License server is down
+* Unlicensed GPU: No license, license server down, ...
+* Inappropriate license: CUDA-incapable vGPU profile/license; need C, Q
+
+In addition, the usual GPU setup surprises may apply:
 * No Docker GPU runtime
 * Docker GPU runtime not set as default (`docker info` and `/etc/docker/daemon.json`)
-
+* See above `test-gpu.sh` discussions
 
 
