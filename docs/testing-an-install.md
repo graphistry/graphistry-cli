@@ -15,11 +15,11 @@ NOTE: Below tests use the deprecated 1.0 REST upload API.
 * Put the container in `/var/home/my_user/releases/my_release_1`: Ensures relative paths work, and good persistence hygiene across upgrades
 * Go time!
 ```
-docker load -i containers.tar
+docker load -i containers.tar.gz
 docker-compose up
 ```
 
-* Check health status via `docker ps` or via the [health check REST APIs](https://hub.graphistry.com/docs/api/2/rest/health/#healthchecks). Check resource consumption via `docker stats`, `nvidia-smi`, and `htop`:
+* Check health status via `docker ps` or via the [health check REST APIs](https://hub.graphistry.com/docs/api/2/rest/health/#healthchecks). Check resource consumption via `docker stats`, `nvidia-smi`, and `htop`. Note that the set of services evolves across releases:
 
 ```
 CONTAINER ID        IMAGE                                    COMMAND                  CREATED             STATUS                            PORTS                                                          NAMES
@@ -51,18 +51,18 @@ d50ac889f22b        graphistry/graphistry-postgres:v2.35.3   "docker-entrypoint.
 | Investigation automation | `pivot` (heavy) |
 | Jupyter notebooks | `notebook` (heavy) |
    
-* It is safe to reset any individual container **except** `postgres`, which is stateful: `docker-compose up -d --force-recreate --no-deps some_ephemeral_container`
+* It is safe to reset any individual container **except** `postgres`, which is stateful: `docker-compose up -d --force-recreate --no-deps <some_stateless_services>`
 
-* For any unhealthy container, such as stuck in a restart loop, check `docker-compose logs -f -t --tail=1000 that_service`. To further diagnose, potentially increase the system log level (edit `data/config/custom.env` to have `LOG_LEVEL=DEBUG`, `GRAPHISTRY_LOG_LEVEL=DEBUG`) and restart the unhealthy container.
+* For any unhealthy container, such as stuck in a restart loop, check `docker-compose logs -f -t --tail=1000 that_service`. To further diagnose, potentially increase the system log level (edit `data/config/custom.env` to have `LOG_LEVEL=DEBUG`, `GRAPHISTRY_LOG_LEVEL=DEBUG`) and recreate + restart the unhealthy container
 
 * Check `data/config/custom.env` has system-local keys (ex: `STREAMGL_SECRET_KEY`) with fallback to `.env`
 
 
 ## 2. Basic web servers and networking
 
-* Check `caddy` and `nginx`: Check https://graphistry/caddy/health/ (caddy) and http://hub.graphistry.com/healthz (nginx) via your browser or curl: should return status code `200`
+* Check `caddy` and `nginx`: Check https://localhost/caddy/health/ (caddy) and http://localhost/healthz (nginx) via your browser or `curl -v http://...`: should return status code `200`
 * Check `nexus` for auth, admin, docs, static resources, and API gateway: 
-  * Go to https://graphistry
+  * Go to https://localhost
   * Should be a login page or your user dashboard
 
 ## 3. GPU visual analysis of preloaded dataset 
@@ -74,7 +74,8 @@ d50ac889f22b        graphistry/graphistry-postgres:v2.35.3   "docker-entrypoint.
   * If points still do not load, or appear and freeze, likely issues with GPU init (driver) or websocket (firewall)
   * Can also be because preloaded datasets are unavailable: not provided, or externally mounted data sources
     * In this case, use ETL test, and ensure clustering runs for a few seconds (vs. just initial pageload)
-* Check `docker-compose logs -f -t --tail=1` and `docker ps` in case config or GPU driver issues, especially for GPU services
+* Check `docker-compose logs -f -t --tail=1` and `docker ps` in case config or GPU driver issues, especially for GPU services listed above
+* Upon failures, see below section on GPU testing
 
 ## 4a. Test 1.0 API uploads, Jupyter, and the PyGraphistry client API
 
@@ -245,9 +246,14 @@ Cloud:
 
 ## 6. Quick Testing and Test GPU
 
-* `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services
-  * check `docker-compose logs`, `docker-compose logs <service>`, `docker-compose logs -f -t --tail=100 service`
-  * unhealthy `streamgl`, `gpu`, `viz`, `forge-etl`: likely GPU driver issue
+Most of the below tests can be automatically run by `cd etc/scripts && ./test-gpu.sh`:
+  * Checks `nvidia-smi` works in your OS
+  * Checks `nvidia-smi` works in Docker, including runtime defaults used by `docker-compose`
+  * Checks Nvidia RAPIDS can successfully create CUDA contexts and run a simple on-GPU compute and I/O task of `1 + 1 == 2`
+
+`docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services:
+  * check `docker-compose logs`, `docker-compose logs <service>`, `docker-compose logs -f -t --tail=100 <service>`
+  * unhealthy `streamgl-gpu`, `forge-etl-python` on start: likely GPU driver issue
     * GPU is not the default runtime in `/etc/docker/deamon.json` (`docker info | grep Default`)
     * `OpenlCL` Initialization error: GPU drivers insufficently setup
     * `NVRTC error: NVRTC_ERROR_INVALID_OPTION`: Check GPU/drivers for RAPIDS compatiblility
