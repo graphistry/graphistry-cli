@@ -2,28 +2,36 @@
 
 Graphistry is the most scalable graph-based visual analysis and investigation automation platform. It supports both cloud and on-prem deployment options. Big graphs are tons of fun!
 
+The documentation here covers system administration
+
+See bottom of page for table of contents and additional resources.
+
 #### Get
 
-* Graphistry Hub: You do not need to manage Graphistry; Graphistry manages Hub for its users
-* Cloud: See below AWS/Azure Marketplace instructions
-* Docker (self-hosted): See [release portal](https://graphistry.zendesk.com/hc/en-us/articles/360033184174)
+Pick an [appropriate hardware/software configuration](hardware-software.md):
+* Graphistry Hub: Graphistry manages Hub for its users
+* AWS/Azure Marketplace: See below instructions
+* Docker (self-hosted): See [enterprise release portal](https://graphistry.zendesk.com/hc/en-us/articles/360033184174)
 
-#### Info
+#### Support
 
-This documentation cover system administration
+Email, Zoom, Slack, phone, tickets -- we encourage using the [Graphistry support channel](https://www.graphistry.com/support) that works best for you. We want you and your users to succeed! 
 
-**Guides**: See the **Further reading** section at the bottom of this page for the list of top-level administration guides. For analyst and developer guides, see the main docs accessible from the Graphistry web UI: `your_graphistry.acme.ngo/docs`. See also the [release history and roadmap](https://github.com/graphistry/graphistry-community).
+---
 
-**Support**: Email, Zoom, Slack, phone, tickets -- we encourage using the [Graphistry support channel](https://www.graphistry.com/support) that works best for you. We want you and your users to succeed! 
-
-
-#### Quick launch: Managed
+## Quick launch: Managed
 
 [AWS and Azure marketplaces](https://www.graphistry.com/get-started): The fastest way to start using Graphistry is to quick launch a preconfigured private Graphistry instance on [AWS and Azure marketplaces](https://www.graphistry.com/get-started)
 
 It runs in your private cloud provider account and is configured to autostart. See [AWS launch walkthrough tutorial & videos](https://www.graphistry.com/blog/marketplace-tutorial) and linked guides for optional post-launch configuration and maintenance.
 
-#### Quick launch: Manual
+Out-of-the-box configurations include GPU drivers, Docker with Nvidia runtime, multi-GPU support, Graphistry installation, auto-start on instance stop/restart, and more
+
+---
+
+## Quick launch: Manual
+
+Requirements: [Download Graphistry](https://graphistry.zendesk.com/hc/en-us/articles/360033184174) and [verify docker-compose is setup for Nvidia runtimes](docs/testing-an-install.md#6-quick-testing-and-test-gpu)
 
 **1. Install** if not already available from the folder with `containers.tar.gz`, and likely using `sudo`:
 
@@ -54,14 +62,7 @@ http://localhost
 * Try a visualization like http://localhost/graph/graph.html?dataset=Facebook&play=5000&splashAfter=false 
   * **Warning**: First viz load may be slow (1 min) as RAPIDS generates **just-in-time** code for each GPU worker upon first encounter, and/or require a page refresh
 
-
-## Advanced administration
-
-This admin guide covers deployment planning, installation and testing, configuration, operation, and maintenance. See links at the bottom of the page for each.
-
-**Cloud Marketplace Admins**: Your system comes preinstalled, so you can skip install steps and focus on customization and operation. Congrats!
-
-**Manul Install Admins**: The use of GPU computing and docker containers is still new to many teams. Graphistry ships batteries-included to make operations close to what you'd expect of modern containerized software. However, you are still responsible for setting up the host environment for Graphistry's containers, namely, setup of Nvidia drivers, Docker,  docker-compose, and enabling GPUs in the docker daemon.
+---
 
 
 ## Top commands
