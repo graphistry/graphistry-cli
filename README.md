@@ -2,13 +2,19 @@
 
 Graphistry is the most scalable graph-based visual analysis and investigation automation platform. It supports both cloud and on-prem deployment options. Big graphs are tons of fun!
 
-#### Docs
+#### Get
 
-This documentation cover system administration. See the **Further reading** section at the bottom of this page for the list of top-level administration guides. For analyst and developer guides, see the main docs accessible from the Graphistry web UI: `your_graphistry.acme.ngo/docs`. 
+* Graphistry Hub: You do not need to manage Graphistry; Graphistry manages Hub for its users
+* Cloud: See below AWS/Azure Marketplace instructions
+* Docker (self-hosted): See [release portal](https://graphistry.zendesk.com/hc/en-us/articles/360033184174)
 
-#### Support
+#### Info
 
-Email, Zoom, Slack, phone, tickets -- we encourage using the [Graphistry support channel](https://www.graphistry.com/support) that works best for you. We want you and your users to succeed! 
+This documentation cover system administration
+
+**Guides**: See the **Further reading** section at the bottom of this page for the list of top-level administration guides. For analyst and developer guides, see the main docs accessible from the Graphistry web UI: `your_graphistry.acme.ngo/docs`. See also the [release history and roadmap](https://github.com/graphistry/graphistry-community).
+
+**Support**: Email, Zoom, Slack, phone, tickets -- we encourage using the [Graphistry support channel](https://www.graphistry.com/support) that works best for you. We want you and your users to succeed! 
 
 
 #### Quick launch: Managed
@@ -204,6 +210,7 @@ docker-compose up -d
   * Capacity: [Hardware/software requirements](hardware-software.md)
   * Security: [Recommended hardening](docs/configure-security.md), [threat model](docs/threatmodel.md), [authentication](docs/authentication.md)
 * Install
+  * [Release portal](https://graphistry.zendesk.com/hc/en-us/articles/360033184174) for enterprise admins to download the latest Docker images
   * [Manual Graphistry Installation](docs/manual.md) for non-marketplace / non-hosted: 
   <br>AWS BYOL, Azure BYOL, On-Prem (RHEL/Ubuntu), & Air-Gapped
   * [Nvidia vGPU virtualization support](docs/vGPU.md)
@@ -223,6 +230,7 @@ docker-compose up -d
   * [PyGraphistry and notebooks](docs/configure-pygraphistry.md)
 
 * Maintain
+  * [Roadmap](https://github.com/graphistry/graphistry-community/projects/1) and [release notes](https://graphistry.zendesk.com/hc/en-us/articles/360033184174)
   * On unconfigured instance reboots, you may need to first run `sudo systemctl start docker`
   * [Update, backup, and migrate](docs/update-backup-migrate.md)
 * Test:
