@@ -63,7 +63,7 @@ Contents:
 
 Upon trying to pick a VM size or launching, Azure may fail for several reasons:
 
-* Insufficient account quota. Solve by requesting increased GPU / vCPU core capacity in your target launch region and extra regions for dev and contention periods. From your Azure Portal, go to  `? (Help)` -> `Help + support` -> `New support request` -> `Service and subscription (Quotas)` ([link](https://portal.azure.com/#blade/Microsoft_Azure_Support/HelpAndSupportBlade/overview)).  Request quota for multiple `NC6s_v2` or `NC6_v3`s in appropriate [regions that have them](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=virtual-machines).
+* Insufficient account quota. Solve by requesting increased GPU / vCPU core capacity in your target launch region and extra regions for dev and contention periods. From your Azure Portal, go to  `? (Help)` -> `Help + support` -> `New support request` -> `Service and subscription (Quotas)` ([link](https://portal.azure.com/#blade/Microsoft_Azure_Support/HelpAndSupportBlade/overview)).  Request quota for multiple `NC4as_T4_v3`, `NC6s_v2`, `NC6_v3`s or bigger in the same family for your intended [regions that have them](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=virtual-machines). We recommend at least 3x-4x quota: production, staging, test1, test2. Later, you may want more for scaling experiments.
 
 * Lack of GPU availability in the current region. In this case, try another valid GPU type in the current region, or launch in another region. Keeping the GPU close to your users is a good idea to minimize latency.
 
