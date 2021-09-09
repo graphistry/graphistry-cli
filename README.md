@@ -221,7 +221,7 @@ docker-compose up -d
       * [Security: Enable auto-TLS and restrict network access](docs/configure-security.md)
       * [Add users](docs/user-creation.md)
       * [AWS Marketplace quickstart](docs/aws_marketplace.md)
-      * [Azure Marketplace quickstart](docs/azure_marketplace.md)
+      * [Azure Marketplace quickstart](docs/azure_marketplace.md) - also [private BYOL plans](docs/azure_marketplace_private_offer.md) and [manual VM setup](docs/azure.md) (deprecated)
   * Content: 
       * [Investigations connectors](docs/configure-investigation.md): Splunk, Neo4j, and more
       * [Investigation templates](docs/templates.md): Save, reuse, link, and embed workflows
