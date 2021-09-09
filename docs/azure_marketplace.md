@@ -2,13 +2,16 @@
 
 You can now securely run Graphistry in your private Azure account with one click by launching [Graphistry in Azure Marketplace](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/graphistry.graphistry-core-2-24-9)!
 
+See also [Azure Marketplace private offers for Graphistry Core BYOL](azure_marketplace_private_offer.md)
+
 ## Get it now!
 
 1. Click **create** (vs. **Start with a pre-set configuration**)
 1. Fill  most VM settings as usual: Resource group, VM Name, and User + SSH Key / Password
     - **Region**: Pick a GPU-capable region in which you have GPU quota (see below), such as East US and West US 2
-    - **Size**: Select **NC6s_v2** or **NC6s_v3** (and *not* v1 series of *NC6s*)
-    - If asked, publicly expose (for incoming connections) `http` (80), `https` (443), and `ssh` (22)
+    - **Size**: Select **NC4as_T4_v3**, **NC6s_v2**, **NC6s_v3** (and *not* v1 series of *NC6s*) or bigger within the same families
+      - If the first time using GPUs, you may need to make a quota request, which generally takes 1-2 days
+    - If asked, publicly expose (for incoming connections) `http` (80), `https` (443), `ssh` (22), and potentially unconfigured `streamlit` (8501)
 1. Click **Review and create** and then **Create**
 1. Go to the public IP, refresh the page until it has fully loaded, create the first user (= admin) account, and start graphing!
 
@@ -42,14 +45,15 @@ Contents:
 
 ### 1. Azure special notes
 
-* Pick an NCv2-series or NCv3-series GPU, such as an NC6s v2, from an [Azure GPU-capable region near you](https://azure.microsoft.com/en-us/global-infrastructure/services/) 
+* Pick an NC4as_T4_v3, NCv2-series, or NCv3-series GPU, such as an NC6s v2, from an [Azure GPU-capable region near you](https://azure.microsoft.com/en-us/global-infrastructure/services/) 
 * Install path: `/var/graphistry`
 * If many uploads are expected, you may benefit from attaching a managed disk; contact Graphistry staff for automation scripts
 
 ### 2. Recommended configuration
 
 * Public ports:
-  * HTTP, HTTPS, and SSH
+  * HTTP (80), HTTPS (443), SSH (22), and optionally StreamLit (8501)
+    * You can lock these down further at any time, e.g., only open 22 when using
   * In restricted environments, constrain networking to a a safelist, e.g., VPN, and optional, [change logging drivers](https://docs.docker.com/config/containers/logging/configure/) to stop Graphistry from recieving maintenace logs
 * Assign a static IP or DNS entry to your Graphistry instance 
 * [Setup TLS](configure.md) and [restrict ports](configure-security.md)
@@ -147,6 +151,12 @@ See the `reset` command in the main README. Requires logging in, and will delete
 #### I want to log into the server
 
 See section `login`
+
+#### I want to use a private VM
+
+Private marketplace: See section [Azure Marketplace Privacy Offer: Launching Graphistry Core BYOL](azure_marketplace_private_offer.md)
+
+Private docker: Check Azure instructins for VM sizing and Docker instructions for manual installation.
 
 ---
 
