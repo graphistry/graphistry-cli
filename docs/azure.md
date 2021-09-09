@@ -29,8 +29,8 @@ Subsequent reading: [General installation](https://github.com/graphistry/graphis
 ## Prerequisites: Azure GPU Quota
 You may need to make quota requests to add GPUs to each of your intended locations:
 
-* **Minimal GPU type**: NC6v2 (hdd) in your region
-* **Maximal GPU type**: N-Series, see general documentation for sizing considerations
+* **Minimal GPU type**: Standard_NC4as_T4_v3 in your region
+* **Maximal GPU type**: N-Series (NC T4_v3, NC v2, NC v3, and A100), see general documentation for sizing considerations
 
 ### Testing if you already have GPU quota
 
