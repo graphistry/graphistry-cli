@@ -35,6 +35,8 @@ The steps are based on [Microsoft's offical instructions](https://docs.microsoft
 
 4. Private products
 
+Go to **private products**. Take care to **AVOID** the private marketplace link.
+
 ![Screen Shot 2021-09-09 at 2 35 28 PM](https://user-images.githubusercontent.com/4249447/132768074-21d5718f-a7b1-4da9-91d6-19b0c99c07e0.png)
 
 5. Graphistry Core : Bring your own license, private
