@@ -17,6 +17,10 @@ Pick an [appropriate hardware/software configuration](hardware-software.md):
 
 Email, Zoom, Slack, phone, tickets -- we encourage using the [Graphistry support channel](https://www.graphistry.com/support) that works best for you. We want you and your users to succeed! 
 
+#### Learn
+
+See also [release guides](https://github.com/graphistry/graphistry-community) and [user and developer documentation](https://hub.graphistry.com/docs)
+
 ---
 
 ## Quick launch: Managed
@@ -235,5 +239,7 @@ docker-compose up -d
   * [Roadmap](https://github.com/graphistry/graphistry-community/projects/1) and [release notes](https://graphistry.zendesk.com/hc/en-us/articles/360033184174)
   * On unconfigured instance reboots, you may need to first run `sudo systemctl start docker`
   * [Update, backup, and migrate](docs/update-backup-migrate.md)
+* Use and develop
+  * [Main documentation](https://hub.graphistry.com/docs) or the same URL adjusted for your local server's address
 * Test:
   * [Testing an install](docs/testing-an-install.md)
