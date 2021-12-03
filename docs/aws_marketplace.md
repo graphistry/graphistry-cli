@@ -46,6 +46,7 @@ Contents:
 
 ### 1. Recommended configuration
  
+* Use a regular AWS account as it is safer than [AWS Root account](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html)
 * [Associate your AWS instance with an Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html#using-instance-addressing-eips-associating) or a domain 
 * [Setup TLS](configure.md)
 * In restricted environments, constrain networking to a safelist, e.g., VPN, and optional, [change logging drivers](https://docs.docker.com/config/containers/logging/configure/) to stop Graphistry from recieving maintenace logs. See [recommended port restrictions](configure-security.md).
