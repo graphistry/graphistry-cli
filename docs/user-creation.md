@@ -4,6 +4,8 @@ See also [general configuration](configure.md) and [authentication](authenticati
 
 ## Account Creation Model
 
+It is easy to securely add users, and we generally recommend [giving users only as much access as they need](https://en.wikipedia.org/wiki/Principle_of_least_privilege):
+
 * Graphistry temporarily starts with **Open Registration**
 * The first user to register automatically gains the **superuser** and **staff** roles, and the system automatically switches to **Invite-Only**
 * **superuser** users can create new users and assign them roles, including **superuser** and **staff**
