@@ -5,6 +5,7 @@ Graphistry instances come with security out-of-the-box, and are typically furthe
 Read on for:
 
 * Out-of-the-box config (Admin)
+* Server configuration (Admin)
 * Recommended network config (Admin)
 * Connector configuration (Admin)
 * Safely using Graphistry APIs (Developer)
@@ -21,12 +22,21 @@ For futher information, see:
 
 ## Out-of-the-box config
 
-* First user to create an account is the Admin
+* First user to create an account is the web Admin
   * Cloud-specific deployments may tailor secure initialization, such as AWS defaulting to `admin` / `i-instanceID`
-* Admins then create other users and with differing role levels: Admin, User, Inactive
+* Web Admins then create other users and with differing role levels: Admin, User, Inactive
+  * As a web Admin, we recommend also creating a non-admin account for yourself
 * Sessions are protected with JWT tokens and HTTP-only CSRF tokens
   * TLS recommended
 * Visualizations are shared as web keys
+
+## Server configuration
+
+Self-hosting a server requires managing your own server security, such as periodic updates.
+
+If using a Cloud Marketplace distribution, you can always update to latest recommended system settings by updating to a latest Graphsitry-provided version.
+
+One common security recommendation is to seperate per-user lower-privilege server admin accounts instead of a shared root. These users will require access to the Docker daemon and `$GRAPHISTRY_HOME` (likely `/var/graphistry` or `~/graphistry`). We note that most web admins do not require server access.
 
 ## Recommended network config: TLS, IPs, Ports
 
@@ -49,7 +59,7 @@ The below should be standard for cloud and enterprise environments:
   * VPN-only if publishing is not meant for the general web
   * Port 22 (ssh): Always on, or manually enabled during administration
   * Port 443 (https): Always on
-  * Port 80 (http): Always on
+  * Port 80 (http): Always on, or manually enabled during administration
   * If the GPU/CPU is reused for other applications, whatever ports those systems need (we like to preassign a limited safe range)
 * Server firewall - Outbound port recommendations:
   * VPN user browsers (if no general web publishing)
