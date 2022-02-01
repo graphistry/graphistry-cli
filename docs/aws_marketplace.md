@@ -21,7 +21,7 @@ Launching Graphistry in AWS Marketplace? [Get started](https://www.graphistry.co
 
 ## Basic administration
 
-* [Security: Enable auto-TLS and restrict network access](docs/configure-security.md)
+* [Security: Enable auto-TLS and restrict network access](configure-security.md)
 * [Create users](user-creation.md)
 * [Generate API keys](../README.md) for individuals without accounts
 * Turn server on-and-off via AWS Console via **stop** and **start**
