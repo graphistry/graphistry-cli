@@ -10,6 +10,7 @@ Read on for:
 * Connector configuration (Admin)
 * Safely using Graphistry APIs (Developer)
 * Air gapping
+* Sensitive data
 
 For futher information, see:
 
@@ -104,3 +105,11 @@ Some environments require operation without access to the public internet
   * Benefit: Increase privacy, and potentially avoid usage slowdowns from waiting on non-responsive requests
   * Method 1: Before first system start, in your `data/config/custom.env`, set `AIR_GAPPED=1`
   * Method 2: User -> Admin portal -> Settings -> Config -> Check IS_AIR_GAPPED and save
+
+
+# Sensitive data
+
+As a Docker-based Linux system, most custom data is stored in Docker volumes. The remaining data, such as server accounts, are in standard Linux locations.
+
+In Graphistry, persistent data appears as the Postgres volume alongside the other Docker-managed volumes, and mounted subfolders of `$GRAPHISTRY_HOME/data`. Data like web login credentials are encrypted in Postgres (standard Django), with random values generated on first system start and recorded in your `${GRAPHISTRY_HOME}/data/config/custom.env`. See the migration sections for more on each. Several containers have additional named volumes used for caching purposes and, like Postgres, are managed by Docker.
+
