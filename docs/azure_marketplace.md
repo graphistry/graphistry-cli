@@ -19,7 +19,7 @@ Please [reach out](https://www.graphistry.com/support) to our team if we can hel
 
 ## Basic administration
 
-* [Security: Enable auto-TLS and restrict network access](configure-security.md)
+* [Security: Enable auto-TLS, restrict network access, and manage your server internals](configure-security.md)
 * [Create users](user-creation.md)
 * [Generate API keys](../README.md) for individuals without accounts
 * Turn server on-and-off in the Azure Console via **stop** and **start**
