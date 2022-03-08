@@ -52,6 +52,10 @@ https://*.website.org:443 {
 
 Note that Graphistry is internally configured via `nginx`.
 
+### Setup free Semi-Automatic TLS
+
+The above step may fail if your server does not allow outbound internet traffic. To work around, perform a [manual LetsEncrypt Certbot handshake for Caddy](configure-tls-caddy-manual-lets-encrypt-handshake.md).
+
 ### Setup custom certs
 
 * Place your certs in `./.caddy/my.crt` and `./.caddy/my.key`
