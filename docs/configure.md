@@ -44,9 +44,11 @@ https://*.website.org:443 {
   tls {
     max_certs 100
   }
-  proxy / nginx:80 {
-    websocket
+  respond /caddy/health/ 200 {
+    body "{\"success\": true}"
+    close
   }
+  reverse_proxy nginx:80
 }
 ```
 
@@ -64,9 +66,7 @@ The above step may fail if your server does not allow outbound internet traffic.
 ```
 https://your.site.ngo:443 {
   tls /root/.caddy/my.crt /root/.caddy/my.key
-  proxy / nginx:80 {
-    websocket
-  }
+  reverse_proxy nginx:80
 }
 ```
 
@@ -267,13 +267,17 @@ For automatic TLS (Let's Encrypt) and manual certs, edit `Caddyfile` ([Caddy doc
   tls {
     max_certs 100
   }
-  proxy / nginx:80 {
-    websocket
+  respond /caddy/health/ 200 {
+    body "{\"success\": true}"
+    close
   }
+  reverse_proxy nginx:80
 }
 :80 {
-  proxy / nginx:80 {
-    websocket
+  respond /caddy/health/ 200 {
+    body "{\"success\": true}"
+    close
   }
+  reverse_proxy nginx:80
 }
 ```
