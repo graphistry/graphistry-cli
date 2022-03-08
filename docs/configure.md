@@ -66,6 +66,10 @@ The above step may fail if your server does not allow outbound internet traffic.
 ```
 https://your.site.ngo:443 {
   tls /root/.caddy/my.crt /root/.caddy/my.key
+  respond /caddy/health/ 200 {
+    body "{\"success\": true}"
+    close
+  }
   reverse_proxy nginx:80
 }
 ```
