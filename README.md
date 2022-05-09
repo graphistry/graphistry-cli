@@ -12,6 +12,7 @@ Pick an [appropriate hardware/software configuration](hardware-software.md):
 * Graphistry Hub: Graphistry manages Hub for its users
 * AWS/Azure Marketplace: See below instructions
 * Docker (self-hosted): See [enterprise release portal](https://graphistry.zendesk.com/hc/en-us/articles/360033184174)
+* Experimental - Kubernetes Helm chart: See [graphistry/graphistry-helm repository](https://github.com/graphistry/graphistry-helm)  
 
 #### Support
 
