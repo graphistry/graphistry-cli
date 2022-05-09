@@ -23,7 +23,7 @@ Graphistry Enterprise also ships as a Docker container that runs in Linux Nvidia
 
 * Overview
 * Client
-* Server Software: Cloud, OS, Docker, Avoiding Root Users
+* Server Software: Cloud, Kubernetes, OS, Docker, Avoiding Root Users
 * Server Hardware: Capacity Planning
 
 ## Overview
@@ -103,6 +103,14 @@ Pricing: https://cloud.google.com/compute/gpus-pricing ($440+/mo at time of writ
 See the hardware provisioning section to pick the right configuration for you.
 
 Please contact for discussion of multi-GPU scenarios.
+
+### Kubernetes - Experimental
+
+See [graphistry/graphistry-helm repository](https://github.com/graphistry/graphistry-helm)
+
+* Same software/hardware requirements as elsewhere in this document
+* Runs as pods on one node and support for multi-node coming
+* Tested support for self-hosted (ex: minikube), Azure AKS, and Amazon EKS
 
 ### Virtualization
 
