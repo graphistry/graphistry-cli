@@ -113,6 +113,10 @@ You can configure the Caddy service to also reverse proxy additional services, i
 For an example of both public and log-required proxies, see the [graph-app-kit sample](https://github.com/graphistry/graph-app-kit/blob/master/src/caddy/full.Caddyfile).
 
 
+## Dashboards
+
+Separately [configure the public and private dashboards](configure-dashboards.md)
+
 ## Connectors
 
 Optionally, you can configure Graphistry to use database connectors. Graphistry will orchestrate cross-database query generation, pushing them down through the database API, and returning the combined results to the user. This means Graphistry can reuse your existing scaleout infrastructure and make its data more accessible to your users without requiring a second copy to be maintained. Some connectors further support use of the [Graphistry data bridge](bridge.md) for proxying requests between a Graphistry cloud server and an intermediate on-prem data bridge instead of directly connecting to on-prem API servers.
