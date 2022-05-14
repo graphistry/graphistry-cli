@@ -22,23 +22,25 @@ docker-compose up
 * Check health status via `docker ps` or via the [health check REST APIs](https://hub.graphistry.com/docs/api/2/rest/health/#healthchecks). Check resource consumption via `docker stats`, `nvidia-smi`, and `htop`. Note that the set of services evolves across releases:
 
 ```
-CONTAINER ID        IMAGE                                    COMMAND                  CREATED             STATUS                            PORTS                                                          NAMES
-a52806c712bb        graphistry/etl-server-python:v2.35.3     "/entrypoints/rapids…"   11 hours ago        Up 11 hours (healthy)             8786-8787/tcp                                                  graphistry_dask-scheduler_1
-0ba4a03e1f43        graphistry/etl-server-python:v2.35.3     "/entrypoints/rapids…"   11 hours ago        Up 11 hours                       8080/tcp                                                       graphistry_dask-cuda-worker_1
-4a07de869949        graphistry/streamgl-nginx:v2.35.3        "/docker-entrypoint.…"   11 hours ago        Up 11 hours (healthy)             80/tcp, 8080/tcp                                               graphistry_nginx_1
-df5c24ec02d6        graphistry/etl-server-python:v2.35.3     "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_forge-etl-python_1
-c50439a52ef2        graphistry/jupyter-notebook:v2.35.3      "/tini -g -- /bin/ba…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_notebook_1
-e0079b0b7b42        graphistry/graphistry-nexus:v2.35.3      "/entrypoint /bin/ba…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_nexus_1
-2e5b69c3c771        graphistry/graphistry-pivot:v2.35.3      "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_pivot_1
-cc40df2578f2        willfarrell/autoheal:v0.7.0              "/docker-entrypoint …"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_autoheal_1
-c1948372ed31        graphistry/caddy:v2.35.3                 "caddy run --config …"   11 hours ago        Up 8 minutes (health: starting)   0.0.0.0:80->80/tcp, 2019/tcp, 0.0.0.0:443->443/tcp, 8080/tcp   graphistry_caddy_1
-d35de5ccfe9f        graphistry/streamgl-viz:v2.35.3          "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_streamgl-viz_1
-4937beda66cb        redis:6.0.5                              "docker-entrypoint.s…"   11 hours ago        Up 11 hours (healthy)             6379/tcp, 8080/tcp                                             graphistry_redis_1
-3190b1739afa        graphistry/etl-server:v2.35.3            "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_forge-etl_1
-f98d7f50f590        graphistry/streamgl-sessions:v2.35.3     "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_streamgl-sessions_1
-931ed208c943        graphistry/streamgl-vgraph-etl:v2.35.3   "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_streamgl-vgraph-etl_1
-63dee80cb1c9        graphistry/streamgl-gpu:v2.35.3          "/tini -- /entrypoin…"   11 hours ago        Up 11 hours (healthy)             8080/tcp                                                       graphistry_streamgl-gpu_1
-d50ac889f22b        graphistry/graphistry-postgres:v2.35.3   "docker-entrypoint.s…"   11 hours ago        Up 11 hours (healthy)             5432/tcp, 8080/tcp                                             graphistry_postgres_1
+CONTAINER ID   NAME                              CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O         PIDS
+34f3cf3f9833   compose_nginx_1                   0.00%     23.91MiB / 31.27GiB   0.07%     10.7MB / 11.4MB   1.3MB / 49.2kB    27
+3e876f4acf19   compose_forge-etl-python_1        0.08%     1.376GiB / 2.93GiB    46.96%    137kB / 294kB     186MB / 16.4kB    27
+ea097f97aac9   compose_pivot_1                   0.00%     87.87MiB / 31.27GiB   0.27%     27.1kB / 1.91kB   28.5MB / 8.19kB   20
+2a2307451f30   compose_dask-cuda-worker_1        1.95%     1.147GiB / 8.789GiB   13.05%    839kB / 1.79MB    70.4MB / 8.19kB   22
+6d088ab08cfe   compose_streamgl-viz_1            0.23%     202.6MiB / 31.27GiB   0.63%     52.8kB / 11.4kB   287kB / 8.19kB    23
+aaf1d61a5de1   compose_notebook_1                0.00%     213.3MiB / 31.27GiB   0.67%     244kB / 7.24MB    58.5MB / 36.9kB   7
+06d8ee55767d   compose_streamgl-gpu_1            0.97%     717MiB / 31.27GiB     2.24%     26kB / 1.17kB     41.5MB / 8.19kB   84
+b1c4f9b4de53   compose_nexus_1                   0.03%     140.4MiB / 31.27GiB   0.44%     1.02MB / 1.46MB   106MB / 8.19kB    5
+a386ff2f93f9   compose_streamgl-sessions_1       0.03%     149.4MiB / 31.27GiB   0.47%     29.3kB / 1.2kB    29MB / 8.19kB     12
+2a46c4645224   compose_dask-scheduler_1          1.04%     142.2MiB / 31.27GiB   0.44%     2.09MB / 913kB    55.9MB / 8.19kB   6
+ed3a5d6e25ad   compose_forge-etl_1               0.24%     189.9MiB / 31.27GiB   0.59%     28.1kB / 1.17kB   15.4MB / 8.19kB   23
+e9bd7d2fa43c   compose_caddy_1                   0.00%     19.74MiB / 31.27GiB   0.06%     11.4MB / 11.4MB   11.9MB / 4.1kB    26
+351b27c75b8c   compose_streamgl-vgraph-etl_1     0.01%     128.3MiB / 31.27GiB   0.40%     30.6kB / 3.93kB   16MB / 8.19kB     12
+2c596681e5c9   compose_graph-app-kit-public_1    0.00%     133MiB / 31.27GiB     0.42%     56.3kB / 2.81MB   62.9MB / 8.19kB   6
+a31f9f54a506   compose_graph-app-kit-private_1   0.00%     97.94MiB / 31.27GiB   0.31%     27.2kB / 644B     6.5MB / 8.19kB    6
+aeed3469d559   compose_autoheal_1                0.00%     4.316MiB / 31.27GiB   0.01%     26.9kB / 0B       4.97MB / 0B       2
+2ae36f5256e8   compose_postgres_1                0.00%     55.05MiB / 31.27GiB   0.17%     1.16MB / 912kB    13.8MB / 75.6MB   7
+f0bc21b5bda2   compose_redis_1                   0.05%     6.781MiB / 31.27GiB   0.02%     29kB / 10.1kB     4.95MB / 0B       5
 ```
 
 | Type | Containers |
@@ -50,6 +52,7 @@ d50ac889f22b        graphistry/graphistry-postgres:v2.35.3   "docker-entrypoint.
 | JS viz services | `streamgl-viz` (heavy), `streamgl-sessions`, `streamgl-vgraph-etl` |
 | Investigation automation | `pivot` (heavy) |
 | Jupyter notebooks | `notebook` (heavy) |
+| Dashboards | `graph-app-kit-public`, `graph-app-kit-private` |
    
 * It is safe to reset any individual container **except** `postgres`, which is stateful: `docker-compose up -d --force-recreate --no-deps <some_stateless_services>`
 
@@ -192,12 +195,12 @@ docker-compose up
 ```
 
 
-#### 4c.i Persistence
+#### 5c.i Persistence
 
 * Pivot should persist to `./data` already by default, no need to do anything
 * Run a pivot investigation and save: should see `data/{investigation,pivot,workbook_cache,data_cache}/*.json`
 
-#### 4c.ii Connector - Splunk
+#### 5c.ii Connector - Splunk
 
 * Edit `data/custom/custom.env` for `SPLUNK_HOST`, `SPLUNK_PORT`, `SPLUNK_USER`, `SPLUNK_KEY`
 * Restart the `/pivot` service: `docker-compose restart pivot`
@@ -212,7 +215,7 @@ Entities: *
 ```
   * Expect to see two orange nodes on the first line, connected to many nodes in the second
 
-#### 4c.iv Connector - Neo4j
+#### 5c.iv Connector - Neo4j
 
 * Edit `.env` for `NEO4J_BOLT` (`bolt://...:...`), `NEO4J_USER`, `NEO4J_PASSWORD`
 * Test status button in http://graphistry/pivot/connectors
@@ -233,7 +236,7 @@ Steps out: 1..1
 ```  
   * Run all: Gets values for both
   
-## 5. Test TLS Certificates
+## 6. Test TLS Certificates
 
 Cloud:
 * Ensure domain<>IP assignment
@@ -244,7 +247,7 @@ Cloud:
   * Restart `docker-compose restart caddy`, check pages load
 * Try a notebook upload with `graphistry.register(...., protocol='https')`
 
-## 6. Quick Testing and Test GPU
+## 7. Quick Testing and Test GPU
 
 Most of the below tests can be automatically run by `cd etc/scripts && ./test-gpu.sh`:
   * Checks `nvidia-smi` works in your OS
@@ -293,3 +296,9 @@ Most of the below tests can be automatically run by `cd etc/scripts && ./test-gp
   * ``site.com/pivot/connectors`` loads a list of connectors
     * When clicking the ``Status`` button for each connector, it reports green. Check error reported in UI or docker logs (`docker compose logs -f -t pivot`): likely configuration issues such as password, URL domain vs fqdn, or firewall.
   *  Opening and running an investigation in ``site.com/pivot`` uploads and shows a graph
+
+
+## 8. Dashboard
+
+* When logged out, ensure `site.com/public/dash/` loads (note trailing slash), corresponding to `graph-app-kit-public`
+* When logged in as admin/staff, ensure `site.com/private/dash/` loads (note trailing slash), corresponding to `graph-app-kit-private`
