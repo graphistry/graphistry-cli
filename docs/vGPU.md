@@ -30,7 +30,7 @@ Longer-term, Graphistry is aiming to push most/all GPU use to [Dask](https://doc
 
 Plan licensing and driver versons first, as mistakes may require starting over.
 
-Most likely, you'll want vGPU profile 8Q with vGPU 10.2 -- vGPU 11.0 drivers:
+Most likely, you'll want vGPU profile 8Q with vGPU 11.0+ (11.4+ for AI) vGPU drivers:
 
 **GPU Driver**
 
@@ -38,7 +38,7 @@ You will install a hypervisor GPU driver in the hypervisor and a guest OS GPU dr
 
 * The hypervisor+guest GPU driver pair should be from [the same vGPU family](https://docs.nvidia.com/grid/index.html)
 
-* The driver's CUDA version must be [RAPIDS-compatible](https://rapids.ai/start.html): 10.2 -- 11.0 at time of writing
+* The driver's CUDA version must be [RAPIDS-compatible](https://rapids.ai/start.html): 11.0+ (11.4+ for AI) at time of writing
 
 * Use officially sanctioned drivers. Google Cloud hosts MD5-matched [guest OS drivers](https://cloud.google.com/compute/docs/gpus/grid-drivers-table).
 
@@ -52,7 +52,7 @@ Only C (vCS) and Q (Quadro vDWS) support OpenCL/CUDA. The compute profile (C) is
 
 Only one kind of vGPU virtualization currently works with Nvidia RAPIDS:
 
-1. Supported - Logical time and memory sliced: Nvidia RAPIDS-compatible vGPUs are for 10.2 - 11.0 . Each vGPU gets time-sliced and a maximum amount of memory.
+1. Supported - Logical time and memory sliced: Nvidia RAPIDS-compatible vGPUs are for 11.0 (11.4+ for AI) . Each vGPU gets time-sliced and a maximum amount of memory.
 
 2. Unsupported - MIG (physical virtualization): vGPU 11.1+ supports more true isolation of GPU cores and memory... but Nvidia RAPIDS does not yet officially work on MIGs.
 
