@@ -19,7 +19,7 @@ The instructions can be used in two ways:
 On your home machine or any other with internet access and Python, such as a container:
 
 * `sudo pip install certbot`
-* ` you might have to do sudo pip install cryptography --upgrade to upgrade the python cryptography package`
+* `sudo pip install cryptography --upgrade`
 * `sudo certbot certonly --manual --preferred-challenges dns --server https://acme-v02.api.letsencrypt.org/directory --manual-public-ip-logging-ok -d '<domain>'`
 
 Domain is an entry like `'my-org.graphistry.com'` -- not `https://` needed
