@@ -58,7 +58,7 @@ From `${GRAPHISTRY_HOME}`, run:
 * `docker-compose up -d --force-recreate --no-deps caddy`
 * Watch logs with `docker-compose logs -f -t --tail=1 caddy`
 
-### 4. Renewing certs
+### 5. Renewing certs
 * follow steps 1-4 above 
 * `docker-compose stop caddy` & remove caddy generate files in data/caddy/{data,config}/*
 * `docker-compose up -d --force-recreate --no-deps caddy`
