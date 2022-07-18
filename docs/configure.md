@@ -30,6 +30,14 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 
 Contact staff for setting up internal SSO (OIDC: Okta, ...) or via social logins to GitHub/Google
 
+If using an external proxy or load balancer, configure Graphistry's site domain setting (see above) and check above TLS settings
+
+Recommendations when self-hosting:
+* Setup email
+* Mark SSO as site-wide
+* Disallow non-SSO account creation
+
+
 ## TLS
 
 We encourage everyone to use HTTPS over HTTP, especially through the automatic TLS option, for [securing authentication](authentication.md)
@@ -85,6 +93,7 @@ Note the use of a fully qualified domain name in the first line, and that the fi
 To enforce TLS using your own outside load balancer or proxy rather than the built-in Caddy server, we recommend:
 
 * Setup TLS at your load balancer (ex: AWS ALB) or proxy
+* Ensure http traffic is auto-upgraded (redirected) to https
 * Forward (stripped) http traffic to Graphistry
 * Optionally, in your `Caddyfile`'s [reverse_proxy](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy) section, add [trusted_proxies](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy#trusted_proxies) so your load balancer's `X-Forwarded-{For,Proto,Host}` headers are trusted for propagation to Graphistry
 
@@ -118,9 +127,33 @@ Custom TLS setups often fail due to the certificate, OS, network, Caddy config, 
 If problems persist, please reach out to your Graphistry counterparts. Additional workarounds are possible.
 
 
+## Email
+
+*Optional*
+
+Contact staff for information on using an SMTP-based email service or Mailgun API, which is useful for tasks like user notifications
+
+## Site domain
+
+*Optional*
+
+In the Admin portal, go to Sites and change the `Domain name` to your domain, such as `graphs.acme-corp.com` 
+
+This aids scenarios such as when using an outside proxy and ensuring that web users see the intended external domain instead of the internal one leaking through
+
 ## Reverse proxy
 
-Graphistry routes all public traffic through Docker container Caddy, so you generally modify Docker settings for service `caddy:` in `docker-compose.yml` (or `data/config/custom.env`)  or Caddy settings in `data/config/Caddyfile`.
+### Built-in proxying
+
+Graphistry routes all public traffic through Docker container Caddy, so you generally modify Docker settings for service `caddy:` in `docker-compose.yml` (or `data/config/custom.env`)  or Caddy settings in `data/config/Caddyfile`. Further internal proxying may occur, but we do not advise manipulating internal tiers.
+
+### External proxies
+
+You may externally redirect traffic, such as through an AWS Load Balancer or CloudFlare
+
+* See above TLS discussion
+* Set the Site  
+
 
 ### Change public port
 
@@ -285,3 +318,4 @@ Every connector comes with a base set of pivots. See [custom pivots](configure-c
 ## Performance
 
 See [performance tuning](performance-tuning.md)
+
