@@ -24,15 +24,17 @@ Between edits, restart one or all Graphistry services: `docker-compose stop`  an
 ## Further configuration: docker-compose.yml and Caddyfile
 
 * More advanced administrators may edit `docker-compose.yml` .  Maintenance is easier if you never edit it.
-* Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https)) and mounting your certificates via `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker)). Caddy supports LetsEncrypt with automatic renewal, custom certificates and authorities, and self-signed certificates. 
+* Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https)), see below
 
 ## SSO
 
-Contact staff for setting up social logins to GitHub/Google, and support for exposing additional SSO layers to further social logins and/or internal systems like LDAP.
+Contact staff for setting up internal SSO (OIDC: Okta, ...) or via social logins to GitHub/Google
 
 ## TLS
 
 We encourage everyone to use HTTPS over HTTP, especially through the automatic TLS option, for [securing authentication](authentication.md)
+
+Graphistry supports both free automatic TLS within your server (Caddy/LetsEncrypt) and offloading to an external load balancer or proxy
 
 ### Setup free Automatic TLS
 
@@ -60,6 +62,8 @@ The above step may fail if your server does not allow outbound internet traffic.
 
 ### Setup custom certs
 
+If you already have certificates, Caddy can use them:
+
 * Place your certs in `./.caddy/my.crt` and `./.caddy/my.key`
 * Modify `Caddyfile`:
 
@@ -75,6 +79,31 @@ https://your.site.ngo:443 {
 ```
 
 Note the use of a fully qualified domain name in the first line, and that the file paths are for the `caddy` container's file system, not the host file system
+
+### Setup offloading TLS from a load balancer or proxy
+
+To enforce TLS using your own outside load balancer or proxy rather than the built-in Caddy server, we recommend:
+
+* Setup TLS at your load balancer (ex: AWS ALB) or proxy
+* Forward (stripped) http traffic to Graphistry
+* Optionally, in your `Caddyfile`'s [reverse_proxy](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy) section, add [trusted_proxies](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy#trusted_proxies) so your load balancer's `X-Forwarded-{For,Proto,Host}` headers are trusted for propagation to Graphistry
+
+IP List:
+
+```
+reverse_proxy 172.16.0.169:8080 {
+	trusted_proxies 173.245.48.0/20 103.21.244.0/22
+}
+```
+
+Shortcut for internal IPs:
+
+```
+reverse_proxy 172.16.0.169:8080 {
+	trusted_proxies private_ranges
+}
+```
+
 
 ### Debugging TLS
 
@@ -256,36 +285,3 @@ Every connector comes with a base set of pivots. See [custom pivots](configure-c
 ## Performance
 
 See [performance tuning](performance-tuning.md)
-
-TLS: Caddyfile
---------------------
-
-All external traffic reverse proxies through Caddy, which is provided as a convenient declarative control layer for settings such as TLS. Please contact your sales engineer for additional assistance. 
-
-### Caddyfile
-
-For automatic TLS (Let's Encrypt) and manual certs, edit `Caddyfile` ([Caddy docs](https://caddyserver.com/docs/tls)) and mount your certs by editing `docker-compose.yml` ([Caddy Docker docs](https://github.com/abiosoft/caddy-docker))
-
-#### Sample free automatically-renewing LetsEncrypt TLS certificates with Caddy
-
-**Caddyfile**
-
-```
-*.acme.org {
-  tls {
-    max_certs 100
-  }
-  respond /caddy/health/ 200 {
-    body "{\"success\": true}"
-    close
-  }
-  reverse_proxy nginx:80
-}
-:80 {
-  respond /caddy/health/ 200 {
-    body "{\"success\": true}"
-    close
-  }
-  reverse_proxy nginx:80
-}
-```
