@@ -45,9 +45,9 @@ One common security recommendation is to seperate per-user lower-privilege serve
 
 We **highly** encourage using TLS and make it easy:
 
-* [Configure the Caddyfile](configure.md) for auto-TLS with one line (recommended) or add your own TLS certificate
+* [Configure the Caddyfile](configure.md) for auto-TLS with one line (recommended), add your own TLS certificate, or offload TLS
 * TLS is required for JWT auth to be secured against MitM attacks
-* Auto-TLS requires a domain name
+* The built-in auto-TLS requires a domain name
 
 ### Firewalls & SSH
 
@@ -56,15 +56,20 @@ We recommend secure use of SSH and to consider using a firewall for VPN-only tra
 The below should be standard for cloud and enterprise environments:
 
 * SSH: Keys for admins
+* DNS: Assign a domain name and set it in the Graphistry Admin Portal's Site Settings
 * Server firewall - Inbound recommendations:
   * VPN-only if publishing is not meant for the general web
+  * If an external load balancer and bastion are available, VPC-only
+  * HTTP->HTTPS auto-upgrade either via the built-in Caddy proxy, or when TLS-offloading, at the external system
   * Port 22 (ssh): Always on, or manually enabled during administration
-  * Port 443 (https): Always on
+  * Port 443 (https): Always on, unless offloading TLS
   * Port 80 (http): Always on, or manually enabled during administration
   * If the GPU/CPU is reused for other applications, whatever ports those systems need (we like to preassign a limited safe range)
 * Server firewall - Outbound port recommendations:
   * VPN user browsers (if no general web publishing)
   * Whatever database and API systems (servers and cloud regions)
+
+Graphistry can work with TLS offloading (CF, AWS ALBs, ...) or handle internally (Caddy)
 
 # Connector configuration
 
@@ -84,7 +89,7 @@ Check if your database or API supports restricted roles. For example, when Graph
 
 
 * Safe defaults
-  * Ensure TLS is configured, especially for data uploads
+  * Ensure TLS is configured (Caddy or offloaded)
   * Prefer the 2.0 API over the 1.0 where available
 * Principle of least privilege: API tokens act on behalf of the owning account, so be as minimal as needed
   * Prefer User accounts over Admin accounts
