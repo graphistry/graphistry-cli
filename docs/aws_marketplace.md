@@ -48,9 +48,9 @@ Contents:
  
 * Use a regular AWS account as it is safer than [AWS Root account](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html)
 * [Associate your AWS instance with an Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html#using-instance-addressing-eips-associating) or a domain 
-* [Setup TLS](configure.md)
-* In restricted environments, constrain networking to a safelist, e.g., VPN, and optional, [change logging drivers](https://docs.docker.com/config/containers/logging/configure/) to stop Graphistry from recieving maintenace logs. See [recommended port restrictions](configure-security.md).
-* [Setup TLS](configure.md)
+* [Setup TLS](configure.md), potentially through an AWS Load Balancer (ALB)
+* In restricted environments, constrain networking to a safelist, e.g., VPN, and optional, [change logging drivers](https://docs.docker.com/config/containers/logging/configure/) to stop Graphistry from recieving maintenace logs. See [recommended port restrictions](configure-security.md)
+  * You can limit instance traffic to VPC-internal, such as not associating a public IP: SSH via a bastion server, and route all public HTTP/HTTPS through an AWS Load Balancer (ALB), including aan AWS Web Application Firewall (WAF)
 * If expecting many uploads, attach a managed disk. Contact Graphistry staff for automation assistance.
 
 ### 2. Solve GPU availability errors
