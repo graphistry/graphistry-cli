@@ -44,6 +44,29 @@ We encourage everyone to use HTTPS over HTTP, especially through the automatic T
 
 Graphistry supports both free automatic TLS within your server (Caddy/LetsEncrypt) and offloading to an external load balancer or proxy
 
+### TLS Hardening
+
+If Caddy is used for TLS, several additional policies may be of interest, but only use ones that match your intended usage patterns:
+
+```
+https://*.website.org:443 {
+  ...
+  reverse_proxy nginx:80 {
+        # enable HSTS (1yr)
+        header_down Strict-Transport-Security max-age=31536000;
+
+        # disable clients from sniffing the media type
+        header_down X-Content-Type-Options nosniff
+
+        # clickjacking protection
+        header_down X-Frame-Options SAMEORIGIN
+
+        # keep referrer data off of HTTP connections
+        header_down Referrer-Policy no-referrer-when-downgrade
+  }
+}
+```
+
 ### Setup free Automatic TLS
 
 Caddy supports [free automatic TLS](https://caddyserver.com/docs/automatic-https) as long as your site meets the listed conditions.  
