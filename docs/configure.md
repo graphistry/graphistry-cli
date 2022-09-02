@@ -46,6 +46,7 @@ Graphistry supports both free automatic TLS within your server (Caddy/LetsEncryp
 
 ### TLS Hardening
 
+#### Caddy
 If Caddy is used for TLS, several additional policies may be of interest, but only use ones that match your intended usage patterns:
 
 ```
@@ -67,12 +68,15 @@ https://*.website.org:443 {
 }
 ```
 
-Also inform the Graphistry server to use secure cookies in `data/config/custom.env`:
+#### Application servers
+
+Also inform the Graphistry application servers to use secure cookies in `data/config/custom.env`:
 
 ```
 COOKIE_SECURE=true
 ```
 
+... then restart: `docker-compose up -d --force-recreate --no-deps nexus`
 
 
 ### Setup free Automatic TLS
