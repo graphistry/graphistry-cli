@@ -166,7 +166,7 @@ If problems persist, please reach out to your Graphistry counterparts. Additiona
 
 *Optional*
 
-Contact staff for information on using an SMTP-based email service or Mailgun API, which is useful for tasks like user notifications
+See the [email](email.md) section
 
 ## Site domain
 
