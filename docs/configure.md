@@ -67,6 +67,14 @@ https://*.website.org:443 {
 }
 ```
 
+Also inform the Graphistry server to use secure cookies in `data/config/custom.env`:
+
+```
+COOKIE_SECURE=true
+```
+
+
+
 ### Setup free Automatic TLS
 
 Caddy supports [free automatic TLS](https://caddyserver.com/docs/automatic-https) as long as your site meets the listed conditions.  
