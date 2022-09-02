@@ -66,7 +66,7 @@ We **highly** encourage using TLS and make it easy:
 
 * [Configure the Caddyfile](configure.md) for auto-TLS with one line (recommended), add your own TLS certificate, or offload TLS
 * TLS is required for JWT auth to be secured against MitM attacks
-* The built-in auto-TLS requires a domain name
+* Beyond enabling TLS, check other common server settings around it in the authentication configuration docs
 
 ### Firewalls & SSH
 
