@@ -39,6 +39,25 @@ If using a Cloud Marketplace distribution, you can always update to latest recom
 
 One common security recommendation is to seperate per-user lower-privilege server admin accounts instead of a shared root. These users will require access to the Docker daemon and `$GRAPHISTRY_HOME` (likely `/var/graphistry` or `~/graphistry`). We note that most web admins do not require server access.
 
+### Session configuration
+
+You may want to tweak session security options in `data/config/custom.env` (see defaults in `.env`):
+
+```bash
+# APIS
+JWT_ALLOW_REFRESH=True
+JWT_REFRESH_EXPIRATION_DELTA=86400
+#Force re-token every hour
+JWT_EXPIRATION_DELTA=3600
+
+# WEB
+# Web session cookie timeout default 2 weeks
+SESSION_COOKIE_AGE=1209600
+```
+
+Upon changing, restart the web server with the fresh environment: `docker-compose up -d --force-recreate --no-deps nexus`
+
+
 ## Recommended network config: TLS, IPs, Ports
 
 ### TLS Certificates
