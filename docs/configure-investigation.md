@@ -20,12 +20,12 @@ Set log level to debug:
 
 Via `.env`:
 
-```
+```bash
 GRAPHISTRY_LOG_LEVEL=DEBUG
 ```
 
-Via `data/investigations/config/config.json`:
-```
+Via `data/pivot-db/config/config.json`:
+```json
 {
   "log": {
     "level": "DEBUG"
@@ -41,9 +41,11 @@ After setting these, restart your server:
 
 # Schema
 
-See also: [main ontology docs](configure-ontology.md)
+The schema specifies how to configure each setting as either an environment variable in `data/config/custom.env` (ex: `"env": "PIVOT_INTERNAL_IP_ACCEPTLIST"`) or as JSON in `data/pivot-db/config/config.json` following the schema's hierarchy + type `"format"` (ex: `{"layouts": {"network": { "ipInternalAcceptList": [ "ip1", "ip2"] } }
 
-```
+See also: [main ontology docs](configure-ontology.md) and the [convict specification format](https://github.com/mozilla/node-convict/tree/master/packages/convict)
+
+```json
 {
     "env": {
         "doc": "The applicaton environment.",
