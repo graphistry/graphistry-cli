@@ -1,6 +1,6 @@
 # Configure Custom Graphistry Ontology
 
-The Graphistry ontology is a set of mappings that guide automatic visualization and simplify data worklows. This document overviews the ontology and how to extend.
+The Graphistry ontology is a set of mappings that guide automatic visualization and simplify data worklows. This document overviews the ontology and how to extend. For the formal format, see Graphistry's [convict-format specification](https://github.com/graphistry/graphistry-cli/blob/master/docs/configure-investigation.md#schema).
 
 ## Out-of-the-box ontologies
 
