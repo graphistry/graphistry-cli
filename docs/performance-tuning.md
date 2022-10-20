@@ -72,9 +72,10 @@ By default, Graphistry will use all available Nvidia GPUs and CPU cores on a ser
 
 * The GPU-using services are `streamgl-gpu`, `forge-etl-python`, and `dask-cuda-worker`
 * Each service used all GPUs by default
-* Pick which GPUs a service's workers can access by setting environment variable CUDA_VISIBLE_DEVICES
-  * Ex: `CUDA_VISIBLE_DEVICES=0`
-  * Ex: `CUDA_VISIBLE_DEVICES=0,3`
+* Pick which GPUs a service's workers can access by setting environment variable NVIDIA_VISIBLE_DEVICES
+  * Ex: `NVIDIA_VISIBLE_DEVICES=""` <-- no GPUs (CPU-only)
+  * Ex: `NVIDIA_VISIBLE_DEVICES=0` <-- GPU 0
+  * Ex: `NVIDIA_VISIBLE_DEVICES=0,3` <-- GPUs 0 and 3
   * Every GPU exposed to `forge-etl-python` should also be exposed to `dask-cuda-worker`
 * By default, each GPU worker can use any CPU core
   * In general, there should be 4+ CPU cores per GPU
