@@ -14,7 +14,7 @@ The reference script below was last tested with an Azure Ubuntu 18.04 LTS  AMI o
 
 
 * Nvidia driver 430.26
-* CUDA 10.2
+* CUDA 10.2 (NOTE: 11.0 now required for RAPIDS 2022.x, or 11.5+ for Graphistry AI extensions)
 * Docker CE 19.03.1
 * docker-compose 1.24.1
 * nvidia-container 1.0.4
