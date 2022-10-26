@@ -135,7 +135,7 @@ Graphistry regularly runs on:
 
 Both support Nvidia / Docker:
 
-* CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) (CUDA 10.2 - 11.0 for RAPIDS 0.16+)
+* CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) (CUDA 11.0 for RAPIDS 2022.x, and 11.5+ for Graphistry AI extensions)
 * [Nvidia Docker *native* runtime](https://github.com/NVIDIA/nvidia-docker)  (for after Docker 19.03)
 * [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.6+) 
   * Ensure the default Docker runtime set as `nvidia` at time of launch (check: `docker info | grep -i runtime` => default `nvidia`)
@@ -201,7 +201,7 @@ The following GPUs, Pascal and later (Pascal, Tesla, Turing, Volta, RTX) are kno
 
 The GPU should provide 1+ GB of memory per concurrent user. A minimum of 4GB of GPU RAM is required, and 12GB+ is recommended. Lower is possible for development. For help evaluating GPUs, we recommend reaching out to the Graphistry team or the [RAPIDS.ai community](https://rapids.ai/community.html).
 
-RAPIDS requires specific Nvidia drivers. Graphistry releases align with [Nvidia RAPIDS.ai](https://rapids.ai/) releases, so pick drivers compatible with the RAPIDS.ai distribution from the same time period. At time of writing, this would be CUDA 10.2 -- 11.0.
+RAPIDS requires specific Nvidia drivers. Graphistry releases align with [Nvidia RAPIDS.ai](https://rapids.ai/) releases, so pick drivers compatible with the RAPIDS.ai distribution from the same time period. At time of writing, this would be CUDA 11.0 (RAPIDS 2022.x) or 11.5+ (Graphistry AI extensions)
 
 If also using a hypervisor, the hypervisor GPU driver should match the guest OS GPU driver, and due to vGPUs not currently supporting CUDA Unified Memory, set `RMM_ALLOCATOR=default` in Graphistry setting file `data/config/custom.env`.
 
