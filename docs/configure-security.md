@@ -29,7 +29,9 @@ For futher information, see:
   * As a web Admin, we recommend also creating a non-admin account for yourself
 * Sessions are protected with JWT tokens and HTTP-only CSRF tokens
   * TLS recommended
-* Visualizations are shared as web keys
+  * Cross-origin embedding enabled
+  * Cross-origin embedded login disabled (see TLS configuration section)
+* Visualizations are shared as secure web keys (unguessable IDs)
 
 ## Server configuration
 
@@ -64,9 +66,16 @@ Upon changing, restart the web server with the fresh environment: `docker-compos
 
 We **highly** encourage using TLS and make it easy:
 
-* [Configure the Caddyfile](configure.md) for auto-TLS with one line (recommended), add your own TLS certificate, or offload TLS
+* [Configure the Caddyfile](configure.md#tls) for auto-TLS with one line (recommended), add your own TLS certificate, or offload TLS
 * TLS is required for JWT auth to be secured against MitM attacks
 * Beyond enabling TLS, check other common server settings around it in the authentication configuration docs
+
+### Embedding
+
+Enabling **cross-origin authenticated use** is often desirable:
+
+* Cross-origin embedding for unauthenticated visualizations is enabled by default
+* Cross-origin embedding for authenticated visualizations is disabled by default, enable as part of [TLS configuration](configure.md#tls)
 
 ### Firewalls & SSH
 
