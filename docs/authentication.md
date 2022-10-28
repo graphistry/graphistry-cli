@@ -60,7 +60,10 @@ Graphistry authentication uses standard web software layers:
 
 * The first user to create an account will be given an administrator role. This may vary, such as AWS Marketplace does have an initial account: `admin` / `i-theInstanceID`. 
 
-* Subsequent user registration follows a configurable policy ([see user creation](user-creation.md)). By default, only the administrator can invite subsequent users. The administrator may want to open registration or manually elevate the role of different users.
+* Subsequent user registration follows a configurable policy ([see user creation](user-creation.md))
+    * By default, only the administrator can invite subsequent users
+    * The administrator may want to open account creation or manually elevate the role of different users
+    * Organization administrators may control whether their organization is open for joining at all, including whether SSO users can self-join or require an explicit invitation
 
 * API users, upon getting an account, will make their code [programmatically generate short-lived JWT tokens and refresh them](https://hub.graphistry.com/docs/api/1/rest/auth/#auth2).
 
