@@ -32,10 +32,11 @@ Contact staff for setting up internal SSO (OIDC: Okta, ...) or via social logins
 
 If using an external proxy or load balancer, configure Graphistry's site domain setting (see above) and check above TLS settings
 
-Recommendations when self-hosting:
+Recommendations for SSO when self-hosting:
 * Setup email
 * Mark SSO as site-wide
 * Disallow non-SSO account creation
+* Decide whether SSO users can automatically join organizations without an invitation
 
 
 ## TLS
@@ -43,6 +44,8 @@ Recommendations when self-hosting:
 We encourage everyone to use HTTPS over HTTP, especially through the automatic TLS option, for [securing authentication](authentication.md)
 
 Graphistry supports both free automatic TLS within your server (Caddy/LetsEncrypt) and offloading to an external load balancer or proxy
+
+As part of TLS configuration, decide whether to allow cross-origin embedding of private visualizations
 
 ### TLS Hardening
 
