@@ -14,7 +14,7 @@ It is easy to securely add users, and we generally recommend [giving users only 
 * **staff** users also get access to the shared Jupyter notebook server, private dashboards, and the team investigation automation tool
 * **superuser** users can also turn open registration back on, and give newly self-registered users the role **staff**
 * Users can create organizations
-* SSO can be enabled site-wide or per-organization, such as when there are multiple identity providers
+* [SSO can be enabled](authentication.md) site-wide or per-organization, such as when there are multiple identity providers
 * Organization administrators can invite existing site users into their organization
 * Organization administrators can choose whether SSO users can self-join the organization or require an invitation
 * Site administrators can create users from an organization page, who then get added to the organization at the same time
