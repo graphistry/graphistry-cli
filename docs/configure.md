@@ -72,8 +72,14 @@ https://*.website.org:443 {
 
 Also inform the Graphistry application servers to use secure cookies in `data/config/custom.env`:
 
-```
+```bash
 COOKIE_SECURE=true
+```
+
+For visualizations to be embeddable in different origin sites, enable `COOKIE_SECURE` and then disable `COOKIE_SAMESITE`:
+
+```bash
+COOKIE_SAMESITE=None
 ```
 
 ... then restart: `docker-compose up -d --force-recreate --no-deps nexus`
