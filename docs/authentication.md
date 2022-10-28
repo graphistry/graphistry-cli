@@ -24,7 +24,7 @@ Graphistry authentication uses standard web software layers:
   * For example, notebook service use currently require staff level permissions
   * Nginx is _not_ exposed for configuration
   
-* Authentication service: Django (`nexus`) - CSRF/JWT sessions
+* Authentication service: Django (`nexus`) - CSRF/JWT cookies and sessions
   * Web sesssions use HTTP-only `csrftoken` and `graphistry_jwt` cookies
   * APIs use `jwt` tokens via header `Authorization: Bearer xyz`
   * ... TLS is required for protecting these from MITM attacks
@@ -39,6 +39,13 @@ Graphistry authentication uses standard web software layers:
   * Services are written following an object-capability paradigm:
     * Having a value gives authority to read/write/call it
     * ... As does passing it, or having/passing a csrf/jwt credential authorized for it
+
+ * Browser security headers
+   * Unconfigured servers do nto have TLS
+   * [Add a TLS certificate](configure.md#tls) enables TLS
+   * Further consider adding [additional security headers](configure.md#caddy)
+   * Cross-origin embedding for unauthenticated visualizations is enabled by default
+   * To enable cross-origin embedding of authenticated visualizations, [modify the cookie options](configure.md#application-servers)
     
 ## Usage
 
