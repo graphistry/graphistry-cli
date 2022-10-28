@@ -30,6 +30,15 @@ Graphistry authentication uses standard web software layers:
   * ... TLS is required for protecting these from MITM attacks
   * By default, authentication is via Graphistry's internal account system
     * Integrating with social/external and internal auth are also possible
+
+* Single sign-on (SSO)
+  * Graphistry supports OIDC-compliant single sign-on (SSO)
+  * Menu: Admin Portal -> Settings -> Config -> IS_SSO_SIGNUP: Enable, save
+  * Manu:
+      * Site-wide SSO: Go to Manage Site
+      * Organization-specific:  Go to Manage Organizations -> Security icon (SSO)
+  * Configure the identity provider as instructed
+      * For popular providers, pick a template, fill in the host name, and get the rest prefilled
     
 * Services use JWT tokens
   * They will translate csrf to JWT as needed
@@ -63,3 +72,7 @@ The most typical authentication configurations are:
 1. Set TLS via `Caddyfile`, with optional manual TLS credential volume mount in the `docker-compose.yml`. See TLS [docs](configure.md#tls-caddyfile).
 
 2. Open/close account registration and invite users. See [user creation docs](user-creation.md). Contact staff for more advanced options, such as social logins and LDAP/SAML.
+
+3. Enable cross-origin embedding of authenticated visualizations by [editing cookie settings](configure.md#application-servers) (requires TLS)
+
+4. Enable SSO
