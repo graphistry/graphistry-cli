@@ -71,6 +71,8 @@ https://*.website.org:443 {
 }
 ```
 
+Note: Configuration line `header_down X-Frame-Options SAMEORIGIN` will prevent all cross-origin embedding. By default, public content can be cross-origin embedded while private content cannot. See also `COOKIE_SAMESITE` for enabling authorized private content in cross-origin embeddings.
+
 #### Application servers
 
 Also inform the Graphistry application servers to use secure cookies in `data/config/custom.env`:
