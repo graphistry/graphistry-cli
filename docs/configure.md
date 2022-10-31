@@ -290,7 +290,7 @@ SPLUNK_KEY=...
 #SPLUNK_SERVER_KEY=...
 ```
 
-4. Restart and test the connector as per above. You can test the underlying Splunk API configuration by running `curl -u admin:changme  https://splunk.host.name.here:8089/services/search/jobs/export  -d search="search * | head 3" -d output_mode=csv` from your local Splunk server and your Graphistry server.
+4. Restart the pivot service (see Get Started) and test the connector as per above. You can test the underlying Splunk API configuration by running `curl -u admin:changme  https://splunk.host.name.here:8089/services/search/jobs/export  -d search="search * | head 3" -d output_mode=csv` from your local Splunk server and your Graphistry server.
 
 ### Example: Neo4j
 
@@ -335,7 +335,7 @@ For faster start, or to be explicit about schema, or avoid start issues, you may
 ```
 
 
-2. Restart and test the connector as per above. In-tool, you can test the connection status for the connector panel by clicking the 'check status' button for the Neo4j connector. If there is an error, you can further test your Neo4j database network connectivity by trying a Graphistry Jupyter notebook demo for Neo4j to connect to Neo4j from the notebook.
+2. Restart the pivot service (see Get Started) and test the connector as per above. In-tool, you can test the connection status for the connector panel by clicking the 'check status' button for the Neo4j connector. If there is an error, you can further test your Neo4j database network connectivity by trying a Graphistry Jupyter notebook demo for Neo4j to connect to Neo4j from the notebook.
 
 
 ### Data bridge
