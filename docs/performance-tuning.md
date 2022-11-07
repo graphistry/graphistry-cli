@@ -140,6 +140,7 @@ When pushing datasets via the REST API or users upload via the browser, you can 
 By default, Graphistry will use all available Nvidia GPUs and CPU cores on a server to spread tasks from concurrent users:
 
 * The GPU-using services are `streamgl-gpu`, `forge-etl-python`, and `dask-cuda-worker`
+* You may want to increase support CPU worker counts accordingly as well, see above
 * Each service used all GPUs by default
 * Pick which GPUs a service's workers can access by setting environment variable NVIDIA_VISIBLE_DEVICES
   * Ex: `NVIDIA_VISIBLE_DEVICES=""` <-- no GPUs (CPU-only)
