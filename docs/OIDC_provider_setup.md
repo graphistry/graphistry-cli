@@ -5,18 +5,17 @@
 ### OKTA OIDC SETUP
 | Step | Diagram |
 | :- | :-: |
-| 1. After login to your OKTA account, if it show this page, click admin button    | <img src="img/OIDC_setup/oidc_setup_auth0_1_1.png" width="60%">     |
-| 2. Go to the application page and click “Create App Integration” to create a new application.    | ![image](https://user-images.githubusercontent.com/93269128/159424300-ebc34710-aaff-4fdd-b255-2d1401ae8156.png) |
-| 3. Select “OIDC - OpenID Connect” in the Sign-in method section and “Single-Page Application” at the Application Type section.    | ![image](https://user-images.githubusercontent.com/93269128/200738647-ade0ad26-28aa-4ebd-b240-c692d74ae9aa.png) | 
-| 4. Change the application name as you like and you can upload a logo for this application.    | ![image](https://user-images.githubusercontent.com/93269128/200741176-b1da3776-b70a-46f5-8716-7f9a3ee15685.png) | 
+| 1. After login to your OKTA account, if it show this page, click admin button    | <img src="img/OIDC_setup/oidc_setup_okta_1_1.png" width="70%">     |
+| 2. Go to the application page and click “Create App Integration” to create a new application.    | <img src="img/OIDC_setup/oidc_setup_okta_1_2.png" width="70%"> |
+| 3. Select “OIDC - OpenID Connect” in the Sign-in method section and “Single-Page Application” at the Application Type section.    | <img src="img/OIDC_setup/oidc_setup_okta_1_3.png" width="70%"> | 
+| 4. Change the application name as you like and you can upload a logo for this application.    | <img src="img/OIDC_setup/oidc_setup_okta_1_4.png" width="70%"> | 
 | 5. Change the sign-in redirect url in the following format. Change the field in bracket to relative field. For example, this is one of the urls used in development eg(http://localhost:8000/o/{org_id}/sso/oidc/{idp_name}/login/callback)
-If you are using an enterprise plan, this is the callback url for it. eg(http://localhost:8000/g/sso/oidc/{idp_name}/login/callback)    | ![image](https://user-images.githubusercontent.com/93269128/159429137-6f13cdd9-3306-4f3e-b1f0-b3abae1ee8ea.png) | 
-| 6. Choose “Skip group assignment for now” and save the changes. We will assign the user/group later.    | ![image](https://user-images.githubusercontent.com/93269128/159429177-a507b2bd-6b63-4aac-9694-f4ff98356795.png) | 
-| 7. Record the field named “Client ID”, and “Okta domain”. We have to use these fields to register an Organization SSO ID Provider in graphistry.    | ![image](https://user-images.githubusercontent.com/93269128/200978082-7ab578a9-e6d6-4f9c-9c5e-d67b5c9187b8.png)
-![image](https://user-images.githubusercontent.com/93269128/200978359-0b6fc650-61cf-4489-8efa-5617e4feab12.png) | 
-| 8. Assign persons to application.    | ![image](https://user-images.githubusercontent.com/93269128/200741383-78a50796-bbee-4788-be9f-e608b7c1a95c.png) | 
-| 9. Click the “Assign” same line with the person to assign the application to it.    | ![image](https://user-images.githubusercontent.com/93269128/200741506-8dfdb745-af04-4f5f-a921-5429d4f60acd.png) | 
-| 10. Click the “Assign” same line as group to assign group to it. If assigned by group, all people in the group can login to this application.    | ![image](https://user-images.githubusercontent.com/93269128/200741698-a50cfb3c-d95d-45fc-bc0d-6784eda1d694.png) | 
+If you are using an enterprise plan, this is the callback url for it. eg(http://localhost:8000/g/sso/oidc/{idp_name}/login/callback)    | <img src="img/OIDC_setup/oidc_setup_okta_1_5.png" width="70%"> | 
+| 6. Choose “Skip group assignment for now” and save the changes. We will assign the user/group later.    | <img src="img/OIDC_setup/oidc_setup_okta_1_6.png" width="70%"> | 
+| 7. Record the field named “Client ID”, and “Okta domain”. We have to use these fields to register an Organization SSO ID Provider in graphistry.    | <img src="img/OIDC_setup/oidc_setup_okta_1_7.png" width="70%"> <img src="img/OIDC_setup/oidc_setup_okta_1_8.png" width="70%"> | 
+| 8. Assign persons to application.    | <img src="img/OIDC_setup/oidc_setup_okta_1_9.png" width="70%"> | 
+| 9. Click the “Assign” same line with the person to assign the application to it.    | <img src="img/OIDC_setup/oidc_setup_okta_1_10.png" width="70%"> | 
+| 10. Click the “Assign” same line as group to assign group to it. If assigned by group, all people in the group can login to this application.    | <img src="img/OIDC_setup/oidc_setup_okta_1_11.png" width="70%"> | 
 
 
 1. After login to your OKTA account, if it show this page, click admin button
