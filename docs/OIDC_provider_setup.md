@@ -12,8 +12,8 @@
 <img src="img/OIDC_setup/oidc_setup_okta_1_3.png">
 4. Change the application name as you like and you can upload a logo for this application. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_4.png">
-5. Change the sign-in redirect url in the following format. Change the field in bracket to relative field. For example, this is one of the urls used in development eg(http://localhost:8000/o/{org_id}/sso/oidc/{idp_name}/login/callback)
-If you are using an enterprise plan, this is the callback url for it. eg(http://localhost:8000/g/sso/oidc/{idp_name}/login/callback) <br>
+5. Change the sign-in redirect url in the following format. Change the field in bracket to relative field. For example, this is one of the urls used in development `http://localhost:8000/o/{organization_id}/sso/oidc/{idp_name}/login/callback`
+If you are using an enterprise plan, this is the callback url for it. `http://localhost:8000/g/sso/oidc/{idp_name}/login/callback` <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_5.png">
 6. Choose “Skip group assignment for now” and save the changes. We will assign the user/group later. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_6.png">
@@ -67,8 +67,8 @@ If you are using an enterprise plan, this is the callback url for it. eg(http://
 <img src="img/OIDC_setup/oidc_setup_auth0_1_4.png">
 5. Go to “Settings” to get “Domain”, “Client ID” and “Client Secret”.  We have to use these fields to register an Organization SSO ID Provider in graphistry. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_1_5.png">
-6. Change the sign-in redirect url in the following format. Change the field in bracket to relative field. For example, this is one of the urls used in development http://localhost:8000/o/admin/sso/oidc/test_admin/login/callback/ 
-If you are using an enterprise plan, this is the callback url for it. http://localhost:8000/g/sso/oidc/Site_wide_SSO_Provider/login/callback/ <br>
+6. Change the sign-in redirect url in the following format. Change the field in bracket to relative field. For example, this is one of the urls used in development `http://localhost:8000/o/admin/sso/oidc/test_admin/login/callback/` 
+If you are using an enterprise plan, this is the callback url for it. `http://localhost:8000/g/sso/oidc/Site_wide_SSO_Provider/login/callback/` <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_1_6.png">
 7. Save changes after completing add callback urls. <br>
 8. Disable grants to use organization function. <br>
@@ -120,7 +120,7 @@ If you are using an enterprise plan, this is the callback url for it. http://loc
 <img src="img/OIDC_setup/oidc_setup_keycloak_1_4.png">	
 5. Fill in “client id” for and this client id is the Client ID you have to use when create OrgSSO object. <br>
 <img src="img/OIDC_setup/oidc_setup_keycloak_1_5.png">
-6. Change the “Access type” from public to confidential. Add valid Redirect URls to it. For example, http://localhost/* , the * means it will take anything after the host. <br>
+6. Change the “Access type” from public to confidential. Add valid Redirect URls to it. For example, `http://localhost/*` , the * means it will take anything after the host. <br>
 <img src="img/OIDC_setup/oidc_setup_keycloak_1_6.png">
 7. Go to “Credentials” to get the secret key. <br>
 <img src="img/OIDC_setup/oidc_setup_keycloak_1_7.png">
