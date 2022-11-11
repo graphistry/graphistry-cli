@@ -2,16 +2,18 @@
 
 ## Table of contents
 1. [OKTA SETUP](#okta_1)
-    i. [OKTA OIDC SETUP](#okta_1_1)
-    ii. [OKTA PEOPLE SETUP](#okta_1_2)
-    iii. [OKTA GROUP SETUP](#okta_1_3)
+    1. [OKTA OIDC SETUP](#okta_1_1)
+    2. [OKTA PEOPLE SETUP](#okta_1_2)
+    3. [OKTA GROUP SETUP](#okta_1_3)
 2. [AUTH0 SETUP](#auth0_1)
-    i. [AUTH0 OIDC SETUP](#auth0_1_1)
-    i. [AUTH0 USER SETUP](#auth0_1_2)
-    iii. [AUTH0 ORGANIZATION SETUP](#auth0_1_3)
+    1. [AUTH0 OIDC SETUP](#auth0_1_1)
+    2. [AUTH0 USER SETUP](#auth0_1_2)
+    3. [AUTH0 ORGANIZATION SETUP](#auth0_1_3)
 3. [KEYCLOAK SETUP](#keycloak_1)
-    i. [KEYCLOAK OIDC SERVER SETUP](#keycloak_1_1)
-    ii. [KEYCLOAK USER SETUP](#keycloak_1_2)
+    1. [KEYCLOAK OIDC SERVER SETUP](#keycloak_1_1)
+    2. [KEYCLOAK USER SETUP](#keycloak_1_2)
+
+<hr>
 
 ## OKTA SETUP <a name="okta_1"></a>
 
@@ -62,7 +64,7 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 <img src="img/OIDC_setup/oidc_setup_okta_2_3.png">
 
 
-### OKTA GROUP SETUP
+### OKTA GROUP SETUP <a name="okta_1_3"></a>
 
 1. Create a new Group. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_3_1.png">
@@ -80,9 +82,9 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 
 <hr>
 
-## AUTH0 SETUP
+## AUTH0 SETUP <a name="auth0_1"></a>
 
-### AUTH0 OIDC SETUP
+### AUTH0 OIDC SETUP <a name="auth0_1_1"></a>
 
 1. After signing an account for Auth0, select “Company” as the account type so you can limit the person who can log in to this organization. Fill in the company name and select size for company. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_1_1.png">
@@ -112,7 +114,7 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 <img src="img/OIDC_setup/oidc_setup_auth0_1_8.png">
 
 
-### AUTH0 USER SETUP
+### AUTH0 USER SETUP <a name="auth0_1_2"></a>
 
 1. Go to ”User Management” and select the user to go to the user page. Click “Create User” to create a new user. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_2_1.png">
@@ -120,7 +122,7 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 2. Fill in all of the fields and click “Create” to create a new user. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_2_2.png">
 
-### AUTH0 ORGANIZATION SETUP
+### AUTH0 ORGANIZATION  <a name="auth0_1_3"></a>
 
 1. Go to “Organizations” and click “Create Organization” to create a new organization. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_3_1.png">	
@@ -149,9 +151,9 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 
 <hr>
 
-## KEYCLOAK SETUP (No PKCE)
+## KEYCLOAK SETUP (No PKCE) <a name="keycloak_1"></a>
 
-### KEYCLOAK OIDC SERVER SETUP
+### KEYCLOAK OIDC SERVER SETUP <a name="keycloak_1_1"></a>
 
 1. Login to the keycloak admin console. Default username is “admin” and passwords is “graphistry”. <br>
 <img src="img/OIDC_setup/oidc_setup_keycloak_1_1.png">	
@@ -174,7 +176,7 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 7. Go to “Credentials” to get the secret key. <br>
 <img src="img/OIDC_setup/oidc_setup_keycloak_1_7.png">
 
-### KEYCLOAK USER SETUP
+### KEYCLOAK USER SETUP <a name="keycloak_1_2"></a>
 1. Go to the “User” section and click “add user”. <br>
 <img src="img/OIDC_setup/oidc_setup_keycloak_2_1.png">	
 
