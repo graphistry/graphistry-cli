@@ -1,8 +1,21 @@
 # OIDC Server Setup
 
-## OKTA SETUP
+## Table of contents
+1. [OKTA SETUP](#okta_1)
+    i. [OKTA OIDC SETUP](#okta_1_1)
+    ii. [OKTA PEOPLE SETUP](#okta_1_2)
+    iii. [OKTA GROUP SETUP](#okta_1_3)
+2. [AUTH0 SETUP](#auth0_1)
+    i. [AUTH0 OIDC SETUP](#auth0_1_1)
+    i. [AUTH0 USER SETUP](#auth0_1_2)
+    iii. [AUTH0 ORGANIZATION SETUP](#auth0_1_3)
+3. [KEYCLOAK SETUP](#keycloak_1)
+    i. [KEYCLOAK OIDC SERVER SETUP](#keycloak_1_1)
+    ii. [KEYCLOAK USER SETUP](#keycloak_1_2)
 
-### OKTA OIDC SETUP
+## OKTA SETUP <a name="okta_1"></a>
+
+### OKTA OIDC SETUP <a name="okta_1_1"></a>
 
 1. After login to your OKTA account, if it show this page, click admin button. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_1.png">
@@ -37,7 +50,7 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 <img src="img/OIDC_setup/oidc_setup_okta_1_11.png">
 
 
-### OKTA PEOPLE SETUP
+### OKTA PEOPLE SETUP <a name="okta_1_2"></a>
 
 1. Create new people. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_2_1.png">
