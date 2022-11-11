@@ -12,6 +12,8 @@
 3. [KEYCLOAK SETUP](#keycloak_1)
     1. [KEYCLOAK OIDC SERVER SETUP](#keycloak_1_1)
     2. [KEYCLOAK USER SETUP](#keycloak_1_2)
+4. [GRAPHISTRY SETUP](#graphistry_1)
+    1. [ORGANIZATION CONFIGURE SSO ](#graphistry_1_1)
 
 <hr>
 
@@ -31,14 +33,14 @@
 4. Change the application name as you like and you can upload a logo for this application. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_4.png">
 
-5. Change the sign-in redirect url in the following format. Change the field in bracket to relative field. For example, this is one of the urls used in development `http://localhost:8000/o/{organization_id}/sso/oidc/{idp_name}/login/callback`
+5. <a name="okta_1_1_5"></a> Change the sign-in redirect url in the following format. Change the field in bracket to relative field. For example, this is one of the urls used in development `http://localhost:8000/o/{organization_id}/sso/oidc/{idp_name}/login/callback`
 If you are using an enterprise plan, this is the callback url for it. `http://localhost:8000/g/sso/oidc/{idp_name}/login/callback` <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_5.png">
 
 6. Choose “Skip group assignment for now” and save the changes. We will assign the user/group later. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_6.png">
 
-7. Record the field named “Client ID”, and “Okta domain”. We have to use these fields to register an Organization SSO ID Provider in graphistry. <br>
+7. Record the field named “Client ID”, and “Okta domain”. We have to use these fields to register an Organization SSO ID Provider in graphistry. <a name="okta_1_1_7"></a> <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_7.png">
 <img src="img/OIDC_setup/oidc_setup_okta_1_8.png">
 
@@ -185,3 +187,35 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 
 3. Go to the “Credentials” section, create a password for this user so they can log in to this server. If you toggle on the “Temporary”, users have to update the password for the first time they login. <br>
 <img src="img/OIDC_setup/oidc_setup_keycloak_2_3.png">
+
+
+<hr>
+
+## GRAPHISTRY SETUP <a name="graphistry_1"></a>
+
+### ORGANIZATION CONFIGURE SSO <a name="graphistry_1_1"></a>
+
+1. After login to your graphistry account, click the "Manage organization" button. <br>
+<img src="img/OIDC_setup/oidc_setup_graphistry_1_1.png">
+
+2. Click the "+" button to add a new organization. <br>
+<img src="img/OIDC_setup/oidc_setup_graphistry_1_2.png">
+
+3. Fill the information for the organization and click the create button, the "Organization ID" is unique. <br>
+<img src="img/OIDC_setup/oidc_setup_graphistry_1_3.png">
+
+4. Click the orange button, which is "configure SSO" button. <br>
+<img src="img/OIDC_setup/oidc_setup_graphistry_1_4.png">
+
+5. Click the "+" button to add new SSO providers. <br>
+<img src="img/OIDC_setup/oidc_setup_graphistry_1_5.png">
+
+6. Fill the IDP Name, Host URL, Client ID and select the SSO provider. <br>
+<img src="img/OIDC_setup/oidc_setup_graphistry_1_6.png">
+
+7. Example for Okta, "Client ID" and "Host URL" can found in [“Client ID”, and “Okta domain”](#okta_1_1_7) respectively. <br>
+<img src="img/OIDC_setup/oidc_setup_graphistry_1_7.png">
+
+8. The SSO Provider for the organization was shown. Remember to setup the Sign-in redirect URIs in [picture](#okta_1_1_5), fill it with 
+`http://{hostname}/o/{organization_id}/sso/oidc/{idp_name}/login/callback`. <br>
+<img src="img/OIDC_setup/oidc_setup_graphistry_1_8.png">
