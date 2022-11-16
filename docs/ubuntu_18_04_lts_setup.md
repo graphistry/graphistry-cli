@@ -109,7 +109,7 @@ sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker
 
 #_not_ default runtime
-sudo docker run --gpus all nvidia/cuda:9.0-base nvidia-smi
+sudo docker run --gpus all nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi
 
 ####################
 #                  #
@@ -131,6 +131,6 @@ sudo vim /etc/docker/daemon.json
 }
 sudo systemctl restart docker
 
-sudo docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
-sudo docker run --rm nvidia/cuda nvidia-smi
+sudo docker run --runtime=nvidia --rm nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi
+sudo docker run --rm nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi
 ```

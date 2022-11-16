@@ -67,7 +67,7 @@ curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidi
 sudo yum install -y nvidia-container-runtime
 sudo systemctl enable --now docker
 
-sudo docker run --gpus all nvidia/cuda:9.0-base nvidia-smi
+sudo docker run --gpus all nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi
 
 # Nvidia docker as default runtime (needed for docker-compose)
 sudo yum install -y vim
@@ -83,6 +83,6 @@ sudo vim /etc/docker/daemon.json
 }
 sudo systemctl restart docker
 
-sudo docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
-sudo docker run --rm nvidia/cuda nvidia-smi
+sudo docker run --runtime=nvidia --rm nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi
+sudo docker run --rm nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi
 ```

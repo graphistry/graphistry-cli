@@ -265,12 +265,12 @@ Most of the below tests can be automatically run by `cd etc/scripts && ./test-gp
   * unhealthy `nginx`, `nexus`, `caddy`: 
     * likely config file issue, unable to start due to other upstream services, or public ports are already taken
 
-* If a GPU service is unhealthy, the typical cause is an unhealthy Nvidia host or Nvidia container environment setup. Pinpoint the misconfiguration through the following progression, or run as part of `etc/scripts/test-gpu.sh` (Graphistry 2.33+). For on-prem users, your `container.tar` load will import Nvidia's official `nvidia/cuda` container used by Graphistry your version, which can aid pinpointing ecosystem issues outside of Graphistry (v2.33.20+).
+* If a GPU service is unhealthy, the typical cause is an unhealthy Nvidia host or Nvidia container environment setup. Pinpoint the misconfiguration through the following progression, or run as part of `etc/scripts/test-gpu.sh` (Graphistry 2.33+). For on-prem users, your `container.tar` load will import Nvidia's official `nvidia/cuda:11.5.0-base-ubuntu20.04` container used by Graphistry your version, which can aid pinpointing ecosystem issues outside of Graphistry (v2.33.20+).
   * `docker run hello-world` reports a message <-- tests CPU Docker installation
   * `nvidia-smi` reports available GPUs  <-- tests host has a GPU configured with expected GPU driver version number
-  * `docker run --gpus=all nvidia/cuda nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
-  * `docker run --runtime=nvidia nvidia/cuda nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
-  * `docker run --rm nvidia/cuda  nvidia-smi` reports available GPUs <-- tests Docker GPU defaults (used by docker-compose via /etc/docker/daemon.json)
+  * `docker run --gpus=all nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
+  * `docker run --runtime=nvidia nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
+  * `docker run --rm nvidia/cuda:11.5.0-base-ubuntu20.04  nvidia-smi` reports available GPUs <-- tests Docker GPU defaults (used by docker-compose via /etc/docker/daemon.json)
   * "docker run --rm graphistry/graphistry-blazing:`cat VERSION`-dev nvidia-smi" reports available GPUs (public base image) <- tests Graphistry container CUDA versions are compatible with host versions
   * "docker run --rm graphistry/etl-server-python:`cat VERSION`-dev nvidia-smi" reports available GPUs (application image)
   * Repeat the docker tests, but with `cudf` execution. Ex:
