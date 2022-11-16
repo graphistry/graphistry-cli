@@ -115,10 +115,10 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 ### Test your environment setup
 
 
-You can test your GPU environment via Graphistry's [base RAPIDS Docker image on DockerHub](https://hub.docker.com/r/graphistry/graphistry-blazing):
+You can test your GPU environment via Graphistry's [base RAPIDS Docker image on DockerHub](https://hub.docker.com/r/graphistry/graphistry-forge-base):
 
 ```
-docker run --rm -it --entrypoint=/bin/bash graphistry/graphistry-blazing:latest -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""
+docker run --rm -it --entrypoint=/bin/bash graphistry/graphistry-forge-base:latest -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""
 ```
 
 =>
@@ -178,7 +178,7 @@ docker-compose up -d
 
 * Can Graphistry use multiple GPUs and multiple servers? 
   * Graphistry visualizations take advantage of multiple GPUs & CPUs on the same server to handle more users
-  * Graphistry-managed Jupyter notebooks enable users to run custom GPU code, where each user may run multi-GPU tasks (e.g., via dask-cudf and BlazingSQL)
+  * Graphistry-managed Jupyter notebooks enable users to run custom GPU code, where each user may run multi-GPU tasks (e.g., via dask-cudf and dask-sql)
   * For high availability configuration and operation, contact staff for additional guidance
   * For many-node deployment and multi-GPU visualization acceleration, contact staff for roadmap
 
