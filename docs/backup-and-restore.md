@@ -2,13 +2,21 @@
 
 ### Overview
 
-There are two scripts provided that will backup your graphistry environment to remote blob storage (AWS s3, Azure Blob Storage or Google Cloud Storage). Graphistry uses [restic](https://restic.net/) backup utility which provides fast and secure incremental backups to remote blob storage. More details can be found in the [Restic documentation](https://restic.readthedocs.io/en/stable/index.html).
+Backup and restore scripts are provided that will backup your graphistry environment to remote blob storage (AWS s3, Azure Blob Storage or Google Cloud Storage). Graphistry uses [restic](https://restic.net/) backup utility which provides fast and secure incremental backups to remote blob storage. More details can be found in the [restic documentation](https://restic.readthedocs.io/en/stable/index.html).
+
+<br>
+
+> **Warning** 
+> On a restore, the existing postgres database and data directory are irrevocably lost. If think you may need the postgres and/or data directory on the restore server, either run backup.sh from the restore server or manually copy the data directory and export from the postgres database. See `${FROM_PATH}/etc/scripts/copy-db-local.sh` for details on manually exporting postgres. 
+
+
+<br> 
 
 ### Configuration
 
-The following environment variables are required for authentication depending on the cloud provider: 
+The following environment variables are required for depending on the cloud provider: 
 
-[**AWS**](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#amazon-s3)
+[**AWS:**](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#amazon-s3)
 
 We recommend adding these to ~/.bashrc or ~/.profile and re-starting the shell or sourcing the file to pick up the changes: 
 
@@ -51,7 +59,7 @@ Restic supports using a Service Account to access the storage bucket, see instru
 # define the project: 
 project=<gcp_project_name>
 
-# defined the bucket: 
+# define the bucket: 
 bucket=gs://<bucket_name>/
 
 # define the default compute service account credential file path: 
@@ -79,7 +87,6 @@ export RESTIC_REPOSITORY=gs:<bucket_name:/<bucket_path>
 export RESTIC_PASSWORD=<restic_repo_password>
 
 ```
-
 
 
 ## Backup
