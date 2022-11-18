@@ -10,16 +10,14 @@ Backup and restore scripts are provided that will backup your graphistry environ
 > On a restore, the existing postgres database and data directory are irrevocably lost. If think you may need the postgres and/or data directory on the restore server, either run backup.sh from the restore server or manually copy the data directory and export from the postgres database. See `${FROM_PATH}/etc/scripts/copy-db-local.sh` for details on manually exporting postgres. 
 
 <br> 
-**Sections of this guide:**  
- 
-[Configuration](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#configuration)
-[Backup](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#backup)
-[Restore](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#restore)
-[Restore](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#restore)
 
 
+### [Configuration](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#configuration)
+### [Backup](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#backup)
+### [Restore](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#restore)
+### [Scheduling Backups](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#scheduling-backups)
 
-<br> 
+<br>  
 
 ## Configuration
 
@@ -97,6 +95,7 @@ export RESTIC_PASSWORD=<restic_repo_password>
 
 ```
 
+<br>
 
 ## Backup
 
@@ -156,6 +155,7 @@ DATA_DIR=/mnt/data ./backup.sh
 ```
 
 
+<br>
 
 ## Restore
 
@@ -199,6 +199,8 @@ cd /var/graphistry/compose/etc/scripts
 
 TO_PATH=/var/graphistry/ ./restore.sh 
 ```
+
+<br>
 
 ## Scheduling Backups: 
 
