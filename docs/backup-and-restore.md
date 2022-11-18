@@ -9,10 +9,19 @@ Backup and restore scripts are provided that will backup your graphistry environ
 > **Warning** 
 > On a restore, the existing postgres database and data directory are irrevocably lost. If think you may need the postgres and/or data directory on the restore server, either run backup.sh from the restore server or manually copy the data directory and export from the postgres database. See `${FROM_PATH}/etc/scripts/copy-db-local.sh` for details on manually exporting postgres. 
 
+<br> 
+**Sections of this guide:**  
+ 
+[Configuration](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#configuration)
+[Backup](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#backup)
+[Restore](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#restore)
+[Restore](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#restore)
+
+
 
 <br> 
 
-### Configuration
+## Configuration
 
 The following environment variables are required for depending on the cloud provider: 
 
@@ -24,7 +33,7 @@ We recommend adding these to ~/.bashrc or ~/.profile and re-starting the shell o
 export AWS_ACCESS_KEY_ID=<MY_ACCESS_KEY>
 export AWS_SECRET_ACCESS_KEY=<MY_SECRET_ACCESS_KEY>
 
-export RESTIC_REPOSITORY=azure:<storage_account>:/<path>
+export RESTIC_REPOSITORY=s3:s3.amazonaws.com/<bucket_name>/<path>
 export RESTIC_PASSWORD=<restic_repo_password>
 
 ```
@@ -46,7 +55,7 @@ export AZURE_ACCOUNT_SAS=<SAS_TOKEN>
 
 # and 
 
-export RESTIC_REPOSITORY=s3:s3.amazonaws.com/<bucket_name>/<bucket_path>
+export RESTIC_REPOSITORY=azure:<storage_account>:/<path> 
 export RESTIC_PASSWORD=<restic_repo_password>
 
 ```
@@ -83,7 +92,7 @@ We recommend adding these to ~/.bashrc or ~/.profile and re-starting the shell o
 export GOOGLE_PROJECT_ID=123123123123
 export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gs-secret-restic-key.json
 
-export RESTIC_REPOSITORY=gs:<bucket_name:/<bucket_path>
+export RESTIC_REPOSITORY=gs:<bucket_name>:/<bucket_path>
 export RESTIC_PASSWORD=<restic_repo_password>
 
 ```
@@ -104,9 +113,11 @@ backup config options:
 
 <br><br>
 
-1. ssh into the graphistry server e.g. `ssh -i </path/to/private_key> ubuntu@IP_addr`
+1. Make sure you have defined RESTIC_REPOSTITORY, RESTIC_PASSWORD and the other authentication variables required for the cloud provider in the [configuration](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#configuration) section above. 
 
-2. cd to the scripts directory in <GRAPHISTRY_HOME>
+2. ssh into the graphistry server e.g. `ssh -i </path/to/private_key> ubuntu@IP_addr`
+
+3. cd to the scripts directory in <GRAPHISTRY_HOME>
 
 ```
 # AWS: 
@@ -117,7 +128,7 @@ cd /var/graphistry/compose/etc/scripts
 
 ```
 
-3. Run the backup script: 
+4. Run the backup script: 
 
 ```
 # AWS
@@ -127,8 +138,26 @@ cd /var/graphistry/compose/etc/scripts
 FROM_PATH=/var/graphistry/ ./backup.sh 
 ```
 
+#### Additional examples: 
 
-### Restore
+```
+# dry-run: will only print the commands and execute restic with --dry-run option flag for testing purposes
+
+DRY_RUN=True ./backup.sh 
+
+# adding tags to a back (useful if you are using the same repo for multiple graphistry servers) this example creates three tags attached to the restic snapshot: server1, dev and nightly: 
+
+RESTIC_TAGS="server_1 dev nightly" ./backup.sh
+
+# if your data directory is a symlink, you need to override the DATA_DIR with the path to mount point as restic does not follow symlinks
+
+DATA_DIR=/mnt/data ./backup.sh
+
+```
+
+
+
+## Restore
 
 | variable          | default if unset                      | description                    |
 |-------------------|---------------------------------------|--------------------------------|
@@ -171,9 +200,9 @@ cd /var/graphistry/compose/etc/scripts
 TO_PATH=/var/graphistry/ ./restore.sh 
 ```
 
+## Scheduling Backups: 
 
-
-### scheduling nightly or weekly backups with cron: 
+Any scheduler can be used, but below are some examples of setting up cron to schedule nightly or weekly backups. 
 
 ```
 # list your current crontab entries: 
@@ -191,7 +220,7 @@ crontab -e
 
 <br> 
 
-AWS: 
+**AWS crontab examples:** 
 ```
 # add the following line to run backup either daily: 
 
@@ -204,7 +233,7 @@ AWS:
 
 <br> 
 
-Azure: 
+**Azure crontab examples:** 
 
 ```
 # add the following line to run backup either daily: 
@@ -215,6 +244,45 @@ Azure:
 
 0 0 * * 0 TO_PATH=/var/graphistry/ /var/graphistry/compose/etc/scripts/backup.sh
 ```
+
+#### creating a script that has several variables that your crontab entry will call: 
+
+```
+#!/bin/bash
+
+export AZURE_ACCOUNT_NAME=<ACCOUNT_NAME>
+export AZURE_ACCOUNT_KEY=<SECRET_KEY>
+
+export RESTIC_REPOSITORY=azure:<storage_account>:/<path> 
+export RESTIC_PASSWORD=<restic_repo_password>
+
+export FROM_PATH=/var/graphistry
+
+export RESTIC_TAGS="server2 prod nightly"
+
+${FROM_PATH}/compose/etc/scripts/backup.sh
+
+```
+
+make the script executable: 
+
+```
+chmod +x ~/scripts/my_backup_script.sh
+```
+
+add the path to the above to your crontab: 
+
+```
+crontab -e 
+
+# then add the following for nightly backups: 
+
+0 0 * * * ~/scripts/my_backup_script.sh
+
+```
+
+
+
 
 
 
