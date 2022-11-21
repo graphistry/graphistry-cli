@@ -118,9 +118,9 @@ sudo docker run --gpus all nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi
 ####################
 
 # Nvidia docker as default runtime (needed for docker-compose)
-mkdir -p /etc/docker
+sudo mkdir -p /etc/docker
 
-cat << EOF > /etc/docker/daemon.json
+sudo cat << EOF > /etc/docker/daemon.json
 {
     "default-runtime": "nvidia",
     "runtimes": {
