@@ -21,7 +21,7 @@
 
 ### OKTA OIDC SETUP
 
-1. After login to your OKTA account, if it show this page, click admin button. <br>
+1. After logging in your OKTA account, if it show this page, click admin button. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_1.png">
 
 2. Go to the application page and click “Create App Integration” to create a new application. <br>
@@ -40,29 +40,29 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 6. Choose “Skip group assignment for now” and save the changes. We will assign the user/group later. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_6.png">
 
-7. Record the field named “Client ID”, and “Okta domain”. We have to use these fields to register an Organization SSO ID Provider in graphistry. <a name="okta_1_1_7"></a> <br>
+7. Record the field named “Client ID”, and “Okta domain”. Using these fields allows you to register an Organization SSO ID Provider in Graphistry.  <a name="okta_1_1_7"></a> <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_7.png">
 <img src="img/OIDC_setup/oidc_setup_okta_1_8.png">
 
 8. Assign persons to application. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_9.png">
 
-9. Click the “Assign” same line with the person to assign the application to it. <br>
+9. Click “Assign” on the line of the person you want to assign the application. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_10.png">
 
-10. Click the “Assign” same line as group to assign group to it. If assigned by group, all people in the group can login to this application. <br>
+10. Click “Assign” on the line of the group you want to assign the application. If assigned by group, all people in the group can login to this application. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_1_11.png">
 
 
 ### OKTA PEOPLE SETUP
 
-1. Create new people. <br>
+1. Add a new person. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_2_1.png">
 
-2. Fill in the relative field.If the Activation is set to "Activate later", users will receive an email to set their password and activate the account. <br>
+2. Fill in the relative field. If the Activation is set to "Activate later", users will receive an email to set their password and activate the account. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_2_2.png">
 
-3. If the Activation is set to "Activate now", it will show some options for setting the password. If the "I will set password" option is ticked, you can enter a temporary password and can specify user to change their password after first login or not. <br>
+3. If the Activation is set to "Activate now", it will show some options for setting the password. If the "I will set password" option is ticked, you can enter a temporary password and specify if the user changes their password after initial login. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_2_3.png">
 
 
@@ -71,13 +71,13 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 1. Create a new Group. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_3_1.png">
 
-2. Give a name to the group and add description if you want to. <br>
+2. Give a name to the group. Optionally, you can add a description. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_3_2.png">
 
 3. Click the group name you create to manage the group. <br>
 <img src="img/OIDC_setup/oidc_setup_okta_3_3.png">
 
-4. Click the "Assign people" to add person to the group by clicking the person. You also can remove user from group by click "remove". <br>
+4. Click "Assign people" to add a person to the group. You can also remove user from group by clicking "remove". <br>
 <img src="img/OIDC_setup/oidc_setup_okta_3_4.png">
 <img src="img/OIDC_setup/oidc_setup_okta_3_5.png">
 
@@ -88,19 +88,19 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 
 ### AUTH0 OIDC SETUP
 
-1. After signing an account for Auth0, select “Company” as the account type so you can limit the person who can log in to this organization. Fill in the company name and select size for company. <br>
+1. After signing an account for Auth0, select “Company” as the account type so you can restrict who can log in to this organization. Fill in the company's name and select size for company. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_1_1.png">
 
-2. You can change the domain name and choose the country you want. Change of country will change the host url. <br>
+2. You can change the domain name and country. Changing the country will change the host url. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_1_2.png">
 
-3. Click the “Application” in the Application section to go to the application page. Click “Create Application” to create a new application. <br>
+3. Click the “Application” in the Application section to go to the application page. Under the application panel, click “Create Application” to create a new application. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_1_3.png">
 
 4. Name your application and select “Single Page Web Applications”. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_1_4.png">
 
-5. Go to “Settings” to get “Domain”, “Client ID” and “Client Secret”.  We have to use these fields to register an Organization SSO ID Provider in graphistry. <br>
+5. Go to “Settings” to get “Domain”, “Client ID” and “Client Secret”.  We have to use these fields to register an Organization SSO ID Provider in Graphistry. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_1_5.png">
 
 6. Change the sign-in redirect url in the following format. Change the field in bracket to relative field. For example, this is one of the urls used in development `http://localhost:8000/o/admin/sso/oidc/test_admin/login/callback/` 
@@ -129,13 +129,13 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 1. Go to “Organizations” and click “Create Organization” to create a new organization. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_3_1.png">	
 
-2. Name your organization and a name displayed. <br>
+2. Name your organization and set your displayed name. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_3_2.png">	
 
-3. Please record this “Organization ID” because this ID has to use when create org sso id provider. <br>
+3. Record your “Organization ID” which you'll need when you create your org sso id provider. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_3_3.png">	
 
-4. You can change these fields to adjust thein UI the login page. Save changes if you change anything. <br>
+4. You can change these fields to adjust the UI of the login page. Make sure to save your changes. <br>
 <img src="img/OIDC_setup/oidc_setup_auth0_3_4.png">	
 
 5. Go to the “Member” session and click “Add Members” to add members to your organization. <br>
