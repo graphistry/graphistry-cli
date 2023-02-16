@@ -2,8 +2,10 @@
 set -ex
 
 ##############################################################################
-#   This is a sample script that can be used to install pre-requisites for   #
-#    Graphistry Enterprise Server on an "ubuntu 20.04 LTS" base image.       #
+#   This script is provided as sample reference only, for installing         #
+#     pre-requisites for Graphistry Enterprise Server on an "Ubuntu 20.04    #
+#     LTS" base image running in AWS. The process follows loosely the steps  #
+#     taken when we build the underlying base AMIs.                          #
 #                                                                            #
 #   The script will reboot the machine once, and will need to be run         #
 #    a second time to finish the installation. It uses a breadcrumb          #
@@ -11,6 +13,12 @@ set -ex
 #                                                                            #
 #    To run the script again from the beginning, delete the                  #
 #    file: ~/g-part1.lck                                                     #
+#                                                                            #
+#   Assumptions:                                                             #
+#   1. the user running this script is the ubuntu user                       #
+#   2. user has sudo rights                                                  #
+#   3. graphistry software is unpacked into `/home/ubuntu/graphistry`        #
+#                                                                            #
 #                                                                            #
 #    for assistance:  support@graphistry.com                                 #
 #                                                                            #
