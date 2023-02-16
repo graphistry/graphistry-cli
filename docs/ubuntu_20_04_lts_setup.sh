@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex 
+set -ex
 
 ##############################################################################
 #   This is a sample script that can be used to install pre-requisites for   #
@@ -19,7 +19,7 @@ set -ex
 
 lock_file=/tmp/g-part1.lck
 
-if [ ! -f ${lock_file} ]; then 
+if [ ! -f ${lock_file} ]; then
 
 	###################
 	#                 #
@@ -28,7 +28,7 @@ if [ ! -f ${lock_file} ]; then
 	###################
 
 	sudo apt update
-	sudo apt upgrade -y 
+	sudo apt upgrade -y
 
 
 	###################
@@ -47,7 +47,7 @@ if [ ! -f ${lock_file} ]; then
 	sudo reboot
 fi
 
-echo "start stage 2 graphistry pre-reqs..."; echo 
+echo "start stage 2 graphistry pre-reqs..."; echo
 
 nvidia-smi
 
@@ -96,8 +96,6 @@ sudo usermod -aG docker $USER
 #                  #
 ####################
 
-#NVIDIA_CONTAINER="nvidia/cuda:11.0.3-base-ubuntu18.04"
-#  which one is best to test? 
 NVIDIA_CONTAINER="nvidia/cuda:11.4.0-base-ubuntu20.04"
 
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
@@ -110,7 +108,7 @@ sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
 
 sudo systemctl restart docker
 
-# test run with nvidia runtime as param 
+# test run with nvidia runtime as param
 sudo docker run --gpus all ${NVIDIA_CONTAINER} nvidia-smi
 
 ###########################
@@ -145,9 +143,9 @@ sudo systemctl restart docker
 #                         #
 ###########################
 
-# test run with nvidia runtime as param 
+# test run with nvidia runtime as param
 sudo docker run --runtime=nvidia --rm ${NVIDIA_CONTAINER} nvidia-smi
 
-# test nvidia runtime set as default (from /etc/docker/daemon.json above) 
+# test nvidia runtime set as default (from /etc/docker/daemon.json above)
 sudo docker run --rm ${NVIDIA_CONTAINER}  nvidia-smi
 
