@@ -1,6 +1,6 @@
 # Threat Model
 
-Graphistry is largely a standard enterprise webapp and uses modern design patterns, infrastructure, tools, & frameworks.
+Graphistry is largely a standard enterprise webapp and uses modern design patterns, infrastructure, tools, & frameworks. It can be run through Graphistry Hub (Graphistry-hosted multi-tennant public cloud SaaS), automatically self-hosted in public clouds (AWS/Azure Marketplace single-VM AMIs), manually self-hosted in public cloud (docker-compose or kubernetes), or self-hosted on-prem (including air-gapped). Details vary depending on distribution choice and configuration.
 
 Interesting surface areas include: frontend & backend (app + system), the network, exported logs, the use of GPUs, and the distinctions between authenticated users (privileged analyst teams) vs. network users (shared visualization recipients. Beyond the scope of this document is securing non-Graphistry systems, e.g., data science notebooks or your own database.
 
