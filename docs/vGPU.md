@@ -30,7 +30,7 @@ Longer-term, Graphistry is aiming to push most/all GPU use to [Dask](https://doc
 
 Plan licensing and driver versons first, as mistakes may require starting over.
 
-Most likely, you'll want vGPU profile 8Q with vGPU 11.0+ (11.5+ for AI) vGPU drivers:
+Most likely, you'll want vGPU profile 8Q with vGPU 11.5+ vGPU drivers:
 
 **GPU Driver**
 
@@ -38,7 +38,7 @@ You will install a hypervisor GPU driver in the hypervisor and a guest OS GPU dr
 
 * The hypervisor+guest GPU driver pair should be from [the same vGPU family](https://docs.nvidia.com/grid/index.html)
 
-* The driver's CUDA version must be [RAPIDS-compatible](https://rapids.ai/start.html): 11.0+ (11.5+ for AI) at time of writing
+* The driver's CUDA version must be [RAPIDS-compatible](https://rapids.ai/start.html): 11.5+ at time of writing
 
 * Use officially sanctioned drivers. Google Cloud hosts MD5-matched [guest OS drivers](https://cloud.google.com/compute/docs/gpus/grid-drivers-table).
 
