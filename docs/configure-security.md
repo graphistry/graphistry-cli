@@ -7,6 +7,7 @@ Read on for:
 * Out-of-the-box config (Admin)
 * Server configuration (Admin)
 * Recommended network config (Admin)
+* Secrets configuration (Admin)
 * Connector configuration (Admin)
 * Safely using Graphistry APIs (Developer)
 * Air gapping
@@ -32,6 +33,7 @@ For futher information, see:
   * Cross-origin embedding enabled
   * Cross-origin embedded login disabled (see TLS configuration section)
 * Visualizations are shared as secure web keys (unguessable IDs)
+* Unique secrets are set in managed host environments (AWS/Azure Marketplace)
 
 ## Server configuration
 
@@ -98,6 +100,25 @@ The below should be standard for cloud and enterprise environments:
   * Whatever database and API systems (servers and cloud regions)
 
 Graphistry can work with TLS offloading (CF, AWS ALBs, ...) or handle internally (Caddy)
+
+## Secrets configuration
+
+In managed host environments such as AWS Marketplace and Azure Marketplace, unique secrets are automatically generated on first boot and saved in `./data/config/custom.env`
+
+If you are manually managing the host environment, we strongly encourage setting up unique secrets in `./data/config/custom.env`
+
+```bash
+#openssl rand -base64 32 | tr -d '=+/' | cut -c1-50
+DJANGO_SECRET_KEY="..."
+
+#dd if=/dev/urandom bs=32 count=1 2>/dev/null | base64
+GRAPHISTRY_NEXUS_ENCRYPTION_KEYS="..."
+
+#uuidgen -r
+GRAPHISTRY_NEXUS_SIGNING_KEY="..."
+```
+
+
 
 # Connector configuration
 
