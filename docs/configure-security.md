@@ -118,6 +118,9 @@ GRAPHISTRY_NEXUS_ENCRYPTION_KEYS="..."
 GRAPHISTRY_NEXUS_SIGNING_KEY="..."
 ```
 
+After, restart nexus with a fresh environment: `docker compose up -d --force-recreate --no-deps nexus`.
+
+These are best to setup on a fresh installation with an empty database: `docker compose down -v && docker compose up -d`.
 
 
 # Connector configuration
