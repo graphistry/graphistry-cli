@@ -143,19 +143,21 @@ To enforce TLS using your own outside load balancer or proxy rather than the bui
 * Forward (stripped) http traffic to Graphistry
 * Optionally, in your `Caddyfile`'s [reverse_proxy](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy) section, add [trusted_proxies](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy#trusted_proxies) so your load balancer's `X-Forwarded-{For,Proto,Host}` headers are trusted for propagation to Graphistry
 
-IP List:
+
+
+To safelist typical internal IPs `192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8 fd00::/8 ::1`:
 
 ```
-reverse_proxy 172.16.0.169:8080 {
-	trusted_proxies 173.245.48.0/20 103.21.244.0/22
+reverse_proxy nginx:80 {
+	trusted_proxies private_ranges
 }
 ```
 
-Shortcut for internal IPs:
+If you know the specific range, you can provide that as well:
 
 ```
-reverse_proxy 172.16.0.169:8080 {
-	trusted_proxies private_ranges
+reverse_proxy nginx:80 {
+	trusted_proxies 173.245.48.0/20 103.21.244.0/22
 }
 ```
 
