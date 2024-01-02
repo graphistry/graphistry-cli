@@ -51,6 +51,8 @@ my-org.graphistry.com {
 }
 ```
 
+Optionally, there are additional [Caddyfile http/https header settings](https://github.com/graphistry/graphistry-cli/blob/master/docs/configure.md#tls-hardening)
+
 ### 4. Restart Caddy
 
 From `${GRAPHISTRY_HOME}`, run:
