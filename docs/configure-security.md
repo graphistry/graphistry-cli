@@ -72,6 +72,8 @@ We **highly** encourage using TLS and make it easy:
 * TLS is required for JWT auth to be secured against MitM attacks
 * Beyond enabling TLS, check other common server settings around it in the authentication configuration docs
 
+After, there are additional [Caddyfile http/https header settings](https://github.com/graphistry/graphistry-cli/blob/master/docs/configure.md#tls-hardening)
+
 ### Embedding
 
 Enabling **cross-origin authenticated use** is often desirable:
