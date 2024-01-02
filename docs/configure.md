@@ -53,7 +53,14 @@ As part of TLS configuration, decide whether to allow cross-origin embedding of 
 If Caddy is used for TLS, several additional policies may be of interest, but only use ones that match your intended usage patterns:
 
 ```
-https://*.website.org:443 {
+grphstry.my-website.org, :80 {
+  ...
+  @mismatchedHost {
+        not host grphstry.my-website.org localhost
+  }
+  handle @mismatchedHost {
+        respond 400
+  }
   ...
   reverse_proxy nginx:80 {
         # enable HSTS (1yr)
