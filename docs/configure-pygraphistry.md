@@ -124,6 +124,8 @@ config_paths = [
 
 If you are using Graphistry's built-in Jupyter server, it autoconfigures `PYGRAPHISTRY_CONFIG` and `graphistry.config`. Modify `docker-compose.yml`'s `notebook` section's volume mounts for new behavior. You can check the container's default config by running `! cat /home/graphistry/pygraphistry.config` from a notebook.
 
+Libraries can be added using `pip` in the built-in Jupyter server. To enable new library install or existing library override, enter the server running the notebook container and change the permissions of the python env directory using `sudo chown -R ubuntu:ubuntu /home/ubuntu/graphistry/data/py_envs/jupyter`.
+
 ## Examples
 
 ### Speed up some uploads
