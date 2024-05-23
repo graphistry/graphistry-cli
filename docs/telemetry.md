@@ -52,11 +52,11 @@ JAEGER_PUB_COMPOSE_FILE=compose/jaeger-pub.yml
 
 ## Usage
 
-By default, the telemetry services are disabled, so using `docker compose` commands will not trigger telemetry collection, forwarding, nor telemetry UIs
+By default, the telemetry services are disabled, so using `./release` commands ((alias for `docker compose ...` with  settings like logging) will not trigger telemetry collection, forwarding, nor telemetry UIs
 
 ### Turning on
 
-The `docker compose` will automatically start those services when `ENABLE_OPEN_TELEMETRY=true`.  Once the services are online, we can access these useful links for development and operations:
+The command `./release` will automatically start those services when `ENABLE_OPEN_TELEMETRY=true`.  Once the services are online, we can access these useful links for development and operations:
 
 * OTEL Collector metrics for Prometheus: http://localhost:8889/metrics
 * Prometheus dashboard: http://$GRAPHISTRY_HOST:9091
