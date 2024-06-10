@@ -26,3 +26,7 @@ Graphistry maintains [graph-app-kit](http://github.com/graphistry/graph-app-kit)
 2. Disable the dashboard services:
    * Edit your `docker-compose.override.yml`
    * Services: `graph-app-kit-public` and `graph-app-kit-private`
+
+## Add or modify python libraries
+
+Python libraries can be added or modified as desired. See [graph-app-kit documentation](https://github.com/graphistry/graph-app-kit/blob/master/docs/additional-packages.md) for more information on how to use this feature.
