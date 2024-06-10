@@ -38,7 +38,6 @@ For example, this is the configuration template for a local development env that
 ```bash
 ENABLE_OPEN_TELEMETRY=true
 
-OTEL_COLLECTOR_OTLP_HTTP_ENDPOINT="https://hostname.grafana.net/otlp"   # e.g. Grafana OTLP HTTP endpoint 
 OTEL_COLLECTOR_COMPOSE_FILE=compose/otel-collector.dev.yml
 OTEL_COLLECTOR_CONF_FILE=./etc/otel-collector/otel-collector-config.dev.yml
 OTEL_COLLECTOR_PUB_COMPOSE_FILE=compose/otel-collector-pub.yml
