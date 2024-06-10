@@ -134,8 +134,8 @@ pip install graphistry[AI]==0.33.8
 ```
 
 ```python
-# inside jupyter notbook
-!pip install opencv-python
+# inside Jupyter notebook
+!pip install graphistry[AI]==0.33.8
 ```
 
 ## Examples
