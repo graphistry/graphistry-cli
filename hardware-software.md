@@ -170,6 +170,7 @@ For teams doing single-purpose multi-year purchases, we generally recommend more
 
 Developer systems should match the minimum requirements, though GPU memory can go down to 2GB (recommended: 4GB+).
 
+Benchmarking is a useful means to capture metrics of various workloads to understand their hardware requirements and accurately size systems, for more see [Benchmarking Graphistry for Capacity Planning](https://github.com/graphistry/graphistry-cli/blob/master/docs/benchmarking.md)
 
 ### Network
 
