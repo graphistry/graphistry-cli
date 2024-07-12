@@ -10,8 +10,8 @@ Benchmarking helps identify the high-watermarks of system resources like GPU mem
 - **Plan for Scalability:** Make informed decisions about scaling up hardware as usage grows.
 
 Additional details can be found here:
-- [Graphistry Admin Guide - Planning a Graphistry Deployment](#)
-- [Graphistry Admin Guide - Recommended Deployment Configurations: Client, Server Software, Server Hardware](#)
+- [Graphistry Admin Guide - Planning a Graphistry Deployment](https://github.com/graphistry/graphistry-cli/blob/master/docs/deployment-planning.md)
+- [Graphistry Admin Guide - Recommended Deployment Configurations: Client, Server Software, Server Hardware](https://github.com/graphistry/graphistry-cli/blob/master/hardware-software.md)
 
 ## Intuitions
 
@@ -40,8 +40,10 @@ Choose the different use cases to capture system metrics at scale. Examples incl
 
 - **Hardware Configuration:** Start with a baseline hardware setup. If possible, using the largest sized servers available will allow for consistent scaling of the workload. It is possible to scale up the size of the server as usage and data volume increases, but this might create skew in the performance tests and take longer.
 - **Software Configuration:** Deploy Graphistry Enterprise with default configurations and adjust configuration settings as needed.
-- **Benchmarking Tools:** Graphistry provides tools to help capture these metrics both as bash scripts as well as OpenTelemetry telemetry and dashboards to capture system metrics for benchmarking. You may also find basic htop (CPU/RAM), iftop (network), and nvidia-smi (GPU) get you far.
-
+- **Benchmarking Tools:** Graphistry provides tools to help capture these metrics both as bash scripts as well as OpenTelemetry and associated dashboards. You may also find basic htop (CPU/RAM), iftop (network), and nvidia-smi (GPU) get you far.
+  - Open Telemetry Traces: Utilize telemetry traces to gain deeper insights into system behavior and performance bottlenecks. Graphistry supports [OpenTelemetry](https://github.com/graphistry/graphistry-cli/blob/master/docs/telemetry.md), enabling comprehensive performance monitoring and analysis.
+  - Bash Script: [system-metrics-to-csv.sh](https://github.com/graphistry/graphistry-cli/blob/master/docs/system-metrics-to-csv.sh) is also provided if open telemetry is not enabled to assist with capturing metrics for benchmarking.
+   
 ### Step 4: Conduct Benchmark Tests
 
 - **GPU Memory:** Measure the memory usage during peak graphical processing loads. Monitor for bottlenecks and optimize GPU resources.
