@@ -8,6 +8,7 @@ Benchmarking helps identify the high-watermarks of system resources like GPU mem
 - **Ensure System Stability:** Prevent crashes or slowdowns during peak usage.
 - **Optimize Performance:** Maintain smooth and responsive user experiences.
 - **Plan for Scalability:** Make informed decisions about scaling up hardware as usage grows.
+- **Manage costs:** Right-size footprint for current and upcoming workloads and  negotiate longterm hardware commitments.
 
 Additional details can be found here:
 - [Graphistry Admin Guide - Telemetry](telemetry.md)
@@ -16,10 +17,11 @@ Additional details can be found here:
 
 ## Intuitions
 
-- **Graphs are in-GPU-memory during use** and get moved on/off GPU memory to CPU memory or disk, so it is key to track graph size (nodes, edges, attributes) and concurrent user/task load is key.
+- **Graphs are in-GPU-memory during use** and get moved to CPU memory and disk when not used, so it is key to track graph size (nodes, edges, attributes) and concurrent user/task load is key.
 - **During layout, graphs stream to the browser**, consuming bandwidth proportional to the number of nodes in the graph.
-- There is a likely balance of GPU utilization to CPU utilization.
-- Some workloads are best managed by physical isolation via multiple GPUs or even servers, e.g., separating steadier & operational web dashboard users from data science power users.
+- **Balance GPU utilization to CPU utilization**, which varies by workload.
+- **Some workloads are bursty**, such as data science power users loading large visualizations, loading large files for preprocessing, or running large AI models.
+- **Some workloads are best managed by physical isolation via multiple GPUs or even servers**, e.g., separating steadier & operational web dashboard users from data science power users.
 
 ## Benchmarking Process
 
