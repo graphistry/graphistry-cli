@@ -39,29 +39,57 @@ For example, this is the configuration template for a local development env that
 ENABLE_OPEN_TELEMETRY=true
 
 OTEL_COLLECTOR_OTLP_HTTP_ENDPOINT="https://hostname.grafana.net/otlp"   # e.g. Grafana OTLP HTTP endpoint 
-OTEL_COLLECTOR_COMPOSE_FILE=compose/otel-collector.dev.yml
+OTEL_COLLECTOR_COMPOSE_FILE=otel-collector.dev.yml
 OTEL_COLLECTOR_CONF_FILE=./etc/otel-collector/otel-collector-config.dev.yml
-OTEL_COLLECTOR_PUB_COMPOSE_FILE=compose/otel-collector-pub.yml
+OTEL_COLLECTOR_PUB_COMPOSE_FILE=otel-collector-pub.yml
 
-PROMETHEUS_COMPOSE_FILE=compose/prometheus.yml
-PROMETHEUS_PUB_COMPOSE_FILE=compose/prometheus-pub.yml
+PROMETHEUS_COMPOSE_FILE=prometheus.yml
+PROMETHEUS_PUB_COMPOSE_FILE=prometheus-pub.yml
 
-JAEGER_COMPOSE_FILE=compose/jaeger.yml
-JAEGER_PUB_COMPOSE_FILE=compose/jaeger-pub.yml
+JAEGER_COMPOSE_FILE=jaeger.yml
+JAEGER_PUB_COMPOSE_FILE=jaeger-pub.yml
+```
+### Caddyfile - reverse proxy set up 
+
+To acces the otel services, you need to set up routes to the various services in the Caddyfile. An example Caddyfile with the required routes is provided, but may require merging into your existing Caddyfile. 
+
+1. Create a backup copy of you current Caddyfile: `$GRAPHISTRY_HOME/data/config/Caddyfile`.
+2. If you use the default Caddyfile with no changes, then you can simply copy in `$GRAPHISTRY_HOME/data/config/Caddyfile.otel-setup to in `$GRAPHISTRY_HOME/data/config/Caddyfile`. Otherwise, copy the handle directives for the various services into your existing Caddyfile. Copy the following sections into the existing Caddyfile: 
+
+```
+    # Routes for jaeger
+      ...
+    # Route to prometheus
+      ...
+    # Routes for Grafana
+      ...
+```
+3. restart caddy with:
+
+```
+cd $GRAPHISTRY_HOME
+docker compose up -d --force-recreate caddy
 ```
 
-## Usage
+### Usage
 
-By default, the telemetry services are disabled, so using `./release` commands ((alias for `docker compose ...` with  settings like logging) will not trigger telemetry collection, forwarding, nor telemetry UIs
+By default, the telemetry services are disabled. To enable, set `ENABLE_OPEN_TELEMETRY=true` in `$GRAPHISTRY_HOME/data/config/telemetry.env`.
 
-### Turning on
+The `./release` script in $GRAPHISTRY_HOME will automatically start those services when `ENABLE_OPEN_TELEMETRY=true`.  The `./release` script is anologous to `docker compose ...`, but will not trigger telemetry collection, forwarding, nor telemetry UIs unless ENABLE_OPEN_TELEMETRY is set to true and the services are properly configured. 
 
-The command `./release` will automatically start those services when `ENABLE_OPEN_TELEMETRY=true`.  Once the services are online, we can access these useful links for development and operations:
+To start the otel services, run: 
+```
+cd $GRAPHISTRY_HOME
+./release up -d
+```
 
-* OTEL Collector metrics for Prometheus: http://localhost:8889/metrics
-* Prometheus dashboard: http://$GRAPHISTRY_HOST:9091
-* Jaeger dashboard: http://$GRAPHISTRY_HOST:16686
+Once the services are online, we can access these links for development and operations:
 
+* OTEL Collector metrics for Prometheus: https://$GRAPHISTRY_HOST:8889/metrics
+* Prometheus dashboard: https://$GRAPHISTRY_HOST/prometheus/
+* Jaeger dashboard: https://$GRAPHISTRY_HOST/jaeger/ 
+* Grafana dashboard: https://$GRAPHISTRY_HOST/grafana/
+   
 ### Audience selection via feature flags
 
 The feature flag in the web admin panel (waffle) for OpenTelemetry is `flag_ot_traces`, and it is off by default
