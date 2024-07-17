@@ -167,7 +167,7 @@ docker compose version \
 
 BOOTSTRAP_DIR="${GRAPHISTRY_HOME}/etc/scripts/bootstrap"
 CUDA_SHORT_VERSION=${CUDA_SHORT_VERSION:-`cat ${GRAPHISTRY_HOME}/CUDA_SHORT_VERSION`}
-NVIDIA_CONTAINER="nvidia/cuda:11.5.2-base-ubuntu20.04"
+NVIDIA_CONTAINER="docker.io/rapidsai/base:24.04-cuda11.8-py3.10"
 
 
 sudo docker run --rm --gpus all ${NVIDIA_CONTAINER} nvidia-smi \

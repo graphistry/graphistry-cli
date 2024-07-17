@@ -265,18 +265,18 @@ Most of the below tests can be automatically run by `cd etc/scripts && ./test-gp
   * unhealthy `nginx`, `nexus`, `caddy`: 
     * likely config file issue, unable to start due to other upstream services, or public ports are already taken
 
-* If a GPU service is unhealthy, the typical cause is an unhealthy Nvidia host or Nvidia container environment setup. Pinpoint the misconfiguration through the following progression, or run as part of `etc/scripts/test-gpu.sh` (Graphistry 2.33+). For on-prem users, your `container.tar` load will import Nvidia's official `nvidia/cuda:11.5.0-base-ubuntu20.04` container used by Graphistry your version, which can aid pinpointing ecosystem issues outside of Graphistry (v2.33.20+).
+* If a GPU service is unhealthy, the typical cause is an unhealthy Nvidia host or Nvidia container environment setup. Pinpoint the misconfiguration through the following progression, or run as part of `etc/scripts/test-gpu.sh` (Graphistry 2.33+). For on-prem users, your `container.tar` load will import Nvidia's official `docker.io/rapidsai/base:24.04-cuda11.8-py3.10` container used by Graphistry your version, which can aid pinpointing ecosystem issues outside of Graphistry (v2.33.20+).
   * `docker run hello-world` reports a message <-- tests CPU Docker installation
   * `nvidia-smi` reports available GPUs  <-- tests host has a GPU configured with expected GPU driver version number
-  * `docker run --gpus=all nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
-  * `docker run --runtime=nvidia nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
-  * `docker run --rm nvidia/cuda:11.5.0-base-ubuntu20.04  nvidia-smi` reports available GPUs <-- tests Docker GPU defaults (used by docker-compose via `/etc/docker/daemon.json`)
-  * ``docker run --rm graphistry/graphistry-forge-base:`cat VERSION`-11.5 nvidia-smi``
+  * `docker run --gpus=all docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
+  * `docker run --runtime=nvidia docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
+  * `docker run --rm docker.io/rapidsai/base:24.04-cuda11.8-py3.10  nvidia-smi` reports available GPUs <-- tests Docker GPU defaults (used by docker-compose via `/etc/docker/daemon.json`)
+  * ``docker run --rm graphistry/graphistry-forge-base:`cat VERSION`-11.8 nvidia-smi``
 Reports available GPUs (public base image) <- tests Graphistry container CUDA versions are compatible with host versions
-  * ``docker run --rm graphistry/etl-server-python:`cat VERSION`-11.5 nvidia-smi``
+  * ``docker run --rm graphistry/etl-server-python:`cat VERSION`-11.8 nvidia-smi``
     Reports available GPUs (application image)
   * Repeat the docker tests, but with `cudf` execution. Ex:
-    ``docker run --rm -it --entrypoint=/bin/bash graphistry/etl-server-python:`cat VERSION`-11.5 -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""``
+    ``docker run --rm -it --entrypoint=/bin/bash graphistry/etl-server-python:`cat VERSION`-11.8 -c "source activate base && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""``
 Tests Nvidia RAPIDS  (VERSION is your Graphistry version)
   * `docker run graphistry/cljs:1.1 npm test` reports success  <-- tests driver versioning, may be a faulty test however
   * If running in a hypervisor, ensure `RMM_ALLOCATOR=default` in `data/config/custom.env`, and check the startup logs of `docker-compose logs -f -t --tail=1000 forge-etl-python` that `cudf` / `cupy` are respecting that setting (`LOG_LEVEL=INFO`)

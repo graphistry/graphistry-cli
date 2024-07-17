@@ -98,12 +98,12 @@ All likely require `sudo`. Run from where your `docker-compose.yml` file is loca
 | **Restart (hard)** 	| `docker up -d --force-recreate --no-deps <CONTAINER>` 	|  Restart with fresh state. May also need to restart service `nginx`.	|
 | **Reset**     | `docker-compose down -v && docker-compose up -d` | Stop Graphistry, remove all internal state (including the user account database!), and start fresh .  |
 | **Status** 	 | `docker-compose ps`, `docker ps`, and `docker status` 	|  Status: Uptime, healthchecks, ...	|
-| **GPU Status** | `nvidia-smi` | See GPU processes, compute/memory consumption, and driver.  Ex: `watch -n 1.5 nvidia-smi`. Also, `docker run --rm -it nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi` for in-container test. |
+| **GPU Status** | `nvidia-smi` | See GPU processes, compute/memory consumption, and driver.  Ex: `watch -n 1.5 nvidia-smi`. Also, `docker run --rm -it docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi` for in-container test. |
 | **1.0 API Key** | docker-compose exec streamgl-vgraph-etl curl "http://0.0.0.0:8080/api/internal/provision?text=MYUSERNAME" 	|  Generates API key for a developer or notebook user	(1.0 API is deprecated)|
 | **Logs** 	|  `docker-compose logs <CONTAINER>` 	|  Ex: Watch all logs, starting with the 20 most recent lines:  `docker-compose logs -f -t --tail=20 forge-etl-python`	. You likely need to switch Docker to use the local json logging driver by  deleting the two default managed Splunk log driver options in `/etc/docker/daemon.json` and then restarting the `docker` daemon (see below). |
 | **Create Users** | Use Admin Panel (see [Create Users](docs/user-creation.md)) or `etc/scripts/rest` |
 | **Restart Docker Daemon** | `sudo service docker restart` | Use when changing `/etc/docker/daemon.json`, ... |
-| **Jupyter shell**| `docker exec -it -u root graphistry_notebook_1 bash` then `source activate rapids` | Use for admin tasks like global package installs |
+| **Jupyter shell**| `docker exec -it -u root graphistry_notebook_1 bash` then `source activate base` | Use for admin tasks like global package installs |
 
 
 ## Manual enterprise install
@@ -118,7 +118,7 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 You can test your GPU environment via Graphistry's [base RAPIDS Docker image on DockerHub](https://hub.docker.com/r/graphistry/graphistry-forge-base):
 
 ```
-docker run --rm -it --entrypoint=/bin/bash graphistry/graphistry-forge-base:latest -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""
+docker run --rm -it --entrypoint=/bin/bash graphistry/graphistry-forge-base:latest -c "source activate base && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""
 ```
 
 =>
