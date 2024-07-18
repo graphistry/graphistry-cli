@@ -1,74 +1,118 @@
 # Configure Louie
-## Oauth2
-
-Louie is an oauth2 client to nexus
-
-When graphistry creds are provided as env vars, auth gets skipped
-
-To use a private graphistry server:
-* Register a client app in nexus admin:
-  * https://github.com/graphistry/graphistry/wiki/OAuth2-Client-Setup
-* Set .env oauth2 settings as per .env.example
-
-You may need to remove `lui_*` cookies (browser devtools -> application -> cookies)
-
-## Use Louie with local Nexus
-Alter the /etc/hosts to add host.docker.internal to the 127.0.0.1 hostname
+## OAuth2 
+Louie serves as an OAuth2 client to Nexus. When Graphistry credentials are provided as environment variables, authentication is bypassed. To utilize a private Graphistry server, follow these steps: 
+ 
+- Register a client app in the Nexus admin panel: [OAuth2 Client Setup](https://github.com/graphistry/graphistry/wiki/OAuth2-Client-Setup) 
+- Configure OAuth2 settings in the  .env  file as per the  .env.example  
+ 
+If necessary, remove  lui_*  cookies using browser developer tools (navigate to Application -> Cookies). 
+ 
+## Use Louie with Local Nexus 
+To configure Louie with a local Nexus setup, modify the  /etc/hosts  file to include  `host.docker.internal`  alongside  `127.0.0.1` :
 For example:
 ```
 127.0.0.1	localhost host.docker.internal
 ```
-1. Get local nexus online
-2. Create an admin account
-3. Set up Oauth2 following steps in section [Oauth2](#oauth2)
+1. Ensure local Nexus is online. 
+2. Create an admin account. 
+3. Set up OAuth2 following the steps outlined in the [OAuth2](#oauth2) section.
 
-### Databricks Connector Setup In Nexus
-1. Setup encryption and signing environment in `.envs/.development/custom.env` or `.envs/.production/custom.env`
+### Connector Management Command 
+This Django management command facilitates CRUD operations (Create, List, Show, Edit, Delete) on the Connector model. 
+ 
+#### Usage 
 
-run `compose/etc/scripts/cred-gen.sh >> ./data/config/custom.env` to create the following enviromental varible
+1. Run the management command with the specified actions:
+    - `create`: Create a new connector.
+    - `list`: List all existing connectors.
+    - `show --id <connector_id>`: Show details of a specific connector.
+    - `edit --id <connector_id>`: Edit an existing connector.
+    - `delete --id <connector_id>`: Delete a connector.
+
+2. Available arguments:
+    - `--id`: Connector ID for show, edit, or delete actions.
+    - `--name`: The name of the connector.
+    - `--type`: The type of the connector.
+    - `--host`: The host for the connector.
+    - `--token`: The authentication token for the connector.
+    - `--workspace_id`: The workspace ID for the connector.
+
+#### Examples
+
+1. Create a new connector:
+```bash
+GRAPHISTRY_HOME=compose/ CMD_NAME=manage_connector ./compose/etc/scripts/nexus-command.sh create --name "ConnectorName" --type "ConnectorType" --host "ConnectorHost" --token "AuthenticationToken" --workspace_id "WorkspaceID"
+```
+2. List all connectors:
+```bash
+GRAPHISTRY_HOME=compose/ CMD_NAME=manage_connector ./compose/etc/scripts/nexus-command.sh list
+```
+3. Show details of a specific connector:
+```bash
+GRAPHISTRY_HOME=compose/ CMD_NAME=manage_connector ./compose/etc/scripts/nexus-command.sh show --id <connector_id>
+```
+4. Edit an existing connector:
+```bash
+GRAPHISTRY_HOME=compose/ CMD_NAME=manage_connector ./compose/etc/scripts/nexus-command.sh edit --id <connector_id> --name "NewName" --type "NewType"
+```
+5. Delete a connector:
+```bash
+GRAPHISTRY_HOME=compose/ CMD_NAME=manage_connector ./compose/etc/scripts/nexus-command.sh delete --id <connector_id>
+```
+
+#### Notes
+
+- Ensure appropriate permissions are in place to perform CRUD operations on the Connector model. 
+- Provide all required arguments for each action to prevent errors. 
+ 
+### Databricks Connector Setup In Nexus 
+1. If you not yet has encription key(GRAPHISTRY_NEXUS_ENCRYPTION_KEYS): Establish encryption and signing environment in  .envs/.development/custom.env  or  .envs/.production/custom.env . Run the following script to create the necessary environmental variables:
+```bash
+compose/etc/scripts/cred-gen.sh >> ./data/config/custom.env
+```
 ```bash
 # check with Koa the correct values for below variables
 GRAPHISTRY_NEXUS_ENCRYPTION_KEYS=""
 GRAPHISTRY_NEXUS_SIGNING_KEY=""
 GRAPHISTRY_NEXUS_SIGNING_SALT=""
 ```
-2. Create connector. Replace `connector_name` `connector_host` `token` `workspace_id`. This will print out `your_connector_id` (will need this later)
+2. Create a connector using the following command:
 ```bash
-GRAPHISTRY_HOME=compose/ CMD_NAME=create_connector ./compose/etc/scripts/nexus-command.sh connector_name Databricks connector_host token workspace_id
+GRAPHISTRY_HOME=compose/ CMD_NAME=manage_connector ./compose/etc/scripts/nexus-command.sh create --name "ConnectorName" --type "ConnectorType" --host "ConnectorHost" --token "AuthenticationToken" --workspace_id "WorkspaceID"
 
 ```
 
-#### Enviroment variable pairing
-The following enviramental variable pairs need to have the same value between Louie and Nexus
-|Louie|Nexus|
-|:-- |:-- |
-GRAPHISTRY_ENCRYPTION_KEYS|GRAPHISTRY_NEXUS_ENCRYPTION_KEYS
-GRAPHISTRY_SIGNING_KEY|GRAPHISTRY_NEXUS_SIGNING_KEY
-GRAPHISTRY_SIGNING_SALT|GRAPHISTRY_NEXUS_SIGNING_SALT
-
-#### Comparison Between Databricks Enviromental Variable In Louie Vs Connector In Nexus
-|Databricks Enviromental Variable In Louie|Connector Keyjson In Nexus|
-|:-- |:-- |
-DATABRICKS_CONNECTOR_ID | connector.connector_id
-DATABRICKS_OAUTH_CLIENT_ID | connector.keyjson["databricks_oauth_client_id"]
-DATABRICKS_SHARED_METADATA | connector.keyjson["share_metadata"]
-SPARK_TOKEN | connector.keyjson["token"]
-SPARK_HOST | connector.keyjson["host"]
-SPARK_WORKSPACE_ID | connector.keyjson["workspace_id"]
-
-
-#### PAT import (Optional for now if pats created in previous step - data import for future to rotate all the PAT - Nexus PR is not merged yet)
-
-1. for pats replace `apps/core/nexus/common/management/commands/dummy.csv` with your csv file content
-2. run django command (pats)
+### Environment Variable Pairing 
+Ensure the following environmental variable pairs have identical values between Louie and Nexus: 
+ 
+| Louie | Nexus | 
+|:-- |:-- | 
+| GRAPHISTRY_ENCRYPTION_KEYS | GRAPHISTRY_NEXUS_ENCRYPTION_KEYS | 
+| GRAPHISTRY_SIGNING_KEY | GRAPHISTRY_NEXUS_SIGNING_KEY | 
+| GRAPHISTRY_SIGNING_SALT | GRAPHISTRY_NEXUS_SIGNING_SALT | 
+ 
+### Comparison Between Databricks Environmental Variables in Louie and Connector in Nexus 
+| Databricks Environmental Variable in Louie | Connector Keyjson in Nexus | 
+|:-- |:-- | 
+| DATABRICKS_CONNECTOR_ID | connector.connector_id | 
+| DATABRICKS_OAUTH_CLIENT_ID | connector.keyjson["databricks_oauth_client_id"] | 
+| DATABRICKS_SHARED_METADATA | connector.keyjson["share_metadata"] | 
+| SPARK_TOKEN | connector.keyjson["token"] | 
+| SPARK_HOST | connector.keyjson["host"] | 
+| SPARK_WORKSPACE_ID | connector.keyjson["workspace_id"] | 
+ 
+### PAT Import (Optional for now if PATs were created in a previous step - data import for future to rotate all the PAT - Nexus PR is not merged yet) 
+1. For PATs, replace  apps/core/nexus/common/management/commands/dummy.csv  with the content of your CSV file. 
+2. Execute the Django command for PATs:
 
 ```bash
 GRAPHISTRY_HOME=compose/ CMD_NAME=create_org_pats ./compose/etc/scripts/nexus-command.sh
 ```
 
-### Databricks Connector Setup In Louie
-Check script in [Step 2](#databricks-connector-setup-in-nexus) for `your_connector_id` value or go to Nexus admin page: `your_host/admin/pivot/connector/`
-1. Setup Enviroment in `.env`
+### Databricks Connector Setup In Louie 
+Refer to the script in [Step 2](#databricks-connector-setup-in-nexus) to obtain the  your_connector_id  value or visit the Nexus admin page at  your_host/admin/pivot/connector/ . 
+ 
+1. Set up the environment in the  .env  file:
 ```bash
 # check with Koa the correct values for below variables
 GRAPHISTRY_ENCRYPTION_KEYS=""
@@ -78,7 +122,7 @@ SPARK_GRAPHISTRY_SPARK_TOKEN=True
 # SPARK_GRAPHISTRY_PAT_TABLE=True  # uncomment to use pats
 DATABRICKS_CONNECTOR_ID="your_connector_id"
 ```
-2. run louie
+2. Run Louie:
 ```bash
 ./dc build g; ./dc up g
 ```
