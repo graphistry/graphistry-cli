@@ -6,6 +6,45 @@ Louie serves as an OAuth2 client to Nexus. When Graphistry credentials are provi
 - Configure OAuth2 settings in the  .env  file as per the  .env.example  
  
 If necessary, remove  lui_*  cookies using browser developer tools (navigate to Application -> Cookies). 
+
+## How to Use Connector Management Script
+This script facilitates CRUD operations on connectors within the Graphistry system.
+### Prerequisites
+
+Ensure you have the following environment variables set:
+
+    GRAPHISTRY_USERNAME
+    GRAPHISTRY_PASSWORD
+    GRAPHISTRY_NEXUS_SIGNING_KEY
+    GRAPHISTRY_NEXUS_SIGNING_SALT
+    CONNECTOR_NAME
+
+### Usage
+
+1. Create a new connector
+```bash
+GRAPHISTRY_BASE_PATH=http://localhost KEYJSON='{}' CONNECTOR_TYPE=Databrics CONNECTOR_NAME="MyConnector" ACTION=create ./connector_management.sh
+```
+2. Update an existing connector
+```bash
+GRAPHISTRY_BASE_PATH=http://localhost KEYJSON='{}' CONNECTOR_TYPE=Databrics CONNECTOR_ID="connector_id" CONNECTOR_NAME="UpdatedConnector" ACTION=update ./connector_management.sh
+
+```
+3. Delete a connector
+```bash
+GRAPHISTRY_BASE_PATH=http://localhost CONNECTOR_ID="connector_id" ACTION=delete ./connector_management.sh
+
+```
+4. Get a connector
+```bash
+GRAPHISTRY_BASE_PATH=http://localhost CONNECTOR_ID="connector_id" ACTION=get ./connector_management.sh
+
+```
+5. List all connectors
+```bash
+GRAPHISTRY_BASE_PATH=http://localhost ACTION=list ./connector_management.sh
+
+```
  
 ## Use Louie with Local Nexus 
 To configure Louie with a local Nexus setup, modify the  /etc/hosts  file to include  `host.docker.internal`  alongside  `127.0.0.1` :
@@ -100,6 +139,41 @@ Ensure the following environmental variable pairs have identical values between 
 | SPARK_TOKEN | connector.keyjson["token"] | 
 | SPARK_HOST | connector.keyjson["host"] | 
 | SPARK_WORKSPACE_ID | connector.keyjson["workspace_id"] | 
+
+### Louie env var (static vs dynamic connector)
+<table>
+  <tr>
+    <th>Static Connector Confugiration</th>
+    <th>Dynamic Connector Confugiration</th>
+  </tr>
+  <tr>
+    <td>
+        &nbsp;
+        DATABRICKS_SHARED_METADATA=True
+        <br>&nbsp;
+        SPARK_TOKEN="token"
+        <br>&nbsp;
+        SPARK_HOST="host"
+        <br>&nbsp;
+        SPARK_WORKSPACE_ID="workspace_id"
+    </td>
+    <td>
+        &nbsp;
+        GRAPHISTRY_ENCRYPTION_KEYS=""
+        <br>&nbsp;
+        GRAPHISTRY_SIGNING_KEY=""
+        <br>&nbsp;
+        GRAPHISTRY_SIGNING_SALT=""
+        <br>&nbsp;
+        SPARK_GRAPHISTRY_SPARK_TOKEN=True
+        <br>&nbsp;
+        # SPARK_GRAPHISTRY_PAT_TABLE=True  # uncomment to use pats
+        <br>&nbsp;
+        DATABRICKS_CONNECTOR_ID="your_connector_id"
+    </td>
+  </tr>
+</table>
+
  
 ### PAT Import (Optional for now if PATs were created in a previous step - data import for future to rotate all the PAT - Nexus PR is not merged yet) 
 1. For PATs, replace  apps/core/nexus/common/management/commands/dummy.csv  with the content of your CSV file. 
