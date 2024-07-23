@@ -174,6 +174,50 @@ Ensure the following environmental variable pairs have identical values between 
   </tr>
 </table>
 
+## PATs CRUD Management
+
+This section contains a Bash script for managing Personal Access Tokens (PATs) for Databricks connectors.
+
+### Overview
+
+The Django management command allows you to:
+- Update PATs from a CSV file.
+- Add new users and their PATs to the PAT table.
+- Update existing users' PATs.
+- Delete users from the PAT table.
+
+The Bash script provides an easy interface to run the Django management command with the specified options.
+
+### Setup
+
+Ensure you have the necessary environment variables set up:
+
+- `GRAPHISTRY_HOME`: The home directory of your Graphistry setup.
+- `GRAPHISTRY_LOG_LEVEL`: The log level for Graphistry (default is `INFO`).
+
+### Usage
+
+#### Django Management Command
+
+The management command can be run with various options to perform different operations.
+
+##### Arguments
+
+- `--connector_id UUID`: Specify the connector ID to update. If omitted, updates all connectors linked to the site-wide organization.
+- `--update_user USERNAME PAT`: Update the PAT for a specific user. Provide the username and the new PAT value.
+- `--add_user USERNAME PAT`: Add a new user to the PAT table. Provide the username and the PAT value.
+- `--delete_user USERNAME`: Remove a user from the PAT table. Provide the username of the user to delete.
+- `--update_from_csv`: Update PATs using the CSV file located at `common/management/commands/dummy.csv`.
+
+##### Example Usage
+
+```sh
+GRAPHISTRY_HOME="." ./etc/scripts/pats-crud.sh --connector_id your_connector_id --update_user username new_pat
+GRAPHISTRY_HOME="." ./etc/scripts/pats-crud.sh --connector_id your_connector_id --add_user new_username new_pat
+GRAPHISTRY_HOME="." ./etc/scripts/pats-crud.sh --connector_id your_connector_id --delete_user username_to_delete
+GRAPHISTRY_HOME="." ./etc/scripts/pats-crud.sh --update_from_csv
+```
+
  
 ### PAT Import (Optional for now if PATs were created in a previous step - data import for future to rotate all the PAT - Nexus PR is not merged yet) 
 1. For PATs, replace  apps/core/nexus/common/management/commands/dummy.csv  with the content of your CSV file. 
