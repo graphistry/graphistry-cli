@@ -62,11 +62,21 @@ ACTION=list path_to_script/connector_management.sh
 
 ### Managing Personal Access Tokens (PATs)
 
-To upsert or delete PATs associated with a connector, use the following example commands:
+To upsert, delete, delete all, or update all PATs associated with a connector, use the following example commands:
 
 ```bash
+# Upsert a PAT
 ACTION=upsert_pat PAT_KEY="sample_key" PAT_VALUE="sample_value" path_to_script/connector_management.sh
+
+# Delete a PAT
 ACTION=delete_pat PAT_KEY="sample_key" path_to_script/connector_management.sh
+
+# Delete all PATs
+ACTION=delete_all_pats CONNECTOR_ID="sample_connector_id" path_to_script/connector_management.sh
+
+# Update all PATs
+ACTION=update_all_pats CONNECTOR_ID="sample_connector_id" PATS='{"user10":"pat_value"}' path_to_script/connector_management.sh
+
 ```
 
 ### Additional Help
