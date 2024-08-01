@@ -26,7 +26,8 @@ export GRAPHISTRY_NEXUS_SIGNING_SALT=salt_key
 #### Encryption and Signing key Generation
 For local Nexus users, you need to generate encryption and signing keys. If you are using Graphistry Hub, please contact Graphistry support to obtain your keys.
 
-To set up the encryption and signing environment, update the .envs/.development/custom.env or .envs/.production/custom.env file. Run the following command to generate and append the required keys:
+To set up the encryption and signing environment, update the .envs/.development/custom.env or .envs/.production/custom.env file. Follow these steps to generate and append the necessary environmental variables:
+1. Run the following command to generate and append the required keys:
 ```bash
 { echo ""; bash -c "$(sed '1 a\set +x' compose/etc/scripts/cred-gen.sh)" | grep -E "GRAPHISTRY_NEXUS_ENCRYPTION_KEYS|GRAPHISTRY_NEXUS_SIGNING_KEY|GRAPHISTRY_NEXUS_SIGNING_SALT"; } >> path_to_your/custom.env
 ```
@@ -36,6 +37,12 @@ This command does the following:
 - Executes the script with debugging disabled.
 - Filters the output to include only the necessary keys.
 - Appends the output to `path_to_your/custom.env`.
+
+2. Restart Nexus to apply the changes:
+```bash
+./nc build nexus
+./nc up -d nexus
+```
 
 #### Other environment variables:
 - `GRAPHISTRY_BASE_PATH`: The base URL path for the Graphistry API. The default value is http://localhost.
