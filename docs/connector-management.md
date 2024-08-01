@@ -13,7 +13,7 @@ or
 pip3 install cryptography
 ```
 ### Environment Variables
-Ensure you have the following environment variables set:
+#### Ensure you have the following environment variables set:
 
 ```bash
 export GRAPHISTRY_USERNAME=username
@@ -22,7 +22,22 @@ export GRAPHISTRY_ENCRYPTION_KEYS=encryption_key
 export GRAPHISTRY_NEXUS_SIGNING_KEY=signing_key
 export GRAPHISTRY_NEXUS_SIGNING_SALT=salt_key
 ```
-Other environment variables:
+
+#### Encryption and Signing key Generation
+For local Nexus users, you need to generate encryption and signing keys. If you are using Graphistry Hub, please contact Graphistry support to obtain your keys.
+
+To set up the encryption and signing environment, update the .envs/.development/custom.env or .envs/.production/custom.env file. Run the following command to generate and append the required keys:
+```bash
+{ echo ""; bash -c "$(sed '1 a\set +x' compose/etc/scripts/cred-gen.sh)" | grep -E "GRAPHISTRY_NEXUS_ENCRYPTION_KEYS|GRAPHISTRY_NEXUS_SIGNING_KEY|GRAPHISTRY_NEXUS_SIGNING_SALT"; } >> path_to_your/custom.env
+```
+This command does the following:
+
+- Adds a newline before appending the new keys.
+- Executes the script with debugging disabled.
+- Filters the output to include only the necessary keys.
+- Appends the output to `path_to_your/custom.env`.
+
+#### Other environment variables:
 - `GRAPHISTRY_BASE_PATH`: The base URL path for the Graphistry API. The default value is http://localhost.
 - `KEYJSON`: JSON data containing connector configuration value. The default is an empty JSON object.
 - `CONNECTOR_TYPE`: Type of the connector. The default value is Databricks.
