@@ -3,18 +3,36 @@
 This guide provides instructions for utilizing the bash script for managing connectors in Graphistry. The script includes functionalities for creating, updating, deleting, getting, and listing connectors. It interacts with a Graphistry API using curl commands and generates JWT tokens for authentication.
 
 ## Prerequisites
-
+### Python Cryptography Library
+The script uses the Python cryptography library to decrypt keyjson. Install the library using one of the following commands:
+```bash
+pip install cryptography
+```
+or
+```bash
+pip3 install cryptography
+```
+### Environment Variables
 Ensure you have the following environment variables set:
 
 ```bash
-export GRAPHISTRY_USERNAME=username GRAPHISTRY_PASSWORD=pass GRAPHISTRY_ENCRYPTION_KEYS=encryption_key  GRAPHISTRY_NEXUS_SIGNING_KEY=signing_key GRAPHISTRY_NEXUS_SIGNING_SALT=salt_key
+export GRAPHISTRY_USERNAME=username
+export GRAPHISTRY_PASSWORD=pass
+export GRAPHISTRY_ENCRYPTION_KEYS=encryption_key
+export GRAPHISTRY_NEXUS_SIGNING_KEY=signing_key
+export GRAPHISTRY_NEXUS_SIGNING_SALT=salt_key
 ```
 Other environment variables:
 - `GRAPHISTRY_BASE_PATH`: The base URL path for the Graphistry API. The default value is http://localhost.
 - `KEYJSON`: JSON data containing connector configuration value. The default is an empty JSON object.
 - `CONNECTOR_TYPE`: Type of the connector. The default value is Databricks.
 - `CONNECTOR_ID`: The ID of the connector. This can be left empty for certain actions.
-- `ACTION`: Action to perform (create, update, delete, get, list, upsert_pat, delete_pat). The default action is list.
+- `ACTION`: Action to perform (create, update, delete, get, list, upsert_pat, delete_pat, delete_all_pats, update_all_pats). The default action is list.
+- `CONNECTOR_NAME`: The name of the connector.
+- `PAT_KEY`: The key(username) for the Personal Access Token (PAT) to be managed.
+- `PAT_VALUE`: The value for the PAT to be managed.
+- `PATS_JSON`: JSON string containing multiple PATs for bulk updates.
+- `PATS_CSV`: Path to a CSV file containing multiple PATs for bulk updates.
 
 ## How to Use
 
@@ -74,9 +92,32 @@ ACTION=delete_pat PAT_KEY="sample_key" path_to_script/connector_management.sh
 # Delete all PATs
 ACTION=delete_all_pats CONNECTOR_ID="sample_connector_id" path_to_script/connector_management.sh
 
-# Update all PATs
-ACTION=update_all_pats CONNECTOR_ID="sample_connector_id" PATS='{"user10":"pat_value"}' path_to_script/connector_management.sh
+# Update all PATs 
+ACTION=update_all_pats CONNECTOR_ID="sample_connector_id" PATS_JSON='{"user10":"pat_value"}' path_to_script/connector_management.sh
 
+# Update all PATs using csv file
+ACTION=update_all_pats CONNECTOR_ID="sample_connector_id" PATS_CSV='path/to/pats.csv' path_to_script/connector_management.sh
+```
+
+### CSV File Example:
+```csv
+username,PAT
+user123,abc123pat
+user456,def456pat
+user789,ghi789pat
+test1,jkl012pat
+```
+### Keyjson with PATs Example:
+```json
+{
+    "host": "updated_host_url",
+    "pats": {
+        "user1": "updated_pat1",
+        "user2": "updated_pat2"
+    },
+    "token": "updated_service_token",
+    "workspace_id": "updated_workspace_id"
+}
 ```
 
 ### Additional Help
