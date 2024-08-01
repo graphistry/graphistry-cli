@@ -153,5 +153,3 @@ ACTION=help path_to_script/connector_management.sh
 ### Note
 
 Ensure that the necessary prerequisites and action-specific arguments are provided when using the script to avoid any errors with the connector management operations.
-
-This file outlines the basic usage of the provided bash script with examples for creating, updating, deleting, getting, and listing connectors, as well as managing Personal Access Tokens (PATs). It also includes a reminder to provide the necessary prerequisites and action-specific arguments when using the script. 
