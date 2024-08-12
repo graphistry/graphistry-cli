@@ -6,6 +6,8 @@ Graphistry services export telemetry information (metrics and traces) using the 
 
 Graphistry services push their telemetry data to the [opentelemetry-collector](https://opentelemetry.io/docs/collector/) service (alias `otel-collector`) and this will forward the data to any observability tool that is compatible with the OpenTelemetry standard (e.g. Prometheus, Jaeger, Grafana Cloud, etc.).
 
+Graphistry can be deployed alongside the packaged Graphistry Local Telemetry Suite, which includes Prometheus, Jaeger, and Grafana services.
+
 ## Usage
 
 By default, the telemetry services are disabled. To enable, set `ENABLE_OPEN_TELEMETRY=true` in `$GRAPHISTRY_HOME/data/config/telemetry.env`.
@@ -20,7 +22,7 @@ cd $GRAPHISTRY_HOME
 
 Once the services are online, we can access these links for development and operations:
 
-* OTEL Collector metrics for Prometheus: https://$GRAPHISTRY_HOST:8889/metrics
+* OTEL Collector metrics for Prometheus: https://$GRAPHISTRY_HOST/metrics
 * Prometheus dashboard: https://$GRAPHISTRY_HOST/prometheus/
 * Jaeger dashboard: https://$GRAPHISTRY_HOST/jaeger/
 * Grafana dashboard: https://$GRAPHISTRY_HOST/grafana/ (including GPU metrics and dashboard from NVIDIA Data Center GPU Manager: `DCGM Exporter Dashboards`)
@@ -33,7 +35,7 @@ The file `$GRAPHISTRY_HOME/data/config/telemetry.env` has the environment variab
 These are the core environment variables:
 
 - `ENABLE_OPEN_TELEMETRY`: Supports `true` or `false`.  After setting this to `true` and restarting the deployment with `./release up -d` the telemetry services will be started and the Graphistry services will export telemetry data.
-- `OTEL_COMPOSE_FILE`: Indicates which telemetry services will be deployed along the Graphistry services.  Possible values are `telemetry.cloud.yml` (e.g. when we want to export to Grafana) or `telemetry.yml` (e.g. when we want to use the self-hosted Prometheus, Jaeger and Grafana instances).
+- `OTEL_COMPOSE_FILE`: Indicates which telemetry services will be deployed along the Graphistry services.  Possible values are `telemetry.cloud.yml` (e.g. when we want to export to Grafana) or `telemetry.yml` (e.g. when we want to use the Graphistry Local Telemetry Suite: Prometheus, Jaeger and Grafana instances).
 
 These environment variables are used when we want to use `OTEL_COMPOSE_FILE=telemetry.yml`:
 - `OTEL_COLLECTOR_OTLP_HTTP_ENDPOINT`: For example the Grafana Cloud OTLP HTTP endpoint.
@@ -42,17 +44,17 @@ These environment variables are used when we want to use `OTEL_COMPOSE_FILE=tele
 
  ### Telemetry services
 
-The `$GRAPHISTRY_HOME/etc` has the directories to configure the telemetry services:
+The `$GRAPHISTRY_HOME/etc` has the directories to configure the Graphistry Local Telemetry Suite:
 - `$GRAPHISTRY_HOME/etc/otel-collector`: Has the `otel-collector-config.cloud.yml` (when we use the `OTEL_COMPOSE_FILE=telemetry.cloud.yml`) and `otel-collector-config.yml` (`OTEL_COMPOSE_FILE=telemetry.yml`).
-- `$GRAPHISTRY_HOME/etc/prometheus`: Has `prometheus.yml` to configure the self-hosted Prometheus service.  By default, the self-hosted Prometheus service is already configured to collect metrics from Graphistry services and from the `DCGM exporter` service.
-- `$GRAPHISTRY_HOME/etc/jaeger`: To configure the self-hosted Jaeger service.
-- `$GRAPHISTRY_HOME/etc/grafana`: To configure the self-hosted grafana service.  By default, the self-hosted Grafana service has already configured the self-hosted Prometheus service as default datasource.  Also, it has already configured and ready to use the `DCGM Exporter Dashboards`.
+- `$GRAPHISTRY_HOME/etc/prometheus`: Has `prometheus.yml` to configure the Prometheus service.  By default, it is already configured to collect metrics from Graphistry services and from the `DCGM exporter` service.
+- `$GRAPHISTRY_HOME/etc/jaeger`: To configure the Jaeger service.
+- `$GRAPHISTRY_HOME/etc/grafana`: To configure the Grafana service.  By default, it has already configured the Prometheus service as default datasource.  Also, it has already configured and ready to use the `DCGM Exporter Dashboards`.
 
 ## Examples
 
-### Example: Graphana Cloud
+### Example: Deploying with Graphana Cloud
 
-This is the configuration template for [Grafana Cloud](https://grafana.com/):
+This is the configuration template for using [Grafana Cloud](https://grafana.com/) alongside the OpenTelemetry Collector:
 
 ```bash
 ENABLE_OPEN_TELEMETRY=true
@@ -64,9 +66,9 @@ OTEL_COLLECTOR_OTLP_USERNAME="XYZ"   # e.g. Grafana Cloud Instance ID for OTLP
 OTEL_COLLECTOR_OTLP_PASSWORD="PQR"   # e.g. Grafana Cloud API Token for OTLP
 ```
 
-### Example: Self-hosted Prometheus, Jaeger and Grafana instances
+### Example: Deploying with the Packaged Graphistry Local Telemetry Suite
 
-This is the configuration template for self-hosted instances of telemetry services alongside the OpenTelemetry Collector:
+This is the configuration template for using the Graphistry Local Telemetry Suite alongside the OpenTelemetry Collector:
 
 ```bash
 ENABLE_OPEN_TELEMETRY=true
@@ -100,7 +102,7 @@ Metrics are implemented for critical errors and service health, where each metri
 
 To provide comprehensive monitoring of GPU performance, we utilize Grafana in conjunction with NVIDIA Data Center GPU Manager (DCGM).  These tools enable real-time visualization and analysis of GPU metrics, ensuring optimal performance and facilitating troubleshooting.
 - **NVIDIA Data Center GPU Manager (DCGM):** [DCGM](https://developer.nvidia.com/dcgm) is a suite of tools for managing and monitoring NVIDIA GPUs in data centers.  It provides detailed metrics on GPU performance, health, and utilization.
-- **Grafana:** Grafana is an open-source platform for monitoring and observability.  It allows users to query, visualize, alert on, and explore metrics from a variety of data sources, including Prometheus.  By default the self-hosted Grafana instance has the metrics and GPU dashboard from the `DCGM exporter` service (see `DCGM Exporter Dashboards` in the Grafana main page).
+- **Grafana:** Grafana is an open-source platform for monitoring and observability.  It allows users to query, visualize, alert on, and explore metrics from a variety of data sources, including Prometheus.  By default the Grafana instance has the metrics and GPU dashboard from the `DCGM exporter` service (see `DCGM Exporter Dashboards` in the Grafana main page).
 
 ![grafana-import-dcgm-dashboard-6](./img/grafana-import-dcgm-dashboard-6.png)
 
