@@ -1,9 +1,13 @@
 # Using the Connector Management Bash Script
 
-This guide provides instructions for utilizing the bash script for managing connectors in Graphistry. The script includes functionalities for creating, updating, deleting, getting, and listing connectors. It interacts with a Graphistry API using curl commands and generates JWT tokens for authentication.
+You can manage Graphistry connectors using the CLI from a Graphistry server or remotely via the REST API. The serverside management scripts are easier to start with. For convenience, we include bash scripts for using the remote REST API via curl & Python. Functionalities include creating, updating, deleting, getting, and listing connectors.
 
 ## Prerequisites
-### Python Cryptography Library
+
+### Remote REST API bash scripts: Python cryptography library
+
+The REST curl bash scripts invoke the Python cryptography library.
+
 The script uses the Python cryptography library to decrypt keyjson. Install the library using one of the following commands:
 ```bash
 pip install cryptography
@@ -12,8 +16,9 @@ or
 ```bash
 pip3 install cryptography
 ```
-### Environment Variables
-#### Ensure you have the following environment variables set:
+### Environment variables
+
+#### Ensure you have the following environment variables set
 
 ```bash
 export GRAPHISTRY_USERNAME=username
@@ -23,25 +28,29 @@ export GRAPHISTRY_NEXUS_SIGNING_KEY=signing_key
 export GRAPHISTRY_NEXUS_SIGNING_SALT=salt_key
 ```
 
-#### Encryption and Signing key Generation
-For local Nexus users, you need to generate encryption and signing keys. If you are using Graphistry Hub, please contact Graphistry support to obtain your keys.
+#### Find or generate signing keys
 
-To set up the encryption and signing environment, update the .envs/.development/custom.env or .envs/.production/custom.env file. Follow these steps to generate and append the necessary environmental variables:
-1. Run the following command to generate and append the required keys:
+For self-hosted Graphistry server users, you need to generate encryption and signing keys. If you are using Graphistry Hub, please contact Graphistry staff to obtain your keys.
+
+Check if you already have keys in your `./data/config/custom.env`, and read on to replace them if desired:
+
 ```bash
-{ echo ""; bash -c "$(sed '1 a\set +x' compose/etc/scripts/cred-gen.sh)" | grep -E "GRAPHISTRY_NEXUS_ENCRYPTION_KEYS|GRAPHISTRY_NEXUS_SIGNING_KEY|GRAPHISTRY_NEXUS_SIGNING_SALT"; } >> path_to_your/custom.env
+cat data/config/custom.env | grep -E "GRAPHISTRY_NEXUS_ENCRYPTION_KEYS|GRAPHISTRY_NEXUS_SIGNING_KEY|GRAPHISTRY_NEXUS_SIGNING_SALT"
 ```
-This command does the following:
 
-- Adds a newline before appending the new keys.
-- Executes the script with debugging disabled.
-- Filters the output to include only the necessary keys.
-- Appends the output to `path_to_your/custom.env`.
+This should list `GRAPHISTRY_NEXUS_ENCRYPTION_KEYS`, `GRAPHISTRY_NEXUS_SIGNING_KEY`, `GRAPHISTRY_NEXUS_SIGNING_SALT`. To rotate them, delete them from the file and continue.
 
-2. Restart Nexus to apply the changes:
+Generate and append the necessary environmental variables to your `./data/custom.env`:
+
 ```bash
-./nc build nexus
-./nc up -d nexus
+{ echo ""; bash -c "$(sed '1 a\set +x' ./etc/scripts/cred-gen.sh)" | grep -E "GRAPHISTRY_NEXUS_ENCRYPTION_KEYS|GRAPHISTRY_NEXUS_SIGNING_KEY|GRAPHISTRY_NEXUS_SIGNING_SALT"; }
+ >> ./data/custom.env
+```
+
+After, restart the Nexus service to switch to the new signing keys:
+
+```bash
+./nc up -d --force-recreate --no-deps nexus
 ```
 
 #### Other environment variables:
