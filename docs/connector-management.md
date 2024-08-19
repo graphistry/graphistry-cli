@@ -149,7 +149,7 @@ ACTION=get CONNECTOR_ID="connector_id" ./etc/scripts/connector_management.sh
 To create a new connector, use the following example command for Databricks
 
 ```bash
-ACTION=create CONNECTOR_NAME="MyDatabricksConnector" KEYJSON='{"host": "abc123.cloud.databricks.com", "pats": {"user1": "pat123", "user2": "pat456"}, "token": "optional_shared_service_pat","workspace_id": "aa1234"}' ./etc/connector_management.sh
+ACTION=create ORG_NAME=my_org_123 CONNECTOR_NAME="MyDatabricksConnector" CONNECTOR_DETAIL='{"host": "abc123.cloud.databricks.com", "workspace_id": "xyz456"}' KEYJSON='{"user1": "aa11", "user2": "bb22"}' ./etc/scripts/connector_management.sh
 ```
 
 #### Update connector
@@ -157,7 +157,7 @@ ACTION=create CONNECTOR_NAME="MyDatabricksConnector" KEYJSON='{"host": "abc123.c
 To update an existing connector, use the following example command:
 
 ```bash
-ACTION=update CONNECTOR_ID="connector_id" CONNECTOR_NAME="UpdatedConnector" KEYJSON='{"host": "updated_host_url", "pats": {"user1": "updated_pat1", "user2": "updated_pat2"}, "token": "updated_service_token", "workspace_id": "updated_workspace_id"}' ./etc/scripts/connector_management.sh
+ACTION=update CONNECTOR_ID="connector_id" CONNECTOR_NAME="UpdatedConnectorName" CONNECTOR_DETAIL='{"host": "abc123-updated.cloud.databricks.com", "workspace_id": "xyz456-updated"}' KEYJSON='{"user1": "updated_pat1", "user2": "updated_pat2"}' ./etc/scripts/connector_management.sh
 ```
 
 #### Delete connector
