@@ -149,7 +149,7 @@ ACTION=get CONNECTOR_ID="connector_id" ./etc/scripts/connector_management.sh
 To create a new connector, use the following example command for Databricks
 
 ```bash
-ACTION=create ORG_NAME=my_org_123 CONNECTOR_NAME="MyDatabricksConnector" CONNECTOR_DETAIL='{"host": "abc123.cloud.databricks.com", "workspace_id": "xyz456"}' KEYJSON='{"user1": "aa11", "user2": "bb22"}' ./etc/scripts/connector_management.sh
+ACTION=create ORG_NAME=my_org_123 CONNECTOR_NAME="MyDatabricksConnector" CONNECTOR_DETAIL='{"host": "abc123.cloud.databricks.com", "workspace_id": "xyz456"}' KEYJSON='{"pats": {"user1": "aa11", "user2": "bb22"}}' ./etc/scripts/connector_management.sh
 ```
 
 #### Update connector
