@@ -1,6 +1,8 @@
-# Using the Connector Management Bash Script
+# Managed Connector CLI
 
-You can manage Graphistry connectors using the CLI from a Graphistry server or remotely via the REST API. The serverside management scripts are easier to start with. For convenience, we include bash scripts for using the remote REST API via curl & Python. Functionalities include creating, updating, deleting, getting, and listing connectors.
+Graphistry-managed connectors simplify more secure secret management and automation patterns than storing credentionals as environment variables. This document describes REST-based remote management using a bash script. It walks through the needed secret management and configuration. The examples are for Databricks.
+
+You can manage Louie connectors stored in Graphistry using the local console CLI from a Graphistry server or remotely via the REST API. The REST API is easier to start with. For convenience, we include bash scripts for using the remote REST API. Functionalities include creating, updating, deleting, getting, and listing connectors.
 
 ## Prerequisites
 
@@ -16,6 +18,7 @@ or
 ```bash
 pip3 install cryptography
 ```
+
 ### Environment variables
 
 #### Needed keys: Remote API client configuration
@@ -33,6 +36,8 @@ export GRAPHISTRY_ENCRYPTION_KEYS=encryption_key
 export GRAPHISTRY_NEXUS_SIGNING_KEY=signing_key
 export GRAPHISTRY_NEXUS_SIGNING_SALT=salt_key
 ```
+
+Additionally, use or get a copy of `$GRAPHISTRY_HOME/etc/scripts/connector_management.sh`
 
 #### Needed keys: Graphistry server configuration
 
@@ -81,21 +86,21 @@ Once confirmed, restart the Nexus service to switch to the new signing keys:
 ./release up -d --force-recreate --no-deps nexus
 ```
 
-## How to Use: Remote REST API - bash scripts
+## How to Use: Remote bash client over the REST API
 
-The bash script can be used with various combinations of environment variables and actions to perform specific operations on connectors
+The bash script calls the underlying remote REST APIs on your behalf, including Python callouts for encrypt. Use it with various combinations of environment variables and actions to perform specific operations on connectors.
 
 ### Location
 
 You may find a copy of the standalone bash REST API client at `$GRAPHISTRY_HOME/etc/scripts/connector_management.sh`
 
-The following examples assume you are calling it from `$GRAPHISTRY_HOME`, and you can call it from anywhere
+The following examples assume you are calling it from `$GRAPHISTRY_HOME`. You can call it from anywhere, including on other computers with network access to Graphistry.
 
 ### Settings as environment variables
 
 Control settings and configuration by defining the following environment variables during the script invocation.
 
-Client configuration environment variables:
+Client configuration environment variables detailed above:
 
 
 - `GRAPHISTRY_BASE_PATH=http://localhost`
@@ -126,6 +131,7 @@ For further assistance and detailed usage instructions, refer to the following c
 ```bash
 ACTION=help ./etc/scripts/connector_management.sh
 ```
+
 ### Top commands
 
 #### List connectors
@@ -172,7 +178,7 @@ ACTION=delete CONNECTOR_ID="connector_id" ./etc/scripts/connector_management.sh
 
 Databricks connector management is largely via the above generic commands
 
-Additional per-user PAT management is supported through the following Databricks-specific connector commands
+Additional per-user PAT management is supported through the following Databricks-specific connector commands. When SSO is not an option, this allows storing per-user PAT entries that get automatically applied upon regular Graphistry authentication.
 
 #### Manage one or more Personal Access Tokens (PATs)
 
