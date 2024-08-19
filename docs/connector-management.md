@@ -18,98 +18,163 @@ pip3 install cryptography
 ```
 ### Environment variables
 
-#### Ensure you have the following environment variables set
+#### Needed keys: Remote API client configuration
+
+To use the relevant management APIs, ensure you have the following environment variables:
 
 ```bash
+# For administration scripts
 export GRAPHISTRY_USERNAME=username
 export GRAPHISTRY_PASSWORD=pass
+export GRAPHISTRY_BASE_PATH=http://localhost
+
+# For signing
 export GRAPHISTRY_ENCRYPTION_KEYS=encryption_key
 export GRAPHISTRY_NEXUS_SIGNING_KEY=signing_key
 export GRAPHISTRY_NEXUS_SIGNING_SALT=salt_key
 ```
 
+#### Needed keys: Graphistry server configuration
+
+Your Graphistry server uses similarly named keys with the same values:
+
+```bash
+# For administration scripts
+export GRAPHISTRY_USERNAME=username
+export GRAPHISTRY_PASSWORD=pass
+export GRAPHISTRY_BASE_PATH=http://localhost
+
+# For signing
+export GRAPHISTRY_NEXUS_ENCRYPTION_KEYS=encryption_key
+export GRAPHISTRY_NEXUS_SIGNING_KEY=signing_key
+export GRAPHISTRY_NEXUS_SIGNING_SALT=salt_key
+```
+
+Note the difference of `GRAPHISTRY_NEXUS_ENCRYPTION_KEYS` vs `GRAPHISTRY_ENCRYPTION_KEYS`. Future upgrades will normalize on dropping the term `_NEXUS_`.
+
 #### Find or generate signing keys
 
 For self-hosted Graphistry server users, you need to generate encryption and signing keys. If you are using Graphistry Hub, please contact Graphistry staff to obtain your keys.
 
-Check if you already have keys in your `./data/config/custom.env`, and read on to replace them if desired:
+The keys are: `GRAPHISTRY_NEXUS_ENCRYPTION_KEYS`, `GRAPHISTRY_NEXUS_SIGNING_KEY`, and `GRAPHISTRY_NEXUS_SIGNING_SALT`.
+
+Check if you already have them set in your `./data/config/custom.env`, and read on to replace them if desired:
 
 ```bash
-cat data/config/custom.env | grep -E "GRAPHISTRY_NEXUS_ENCRYPTION_KEYS|GRAPHISTRY_NEXUS_SIGNING_KEY|GRAPHISTRY_NEXUS_SIGNING_SALT"
+cat ./data/config/custom.env | grep -E "GRAPHISTRY_NEXUS_ENCRYPTION_KEYS|GRAPHISTRY_NEXUS_SIGNING_KEY|GRAPHISTRY_NEXUS_SIGNING_SALT"
 ```
 
-This should list `GRAPHISTRY_NEXUS_ENCRYPTION_KEYS`, `GRAPHISTRY_NEXUS_SIGNING_KEY`, `GRAPHISTRY_NEXUS_SIGNING_SALT`. To rotate them, delete them from the file and continue.
+This should list your keys. To rotate them, delete them from the file and continue.
 
-Generate and append the necessary environmental variables to your `./data/custom.env`:
+To generate and append the necessary environmental variables to your `./data/custom.env`, run:
 
 ```bash
 { echo ""; bash -c "$(sed '1 a\set +x' ./etc/scripts/cred-gen.sh)" | grep -E "GRAPHISTRY_NEXUS_ENCRYPTION_KEYS|GRAPHISTRY_NEXUS_SIGNING_KEY|GRAPHISTRY_NEXUS_SIGNING_SALT"; }
  >> ./data/custom.env
 ```
 
-After, restart the Nexus service to switch to the new signing keys:
+Running the immediately prior checking script should find and list your keys.
+
+Once confirmed, restart the Nexus service to switch to the new signing keys:
 
 ```bash
-./nc up -d --force-recreate --no-deps nexus
+./release up -d --force-recreate --no-deps nexus
 ```
 
-#### Other environment variables:
-- `GRAPHISTRY_BASE_PATH`: The base URL path for the Graphistry API. The default value is http://localhost.
+## How to Use: Remote REST API - bash scripts
+
+The bash script can be used with various combinations of environment variables and actions to perform specific operations on connectors
+
+### Location
+
+You may find a copy of the standalone bash REST API client at `$GRAPHISTRY_HOME/etc/scripts/connector_management.sh`
+
+The following examples assume you are calling it from `$GRAPHISTRY_HOME`, and you can call it from anywhere
+
+### Settings as environment variables
+
+Control settings and configuration by defining the following environment variables during the script invocation.
+
+Client configuration environment variables:
+
+
+- `GRAPHISTRY_BASE_PATH=http://localhost`
+- `GRAPHISTRY_USERNAME`
+- `GRAPHISTRY_NEXUS_SIGNING_SALT`
+- `GRAPHISTRY_PASSWORD`
+- `GRAPHISTRY_ENCRYPTION_KEYS` (note no `NEXUS`)
+- `GRAPHISTRY_NEXUS_SIGNING_KEY`
+
+Command environment variables:
+
+
+- `ACTION`: Action to perform (`create`, `update`, `delete`, `get`, `list`, `upsert_pat`, `delete_pat`, `delete_all_pats`, `update_all_pats`). The default action is list.
 - `KEYJSON`: JSON data containing connector configuration value. The default is an empty JSON object.
 - `CONNECTOR_TYPE`: Type of the connector. The default value is Databricks.
 - `CONNECTOR_ID`: The ID of the connector. This can be left empty for certain actions.
-- `ACTION`: Action to perform (create, update, delete, get, list, upsert_pat, delete_pat, delete_all_pats, update_all_pats). The default action is list.
 - `CONNECTOR_NAME`: The name of the connector.
 - `PAT_KEY`: The key(username) for the Personal Access Token (PAT) to be managed.
 - `PAT_VALUE`: The value for the PAT to be managed.
 - `PATS_JSON`: JSON string containing multiple PATs for bulk updates.
 - `PATS_CSV`: Path to a CSV file containing multiple PATs for bulk updates.
 
-## How to Use
 
-The bash script can be used with various combinations of environment variables and actions to perform specific operations on connectors. Here are some examples:
+### Additional Help
 
-### Creating a Connector
-
-To create a new connector, use the following example command:
+For further assistance and detailed usage instructions, refer to the following command:
 
 ```bash
-ACTION=create CONNECTOR_NAME="MyConnector" KEYJSON='{"host": "host_url", "pats": {"user1": "pat1", "user2": "pat2"}, "token": "service_token", "workspace_id": "workspace_id"}' path_to_script/connector_management.sh
+ACTION=help ./etc/scripts/connector_management.sh
 ```
+### Top commands
 
-### Updating a Connector
-
-To update an existing connector, use the following example command:
-
-```bash
-ACTION=update CONNECTOR_ID="connector_id" CONNECTOR_NAME="UpdatedConnector" KEYJSON='{"host": "updated_host_url", "pats": {"user1": "updated_pat1", "user2": "updated_pat2"}, "token": "updated_service_token", "workspace_id": "updated_workspace_id"}' path_to_script/connector_management.sh
-```
-
-### Deleting a Connector
-
-To delete a connector, use the following example command:
-
-```bash
-ACTION=delete CONNECTOR_ID="connector_id" path_to_script/connector_management.sh
-```
-
-### Getting a Connector
-
-To retrieve details of a specific connector, use the following example command:
-
-```bash
-ACTION=get CONNECTOR_ID="connector_id" path_to_script/connector_management.sh
-```
-
-### Listing Connectors
+#### List connectors
 
 To list all existing connectors, use the following example command:
 
 ```bash
-ACTION=list path_to_script/connector_management.sh
+ACTION=list ./etc/scripts/connector_management.sh
 ```
 
-### Managing Personal Access Tokens (PATs)
+#### Get connector
+
+To retrieve details of a specific connector, use the following example command:
+
+```bash
+ACTION=get CONNECTOR_ID="connector_id" ./etc/scripts/connector_management.sh
+```
+
+#### Create connector
+
+To create a new connector, use the following example command for Databricks
+
+```bash
+ACTION=create CONNECTOR_NAME="MyDatabricksConnector" KEYJSON='{"host": "abc123.cloud.databricks.com", "pats": {"user1": "pat123", "user2": "pat456"}, "token": "optional_shared_service_pat","workspace_id": "aa1234"}' ./etc/connector_management.sh
+```
+
+#### Update connector
+
+To update an existing connector, use the following example command:
+
+```bash
+ACTION=update CONNECTOR_ID="connector_id" CONNECTOR_NAME="UpdatedConnector" KEYJSON='{"host": "updated_host_url", "pats": {"user1": "updated_pat1", "user2": "updated_pat2"}, "token": "updated_service_token", "workspace_id": "updated_workspace_id"}' ./etc/scripts/connector_management.sh
+```
+
+#### Delete connector
+
+To delete a connector, use the following example command:
+
+```bash
+ACTION=delete CONNECTOR_ID="connector_id" ./etc/scripts/connector_management.sh
+```
+
+### Databricks
+
+Databricks connector management is largely via the above generic commands
+
+Additional per-user PAT management is supported through the following Databricks-specific connector commands
+
+#### Manage one or more Personal Access Tokens (PATs)
 
 To upsert, delete, delete all, or update all PATs associated with a connector, use the following example commands:
 
@@ -130,7 +195,8 @@ ACTION=update_all_pats CONNECTOR_ID="sample_connector_id" PATS_JSON='{"user10":"
 ACTION=update_all_pats CONNECTOR_ID="sample_connector_id" PATS_CSV='path/to/pats.csv' path_to_script/connector_management.sh
 ```
 
-### CSV File Example:
+#### CSV File Example
+
 ```csv
 username,PAT
 user123,abc123pat
@@ -138,7 +204,9 @@ user456,def456pat
 user789,ghi789pat
 test1,jkl012pat
 ```
-### Keyjson with PATs Example:
+
+#### Keyjson with PATs Example
+
 ```json
 {
     "host": "updated_host_url",
@@ -150,15 +218,3 @@ test1,jkl012pat
     "workspace_id": "updated_workspace_id"
 }
 ```
-
-### Additional Help
-
-For further assistance and detailed usage instructions, refer to the following command:
-
-```bash
-ACTION=help path_to_script/connector_management.sh
-```
-
-### Note
-
-Ensure that the necessary prerequisites and action-specific arguments are provided when using the script to avoid any errors with the connector management operations.
