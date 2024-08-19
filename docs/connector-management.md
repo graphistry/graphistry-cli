@@ -180,19 +180,19 @@ To upsert, delete, delete all, or update all PATs associated with a connector, u
 
 ```bash
 # Upsert a PAT
-ACTION=upsert_pat PAT_KEY="sample_key" PAT_VALUE="sample_value" path_to_script/connector_management.sh
+ACTION=upsert_pat CONNECTOR_ID="sample_connector_id" PAT_KEY="sample_key" PAT_VALUE="sample_value" ./etc/scripts/connector_management.sh
 
 # Delete a PAT
-ACTION=delete_pat PAT_KEY="sample_key" path_to_script/connector_management.sh
+ACTION=delete_pat CONNECTOR_ID="sample_connector_id" PAT_KEY="sample_key" ./etc/scripts/connector_management.sh
 
 # Delete all PATs
-ACTION=delete_all_pats CONNECTOR_ID="sample_connector_id" path_to_script/connector_management.sh
+ACTION=delete_all_pats CONNECTOR_ID="sample_connector_id" ./etc/scripts/connector_management.sh
 
 # Update all PATs 
-ACTION=update_all_pats CONNECTOR_ID="sample_connector_id" PATS_JSON='{"user10":"pat_value"}' path_to_script/connector_management.sh
+ACTION=update_all_pats CONNECTOR_ID="sample_connector_id" PATS_JSON='{"user10":"pat_value"}' ./etc/scripts/connector_management.sh
 
 # Update all PATs using csv file
-ACTION=update_all_pats CONNECTOR_ID="sample_connector_id" PATS_CSV='path/to/pats.csv' path_to_script/connector_management.sh
+ACTION=update_all_pats CONNECTOR_ID="sample_connector_id" PATS_CSV='path/to/pats.csv' ./etc/scripts/connector_management.sh
 ```
 
 #### CSV File Example
