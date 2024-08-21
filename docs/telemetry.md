@@ -94,7 +94,7 @@ ENABLE_OPEN_TELEMETRY=true
 OTEL_COMPOSE_FILE=telemetry.yml
 ```
 
-### Example: Deploying with the Packaged Graphistry Local Telemetry Suite and Caddy
+### Example: Deploying with the Packaged Graphistry Local Telemetry Suite behind Caddy
 
 This is the configuration template for using the Graphistry Local Telemetry Suite alongside the OpenTelemetry Collector and running all the telemetry services [behind Caddy](#caddyfile---reverse-proxy-set-up).  Replace `$GRAPHISTRY_HOST` with the domain or IP address where Graphistry is running, and use `https` or `http` as required:
 
