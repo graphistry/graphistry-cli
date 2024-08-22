@@ -6,7 +6,11 @@ Graphistry services export telemetry information (metrics and traces) using the 
 
 Graphistry services push their telemetry data to the [opentelemetry-collector](https://opentelemetry.io/docs/collector/) service (alias `otel-collector`) and this will forward the data to any observability tool that is compatible with the OpenTelemetry standard (e.g. Prometheus, Jaeger, Grafana Cloud, etc.).
 
-Graphistry can be deployed alongside the packaged Graphistry Local Telemetry Suite, which includes Prometheus, Jaeger, and Grafana services.
+Graphistry can be deployed with the Graphistry Local Telemetry Suite, which includes Prometheus, Jaeger, and Grafana.  When telemetry services are enabled, the OpenTelemetry Collector will be included in all deployment scenarios:
+
+1. **Forwarding to External Services**: In this mode, Graphistry forwards telemetry data to external services compatible with the OpenTelemetry Protocol (OTLP), such as Grafana Cloud.  The deployment will include only the OpenTelemetry Collector, which handles the data forwarding.
+2. **Using Packaged Observability Tools**: When using the local observability tools bundled with Graphistry —Prometheus, Jaeger, and Grafana— the OpenTelemetry Collector exports data to these services.  By default, the data is ephemeral, stored inside the containers, and won’t persist across restarts.  To enable data persistence, you can create a custom Docker Compose file named `custom_telemetry.yml` to configure persistent storage and update the environment variable `OTEL_COMPOSE_FILE` in the configuration file (`$GRAPHISTRY_HOME/data/config/telemetry.env`) to point to your `custom_telemetry.yml`.  This setup provides a comprehensive local monitoring and visualization environment.
+3. **Hybrid Mode**: This option combines both the local observability tools and forwarding to external services.  The OpenTelemetry Collector will be configured to export telemetry data both to the local tools (Prometheus, Jaeger, Grafana) and to external services (e.g., Grafana Cloud).  This setup allows you to leverage both local and external monitoring and visualization capabilities.
 
 ## Usage
 
@@ -20,8 +24,31 @@ cd $GRAPHISTRY_HOME
 ./release up -d
 ```
 
+### Managing Individual Telemetry Services
+
+If you need to manage individual telemetry services, you can use the following commands.  Each command starts a specific service:
+
+```bash
+# Start the NVIDIA Data Center GPU Manager Exporter (DCGM Exporter) for GPU monitoring
+./release up -d dcgm-exporter
+
+# Start Prometheus for metrics collection and storage
+./release up -d prometheus
+
+# Start Grafana for visualization and dashboarding
+./release up -d grafana
+
+# Start Jaeger for distributed tracing
+./release up -d jaeger
+
+# Start the OpenTelemetry Collector for collecting and exporting telemetry data
+./release up -d opentelemetry-collector
+```
+
 ## Accessing Telemetry Dashboards and Services
-Once the services are online, we can access these links for operations and development:
+Once the services are online, we can access the next links for operations and development.
+
+Note: If you configure Caddy to expose the Telemetry services (see [behind Caddy](#caddyfile---reverse-proxy-set-up)), the services will have a different URL.
 
 ### OpenTelemetry Collector metrics for Prometheus
 Use this URL when the service is [behind Caddy](#caddyfile---reverse-proxy-set-up): `https://$GRAPHISTRY_HOST/metrics`
