@@ -23,7 +23,7 @@ The threat model excludes:
 
 The 2.0 release (2019) expands from single-admin & untrusted web users to account-based:
 
-#### 1.0 (< 2019): Publishers and Viewers
+### 1.0 (< 2019): Publishers and Viewers
 Aimed at both dedicated developer embedding scenarios and small trusted team settings where a trusted group of publishers (admins) analyzes data and publishes results to general network users.
 
 * Admins:
@@ -32,7 +32,7 @@ Aimed at both dedicated developer embedding scenarios and small trusted team set
 * Viewers (web users):
   * Visualizations: read, copy-on-write
 
-#### 2.0 (>= 2019): Admins, Users, and Viewers
+### 2.0 (>= 2019): Admins, Users, and Viewers
 The 2.0 release expands authentication and authorization options for common shared enterprise analyst tool settings:
 
 * OS System admin: Full access

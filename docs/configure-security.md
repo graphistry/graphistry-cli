@@ -19,7 +19,7 @@ For futher information, see:
 * [Security threat model](threatmodel.md)
 * [Authentication](authentication.md)
 * [Deployment planning](deployment-planning.md)
-* [Capacity planning](../hardware-software.md)
+* [Capacity planning](hardware-software.md)
 
 
 ## Out-of-the-box config
@@ -125,7 +125,7 @@ After, restart nexus with a fresh environment: `docker compose up -d --force-rec
 These are best to setup on a fresh installation with an empty database: `docker compose down -v && docker compose up -d`.
 
 
-# Connector configuration
+## Connector configuration
 
 Connectors are used by the (currently) admin-level investigator tool. Security configuration is generally relevant for enabling it to work with outside systems, and to restrict what users can do.
 
@@ -139,7 +139,7 @@ Connectors are used by the (currently) admin-level investigator tool. Security c
 
 Check if your database or API supports restricted roles. For example, when Graphistry is connected to Splunk, you may want to create a Splunk API user that only has read access to a few indexes, and configure Graphistry to use that account.
 
-# Safely using Graphistry APIs
+## Safely using Graphistry APIs
 
 
 * Safe defaults
@@ -153,7 +153,7 @@ Check if your database or API supports restricted roles. For example, when Graph
   * Prefer server<>server APIs for data uploads
   * Prefer client<>client APIs for user interactions
 
-# Air gapping
+## Air gapping
 
 Some environments require operation without access to the public internet
 
@@ -166,7 +166,7 @@ Some environments require operation without access to the public internet
   * Method 2: User -> Admin portal -> Settings -> Config -> Check IS_AIR_GAPPED and save
 
 
-# Sensitive data
+## Sensitive data
 
 As a Docker-based Linux system, most custom data is stored in Docker volumes. The remaining data, such as server accounts, are in standard Linux locations.
 

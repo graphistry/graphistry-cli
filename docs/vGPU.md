@@ -68,7 +68,7 @@ Supporting vGPUs means setting up a Nvidia license manager server, GPU-capable h
 
 There is also a 1 line change for making Graphistry work with vGPUs.
 
-#### Licensing server and license
+### Licensing server and license
 
 Setup an Nvidia licensing server and use it to generate and download a license. It must stay on while using your vGPU as the license gets dynamically checked.
 
@@ -77,11 +77,11 @@ Unlicensed GPUs will appear under `nvidia-smi` and be marked as unlicensed in `n
 If you have a license server but cannot use it to generate a license, you may be able to [receive a time/account-limited evaluation license at nvidia.com]( https://www.nvidia.com/object/nvidia-enterprise-account.html).
 
 
-#### Hyperviser
+### Hyperviser
 
 Install hypervisor GPU drivers from the vGPU software version
 
-#### Guest OS
+### Guest OS
 
 Install guest OS GPU drivers from the vGPU software version
 
@@ -89,7 +89,7 @@ Install guest OS GPU drivers from the vGPU software version
 
 To confirm license activation, check the license status in `nvidia-smi -q` and debug logs (`sudo grep gridd /var/log/messages`)
 
-#### Graphistry
+### Graphistry
 
 Set `RMM_ALLOCATOR=default` in your `data/config/custom.env` to avoid relying on CUDA Unified Memory for handling bigger-than-memory workloads, which Nvidia vGPUs do not currently support.
 

@@ -1,15 +1,3 @@
-<!-- Generate PDF via 
-
-1. MacDown
-
-2. Or, 
-
-docker run --rm -it -v $PWD:/source jagregory/pandoc -s hardware-software.md -o hardware-software.pdf
-
--->
-
-
-
 # Recommended Deployment Configurations: Client, Server Software, Server Hardware
 
 

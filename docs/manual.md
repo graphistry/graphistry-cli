@@ -25,7 +25,7 @@ If none of those situations apply, read on for how to go to an unconfigured Linu
 * Linux with [Nvidia RAPIDS](https://rapids.ai) and [Nvidia Docker](https://github.com/NVIDIA/nvidia-docker) via `Docker Compose 3`
 * RAPIDS-compatible NVidia GPU: Pascal or later.
 
-For further information, see [Recommended Deployment Configurations: Client, Server Software, Server Hardware](../hardware-software.md).
+For further information, see [Recommended Deployment Configurations: Client, Server Software, Server Hardware](hardware-software.md).
 
 ## 2. Instance Provisioning
 
@@ -43,7 +43,7 @@ Skip almost all of these steps by instead running through [AWS Marketplace](aws_
 
 ### On-Prem
 
-See [Recommended Deployment Configurations: Client, Server Software, Server Hardware](../hardware-software.md).
+See [Recommended Deployment Configurations: Client, Server Software, Server Hardware](hardware-software.md).
 
 ### Airgapped
 

@@ -1,6 +1,6 @@
 # Backup and Restore Instructions: 
 
-### Overview
+## Overview
 
 Backup and restore scripts are provided that will backup your graphistry environment to remote blob storage (AWS s3, Azure Blob Storage or Google Cloud Storage). Graphistry uses [restic](https://restic.net/) backup utility which provides fast and secure incremental backups to remote blob storage. More details can be found in the [restic documentation](https://restic.readthedocs.io/en/stable/index.html).
 
@@ -137,7 +137,7 @@ cd /var/graphistry/compose/etc/scripts
 FROM_PATH=/var/graphistry/ ./backup.sh 
 ```
 
-#### Additional examples: 
+### Additional examples
 
 ```
 # dry-run: will only print the commands and execute restic with --dry-run option flag for testing purposes
@@ -202,7 +202,7 @@ TO_PATH=/var/graphistry/ ./restore.sh
 
 <br>
 
-## Scheduling Backups: 
+## Scheduling Backups
 
 Any scheduler can be used, but below are some examples of setting up cron to schedule nightly or weekly backups. 
 
@@ -222,7 +222,7 @@ crontab -e
 
 <br> 
 
-**AWS crontab examples:** 
+### AWS crontab examples
 ```
 # add the following line to run backup either daily: 
 
@@ -235,7 +235,7 @@ crontab -e
 
 <br> 
 
-**Azure crontab examples:** 
+### Azure crontab examples
 
 ```
 # add the following line to run backup either daily: 
@@ -247,7 +247,7 @@ crontab -e
 0 0 * * 0 TO_PATH=/var/graphistry/ /var/graphistry/compose/etc/scripts/backup.sh
 ```
 
-#### creating a script that has several variables that your crontab entry will call: 
+#### Creating a script that has several variables that your crontab entry will call
 
 ```
 #!/bin/bash

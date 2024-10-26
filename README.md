@@ -6,19 +6,19 @@ The documentation here covers system administration
 
 See bottom of page for table of contents and additional resources.
 
-#### Get
+## Get
 
-Pick an [appropriate hardware/software configuration](hardware-software.md):
+Pick an [appropriate hardware/software configuration](docs/hardware-software.md):
 * Graphistry Hub: Graphistry manages Hub for its users
 * AWS/Azure Marketplace: See below instructions
 * Docker (self-hosted): See [enterprise release portal](https://graphistry.zendesk.com/hc/en-us/articles/360033184174)
 * Experimental - Kubernetes Helm chart: See [graphistry/graphistry-helm repository](https://github.com/graphistry/graphistry-helm)  
 
-#### Support
+## Support
 
 Email, Zoom, Slack, phone, tickets -- we encourage using the [Graphistry support channel](https://www.graphistry.com/support) that works best for you. We want you and your users to succeed! 
 
-#### Learn
+## Learn
 
 See also [release guides](https://github.com/graphistry/graphistry-community) and [user and developer documentation](https://hub.graphistry.com/docs)
 
@@ -214,7 +214,7 @@ docker-compose up -d
 
 * Plan a deployment
   * Architecture: [Deployment architecture planning guide](docs/deployment-planning.md)
-  * Capacity: [Hardware/software requirements](hardware-software.md)
+  * Capacity: [Hardware/software requirements](docs/hardware-software.md)
   * Security: [Recommended hardening](docs/configure-security.md), [threat model](docs/threatmodel.md), [authentication](docs/authentication.md)
 * Install
   * [Release portal](https://graphistry.zendesk.com/hc/en-us/articles/360033184174) for enterprise admins to download the latest Docker images

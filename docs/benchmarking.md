@@ -13,7 +13,7 @@ Benchmarking helps identify the high-watermarks of system resources like GPU mem
 Additional details can be found here:
 - [Graphistry Admin Guide - Telemetry](telemetry.md)
 - [Graphistry Admin Guide - Planning a Graphistry Deployment](deployment-planning.md)
-- [Graphistry Admin Guide - Recommended Deployment Configurations: Client, Server Software, Server Hardware](../hardware-software.md)
+- [Graphistry Admin Guide - Recommended Deployment Configurations: Client, Server Software, Server Hardware](hardware-software.md)
 
 ## Intuitions
 

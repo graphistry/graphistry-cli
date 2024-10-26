@@ -23,7 +23,7 @@ Start with one of the following Linux distributions, and configure it using the 
 ## Ubuntu 18.04 LTS
   * Available on official AWS launch homepage
   * Follow provisioning instructions from AWS install
-  * Hardware type: See [cloud hw/sw recommendations](https://github.com/graphistry/graphistry-cli/blob/master/hardware-software.md#cloud)
+  * Hardware type: See [cloud hw/sw recommendations](hardware-software.md#cloud)
   * Login: ssh -i ...private_key.pem ubuntu@public.dns
 
 **RHEL, CentOS temporarily not supported by our bootstrapper while conflicting nvidia-docker<>CUDA changes get fixed in the Linux ecosystem**
@@ -31,7 +31,7 @@ Start with one of the following Linux distributions, and configure it using the 
 
 # 2. Configure instance
 
-* Instance: See [cloud hw/sw recommendations](https://github.com/graphistry/graphistry-cli/blob/master/hardware-software.md#cloud)
+* Instance: See [cloud hw/sw recommendations](hardware-software.md#cloud)
 * Security groups: ssh, http, https
 
 # 3. General installation

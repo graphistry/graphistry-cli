@@ -82,22 +82,22 @@ To make a template appear as a Workflow Action on a specific kind of event:
 
 ## 6. Best practices
 
-#### Manual data for first step
+### Manual data for first step
 
 By making the first step an `Enter data` one, most of the parameters can be set on it. The URL generates an initial graph, and subsequent steps expand on them.
 
-#### Multiple entry points
+### Multiple entry points
 
 You can likely combine multiple templates into one. For example, in IT scenarios, 360 views for IP's, MAC addresses, and host names likely look the same. Make the first step create a graph for one or more of these, the next ones derive one value type from the other (or a canonical ID), and the remaining steps look the same.
 
-#### Set time range  and provide instructions
+### Set time range  and provide instructions
 
 Analysts unfamiliar with your template would strongly benefit from instructions telling them what to modify (if anything) and how to use the investigation. Many options likely have sane defaults on a per-template basis, such as the time range, so we recommend including them in your URLs.
 
-#### Naming
+### Naming
 
 Content management can become an issue. Use a custom short description name, such as `name=%5BPhone%20360%5D%20555-5555` (=> `[Phone 360] 555-5555`. The generated investigations can now be easily searched and sorted.
 
-#### Cross-linking
+### Cross-linking
 
 You can include templates as links within templates! For example, whenever a phone number node is generated, you can include attribute `link` with value `/pivot/template?investigation=...` .

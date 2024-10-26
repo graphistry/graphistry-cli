@@ -1,6 +1,6 @@
 # Performance tuning
 
-See also [deployment planning](deployment-planning.md) and [hw/sw planning](../hardware-software.md).
+See also [deployment planning](deployment-planning.md) and [hw/sw planning](hardware-software.md).
 
 ## Monitoring
 

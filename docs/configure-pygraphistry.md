@@ -46,7 +46,7 @@ Deprecated 1.0 API option (api=1, api=2)
 
 Override and add query parameters to the loaded visualization iframe by adding key/value strings to `url_params`. This does not control the protocol, domain, nor path, so is primarily for styling and debugging purposes.
 
-##### Example:
+#### Example
 ```
 my_graph.settings(url_params={
     'play': '0', 
@@ -67,7 +67,7 @@ register(api=3, username='...', password='...', server=None, protocol=None, api=
 
 See PyGraphistry docs for individual connectors such as `.bolt(...)` and `.tigergraph(...)`.
 
-##### Example: Neo4j (bolt/cypher)
+#### Example: Neo4j (bolt/cypher)
 
 ```
 import graphistry

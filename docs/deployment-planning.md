@@ -7,7 +7,7 @@ The following documents describe **common Graphistry configurations**, examples 
 Related:
 
 * **Capacity planning and host environment configuration**: 
-  <br>See [Recommended Deployment Configurations: Client, Server Software, Server Hardware](../hardware-software.md) 
+  <br>See [Recommended Deployment Configurations: Client, Server Software, Server Hardware](hardware-software.md) 
 * **Graphistry server configuration**:
   <br>See [main configuration docs](configure.md)
 
@@ -84,7 +84,7 @@ Understanding Graphistry's architecture may help you make your deployment archit
 
 * **Graphistry Core: The visualization server**
   - GPU Visualization uploads and live sessions
-  - Docker containers that require nvidia-docker and Nvidial Pascal or later (See [GPU/OS hardware requirements](../hardware-software.md))
+  - Docker containers that require nvidia-docker and Nvidial Pascal or later (See [GPU/OS hardware requirements](hardware-software.md))
   - Supports multi-GPU (single node) and GPU resource isolation
   - Configurable reverse proxy, TLS, and user/API key management
 * **Graphistry Investigation Server (Optional)**
