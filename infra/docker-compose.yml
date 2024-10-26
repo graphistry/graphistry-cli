@@ -1,0 +1,12 @@
+services:
+  sphinx:
+    build:
+      context: ../  # project root
+      dockerfile: infra/Dockerfile
+    volumes:
+      #- ../docs:/docs/source  # Mount the `docs/source` folder to allow live editing
+      - ../_build:/docs/_build  # Mount the Sphinx build output to a directory on the host
+      - ../doctrees:/docs/doctrees  # Mount doctrees to persist build state
+    environment:
+      - USER_ID=${UID}  # Pass user ID for permission handling
+      - DOCS_FORMAT=${DOCS_FORMAT:-all}  # Pass DOCS_FORMAT to enable specific format builds
