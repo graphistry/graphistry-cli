@@ -2,7 +2,7 @@
 set -ex
 
 build_html() {
-    sphinx-build -b html -d /docs/doctrees . /docs/_build/html
+    sphinx-build -vv -b html -d /docs/doctrees . /docs/_build/html
 }
 
 build_epub() {
@@ -16,6 +16,11 @@ build_pdf() {
     pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex
     pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex
 }
+
+echo "Building documentation: DOCS_FORMAT=${DOCS_FORMAT}"
+echo "PWD: $(pwd)"
+echo "Contents of /docs: $(ls /docs)"
+echo "Contents of /docs/source (head): $(ls /docs/source | head -n 10)"
 
 case "$DOCS_FORMAT" in
     html)

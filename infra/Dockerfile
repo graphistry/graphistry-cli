@@ -12,6 +12,10 @@ RUN --mount=type=cache,target=/var/cache/apt \
 RUN --mount=type=cache,target=/root/.cache/pip \
     python3 -m pip install graphistry[docs]
 
+COPY infra/requirements-python.txt /requirements-python.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    python3 -m pip install -r /requirements-python.txt
+
 COPY docs /graphistry-cli
 
 COPY infra/build-docs.sh /build-docs.sh

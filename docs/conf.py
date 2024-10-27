@@ -12,7 +12,10 @@
 #
 import docutils.nodes, os, logging, re, sys
 from docutils import nodes
+from docutils.parsers.rst import roles
 from packaging.version import Version
+from sphinx.application import Sphinx
+from sphinx.transforms.post_transforms import SphinxTransform
 
 
 sys.path.insert(0, os.path.abspath("../.."))
@@ -54,6 +57,13 @@ extensions = [
     "sphinx_copybutton",
 ]
 
+myst_url_schemes = ["http", "https", "mailto", "ftp", "file"]
+myst_heading_anchors = 3  # Allow md files to have links with extension .md in the path
+
+#myst_enable_extensions = ["linkify", "substitution"]
+myst_enable_extensions = ["linkify"]
+myst_commonmark_only = False  # Use CommonMark only
+myst_heading_anchors_auto_id_prefix = False  # Disable auto ID prefix for headings
 
 # TODO guarantee most notebooks are executable (=> maintained)
 # and switch to opt'ing out the few that are hard, e.g., DB deps
@@ -84,7 +94,7 @@ templates_path = ["_templates"]
 # source_suffix = ['.rst', '.md']
 # source_suffix = ['.rst', '.ipynb']
 source_suffix = {
-     '.md': 'markdown',
+     '.md': 'myst',
      '.txt': 'markdown',
     '.rst': 'restructuredtext',
     #'.ipynb': 'nbsphinx',
@@ -485,10 +495,122 @@ def assert_external_images_removed(app, doctree, fromdocname):
         assert "://" not in image_uri, f"Failed to remove external image: {image_uri}"
 
 
-def setup(app):
-    """
-    Connect the replace_iframe_src function to the doctree-resolved event.
-    """    
+
+
+
+# Step 1: Log include directives to ensure paths are correct
+def validate_includes(app, docname, source):
+    includes_not_found = []
+    content = source[0]
+    for line in content.splitlines():
+        if ".. include::" in line:
+            included_file = line.split("include::")[1].strip()
+            abs_path = os.path.join(app.confdir, included_file)
+            if not os.path.isfile(abs_path):
+                includes_not_found.append((included_file, abs_path))
+    if includes_not_found:
+        logger.warning(f"{docname}: Missing includes: {includes_not_found}")
+
+# Step 2: Log conversion of '.md' to '.html' links in documents
+
+
+
+def convert_md_links(app, docname, source):
+    content = source[0]
+    converted_links = []
+    skipped_links = []  # Track links that were skipped or didn't convert correctly
+
+    for word in content.split():
+        if ".md" in word:
+            original_link = word
+            new_link = word.replace(".md", ".html")
+            
+            # Check if the converted file exists
+            abs_path = os.path.abspath(os.path.join(app.confdir, new_link))
+            if not os.path.isfile(abs_path):
+                skipped_links.append((original_link, new_link, abs_path))
+            else:
+                # Convert the link if the target file exists
+                content = content.replace(word, new_link)
+                converted_links.append((original_link, new_link, abs_path))
+    
+    # Apply the modified content back to the source
+    source[0] = content
+
+    # Log both converted and skipped links for debugging
+    if converted_links:
+        logger.info(f"{docname}: Successfully converted .md links to .html: {converted_links}")
+    if skipped_links:
+        logger.warning(f"{docname}: Skipped links (target missing): {skipped_links}")
+
+
+
+def log_missing_references(app, env, docnames=None):
+    if not docnames:
+        docnames = env.found_docs
+
+    unresolved_refs = {}
+    for docname in docnames:
+        doctree = env.get_doctree(docname)
+        # Only traverse 'reference' nodes
+        for ref_node in doctree.traverse(nodes.reference):
+            refuri = ref_node.get("refuri")
+            if refuri and not refuri.startswith(("http:", "https:")):
+                try:
+                    resolved = env.domains["std"].resolve_xref(
+                        env, app.builder, docname, "ref", refuri, ref_node, None
+                    )
+                    if not resolved:
+                        unresolved_refs.setdefault(docname, []).append(refuri)
+                except Exception as e:
+                    logger.warning(f"{docname}: Error resolving {refuri} - {str(e)}")
+    if unresolved_refs:
+        logger.warning(f"Unresolved references: {unresolved_refs}")
+
+
+
+def log_unresolved_references(app, env, docnames=None):
+    if not docnames:
+        docnames = env.found_docs
+
+    unresolved_refs = {}
+    for docname in docnames:
+        doctree = env.get_doctree(docname)
+        for ref_node in doctree.traverse(nodes.reference):
+            refuri = ref_node.get("refuri")
+            if refuri and not refuri.startswith(("http:", "https:")):
+                resolved = env.domains["std"].resolve_xref(env, app.builder, docname, "ref", refuri, ref_node, None)
+                if not resolved:
+                    unresolved_refs.setdefault(docname, []).append(refuri)
+                    print(f"Unresolved reference in {docname}: {refuri}")
+
+    if unresolved_refs:
+        print(f"Unresolved references: {unresolved_refs}")
+
+
+def check_paths(app):
+    readme_path = os.path.join(app.confdir, 'README.md')
+    logger.info(f"Checking README.md path: {readme_path} - Exists: {os.path.isfile(readme_path)}")
+
+def check_readme_path(app):
+    readme_path = os.path.join(app.srcdir, 'README.md')
+    if not os.path.isfile(readme_path):
+        logger.error(f"README.md path not found at: {readme_path}")
+    else:
+        logger.info(f"README.md found at: {readme_path}")
+
+def setup(app: Sphinx):
+    app.connect("builder-inited", check_readme_path)
+    app.connect("builder-inited", check_paths)
+    app.connect("source-read", validate_includes)
+    app.connect("source-read", convert_md_links)
+    app.connect("env-updated", log_missing_references)
+    app.connect("env-updated", log_unresolved_references)
+
+
+    # Configure MyST to handle .md files in Sphinx
+    logger.info("Setup completed with enhanced logging and link validation.")
+
     app.connect("doctree-resolved", ignore_svg_images_for_latex)
     app.connect("doctree-resolved", remove_external_images_for_latex)
     app.connect('doctree-resolved', replace_iframe_src)
