@@ -19,7 +19,6 @@ jobs:
 
   test-docs:
 
-    needs: [ test-minimal-python ]
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +30,6 @@ jobs:
   
   test-readme:
 
-    needs: [ test-minimal-python ]
     runs-on: ubuntu-latest
 
     steps:
