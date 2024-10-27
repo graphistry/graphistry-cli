@@ -23,6 +23,7 @@ build:
 
     # setup
     - pip install "graphistry[docs]"
+    - pip install -r infra/requirements-python.txt
     #- cp -r demos docs/source/demos
     - cp README.md docs/README.md
 
