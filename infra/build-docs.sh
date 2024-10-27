@@ -13,6 +13,7 @@ build_pdf() {
     sphinx-build -b latex -d /docs/doctrees . /docs/_build/latexpdf
     cd /docs/_build/latexpdf
     # Run pdflatex twice to resolve cross-references, using batchmode for non-interactive build
+    rm -f /docs/_build/latexpdf/Graphistry.pdf
     pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex || test -f /docs/_build/latexpdf/Graphistry.pdf
     pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex || test -f /docs/_build/latexpdf/Graphistry.pdf
 }
