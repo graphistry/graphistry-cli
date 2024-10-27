@@ -160,6 +160,12 @@ htmlhelp_basename = "Graphistry-admin-doc"
 latex_elements = {
     'preamble': r'''
 
+        \usepackage{graphicx}
+        % Command to adjust image paths for LaTeX builds
+        \makeatletter
+        \def\input@path{{./}{./_static/img/}{./static/img/}}
+        \makeatother
+
         \usepackage{svg}   % Enables SVG handling via Inkscape
 
         \RequirePackage{etex}         % Ensure extended TeX capacities
@@ -217,6 +223,7 @@ latex_elements = {
         \DeclareUnicodeCharacter{258F}{\textbf{▏}}         % Right block character
         \DeclareUnicodeCharacter{2728}{\textbf{(sparkles)}}
         \DeclareUnicodeCharacter{2764}{\textbf{(heart)}}
+        \DeclareUnicodeCharacter{2705}{\textbf{(check mark)}}
         \DeclareUnicodeCharacter{2B50}{\textbf{(star)}}
 
     ''',

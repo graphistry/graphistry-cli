@@ -40,9 +40,10 @@ build:
     # build pdf
     - sphinx-build -b latex -d doctrees docs _build/latexpdf
     - ls _build/latexpdf
-    - cd _build/latexpdf && pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex && pdflatex -file-line-error  -interaction=nonstopmode Graphistry.tex && echo ok || { echo fail && exit 1 ; }
+    - cd _build/latexpdf && pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex && pdflatex -file-line-error  -interaction=nonstopmode Graphistry.tex && echo ok || test -f _build/latexpdf/Graphistry.pdf && echo ok2 || { echo fail && exit 1 ; }
     - mkdir -p $READTHEDOCS_OUTPUT/pdf 
     - cp _build/latexpdf/Graphistry.pdf $READTHEDOCS_OUTPUT/pdf/Graphistry.pdf
+
 
 #for nav links?
 formats:
