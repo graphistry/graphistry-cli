@@ -2,22 +2,26 @@
 
 Graphistry is the most scalable graph-based visual analysis and investigation automation platform. It supports both cloud and on-prem deployment options. Big graphs are tons of fun!
 
-The documentation here covers system administration
 
-See bottom of page for table of contents and additional resources.
+## Quick administration links
 
-## Get
+* [Top commands](https://graphistry-admin-docs.readthedocs.io/en/latest/commands.html)
+* [Plan deployments](https://graphistry-admin-docs.readthedocs.io/en/latest/planning/hardware-software.html)
+* Install: [Cloud](https://graphistry-admin-docs.readthedocs.io/en/latest/install/cloud/index.html) & [On-prem](https://graphistry-admin-docs.readthedocs.io/en/latest/install/on-prem/index.html)
+* [Configure](https://graphistry-admin-docs.readthedocs.io/en/latest/app-config/index.html)
+* [Debugging & performance](https://graphistry-admin-docs.readthedocs.io/en/latest/debugging/index.html)
+* [Security](https://graphistry-admin-docs.readthedocs.io/en/latest/security/index.html)
+* [Operations & tools](https://graphistry-admin-docs.readthedocs.io/en/latest/tools/index.html)
+* [FAQ](https://graphistry-admin-docs.readthedocs.io/en/latest/faq/index.html) & [support options](https://graphistry-admin-docs.readthedocs.io/en/latest/support.html)
 
-Pick an a configuration:
-* Graphistry Hub: Graphistry manages Hub for its users
-* AWS/Azure Marketplace: See cloud install instructions
+## Further reading
+
+* [Main Graphistry documentation](https://hub.graphistry.com/docs) and same path on your local server
+* [Release portal](https://graphistry.zendesk.com/hc/en-us/articles/360033184174) for enterprise admins to download the latest
+* [Release notes](https://graphistry.zendesk.com/hc/en-us/articles/360033184174)
+* [Graphistry Hub](https://hub.graphistry.com): Graphistry-managed GPU servers, including free and team tiers
 * Docker (self-hosted): See [enterprise release portal](https://graphistry.zendesk.com/hc/en-us/articles/360033184174)
-* Experimental - Kubernetes Helm chart: See [graphistry/graphistry-helm repository](https://github.com/graphistry/graphistry-helm)
-
-## Learn
-
-See [user and developer documentation](https://hub.graphistry.com/docs)
-
+* [Kubernetes Helm charts](https://github.com/graphistry/graphistry-helm) - Experimental
 
 
 ## Quick GPU Docker environment test
@@ -36,8 +40,3 @@ docker run --rm -it --entrypoint=/bin/bash graphistry/graphistry-forge-base:late
 See the installation and debugging sections for additional scenarios such as ensuring Docker Compose is correctly defaulting to a GPU runtime.
 
 
-## Further reading
-
-* [Release portal](https://graphistry.zendesk.com/hc/en-us/articles/360033184174) for enterprise admins to download the latest
-* [Release notes](https://graphistry.zendesk.com/hc/en-us/articles/360033184174)
-* [Main documentation](https://hub.graphistry.com/docs) or the same URL adjusted for your local server's address

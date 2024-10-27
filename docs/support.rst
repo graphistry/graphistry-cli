@@ -1,4 +1,5 @@
-# Support
+Support
+=======
 
 Enterprise users should contact staff about access to their dedicated Slack chat channel and ZenDesk ticketing organization.
 
