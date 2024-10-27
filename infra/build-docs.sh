@@ -13,8 +13,8 @@ build_pdf() {
     sphinx-build -b latex -d /docs/doctrees . /docs/_build/latexpdf
     cd /docs/_build/latexpdf
     # Run pdflatex twice to resolve cross-references, using batchmode for non-interactive build
-    pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex
-    pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex
+    pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex || test -f /docs/_build/latexpdf/Graphistry.pdf
+    pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex || test -f /docs/_build/latexpdf/Graphistry.pdf
 }
 
 echo "Building documentation: DOCS_FORMAT=${DOCS_FORMAT}"
