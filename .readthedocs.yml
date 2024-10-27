@@ -33,6 +33,8 @@ build:
     # build epub
     - sphinx-build -b epub -d doctrees docs _build/latexpdf
     - mkdir -p $READTHEDOCS_OUTPUT/epub
+    - ls _build/latexpdf
+    - ls $READTHEDOCS_OUTPUT/epub
     - cp _build/latexpdf/Graphistry.epub $READTHEDOCS_OUTPUT/epub/Graphistry.epub
 
     # build pdf
