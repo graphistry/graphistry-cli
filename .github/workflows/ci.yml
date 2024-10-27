@@ -26,7 +26,7 @@ jobs:
 
     - name: Test building docs
       run: |
-        cd docs && ./ci.sh
+        ./bin/ci.sh
   
   test-readme:
 
