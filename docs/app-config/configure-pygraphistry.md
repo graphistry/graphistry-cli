@@ -124,9 +124,46 @@ config_paths = [
 ]
 ```
 
-If you are using Graphistry's built-in Jupyter server, it autoconfigures `PYGRAPHISTRY_CONFIG` and `graphistry.config`. Modify `docker-compose.yml`'s `notebook` section's volume mounts for new behavior. You can check the container's default config by running `! cat /home/graphistry/pygraphistry.config` from a notebook.
+## Graphistry Enterprise: Install packages into built-in Jupyter notebook 
 
-Libraries can be added using `pip` in the built-in Jupyter server. To enable new library install or existing library override, enter the server running the notebook container and change the permissions of the python env directory using `sudo chown -R ubuntu:ubuntu /home/ubuntu/graphistry/data/py_envs/jupyter`.
+If you are using Graphistry's built-in Jupyter server, it autoconfigures `PYGRAPHISTRY_CONFIG`, `graphistry.config`, and `PYTHONPATH`.
+
+The `PYTHONPATH` is automatically set to correspond to your host's `data/py_envs/*` folders, so custom package installs will persist across container restarts and rebuilds.
+
+### Install new packages
+
+You can likely just `pip install you_package` and will work
+
+Safety tip: Use `pip install --no-deps your_package` . This avoids risks of breaking existing GPU packages with unintended dependency upgrades.
+
+You typically need to restart your Jupyter notebook's Python kernel after installing new packages.
+
+### List custom package installs
+
+Check on your host environment, `ls ./data/py_envs/*`
+
+You may also be able to check via your Jupyter notebook environment. See `env` to find where the custom packages are mounted, and check that folder.
+
+### Uninstall packages
+
+Perform the usual `pip uninstall your_package` command.
+
+If there are lingering file issues, check your `data/py_envs` folder for any unintended files and folders.
+
+You may need to restart your Jupyter notebook's Python kernel after uninstalling packages to have the intended effect.
+
+## Bundled installs
+
+Graphistry Enterprise servers come with dependencies built-in, so you can skip this section
+
+For custom environments, you may want to add some that PyGraphistry prebundles. Run `pip install graphistry[bundle_name]`, with the following bundle names as common ones:
+
+* None: (`pip install graphistry`) - no extras
+* `umap_learn`: For CPU UMAP support
+* `ai`: For AI/ML support, including 1GB+ PyTorch install
+* RAPIDS.AI: You can also get far by installing the RAPIDS.ai ecosystem, especially cudf, cuml, and cugraph
+* For more options, see the `setup.py` file in the PyGraphistry Github repository
+
 
 ## Examples
 
