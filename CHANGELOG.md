@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 
 * ReadTheDocs site: [https://graphistry-admin-docs.readthedocs.io/](https://graphistry-admin-docs.readthedocs.io/)
+* Python endpoint
 
 ### Changed
 
@@ -19,3 +20,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 * Sphinx port
 * CI
+
+### Fixed
+
+* Telemetry images
