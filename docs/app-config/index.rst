@@ -33,5 +33,6 @@ System
    :maxdepth: 1
    :titlesonly:
 
-   email
+   configure-python
    configure-pygraphistry
+   email
