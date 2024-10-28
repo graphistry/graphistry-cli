@@ -15,10 +15,12 @@ See [user creation docs](user-creation.md)
 
 ## Top configuration places: data/config/custom.env, data/pivot-db/config/config.json
 
-* Graphistry is primarily configured through file `data/config/custom.env`
+* Graphistry is primarily configured by setting values in `data/config/custom.env`
 * Connector, ontology, and pivot configuration is optionally via `data/pivot-db/config/config.json`. Many relevant options are [detailed in a reference page](configure-investigation.md).
 
-Between edits, restart one or all Graphistry services: `docker-compose stop`  and `docker-compose up -d`
+Between edits, restart one or all Graphistry services: `docker compose stop`  and `docker compose up -d`.
+
+We typically recommend doing targeted and localized restarts via `docker compose stop service1 service2 ...` and `docker compose up -d --force-recreate --no-deps service1 service2 ...`. Contact staff for guidance.
 
 
 ## Further configuration: docker-compose.yml and Caddyfile
@@ -37,16 +39,6 @@ Recommendations for SSO when self-hosting:
 * Mark SSO as site-wide
 * Disallow non-SSO account creation
 * Decide whether SSO users can automatically join organizations without an invitation
-
-## Features
-
-Certain Graphistry features can be enabled or disabled through environment variables to ensure that these features cannot be accessed without explicit permission from an administrator regardless of in-app permissions configuration. In all cases, access can also be more finely controlled using waffle flags set within Graphistry. All feature configuration is done through the file `data/config/custom.env`. Each feature listed below is assigned a corresponding environment variable name. Environment variables can be set to either `true` or `false` to enable or disable the associated feature. An unset environment variable associated with a given feature is treated as `false`.
-
-### Python Endpoint
-
-The Python endpoint allows any user granted access a way to retrieve datasets stored within Graphistry and process it using unrestricted arbitrary user provided Python code. This Python code can include a limited set of external libraries such as `numpy` and `cudf`, in addition to `graphistry`, and can access all computational resources available to the forge-etl-python server including GPU compute. The result is returned to the user as a string or as JSON.
-
-It is recommended that an administrator checks to ensure that only trusted users are provided access via the `flag_python_endpoint` waffle flag before the `ENABLE_PYTHON_ENDPOINT` environment variable is set to `true`.
 
 ## TLS
 
