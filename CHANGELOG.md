@@ -7,6 +7,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Development]
 
+## [v2.41.8 - 2024-10-27]
+
 ### Added
 
 * ReadTheDocs site: [https://graphistry-admin-docs.readthedocs.io/](https://graphistry-admin-docs.readthedocs.io/)
