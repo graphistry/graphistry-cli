@@ -17,6 +17,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 * Reorganized documentation into thematic areas
 * Update RAPIDS base image
 * Update RAPIDS Python env name to `base` from `rapids`
+* Updated most docker compose command references to `docker compose` from `docker-compose`
 
 ### Infra
 

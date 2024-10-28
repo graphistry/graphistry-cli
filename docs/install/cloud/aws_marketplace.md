@@ -74,9 +74,9 @@ Many `ssh` clients may require you to first run `chmod 400 my_key.pem` or `chmod
 
 Graphistry leverages `docker-compose` and the AWS Marketplace AMI preconfigures the `nvidia` runtime for `docker`.
 
-```
+```bash
 cd ~/graphistry
-sudo docker-compose ps
+sudo docker compose ps
 ```
 
 =>

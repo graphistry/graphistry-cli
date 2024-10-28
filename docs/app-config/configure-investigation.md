@@ -35,8 +35,8 @@ Via `data/pivot-db/config/config.json`:
 
 After setting these, restart your server:
 
-* Full: `user@server.com : /var/graphistry $ docker-compose stop && docker-compose up -d`
-* Pivot: `user@server.com : /var/graphistry $ docker-compose stop nginx pivot && docker-compose up -d`
+* Full: `user@server.com : /var/graphistry $ docker compose stop && docker compose up -d`
+* Pivot: `user@server.com : /var/graphistry $ docker compose stop nginx pivot && docker compose up -d`
 
 
 # Schema
