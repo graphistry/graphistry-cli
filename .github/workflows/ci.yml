@@ -1,0 +1,48 @@
+name: CI Tests
+
+on:
+
+  #NOTE: All jobs gated by auth job
+
+  #Regular dev
+  push:
+  pull_request:
+
+  #Enable UI-driven branch testing
+  workflow_dispatch:
+
+  #Test main bidaily @ 1a
+  schedule:
+    - cron: '0 1 1-31/2 * *'
+
+jobs:
+
+  test-docs:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Test building docs
+      run: |
+        ./bin/ci.sh
+  
+  test-readme:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+
+    - name: Test building docs
+      continue-on-error: true
+      run: |
+        docker run --rm -v "$(pwd)/README.md:/workdir/README.md:ro" -v "$(pwd)/.markdownlint.yaml:/workdir/.markdownlint.yaml:ro" ghcr.io/igorshubovych/markdownlint-cli:v0.37.0 README.md
+
+  
