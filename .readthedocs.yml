@@ -1,0 +1,59 @@
+# .readthedocs.yml
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
+# Required
+version: 2
+
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.12"
+  apt_packages:
+    # More closely mirror https://github.com/sphinx-doc/sphinx-docker-images
+    - graphviz
+    - imagemagick
+    - make
+    - pandoc
+    - texlive-latex-base
+    - texlive-latex-recommended
+    - texlive-latex-extra
+    - texlive-fonts-recommended
+  commands:
+
+    # setup
+    - pip install "graphistry[docs]"
+    - pip install -r infra/requirements-python.txt
+    #- cp -r demos docs/source/demos
+    - cp README.md docs/README.md
+
+    # build html
+    - sphinx-build -b html -d doctrees docs $READTHEDOCS_OUTPUT/html/
+
+    # build epub
+    - sphinx-build -b epub -d doctrees docs _build/latexpdf
+    - mkdir -p $READTHEDOCS_OUTPUT/epub
+    - ls _build/latexpdf
+    - ls $READTHEDOCS_OUTPUT/epub
+    - cp _build/latexpdf/GraphistryCLI.epub $READTHEDOCS_OUTPUT/epub/GraphistryCLI.epub
+
+    # build pdf
+    - sphinx-build -b latex -d doctrees docs _build/latexpdf
+    - ls _build/latexpdf
+    - cd _build/latexpdf && (pdflatex -file-line-error -interaction=nonstopmode Graphistry.tex || test -f _build/latexpdf/Graphistry.pdf) && (pdflatex -file-line-error  -interaction=nonstopmode Graphistry.tex || test -f _build/latexpdf/Graphistry.pdf) && echo ok || { echo fail && exit 1 ; }
+    - mkdir -p $READTHEDOCS_OUTPUT/pdf 
+    - cp _build/latexpdf/Graphistry.pdf $READTHEDOCS_OUTPUT/pdf/Graphistry.pdf
+
+
+#for nav links?
+formats:
+  - pdf
+  - epub
+  - htmlzip
+
+python:
+  install:
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs
