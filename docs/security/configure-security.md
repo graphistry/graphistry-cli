@@ -59,7 +59,7 @@ JWT_EXPIRATION_DELTA=3600
 SESSION_COOKIE_AGE=1209600
 ```
 
-Upon changing, restart the web server with the fresh environment: `docker-compose up -d --force-recreate --no-deps nexus`
+Upon changing, restart the web server with the fresh environment: `docker compose up -d --force-recreate --no-deps nexus`
 
 
 ## Recommended network config: TLS, IPs, Ports

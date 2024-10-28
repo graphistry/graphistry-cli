@@ -6,7 +6,7 @@ Most of the testing and inspection is standard for Docker-based web apps: `docke
 
 * To test your base Docker environment for GPU RAPIDS, see the in-depth GPU testing section below.
 
-* For logs throughout your session, you can run `docker-compose logs -f -t --tail=1` and `docker-compose logs -f -t --tail=1 SOME_SERVICE_NAME` to see the effects of your activities. Modify `custom.env` to increase `GRAPHISTRY_LOG_LEVEL` and `LOG_LEVEL` to `DEBUG` for increased logging, and `/etc/docker/daemon.json` to use log driver `json-file` for local logs.
+* For logs throughout your session, you can run `docker compose logs -f -t --tail=1` and `docker compose logs -f -t --tail=1 SOME_SERVICE_NAME` to see the effects of your activities. Modify `custom.env` to increase `GRAPHISTRY_LOG_LEVEL` and `LOG_LEVEL` to `DEBUG` for increased logging, and `/etc/docker/daemon.json` to use log driver `json-file` for local logs.
 
 NOTE: Below tests use the deprecated 1.0 REST upload API.
 
@@ -54,9 +54,9 @@ f0bc21b5bda2   compose_redis_1                   0.05%     6.781MiB / 31.27GiB  
 | Jupyter notebooks | `notebook` (heavy) |
 | Dashboards | `graph-app-kit-public`, `graph-app-kit-private` |
    
-* It is safe to reset any individual container **except** `postgres`, which is stateful: `docker-compose up -d --force-recreate --no-deps <some_stateless_services>`
+* It is safe to reset any individual container **except** `postgres`, which is stateful: `docker compose up -d --force-recreate --no-deps <some_stateless_services>`
 
-* For any unhealthy container, such as stuck in a restart loop, check `docker-compose logs -f -t --tail=1000 that_service`. To further diagnose, potentially increase the system log level (edit `data/config/custom.env` to have `LOG_LEVEL=DEBUG`, `GRAPHISTRY_LOG_LEVEL=DEBUG`) and recreate + restart the unhealthy container
+* For any unhealthy container, such as stuck in a restart loop, check `docker compose logs -f -t --tail=1000 that_service`. To further diagnose, potentially increase the system log level (edit `data/config/custom.env` to have `LOG_LEVEL=DEBUG`, `GRAPHISTRY_LOG_LEVEL=DEBUG`) and recreate + restart the unhealthy container
 
 * Check `data/config/custom.env` has system-local keys (ex: `STREAMGL_SECRET_KEY`) with fallback to `.env`
 
@@ -77,7 +77,7 @@ f0bc21b5bda2   compose_redis_1                   0.05%     6.781MiB / 31.27GiB  
   * If points still do not load, or appear and freeze, likely issues with GPU init (driver) or websocket (firewall)
   * Can also be because preloaded datasets are unavailable: not provided, or externally mounted data sources
     * In this case, use ETL test, and ensure clustering runs for a few seconds (vs. just initial pageload)
-* Check `docker-compose logs -f -t --tail=1` and `docker ps` in case config or GPU driver issues, especially for GPU services listed above
+* Check `docker compose logs -f -t --tail=1` and `docker ps` in case config or GPU driver issues, especially for GPU services listed above
 * Upon failures, see below section on GPU testing
 
 ## 4a. Test 1.0 API uploads, Jupyter, and the PyGraphistry client API
@@ -87,7 +87,7 @@ Do via notebook if possible, else `curl`
 * Get a 1.0 API key by logging into your user's dashboard, or generating a new one using host access:
 
 ```
-docker-compose exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME
+docker compose exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME
 ```
 
 * Install PyGraphistry and check recent version number (Latest: https://pypi.org/project/graphistry/), or use the provided `/notebook` install:
@@ -152,7 +152,7 @@ If you cannot do **3a**, test from the host via `curl` or `wget`:
 Login and get the API key from your dashboard homepage, or run the following:
 
 ```
-docker-compose exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME
+docker compose exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME
 ```
 
 * Upload your 1.0 API data using the key
@@ -190,8 +190,8 @@ Nodes: x y
   * Set each config in one go so you can test more quickly, vs start/stop. 
 * Run
 ```
-docker-compose stop
-docker-compose up
+docker compose stop
+docker compose up
 ```
 
 
@@ -203,7 +203,7 @@ docker-compose up
 #### 5c.ii Connector - Splunk
 
 * Edit `data/custom/custom.env` for `SPLUNK_HOST`, `SPLUNK_PORT`, `SPLUNK_USER`, `SPLUNK_KEY`
-* Restart the `/pivot` service: `docker-compose restart pivot`
+* Restart the `/pivot` service: `docker compose restart pivot`
 * In `/pivot/connectors`, the `Live Connectors` should list `Splunk`, and clicking `Status` will test logging in
 * In `Investigations and Templates`, create a new investigation:
   * Create and run one pivot:
@@ -244,18 +244,18 @@ Cloud:
   * In Route53/DNS: Assign a domain to your IP, ex: `mytest.graphistry.com`
 * Modify `data/config/Caddyfile` to use your domain name
   * Unlikely: If needed, run `DOMAIN=my.site.com ./scripts/letsencrypt.sh` and `./gen_dhparam.sh`
-  * Restart `docker-compose restart caddy`, check pages load
+  * Restart `docker compose restart caddy`, check pages load
 * Try a notebook upload with `graphistry.register(...., protocol='https')`
 
 ## 7. Quick Testing and Test GPU
 
 Most of the below tests can be automatically run by `cd etc/scripts && ./test-gpu.sh`:
   * Checks `nvidia-smi` works in your OS
-  * Checks `nvidia-smi` works in Docker, including runtime defaults used by `docker-compose`
+  * Checks `nvidia-smi` works in Docker, including runtime defaults used by `docker compose`
   * Checks Nvidia RAPIDS can successfully create CUDA contexts and run a simple on-GPU compute and I/O task of `1 + 1 == 2`
 
 `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services:
-  * check `docker-compose logs`, `docker-compose logs <service>`, `docker-compose logs -f -t --tail=100 <service>`
+  * check `docker compose logs`, `docker compose logs <service>`, `docker compose logs -f -t --tail=100 <service>`
   * unhealthy `streamgl-gpu`, `forge-etl-python` on start: likely GPU driver issue
     * GPU is not the default runtime in `/etc/docker/deamon.json` (`docker info | grep Default`)
     * `OpenlCL` Initialization error: GPU drivers insufficently setup
@@ -265,21 +265,21 @@ Most of the below tests can be automatically run by `cd etc/scripts && ./test-gp
   * unhealthy `nginx`, `nexus`, `caddy`: 
     * likely config file issue, unable to start due to other upstream services, or public ports are already taken
 
-* If a GPU service is unhealthy, the typical cause is an unhealthy Nvidia host or Nvidia container environment setup. Pinpoint the misconfiguration through the following progression, or run as part of `etc/scripts/test-gpu.sh` (Graphistry 2.33+). For on-prem users, your `container.tar` load will import Nvidia's official `nvidia/cuda:11.5.0-base-ubuntu20.04` container used by Graphistry your version, which can aid pinpointing ecosystem issues outside of Graphistry (v2.33.20+).
+* If a GPU service is unhealthy, the typical cause is an unhealthy Nvidia host or Nvidia container environment setup. Pinpoint the misconfiguration through the following progression, or run as part of `etc/scripts/test-gpu.sh` (Graphistry 2.33+). For on-prem users, your `container.tar` load will import Nvidia's official `docker.io/rapidsai/base:24.04-cuda11.8-py3.10` container used by Graphistry your version, which can aid pinpointing ecosystem issues outside of Graphistry (v2.33.20+).
   * `docker run hello-world` reports a message <-- tests CPU Docker installation
   * `nvidia-smi` reports available GPUs  <-- tests host has a GPU configured with expected GPU driver version number
-  * `docker run --gpus=all nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
-  * `docker run --runtime=nvidia nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
-  * `docker run --rm nvidia/cuda:11.5.0-base-ubuntu20.04  nvidia-smi` reports available GPUs <-- tests Docker GPU defaults (used by docker-compose via `/etc/docker/daemon.json`)
-  * ``docker run --rm graphistry/graphistry-forge-base:`cat VERSION`-11.5 nvidia-smi``
+  * `docker run --gpus=all docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
+  * `docker run --runtime=nvidia docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
+  * `docker run --rm docker.io/rapidsai/base:24.04-cuda11.8-py3.10  nvidia-smi` reports available GPUs <-- tests Docker GPU defaults (used by docker-compose via `/etc/docker/daemon.json`)
+  * ``docker run --rm graphistry/graphistry-forge-base:`cat VERSION`-11.8 nvidia-smi``
 Reports available GPUs (public base image) <- tests Graphistry container CUDA versions are compatible with host versions
-  * ``docker run --rm graphistry/etl-server-python:`cat VERSION`-11.5 nvidia-smi``
+  * ``docker run --rm graphistry/etl-server-python:`cat VERSION`-11.8 nvidia-smi``
     Reports available GPUs (application image)
   * Repeat the docker tests, but with `cudf` execution. Ex:
-    ``docker run --rm -it --entrypoint=/bin/bash graphistry/etl-server-python:`cat VERSION`-11.5 -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""``
+    ``docker run --rm -it --entrypoint=/bin/bash graphistry/etl-server-python:`cat VERSION`-11.8 -c "source activate base && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""``
 Tests Nvidia RAPIDS  (VERSION is your Graphistry version)
   * `docker run graphistry/cljs:1.1 npm test` reports success  <-- tests driver versioning, may be a faulty test however
-  * If running in a hypervisor, ensure `RMM_ALLOCATOR=default` in `data/config/custom.env`, and check the startup logs of `docker-compose logs -f -t --tail=1000 forge-etl-python` that `cudf` / `cupy` are respecting that setting (`LOG_LEVEL=INFO`)
+  * If running in a hypervisor, ensure `RMM_ALLOCATOR=default` in `data/config/custom.env`, and check the startup logs of `docker compose logs -f -t --tail=1000 forge-etl-python` that `cudf` / `cupy` are respecting that setting (`LOG_LEVEL=INFO`)
 * Health checks
   * CLI: Check `docker ps` for per-service status, may take 1-2min for services to connect and warm up
     * Per-service checks run every ~30s after a ~1min initialization delay, with several retries before capped restart

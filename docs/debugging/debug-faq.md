@@ -19,7 +19,7 @@ Visualization page never returns or Nginx "504 Gateway Time-out" due to services
 * Often with first-ever container launch
 * Likely within 60s of launch
 * Can happen even after static homepage loads
-* In `docker-compose up` logs (or `docker logs ubuntu_central_1`):
+* In `docker compose up` logs (or `docker logs ubuntu_central_1`):
   * "Error: Server at maximum capacity...
   * "Error: Too many users...
   * "Error while assigning...
@@ -54,9 +54,9 @@ Visualization page never returns or Nginx "504 Gateway Time-out" due to services
     * ./graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2/test-20-docker.sh 
     * ./graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2/test-30-CUDA.sh 
     * ./graphistry-cli/graphistry/bootstrap/ubuntu-cuda9.2/test-40-nvidia-docker.sh
-    * nvidia-docker run --rm nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi
+    * nvidia-docker run --rm docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi
     * nvidia-docker exec -it ubuntu_viz_1 nvidia-smi
-      * If `run --rm nvidia/cuda:11.5.0-base-ubuntu20.04` succeeds but `exec` fails, you likely need to update `/etc/docker/daemon.json` to add `nvidia-container-runtime`, and `sudo service docker restart`, and potentially clean stale images to make sure they use the right runtime
+      * If `run --rm docker.io/rapidsai/base:24.04-cuda11.8-py3.10` succeeds but `exec` fails, you likely need to update `/etc/docker/daemon.json` to add `nvidia-container-runtime`, and `sudo service docker restart`, and potentially clean stale images to make sure they use the right runtime
     * See https://www.npmjs.com/package/@graphistry/cljs
     * In container `ubuntu_viz_1`, create & run `/opt/graphistry/apps/lib/cljs/test/cl node test-nvidia.js`:
 ```

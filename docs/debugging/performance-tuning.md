@@ -11,7 +11,7 @@ See also [deployment planning](../planning/deployment-planning.md) and [hw/sw pl
   * Check for both memory compute, and network consumption, and by which process 
 * Check logs for potential errors
   * System: Standard OS logs
-  * App: `docker-compose logs`
+  * App: `docker compose logs`
 * Log level impacts performance
   * TRACE: Slow due to heavy CPU <> GPU traffic
   * DEBUG: Will cause large log volumes that require rotation

@@ -296,7 +296,7 @@ sudo docker compose version
 
 # not used:
 # CUDA_SHORT_VERSION=${CUDA_SHORT_VERSION:-`cat ${GRAPHISTRY_HOME}/CUDA_SHORT_VERSION`}
-NVIDIA_CONTAINER="nvidia/cuda:11.0.3-base-ubuntu18.04"
+NVIDIA_CONTAINER="docker.io/rapidsai/base:24.04-cuda11.8-py3.10"
 
 
 sudo docker run --rm --gpus all ${NVIDIA_CONTAINER} nvidia-smi \

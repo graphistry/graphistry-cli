@@ -29,7 +29,7 @@ Graphistry is the most scalable graph-based visual analysis and investigation au
 You can test your GPU environment via Graphistry's [base RAPIDS Docker image on DockerHub](https://hub.docker.com/r/graphistry/graphistry-forge-base):
 
 ```bash
-docker run --rm -it --entrypoint=/bin/bash graphistry/graphistry-forge-base:latest -c "source activate rapids && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""
+docker run --rm -it --entrypoint=/bin/bash graphistry/graphistry-forge-base:latest -c "source activate base && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""
 ```
 
 =>

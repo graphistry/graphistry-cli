@@ -138,8 +138,23 @@ graphistry@d4afa8b7ced5:~$ go version
 go version go1.10.4 linux/amd64
 ```
 
+### 8. GPUDirect Storage (GDS)
+**Issue Overview**
+A specific issue has been identified with NVIDIA GPUDirect Storage (GDS) on Azure `Ubuntu 22.04` images using the official NVIDIA CUDA Drivers (version `550`).  While the same operating system and driver versions work correctly on other cloud providers such as AWS AMI and Google Kubernetes Engine (GKE), the Azure platform presents a unique challenge.
 
-### 8. Marketplace FAQ
+**Temporary Workaround**
+To ensure stability and performance of Graphistry on Azure, GDS support has been disabled by default. This adjustment has been applied to all Azure Marketplace images by setting the environment variable `LIBCUDF_CUFILE_POLICY` to `OFF`.  See the official Magnum IO GPUDirect Storage (GDS) documentation here for more information:
+https://docs.rapids.ai/api/cudf/nightly/user_guide/io/io/#magnum-io-gpudirect-storage-integration
+
+**Future Considerations**
+Monitoring of this issue is ongoing to identify a permanent solution.  Once Azure resolves this issue, GDS support will be re-enabled to take full advantage of its performance benefits.  Customers will be informed of any updates or changes regarding this matter.
+
+**Recommendations**
+Users may override the default setting and enable GDS support manually by setting the environment variable in the `data/config/custom.env` file (a Docker Compose environment file). For example: `LIBCUDF_CUFILE_POLICY=ALWAYS`.
+
+Understanding and cooperation are appreciated as work towards a resolution continues. For further assistance, please reach out to the support team.
+
+### 9. Marketplace FAQ
 
 #### No site loads or there is an Nginx 404 error
 

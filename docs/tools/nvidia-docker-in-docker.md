@@ -9,11 +9,11 @@ nvidia-docker run --net=host -it -v /var/run/docker.sock:/var/run/docker.sock gc
 
 # https://github.com/NVIDIA/nvidia-docker/issues/380
 # curl the docker cli REST api before you name the image and somehow docker will launch nvidia docker containers just fine
-docker run -ti --rm `curl -s http://localhost:3476/docker/cli` nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi
+docker run -ti --rm `curl -s http://localhost:3476/docker/cli` docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi
 
 
 
 # https://stackoverflow.com/questions/22944631/how-to-get-the-ip-address-of-the-docker-host-from-inside-a-docker-container
 export HOST_MACHINE_ADDRESS=$(/sbin/ip route|awk '/default/ { print $3 }')
-docker run -ti --rm `curl -s http://$HOST_MACHINE_ADDRESS:3476/docker/cli` nvidia/cuda:11.5.0-base-ubuntu20.04 nvidia-smi
+docker run -ti --rm `curl -s http://$HOST_MACHINE_ADDRESS:3476/docker/cli` docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi
 ```
