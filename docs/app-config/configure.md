@@ -13,7 +13,9 @@ Administrators can add users, specify passwords, TLS/SSL, persist data across se
 See [user creation docs](../tools/user-creation.md)
 
 
-## Top configuration places: data/config/custom.env, data/pivot-db/config/config.json
+## Configuration places
+
+### Primary: data/config/custom.env
 
 * Graphistry is primarily configured by setting values in `data/config/custom.env`
 * Connector, ontology, and pivot configuration is optionally via `data/pivot-db/config/config.json`. Many relevant options are [detailed in a reference page](configure-investigation.md).
@@ -23,10 +25,11 @@ Between edits, restart one or all Graphistry services: `docker compose stop`  an
 We typically recommend doing targeted and localized restarts via `docker compose stop service1 service2 ...` and `docker compose up -d --force-recreate --no-deps service1 service2 ...`. Contact staff for guidance.
 
 
-## Further configuration: docker-compose.yml and Caddyfile
+### Secondary:: docker-compose.yml, Caddyfile, `pivot-db/`
 
 * More advanced administrators may edit `docker-compose.yml` .  Maintenance is easier if you never edit it.
 * Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https)), see below
+* Visual playbooks may be configured via `data/pivot-db/config/config.json`
 
 ## SSO
 
@@ -191,6 +194,14 @@ If problems persist, please reach out to your Graphistry counterparts. Additiona
 
 See the [email](email.md) section
 
+## Python, PyGraphistry, & GFQL
+
+You may find it useful to customize specific endpoints:
+
+* [PyGraphistry](configure-pygraphistry.md) for how notebooks talk to your Graphistry instance
+* [Python endpoint](configure-python.md) for how users can run arbitrary Python code against Graphistry datasets and leverage the server GPU
+* GFQL Endpoint for how users can run queries against Graphistry datasets using GFQL: No configuration at this time
+
 ## Site domain
 
 *Optional*
@@ -198,6 +209,12 @@ See the [email](email.md) section
 In the Admin portal, go to Sites and change the `Domain name` to your domain, such as `graphs.acme-corp.com` 
 
 This aids scenarios such as when using an outside proxy and ensuring that web users see the intended external domain instead of the internal one leaking through
+
+
+## Performance
+
+See [performance tuning](../debugging/performance-tuning.md)
+
 
 ## Reverse proxy
 
@@ -233,15 +250,21 @@ You can configure the Caddy service to also reverse proxy additional services, i
 For an example of both public and log-required proxies, see the [graph-app-kit sample](https://github.com/graphistry/graph-app-kit/blob/master/src/caddy/full.Caddyfile).
 
 
-## Dashboards
+## Streamlit Dashboards
 
-Separately [configure the public and private dashboards](configure-dashboards.md)
+Separately [configure the public and private Streamlit dashboards](configure-dashboards.md)
 
-## Connectors
+
+## Visual Playbooks
+
+**Note:** We strongly recommend new users contact the Graphistry team about early access to Louie before starting new usage of the Visual Playbook environment.
+
+
+### Connectors
 
 Optionally, you can configure Graphistry to use database connectors. Graphistry will orchestrate cross-database query generation, pushing them down through the database API, and returning the combined results to the user. This means Graphistry can reuse your existing scaleout infrastructure and make its data more accessible to your users without requiring a second copy to be maintained. Some connectors further support use of the [Graphistry data bridge](../tools/bridge.md) for proxying requests between a Graphistry cloud server and an intermediate on-prem data bridge instead of directly connecting to on-prem API servers.
 
-### Security Notes 
+#### Security Notes 
 
 * Graphistry only needs `read only` access to the database
 * Only one system-wide connector can be used per database per Graphistry virtual server at this time. Ex: You can have Splunk user 1 + Neo4j user 2 on one running Graphistry container, and Splunk user 3 + Neo4j user 2 on another running Graphistry container.
@@ -360,8 +383,7 @@ In scenarios such as a Graphistry cloud server accessing on-prem API servers, an
 * Run a bastion server between Graphistry and your database, such as a new Splunk search head
 * Create fine-grained permissions by running multiple Graphistry virtual servers, with a new Splunk role per instance
 
-
-## Ontology
+### Ontology
 
 See [custom ontology extensions](configure-ontology.md) and [settings reference page](configure-investigation.md) for full options. Topics include controlling:
 
@@ -369,11 +391,6 @@ See [custom ontology extensions](configure-ontology.md) and [settings reference 
 * Map Type -> color, icon, size
 * Map node/edge titles
 
-## Pivots
+### Pivots
 
 Every connector comes with a base set of pivots. See [custom pivots](configure-custom-pivots.md) for teaching Graphistry new pivots based on existing connectors and pivots.
-
-## Performance
-
-See [performance tuning](../debugging/performance-tuning.md)
-
