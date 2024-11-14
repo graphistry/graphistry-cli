@@ -86,16 +86,6 @@ nvidia-smi
 nvidia-smi
 
 
-########################################
-##
-## Start: 532-docker.sh
-##
-########################################
-
-
-# Docker 19.03+ for RHEL 8
-#  - Note: Podman does not support docker-compose, so we really do want docker, not podman
-#  - For available: sudo dnf list docker-ce 
 
 sudo docker --version \
 || {
