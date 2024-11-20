@@ -271,3 +271,46 @@ To acces the telemetry services, you need to use the template file `$GRAPHISTRY_
 The feature flag in the web admin panel (waffle) for OpenTelemetry is `flag_ot_traces`, and it is off by default
 
 You need to be admin in order to change its value, this flag controls at runtime which users can export telemetry data.  You can set monitoring to no/all/select users.
+
+## Kubernetes Deployment
+To deploy OpenTelemetry services for Graphistry in a Kubernetes environment, you will need to configure the system using Helm values.  For comprehensive documentation on deploying Graphistry with Helm, refer to the official documentation at [Graphistry Helm Documentation](https://graphistry-helm.readthedocs.io/).  Additionally, you can explore the open-source Helm project for Graphistry on GitHub at [Graphistry Helm GitHub](https://github.com/graphistry/graphistry-helm).
+
+### Prerequisites
+
+Before deploying OpenTelemetry services for Graphistry on Kubernetes, ensure you have the following prerequisites in place:
+
+1. **Kubernetes Cluster**: You must have access to a running Kubernetes cluster.
+2. **Helm**: Helm is the package manager for Kubernetes that simplifies the deployment and management of applications.
+3. **Graphistry Helm Project**: You must have the `graphistry-helm` project cloned or downloaded to your local machine.  This project contains the necessary Helm charts and configurations for deploying Graphistry services with Kubernetes.  You can find the project and instructions in the official [Graphistry Helm GitHub repository](https://github.com/graphistry/graphistry-helm).
+4. **Access to Required Resources**: Ensure you have the necessary permissions to deploy applications to the Kubernetes cluster.  You may need appropriate access rights to the cloud provider's Kubernetes resources or administrative permissions for your self-hosted Kubernetes environment.
+
+### Helm Values for OpenTelemetry in Kubernetes
+
+To deploy OpenTelemetry for Graphistry in a Kubernetes environment, you'll need to configure the Helm deployment with specific values. These values are typically defined in a `values.yaml` file, which will replace the Docker Compose configuration in your setup.
+
+The following is an example of the configuration you would include in your `values.yaml` file to deploy OpenTelemetry services within Kubernetes:
+
+```yaml
+telemetryEnv:
+  ENABLE_OPEN_TELEMETRY: true
+  OTEL_CLOUD_MODE: false
+  OTEL_COLLECTOR_OTLP_HTTP_ENDPOINT: ""
+  OTEL_COLLECTOR_OTLP_USERNAME: ""
+  OTEL_COLLECTOR_OTLP_PASSWORD: ""
+  DCGM_EXPORTER_CLOCK_EVENTS_COUNT_WINDOW_SIZE: 1000
+  GF_SERVER_ROOT_URL: "/grafana"
+  GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+```
+
+### Configuration Overview
+
+1. **`telemetryEnv`**: This section defines environment variables that control the OpenTelemetry configuration in Kubernetes. These variables replicate the settings that were originally defined in the Docker Compose setup.
+2. **`ENABLE_OPEN_TELEMETRY`**: Set to `true` to enable the OpenTelemetry stack within the Kubernetes environment. This will ensure that telemetry data is collected and processed by the relevant tools in your stack.
+3. **`OTEL_CLOUD_MODE`**:
+  - When set to `false`, the internal observability stack (`Jaeger`, `Prometheus`, `Grafana`, `NVIDIA DCGM Exporter` and `Node Exporter`) is deployed locally within your Kubernetes cluster.  So, setting it to `false` is similar to [using packaged observability tools](#using-packaged-observability-tools) within the Kubernetes environment.
+  - When set to `true`, telemetry data is forwarded to external services, such as Grafana Cloud or other OTLP-compatible services.  So, setting this to `true` is equivalent to [forwarding telemetry to external services](#forwarding-to-external-services).
+4. **`OTEL_COLLECTOR_OTLP_HTTP_ENDPOINT`**, **`OTEL_COLLECTOR_OTLP_USERNAME`**, and **`OTEL_COLLECTOR_OTLP_PASSWORD`**: These fields are required only if `OTEL_CLOUD_MODE` is set to `true`. They provide the necessary connection details (such as the endpoint, username, and password) for forwarding telemetry data to external services like Grafana Cloud or other OTLP-compatible services.
+5. **`GF_SERVER_ROOT_URL`** and **`GF_SERVER_SERVE_FROM_SUB_PATH`**: These settings are used to configure Grafana, especially when it's deployed behind a reverse proxy or using an ingress controller.
+  - **`GF_SERVER_ROOT_URL`** defines the root URL for accessing Grafana (e.g., `/grafana`).
+  - **`GF_SERVER_SERVE_FROM_SUB_PATH`** should be set to `true` if Grafana is accessed from a sub-path (e.g., `/grafana`) behind a reverse proxy or ingress.
+6. **`DCGM_EXPORTER_CLOCK_EVENTS_COUNT_WINDOW_SIZE`**: This environment variable is used when `OTEL_CLOUD_MODE` is set to `true`, and the `dcgm-exporter` is deployed to export GPU metrics to Prometheus. It controls the frequency of GPU sampling to gather metrics. The value `1000` represents the window size for counting clock events on the GPU.
