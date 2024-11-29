@@ -334,4 +334,4 @@ telemetryEnv:
   - **`telemetryEnv.grafana.GF_SERVER_ROOT_URL`** defines the root URL for accessing Grafana (e.g., `/grafana`).
   - **`telemetryEnv.grafana.GF_SERVER_SERVE_FROM_SUB_PATH`** should be set to `true` if Grafana is accessed from a sub-path (e.g., `/grafana`) behind a reverse proxy or ingress.
 7. **`telemetryEnv.dcgmExporter.DCGM_EXPORTER_CLOCK_EVENTS_COUNT_WINDOW_SIZE`**: This environment variable is used when `OTEL_CLOUD_MODE` is set to `true`, and the `dcgm-exporter` is deployed to export GPU metrics to Prometheus. It controls the frequency of GPU sampling to gather metrics. The value `1000` represents the window size for counting clock events on the GPU.
-8. **`telemetryEnv.*.image`**: These values allow to chage the image versions of the observability tools.
+8. **`telemetryEnv.*.image`**: These values allow to change the image versions of the observability tools.
