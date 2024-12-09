@@ -1,4 +1,4 @@
-# Configure the Python Endpoing
+# Configure the Python Endpoint
 
 The Python endpoint allows any user granted access a way to retrieve datasets stored within Graphistry and process it using unrestricted arbitrary user provided Python code. This Python code can include a limited set of external libraries such as `numpy` and `cudf`, in addition to `graphistry`, and can access all computational resources available to the forge-etl-python server including GPU compute. The result is returned to the user as a string or as JSON.
 
