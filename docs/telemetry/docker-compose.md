@@ -1,4 +1,4 @@
-# Telemetry
+# Docker Compose Telemetry
 
 ## Overview
 
@@ -6,7 +6,7 @@ Graphistry services export telemetry information (metrics and traces) using the 
 
 Graphistry services push their telemetry data to the [opentelemetry-collector](https://opentelemetry.io/docs/collector/) service (alias `otel-collector`) and this will forward the data to any observability tool that is compatible with the OpenTelemetry standard (e.g. Prometheus, Jaeger, Grafana Cloud, etc.).
 
-## Telemetry Deployment Modes in Graphistry
+## Telemetry Deployment Modes
 
 When telemetry services are enabled, the OpenTelemetry Collector will be included in all deployment scenarios:
 
@@ -36,6 +36,9 @@ cd $GRAPHISTRY_HOME
 If you need to manage individual telemetry services, you can use the following commands.  Each command starts a specific service:
 
 ```bash
+# Start the Node Exporter to collect and expose system-level metrics (e.g., CPU, memory, disk, and network).
+./release up -d node-exporter
+
 # Start the NVIDIA Data Center GPU Manager Exporter (DCGM Exporter) for GPU monitoring
 ./release up -d dcgm-exporter
 
@@ -73,11 +76,9 @@ Use this URL when the service is [behind Caddy](#caddyfile---reverse-proxy-set-u
 Use this URL when the service is **not behind Caddy**: `https://$GRAPHISTRY_HOST:16686/jaeger/`
 
 ### Grafana dashboard
-Grafana will include GPU metrics and dashboards from NVIDIA Data Center GPU Manager: `DCGM Exporter Dashboards`:
-
-Use this URL when the service is [behind Caddy](#caddyfile---reverse-proxy-set-up): `https://$GRAPHISTRY_HOST/grafana/`
-
-Use this URL when the service is **not behind Caddy**: `https://$GRAPHISTRY_HOST:3000`
+Grafana will include GPU metrics and dashboards from NVIDIA Data Center GPU Manager: `DCGM Exporter Dashboards`, as well as the Node Exporter Dashboard for system-level metrics (e.g., CPU, memory, disk, and network).
+- Use this URL when the service is [behind Caddy](#caddyfile---reverse-proxy-set-up): `https://$GRAPHISTRY_HOST/grafana/`
+- Use this URL when the service is **not behind Caddy**: `https://$GRAPHISTRY_HOST:3000`
 
 ## Configuration
 
