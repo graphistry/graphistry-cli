@@ -16,6 +16,7 @@
    app-config/index
    debugging/index
    security/index
+   telemetry/index
    tools/index
    faq
    support

@@ -1,4 +1,4 @@
-# Telemetry
+# Docker Compose Telemetry
 
 ## Overview
 
@@ -6,7 +6,7 @@ Graphistry services export telemetry information (metrics and traces) using the 
 
 Graphistry services push their telemetry data to the [opentelemetry-collector](https://opentelemetry.io/docs/collector/) service (alias `otel-collector`) and this will forward the data to any observability tool that is compatible with the OpenTelemetry standard (e.g. Prometheus, Jaeger, Grafana Cloud, etc.).
 
-## Telemetry Deployment Modes in Graphistry
+## Telemetry Deployment Modes
 
 When telemetry services are enabled, the OpenTelemetry Collector will be included in all deployment scenarios:
 
@@ -36,6 +36,9 @@ cd $GRAPHISTRY_HOME
 If you need to manage individual telemetry services, you can use the following commands.  Each command starts a specific service:
 
 ```bash
+# Start the Node Exporter to collect and expose system-level metrics (e.g., CPU, memory, disk, and network).
+./release up -d node-exporter
+
 # Start the NVIDIA Data Center GPU Manager Exporter (DCGM Exporter) for GPU monitoring
 ./release up -d dcgm-exporter
 
@@ -73,11 +76,9 @@ Use this URL when the service is [behind Caddy](#caddyfile---reverse-proxy-set-u
 Use this URL when the service is **not behind Caddy**: `https://$GRAPHISTRY_HOST:16686/jaeger/`
 
 ### Grafana dashboard
-Grafana will include GPU metrics and dashboards from NVIDIA Data Center GPU Manager: `DCGM Exporter Dashboards`:
-
-Use this URL when the service is [behind Caddy](#caddyfile---reverse-proxy-set-up): `https://$GRAPHISTRY_HOST/grafana/`
-
-Use this URL when the service is **not behind Caddy**: `https://$GRAPHISTRY_HOST:3000`
+Grafana will include GPU metrics and dashboards from NVIDIA Data Center GPU Manager: `DCGM Exporter Dashboards`, as well as the Node Exporter Dashboard for system-level metrics (e.g., CPU, memory, disk, and network).
+- Use this URL when the service is [behind Caddy](#caddyfile---reverse-proxy-set-up): `https://$GRAPHISTRY_HOST/grafana/`
+- Use this URL when the service is **not behind Caddy**: `https://$GRAPHISTRY_HOST:3000`
 
 ## Configuration
 
@@ -271,67 +272,3 @@ To acces the telemetry services, you need to use the template file `$GRAPHISTRY_
 The feature flag in the web admin panel (waffle) for OpenTelemetry is `flag_ot_traces`, and it is off by default
 
 You need to be admin in order to change its value, this flag controls at runtime which users can export telemetry data.  You can set monitoring to no/all/select users.
-
-## Kubernetes Deployment
-To deploy OpenTelemetry services for Graphistry in a Kubernetes environment, you will need to configure the system using Helm values.  For comprehensive documentation on deploying Graphistry with Helm, refer to the official documentation at [Graphistry Helm Documentation](https://graphistry-helm.readthedocs.io/).  Additionally, you can explore the open-source Helm project for Graphistry on GitHub at [Graphistry Helm GitHub](https://github.com/graphistry/graphistry-helm).
-
-### Prerequisites
-
-Before deploying OpenTelemetry services for Graphistry on Kubernetes, ensure you have the following prerequisites in place:
-
-1. **Kubernetes Cluster**: You must have access to a running Kubernetes cluster.
-2. **Helm**: Helm is the package manager for Kubernetes that simplifies the deployment and management of applications.
-3. **Graphistry Helm Project**: You must have the `graphistry-helm` project cloned or downloaded to your local machine.  This project contains the necessary Helm charts and configurations for deploying Graphistry services with Kubernetes.  You can find the project and instructions in the official [Graphistry Helm GitHub repository](https://github.com/graphistry/graphistry-helm).
-4. **Access to Required Resources**: Ensure you have the necessary permissions to deploy applications to the Kubernetes cluster.  You may need appropriate access rights to the cloud provider's Kubernetes resources or administrative permissions for your self-hosted Kubernetes environment.
-
-### Helm Values for OpenTelemetry in Kubernetes
-
-To deploy OpenTelemetry for Graphistry in a Kubernetes environment, you'll need to configure the Helm deployment with specific values. These values are typically defined in a `values.yaml` file, which will replace the Docker Compose configuration in your setup.
-
-The following is an example of the configuration you would include in your `values.yaml` file to deploy OpenTelemetry services within Kubernetes:
-
-```yaml
-global:  ## global settings for all charts
-  ENABLE_OPEN_TELEMETRY: true
-
-# Graphistry Telemetry values and environment variables for observability tools
-# can be set like helm upgrade -i chart_name --name release_name \
-#--set stENVPublic.LOG_LEVEL="FOO"
-# Telemetry documentation:
-# https://github.com/graphistry/graphistry-cli/blob/master/docs/tools/telemetry.md#kubernetes-deployment
-telemetryEnv:
-  OTEL_CLOUD_MODE: false   # false: deploy our stack: jaeger, prometheus, grafana etc.; else fill OTEL_COLLECTOR_OTLP_HTTP_ENDPOINT and credentials bellow
-  openTelemetryCollector:
-    image: "otel/opentelemetry-collector-contrib:0.87.0"
-    OTEL_COLLECTOR_OTLP_HTTP_ENDPOINT: ""   # e.g. Grafana OTLP HTTP endpoint for Graphistry Hub https://otlp-gateway-prod-us-east-0.grafana.net/otlp
-    OTEL_COLLECTOR_OTLP_USERNAME: ""   # e.g. Grafana Cloud Instance ID for OTLP
-    OTEL_COLLECTOR_OTLP_PASSWORD: ""   # e.g. Grafana Cloud API Token for OTLP
-  grafana:
-    image: "grafana/grafana:11.0.0"
-    GF_SERVER_ROOT_URL: "/grafana"
-    GF_SERVER_SERVE_FROM_SUB_PATH: "true"
-  dcgmExporter:
-    image: "nvcr.io/nvidia/k8s/dcgm-exporter:3.3.5-3.4.1-ubuntu22.04"
-    DCGM_EXPORTER_CLOCK_EVENTS_COUNT_WINDOW_SIZE: 1000  # milliseconds
-  jaeger:
-    image: "jaegertracing/all-in-one:1.50.0"
-  nodeExporter:
-    image: "prom/node-exporter:v1.8.2"
-  prometheus:
-    image: "prom/prometheus:v2.47.2"
-```
-
-### Configuration Overview
-
-1. **`global`**: This section in the `values.yaml` file is used to define values that are accessible across all charts within the parent-child hierarchy.  Both the parent chart (e.g., `charts/graphistry-helm`) and its child charts (e.g., `charts/graphistry-helm/charts/telemetry`) can reference these global values using `.Values.global.<value_name>`, providing a unified configuration across the deployment.
-2. **`telemetryEnv`**: This section defines environment variables that control the OpenTelemetry configuration in Kubernetes. These variables replicate the settings that were originally defined in the Docker Compose setup.
-3. **`global.ENABLE_OPEN_TELEMETRY`**: Set to `true` to enable the OpenTelemetry stack within the Kubernetes environment. This will ensure that telemetry data is collected and processed by the relevant tools in your stack.
-4. **`telemetryEnv.OTEL_CLOUD_MODE`**:
-  - When set to `false`, the internal observability stack (`Jaeger`, `Prometheus`, `Grafana`, `NVIDIA DCGM Exporter` and `Node Exporter`) is deployed locally within your Kubernetes cluster.  So, setting it to `false` is similar to [using packaged observability tools](#using-packaged-observability-tools) within the Kubernetes environment.
-  - When set to `true`, telemetry data is forwarded to external services, such as Grafana Cloud or other OTLP-compatible services.  So, setting this to `true` is equivalent to [forwarding telemetry to external services](#forwarding-to-external-services).
-5. **`telemetryEnv.openTelemetryCollector.OTEL_COLLECTOR_OTLP_HTTP_ENDPOINT`**, **`telemetryEnv.openTelemetryCollector.OTEL_COLLECTOR_OTLP_USERNAME`**, and **`telemetryEnv.openTelemetryCollector.OTEL_COLLECTOR_OTLP_PASSWORD`**: These fields are required only if `OTEL_CLOUD_MODE` is set to `true`. They provide the necessary connection details (such as the endpoint, username, and password) for forwarding telemetry data to external services like Grafana Cloud or other OTLP-compatible services.
-6. **`telemetryEnv.grafana.GF_SERVER_ROOT_URL`** and **`telemetryEnv.grafana.GF_SERVER_SERVE_FROM_SUB_PATH`**: These settings are used to configure Grafana, especially when it's deployed behind a reverse proxy or using an ingress controller.
-  - **`telemetryEnv.grafana.GF_SERVER_ROOT_URL`** defines the root URL for accessing Grafana (e.g., `/grafana`).
-  - **`telemetryEnv.grafana.GF_SERVER_SERVE_FROM_SUB_PATH`** should be set to `true` if Grafana is accessed from a sub-path (e.g., `/grafana`) behind a reverse proxy or ingress.
-7. **`telemetryEnv.dcgmExporter.DCGM_EXPORTER_CLOCK_EVENTS_COUNT_WINDOW_SIZE`**: This environment variable is used when `OTEL_CLOUD_MODE` is set to `true`, and the `dcgm-exporter` is deployed to export GPU metrics to Prometheus. It controls the frequency of GPU sampling to gather metrics. The value `1000` represents the window size for counting clock events on the GPU.
-8. **`telemetryEnv.*.image`**: These values allow to change the image versions of the observability tools.

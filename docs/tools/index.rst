@@ -6,7 +6,6 @@ Operations & Tools
 
   user-creation
   developer
-  telemetry
   backup-and-restore
   update-backup-migrate
   bridge
