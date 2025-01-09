@@ -51,7 +51,7 @@ POSTGRES_HOST=postgres
 
 ## Setup Instructions
 
-For this setup example, we will use the **Network File System (NFS)**, but any **Distributed File System** can be used to achieve the same goal. The file system must ensure that all nodes in the cluster can access the shared dataset directory. We will use **Ubuntu 22.04** on both the follower and leader nodes, with the follower having the IP address **192.168.18.8** and the leader **192.168.18.13**.
+For this setup example, we will use the **Network File System (NFS)**, but any **Distributed File System** can be used to achieve the same goal. The file system must ensure that all nodes in the cluster can access the shared dataset directory. We will use **Ubuntu 22.04** on both the follower and leader nodes, with the follower having the IP address **192.168.0.20** and the leader **192.168.0.10**.
 
 ### Step 1: Configure the NFS Shared Directory
 
@@ -80,7 +80,7 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
 
 3. **Configure NFS exports**:
 
-    Edit the `/etc/exports` file to specify which directories should be shared and with what permissions. The following configuration allows the follower node (with IP `192.168.18.8`) to mount the shared directory with read/write permissions.
+    Edit the `/etc/exports` file to specify which directories should be shared and with what permissions. The following configuration allows the follower node (with IP `192.168.0.20`) to mount the shared directory with read/write permissions.
 
     ```bash
     sudo nano /etc/exports
@@ -89,7 +89,7 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
     Add the following line to export the shared dataset directory:
 
     ```bash
-    /mnt/data/shared/ 192.168.18.8(rw,sync,no_subtree_check)
+    /mnt/data/shared/ 192.168.0.20(rw,sync,no_subtree_check)
     ```
 
     - `rw`: Allows read and write access.
@@ -142,10 +142,10 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
     Mount the directory shared by the leader node to the local directory on the follower node:
 
     ```bash
-    sudo mount -t nfs 192.168.18.13:/mnt/data/shared/ /home/user1/mnt/data/shared/
+    sudo mount -t nfs 192.168.0.10:/mnt/data/shared/ /home/user1/mnt/data/shared/
     ```
 
-    - Replace `192.168.18.13` with the IP address of the leader node.
+    - Replace `192.168.0.10` with the IP address of the leader node.
     - This command mounts the NFS share to `/home/user1/mnt/data/shared/` on the follower node.
 
 4. **Verify the mount**:
@@ -159,7 +159,7 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
     This should show an entry like:
 
     ```bash
-    192.168.18.13:/mnt/data/shared on /home/user1/mnt/data/shared type nfs4 (rw,relatime,vers=4.2,rsize=1048576,wsize=1048576,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.18.8,local_lock=none,addr=192.168.18.13)
+    192.168.0.10:/mnt/data/shared on /home/user1/mnt/data/shared type nfs4 (rw,relatime,vers=4.2,rsize=1048576,wsize=1048576,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=192.168.0.20,local_lock=none,addr=192.168.0.10)
     ```
 
     This confirms that the NFS share is mounted and ready to use.
@@ -172,7 +172,7 @@ Now that the NFS share is set up, we can configure **Docker Compose** for **Grap
 
 1. **Ensure the correct configuration** for the `cluster.env` file. This file should contain the appropriate settings for **multinode mode**, **node type** (leader or follower), the **shared dataset directory**, and the **PostgreSQL connection**.
 
-    Example of `cluster.env` for the leader node:
+    Example of `cluster.env` for the **leader** node:
 
     ```bash
     ENABLE_CLUSTER_MODE=true
@@ -181,24 +181,18 @@ Now that the NFS share is set up, we can configure **Docker Compose** for **Grap
     POSTGRES_HOST=postgres
     ```
 
-    Example of `cluster.env` for a follower node:
+    Example of `cluster.env` for a **follower** node:
 
     ```bash
     ENABLE_CLUSTER_MODE=true
     NODE_TYPE=follower
     LOCAL_DATASET_CACHE_DIR=/home/user1/mnt/data/shared/
-    POSTGRES_HOST=192.168.18.13
+    POSTGRES_HOST=192.168.0.10
     ```
 
 2. **Start Docker Compose**:
 
-    On the leader node, run the following command to start the Docker Compose instance:
-
-    ```bash
-    ./release up -d
-    ```
-
-    On each follower node, run the same command:
+    On the leader and on each follower node, run the following command to start the Docker Compose instance:
 
     ```bash
     ./release up -d
@@ -233,40 +227,28 @@ To verify the operation, you can check the logs of each node using:
 ./release logs
 ```
 
-### Some utilities for NFS Management
+## Usage
 
-- **Unmounting NFS** on the follower node:
+Once the deployment is complete, you can use the leader node to upload datasets, files and perform other data ingestion tasks. The `VISUALIZE FILES (BETA)` feature in Graphistry can be used to upload graph datasets and files. Additionally, you can use the Graphistry Clients (such as `pygraphistry`, `graphistry-js`) or the `REST API` to interact with the data (all of them pointing to the IP/address of the leader):
 
-    ```bash
-    sudo umount /home/user1/mnt/data/shared/
-    ```
+* PyGraphistry: https://github.com/graphistry/pygraphistry
+* Graphistry JS: https://github.com/graphistry/graphistry-js
+* REST API: API Docs: https://hub.graphistry.com/docs/api
 
-- **Changing NFS permissions** (e.g., making the share read-only for the follower):
+For example, you can interact with the leader node from **PyGraphistry** like this:
 
-    1. Edit the `/etc/exports` file on the leader node:
+```python
+import graphistry
+leader_address = "192.168.0.10"
+graphistry.register(api=3, protocol="http", server=leader_address, username="user1", password="password1")
+...
+```
 
-        ```bash
-        sudo nano /etc/exports
-        ```
+Once the upload is finished, these datasets and files will be available on all follower nodes and the leader for visualization. Each graph session on any instance is independent by default. This means that visualizations on the leader and follower nodes are isolated from one another. However, collaborative features will be enabled if users are pointed to the same instance (leader or follower). In this case, multiple users can interact with the same visualization, sharing insights and collaborating in real-time.
 
-    2. Change the permissions from read-write to read-only:
+This setup provides flexibility for both individual exploration and team collaboration, while ensuring that the data and visualizations remain synchronized across the deployment. It also provides high availability and better scalability for Graphistry deployments.
 
-        ```bash
-        /mnt/data/shared/ 192.168.18.8(ro,sync,no_subtree_check)
-        ```
-
-    3. Apply the changes:
-
-        ```bash
-        sudo exportfs -ra
-        sudo systemctl restart nfs-kernel-server
-        ```
-
-    4. On the follower node, remount the NFS share to apply the changes.
-
----
-
-### Troubleshooting
+## Troubleshooting
 
 - **Mounting Issues**: If the NFS mount does not appear or fails, verify the IP addresses and paths in the `/etc/exports` file on the leader node. Ensure that the follower node has access to the shared directory.
   
