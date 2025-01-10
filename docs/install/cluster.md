@@ -4,6 +4,7 @@ This document offers step-by-step instructions for deploying **Graphistry** in a
 
 The leader and followers will share datasets using a **Distributed File System**, for example, using the Network File System (NFS) protocol. This setup allows all nodes to access the same dataset directory. This configuration ensures that **Graphistry** can be deployed across multiple machines, each with different GPU configuration profiles (some with more powerful GPUs, enabling multi-GPU on multinode setups), while keeping the dataset storage centralized and synchronized.
 
+This deployment mode is flexible and can be used both in **on-premises** clusters or in the **cloud**. For example, it should be possible to use **Amazon Machine Images (AMIs)** from the [Graphistry AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-ppbjy2nny7xzk?sr=0-1&ref_=beagle&applicationId=AWSMPContessa), assigning Amazon VMs created from those images to the **leader** and **follower** roles. This allows for scalable and customizable cloud-based deployments with the same multinode architecture.
 
 ## Cluster Configuration Overview
 
