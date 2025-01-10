@@ -29,7 +29,7 @@ logger.setLevel(logging.DEBUG)
 # -- Project information -----------------------------------------------------
 
 project = "Graphistry CLI"
-copyright = "2024, Graphistry, Inc."
+copyright = "2025, Graphistry, Inc."
 author = "Graphistry, Inc."
 
 html_title = "Graphistry Administration Documentation"

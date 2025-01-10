@@ -8,7 +8,6 @@ On-Prem Installation
   rhel_7_6_setup
   ubuntu_18_04_lts_setup
   vGPU
-  cluster
 
 
 
