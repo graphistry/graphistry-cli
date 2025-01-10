@@ -242,9 +242,8 @@ import graphistry
 leader_address = "192.168.0.10"
 graphistry.register(api=3, protocol="http", server=leader_address, username="user1", password="password1")
 ...
-```
 
-Once the upload is finished, these datasets and files will be available on all follower nodes and the leader for visualization. Each graph session on any instance is independent by default. This means that visualizations on the leader and follower nodes are isolated from one another. However, collaborative features will be enabled if users are pointed to the same instance (leader or follower). In this case, multiple users can interact with the same visualization, sharing insights and collaborating in real-time.
+Once the upload is finished, these datasets and files will be available on all follower nodes and the leader for visualization. Each graph session on any instance is independent by default. This means that visualizations on the leader and follower nodes are isolated from one another. However, collaborative features will be enabled if users are pointed to the same instance (leader or follower). In this case, multiple users can interact with the same visualization, sharing insights and collaborating in real-time. Additionally, both the leader and follower nodes will have the ability to delete shared datasets and files using the Nexus dashboard, ensuring that data management can be handled across the entire deployment.
 
 This setup provides flexibility for both individual exploration and team collaboration, while ensuring that the data and visualizations remain synchronized across the deployment. It also provides high availability and better scalability for Graphistry deployments.
 
