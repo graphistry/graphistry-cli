@@ -1,5 +1,7 @@
 # Multinode Deployment with Docker Compose
 
+**Note**: *This deployment configuration is currently **experimental** and subject to future updates.*
+
 This document offers step-by-step instructions for deploying **Graphistry** in a multinode environment using Docker Compose. In this architecture, a **leader** node handles dataset ingestion and manages the single PostgreSQL instance, while **follower** nodes can visualize graphs too using the shared datasets. Currently, only the leader node has permission to upload datasets and files (data ingestion), but future updates will allow follower nodes to also perform dataset and file uploads (data ingestion).
 
 The leader and followers will share datasets using a **Distributed File System**, for example, using the Network File System (NFS) protocol. This setup allows all nodes to access the same dataset directory. This configuration ensures that **Graphistry** can be deployed across multiple machines, each with different GPU configuration profiles (some with more powerful GPUs, enabling multi-GPU on multinode setups), while keeping the dataset storage centralized and synchronized.
@@ -54,6 +56,8 @@ POSTGRES_HOST=postgres
 
 For this setup example, we will use the **Network File System (NFS)**, but any **Distributed File System** can be used to achieve the same goal. The file system must ensure that all nodes in the cluster can access the shared dataset directory. We will use **Ubuntu 22.04** on both the follower and leader nodes, with the follower having the IP address **192.168.0.20** and the leader **192.168.0.10**.
 
+Additionally, ensure that the **firewall** on both the leader and follower nodes is configured to allow **NFS** traffic on the necessary ports (e.g., 2049), enabling seamless communication between the nodes.
+
 ### Step 1: Configure the NFS Shared Directory
 
 NFS will be used to share the dataset directory between nodes. Follow the steps below to set up NFS on both the leader and follower machines.
@@ -104,22 +108,6 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
     sudo systemctl restart nfs-kernel-server
     ```
 
-5. **Disable the firewall** (if enabled) to ensure that NFS traffic is not blocked between nodes:
-
-    Check the status of `ufw` (Uncomplicated Firewall):
-
-    ```bash
-    sudo ufw status
-    ```
-
-    If the firewall is enabled, disable it with:
-
-    ```bash
-    sudo ufw disable
-    ```
-
-    Alternatively, you can allow NFS traffic through the firewall, but disabling it is the easiest way to ensure communication between the nodes.
-
 #### On the Follower Node (Secondary Machine)
 
 1. **Create a directory to mount the NFS share**:
@@ -164,8 +152,6 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
     ```
 
     This confirms that the NFS share is mounted and ready to use.
-
----
 
 ### Step 2: Docker Compose Setup
 
@@ -253,6 +239,6 @@ This setup provides flexibility for both individual exploration and team collabo
 
 - **Mounting Issues**: If the NFS mount does not appear or fails, verify the IP addresses and paths in the `/etc/exports` file on the leader node. Ensure that the follower node has access to the shared directory.
   
-- **Firewall Issues**: Ensure that firewalls are disabled on both the leader and follower nodes or that the NFS ports are allowed. If the firewall is enabled, use `ufw` or `iptables` to allow NFS traffic.
+- **Firewall Issues**: Ensure that the firewall on both the leader and follower nodes is properly configured to allow NFS traffic. Use tools like `ufw` or `iptables` to open the necessary NFS ports (e.g., 2049) based on your installation.
 
 - **Permission Issues**: If permission errors occur when accessing the shared directory, check the directory permissions on the leader node and ensure they are accessible by the user running Docker on the follower node.
