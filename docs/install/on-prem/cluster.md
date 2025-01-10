@@ -5,14 +5,14 @@ This document offers step-by-step instructions for deploying **Graphistry** in a
 The leader and followers will share datasets using a **Distributed File System**, for example, using the Network File System (NFS) protocol. This setup allows all nodes to access the same dataset directory. This configuration ensures that **Graphistry** can be deployed across multiple machines, each with different GPU configuration profiles (some with more powerful GPUs, enabling multi-GPU on multinode setups), while keeping the dataset storage centralized and synchronized.
 
 
-### Cluster Configuration Overview
+## Cluster Configuration Overview
 
 1. **Leader Node**: Handles the ingestion of datasets, PostgreSQL write operations, and exposes the required PostgreSQL ports.
 2. **Follower Nodes**: Connect to the PostgreSQL instance on the leader and can visualize graphs using the shared datasets. However, they do not have their own attached PostgreSQL instance.
 3. **Shared Dataset**: All nodes will access the dataset directory using a **Distributed File System**. This ensures that the leader and followers use the same dataset, maintaining consistency across all nodes.
 4. **PostgreSQL**: The PostgreSQL instance on the leader node is used by all nodes in the cluster for querying. The **Nexus** service, which provides the main dashboard for Graphistry, on the **Leader** node is responsible for managing access to the PostgreSQL database. The **Nexus** services on the **follower** nodes will use the PostgreSQL instance of the **Leader**.
 
-### Configuration File: `cluster.env`
+## Configuration File: `cluster.env`
 
 The configuration for multinode deployment is managed through the environment file `cluster.env`. This file will vary depending on whether the node is a **leader** or a **follower** in the deployment. It defines key settings such as the node type (`leader` or `follower`), the shared dataset directory, and the single shared PostgreSQL connection.
 
@@ -242,6 +242,7 @@ import graphistry
 leader_address = "192.168.0.10"
 graphistry.register(api=3, protocol="http", server=leader_address, username="user1", password="password1")
 ...
+```
 
 Once the upload is finished, these datasets and files will be available on all follower nodes and the leader for visualization. Each graph session on any instance is independent by default. This means that visualizations on the leader and follower nodes are isolated from one another. However, collaborative features will be enabled if users are pointed to the same instance (leader or follower). In this case, multiple users can interact with the same visualization, sharing insights and collaborating in real-time. Additionally, both the leader and follower nodes will have the ability to delete shared datasets and files using the Nexus dashboard, ensuring that data management can be handled across the entire deployment.
 
