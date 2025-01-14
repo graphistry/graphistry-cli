@@ -13,6 +13,7 @@
    install/cloud/index
    install/on-prem/index
    install/testing-an-install
+   install/cluster
    app-config/index
    debugging/index
    security/index
