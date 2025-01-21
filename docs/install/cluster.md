@@ -2,9 +2,9 @@
 
 **Note**: *This deployment configuration is currently **experimental** and subject to future updates.*
 
-This document offers step-by-step instructions for deploying **Graphistry** in a multinode environment using Docker Compose. In this architecture, a **leader** node handles dataset ingestion and manages the single PostgreSQL instance, while **follower** nodes can visualize graphs too using the shared datasets. Currently, only the leader node has permission to upload datasets and files (data ingestion), but future updates will allow follower nodes to also perform dataset and file uploads (data ingestion).
+This document provides step-by-step instructions for deploying **Graphistry** in a multinode environment using Docker Compose. In this architecture, both the **Leader** and **Follower** nodes can ingest datasets and files, with all nodes accessing the same **PostgreSQL** instance on the **Leader** node. As a result, **Follower** nodes can also perform data uploads, ensuring that both **Leader** and **Follower** nodes have equal access to dataset ingestion and visualization.
 
-The leader and followers will share datasets using a **Distributed File System**, for example, using the Network File System (NFS) protocol. This setup allows all nodes to access the same dataset directory. This configuration ensures that **Graphistry** can be deployed across multiple machines, each with different GPU configuration profiles (some with more powerful GPUs, enabling multi-GPU on multinode setups), while keeping the dataset storage centralized and synchronized.
+The leader and followers will share datasets using a **Distributed File System**, for example, using the **Network File System (NFS)** protocol. This setup allows all nodes to access the same dataset directory. This configuration ensures that **Graphistry** can be deployed across multiple machines, each with different **GPU** configuration profiles (some with more powerful GPUs, enabling **multi-GPU** on multinode setups), while keeping the dataset storage centralized and synchronized.
 
 This deployment mode is flexible and can be used both in **on-premises** clusters or in the **cloud**. For example, it should be possible to use **Amazon Machine Images (AMIs)** from the [Graphistry AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-ppbjy2nny7xzk?sr=0-1&ref_=beagle&applicationId=AWSMPContessa), assigning Amazon VMs created from those images to the **leader** and **follower** roles. This allows for scalable and customizable cloud-based deployments with the same multinode architecture.
 
@@ -13,7 +13,7 @@ This deployment mode is flexible and can be used both in **on-premises** cluster
 1. **Leader Node**: Handles the ingestion of datasets, PostgreSQL write operations, and exposes the required PostgreSQL ports.
 2. **Follower Nodes**: Connect to the PostgreSQL instance on the leader and can visualize graphs using the shared datasets. However, they do not have their own attached PostgreSQL instance.
 3. **Shared Dataset**: All nodes will access the dataset directory using a **Distributed File System**. This ensures that the leader and followers use the same dataset, maintaining consistency across all nodes.
-4. **PostgreSQL**: The PostgreSQL instance on the leader node is used by all nodes in the cluster for querying. The **Nexus** service, which provides the main dashboard for Graphistry, on the **Leader** node is responsible for managing access to the PostgreSQL database. The **Nexus** services on the **follower** nodes will use the PostgreSQL instance of the **Leader**.
+4. **PostgreSQL**: The PostgreSQL instance on the **Leader** node is used by all nodes for querying. The **Nexus** service on the **Leader** manages access to the database, while **Follower** nodes also use the **Leader’s** PostgreSQL instance. Both **Leader** and **Follower** nodes can perform actions like user sign-ups and settings modifications through their own **Nexus** dashboards, with changes applied system-wide for consistency across all nodes.
 
 ## Configuration File: `cluster.env`
 
@@ -64,16 +64,7 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
 
 #### On the Leader Node (Main Machine)
 
-1. **Create directories for PostgreSQL data and backups**:
-
-    ```bash
-    mkdir -p /mnt/data/shared/postgresql_data
-    mkdir -p /mnt/data/shared/postgres_backups
-    ```
-
-    These directories will hold the PostgreSQL data and backups, which will be shared with follower nodes.
-
-2. **Install NFS server**:
+1. **Install NFS server**:
 
     On the leader node, install the NFS server software:
 
@@ -83,7 +74,34 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
 
     This will install the necessary software for serving NFS shares to the follower nodes.
 
-3. **Configure NFS exports**:
+2. **Create directories for PostgreSQL and shared data**:
+
+    ```bash
+    # These directories will store PostgreSQL data and backups
+    mkdir -p /mnt/data/shared/postgresql_data
+    mkdir -p /mnt/data/shared/postgres_backups
+
+    # Create the shared directory
+    mkdir -p /mnt/data/shared/uploads /mnt/data/shared/files /mnt/data/shared/datasets
+    ```
+
+3. **Set appropriate permissions on the shared directory**:
+
+    To ensure the shared directory has the correct permissions and can be written to by NFS clients, it’s important to verify and configure access properly. The user is responsible for ensuring that the shared directory has the necessary permissions to allow remote follower nodes to read, write, and modify files as needed. For instance, you may need to apply the following changes to make sure the shared directory is accessible by NFS clients:
+
+    ```bash
+    # Set permissions to allow full access (read, write, execute) for all users
+    sudo chmod -R 777 /mnt/data/shared/
+
+    # Change ownership to 'nobody:nogroup' for NFS access
+    sudo chown -R nobody:nogroup /mnt/data/shared/
+    ```
+
+    This will allow all users and processes (including the remote follower instances) to read and write to the shared directory, ensuring they can ingest datasets and files. You can adjust these permissions later based on your security requirements.
+
+    *Notice: The following shared directory permissions are provided as an example. Please ensure the settings align with your security policies.*
+
+4. **Configure NFS exports**:
 
     Edit the `/etc/exports` file to specify which directories should be shared and with what permissions. The following configuration allows the follower node (with IP `192.168.0.20`) to mount the shared directory with read/write permissions.
 
@@ -94,14 +112,17 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
     Add the following line to export the shared dataset directory:
 
     ```bash
-    /mnt/data/shared/ 192.168.0.20(rw,sync,no_subtree_check)
+    /mnt/data/shared/ 192.168.0.20(rw,sync,no_subtree_check,no_root_squash)
     ```
 
     - `rw`: Allows read and write access.
     - `sync`: Ensures that changes are written to disk before responding to the client.
     - `no_subtree_check`: Disables subtree checking to improve performance.
+    - `no_root_squash`: Retains root access for the client’s root user on the shared directory, which can be necessary for certain tasks but should be used with caution due to the elevated permissions.
 
-4. **Export the NFS share** and restart the NFS server to apply the changes:
+    *Notice: The following NFS configuration is provided as an example. Please ensure the settings align with your security policies.*
+
+5. **Export the NFS share** and restart the NFS server to apply the changes:
 
     ```bash
     sudo exportfs -a
@@ -110,21 +131,21 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
 
 #### On the Follower Node (Secondary Machine)
 
-1. **Create a directory to mount the NFS share**:
-
-    ```bash
-    mkdir -p /home/user1/mnt/data/shared/
-    ```
-
-    This is where the shared dataset will be mounted on the follower node.
-
-2. **Install NFS client**:
+1. **Install NFS client**:
 
     On the follower node, install the NFS client software to mount the NFS share:
 
     ```bash
     sudo apt install nfs-common
     ```
+
+2. **Create a directory to mount the NFS share**:
+
+    ```bash
+    mkdir -p /home/user1/mnt/data/shared/
+    ```
+
+    This is where the shared dataset will be mounted on the follower node.
 
 3. **Mount the shared NFS directory**:
 
@@ -222,12 +243,13 @@ Once the deployment is complete, you can use the leader node to upload datasets,
 * Graphistry JS: https://github.com/graphistry/graphistry-js
 * REST API: API Docs: https://hub.graphistry.com/docs/api
 
-For example, you can interact with the leader node from **PyGraphistry** like this:
+For example, you can interact with any node from **PyGraphistry** like this:
 
 ```python
 import graphistry
-leader_address = "192.168.0.10"
-graphistry.register(api=3, protocol="http", server=leader_address, username="user1", password="password1")
+server_address = "192.168.0.10" # using the leader
+# or using the follower (server_address=192.168.0.20)
+graphistry.register(api=3, protocol="http", server=server_address, username="user1", password="password1")
 ...
 ```
 
