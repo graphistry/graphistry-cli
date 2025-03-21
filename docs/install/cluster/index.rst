@@ -13,8 +13,7 @@ Multinode Deployment Overview
 
 **Note**: *This deployment configuration is currently **experimental** and subject to future updates.*
 
-
-In this installation, both the **Leader** and **Follower** nodes can ingest datasets and files, with all nodes accessing the same **PostgreSQL** instance on the **Leader** node. As a result, **Follower** nodes can also perform data uploads, ensuring that both **Leader** and **Follower** nodes have equal access to dataset ingestion and visualization.
+In this installation, both the **Leader** and **Follower** nodes can ingest datasets and files, with all nodes accessing the same **PostgreSQL** instance on the **Leader** node. As a result, **Follower** nodes can also perform data uploads, allowing both **Leader** and **Follower** nodes to ingest datasets and visualize data.
 
 The leader and followers will share datasets using a **Distributed File System**, for example, using the **Network File System (NFS)** protocol. This setup allows all nodes to access the same dataset directory. This configuration ensures that **Graphistry** can be deployed across multiple machines, each with different **GPU** configuration profiles (some with more powerful GPUs, enabling **multi-GPU** on multinode setups), while keeping the dataset storage centralized and synchronized.
 

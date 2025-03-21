@@ -71,17 +71,28 @@ global:  ## global settings for all charts
 ## Configuration Overview
 
 1. **`global`**: This section in the `values.yaml` file is used to define values that are accessible across all charts within the parent-child hierarchy.  Both the parent chart (e.g., `charts/graphistry-helm`) and its child charts (e.g., `charts/graphistry-helm/charts/telemetry`) can reference these global values using `.Values.global.<value_name>`, providing a unified configuration across the deployment.
+
 2. **`telemetryStack`**: This section defines environment variables that control the OpenTelemetry configuration in Kubernetes. These variables replicate the settings that were originally defined in the Docker Compose setup.
+
 3. **`global.ENABLE_OPEN_TELEMETRY`**: Set to `true` to enable the OpenTelemetry stack within the Kubernetes environment. This will ensure that telemetry data is collected and processed by the relevant tools in your stack.
+
 4. **`telemetryStack.OTEL_CLOUD_MODE`**:
   - When set to `false`, the internal observability stack (`Jaeger`, `Prometheus`, `Grafana`, `NVIDIA DCGM Exporter` and `Node Exporter`) is deployed locally within your Kubernetes cluster.  So, setting it to `false` is similar to [using packaged observability tools](./docker-compose.md#using-packaged-observability-tools) within the Kubernetes environment.
   - When set to `true`, telemetry data is forwarded to external services, such as Grafana Cloud or other OTLP-compatible services.  So, setting this to `true` is equivalent to [forwarding telemetry to external services](./docker-compose.md#forwarding-to-external-services).
+
 5. **`telemetryStack.openTelemetryCollector.OTEL_COLLECTOR_OTLP_HTTP_ENDPOINT`**, **`telemetryStack.openTelemetryCollector.OTEL_COLLECTOR_OTLP_USERNAME`**, and **`telemetryStack.openTelemetryCollector.OTEL_COLLECTOR_OTLP_PASSWORD`**: These fields are required only if `OTEL_CLOUD_MODE` is set to `true`. They provide the necessary connection details (such as the endpoint, username, and password) for forwarding telemetry data to external services like Grafana Cloud or other OTLP-compatible services.
+
 6. **`telemetryStack.openTelemetryCollector.LEADER_OTEL_EXPORTER_OTLP_ENDPOINT`**: This field is used by all follower collectors when `global.ENABLE_CLUSTER_MODE` is set to `true`.  In this case, all follower collectors will export their telemetry data to the leader's collector, which will then export the data to Grafana, Prometheus, Jaeger, etc. For example: `"otel-collector.graphistry1.svc.cluster.local:4317"`.  See the guide on [Configuring Telemetry for a Graphistry Cluster on Kubernetes](https://github.com/graphistry/graphistry-helm/tree/main/charts/values-overrides/examples/cluster#configuring-telemetry-for-graphistry-cluster-on-kubernetes).
+
 7. **`telemetryStack.grafana.GF_SERVER_ROOT_URL`** and **`telemetryStack.grafana.GF_SERVER_SERVE_FROM_SUB_PATH`**: These settings are used to configure Grafana, especially when it's deployed behind a reverse proxy or using an ingress controller.
   - **`telemetryStack.grafana.GF_SERVER_ROOT_URL`** defines the root URL for accessing Grafana (e.g., `/grafana`).
   - **`telemetryStack.grafana.GF_SERVER_SERVE_FROM_SUB_PATH`** should be set to `true` if Grafana is accessed from a sub-path (e.g., `/grafana`) behind a reverse proxy or ingress.
-8. **`telemetryStack.dcgmExporter.DCGM_EXPORTER_CLOCK_EVENTS_COUNT_WINDOW_SIZE`**: This environment variable is used when `OTEL_CLOUD_MODE` is set to `true`, and the `dcgm-exporter` is deployed to export GPU metrics to Prometheus. It controls the frequency of GPU sampling to gather metrics. The value `1000` represents the window size for counting clock events on the GPU.
+
+8. **`telemetryStack.dcgmExporter.DCGM_EXPORTER_CLOCK_EVENTS_COUNT_WINDOW_SIZE`**: This environment variable controls the GPU metric sampling resolution for `dcgm-exporter`, which exports GPU telemetry to `Prometheus`. It defines the window size (in milliseconds) for counting clock events on the GPU.
+  - A smaller value (e.g., 500) results in higher-resolution telemetry with more frequent GPU metric updates.
+  - A larger value (e.g., 2000) reduces the data rate but lowers monitoring overhead.
+This setting applies regardless of `OTEL_CLOUD_MODE` and affects both local and cloud-based telemetry setups.
+
 9. **`telemetryStack.*.image`**: These values allow to change the image versions of the observability tools.
 
 ## Caddyfile - reverse proxy set up
