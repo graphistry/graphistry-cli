@@ -11,6 +11,16 @@ These steps show how to capture JavaScript Console Logs, Network Logs & Iframe U
 
 ### Step 2: Capture JavaScript Console Logs
 
+1. In the DevTools panel, go to the Console tab
+2. This shows JavaScript errors, warnings, and custom console.log() statements.
+3. To Save Console Logs:
+
+	- Right-click in the Console
+	- Click "Save as..."
+	- Save the .log file (or copy-paste logs into a .txt)
+
+### Step 3: Capture Network Logs
+
 1. Go to the Network tab
 2. Check the box: Preserve log (top-left)
 3. Reload the page so all requests (including iframe loads) are captured
@@ -21,10 +31,10 @@ These steps show how to capture JavaScript Console Logs, Network Logs & Iframe U
    - Preview/Response: See content
 7. To export:
    - Right-click ➜ Save all as HAR with content
-   - Or copy headers manually from the Headers tab if only one request mattersStep 3: Capture Network Logs
+   - Or copy headers manually from the Headers tab if only one request matters
 
 
-### Step 3: Get the iframe's full URL (with https/http and path)
+### Step 4: Get the iframe's full URL 
 
 1. Go to Elements tab
 2. Press Ctrl + F and search for: iframe
@@ -41,7 +51,7 @@ Right-click ➜ Copy → Copy link address
 
 Send back this link address so we can see:  `protocol` + `domain` + `subpath`
 
-### Step 4: Capture Parent Frame URL (Page Origin)
+### Step 5: Capture Parent Frame URL (Page Origin)
 
 While still in DevTools:
 
@@ -67,8 +77,7 @@ window.location.origin
 
 To confirm just protocol + domain (e.g., https://myapp.domain.com)
 
-
-Please send the following back to the Support Staff: 
+### Step 6: Send the following back to the Graphistry Support Staff: 
 
 | Item                                    | Where to Get                      |
 | --------------------------------------- | --------------------------------- |
