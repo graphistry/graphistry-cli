@@ -25,6 +25,26 @@ Between edits, restart one or all Graphistry services: `docker compose stop`  an
 We typically recommend doing targeted and localized restarts via `docker compose stop service1 service2 ...` and `docker compose up -d --force-recreate --no-deps service1 service2 ...`. Contact staff for guidance.
 
 
+#### Forge ETL GPU memory watcher
+
+Administrators can enable an optional GPU memory watcher inside the Forge ETL service (`apps/forge/etl-server-python`). The watcher periodically samples GPU memory, warns SREs, and can drain caches or restart the worker when usage stays high. Configure it via the `data/config/custom.env` file:
+
+| Variable | Purpose | Suggested default |
+| --- | --- | --- |
+| `FEP_GPU_WATCHER_ENABLED` | Set to `1/true` to activate the watcher | `0` (disabled) |
+| `FEP_GPU_WATCHER_POLL_SECONDS` | Sampling cadence in seconds | `30` |
+| `FEP_GPU_WATCHER_HEARTBEAT_SECONDS` | Optional heartbeat log interval; blank disables | `300` |
+| `FEP_GPU_WATCHER_WARN_THRESHOLD` | Warn threshold (`70%`, `10240`, etc.) | `70%` |
+| `FEP_GPU_WATCHER_KILL_THRESHOLD` | Deferral/kill threshold | `90%` |
+| `FEP_GPU_WATCHER_IDLE_THRESHOLD` | Consider GPU healthy again below this value | `60%` |
+| `FEP_GPU_WATCHER_KILL_DEFER_SECONDS` | Max time to wait for idle before restart | `300` |
+| `FEP_GPU_WATCHER_EMERGENCY_THRESHOLD` | Immediate restart threshold | `95%` |
+
+Notes:
+
+* When enabled, metrics are emitted via standard logging and (optionally) OpenTelemetry to help operators gauge cache sizes (`gpu_memory_watcher_cache_usage`).
+* The watcher runs inside each Hypercorn worker process; if you scale Forge ETL horizontally, every worker will evaluate the thresholds. Adjust thresholds if you prefer to dedicate a smaller margin on different hardware (e.g., a T4 typically leaves ~2 GB reserved for background services).
+
 ### Secondary:: docker-compose.yml, Caddyfile, `pivot-db/`
 
 * More advanced administrators may edit `docker-compose.yml` .  Maintenance is easier if you never edit it.
