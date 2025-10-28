@@ -135,6 +135,15 @@ go version go1.10.4 linux/amd64
 
 ### 7. Marketplace FAQ
 
+#### What are the default login credentials?
+
+**Username:** `admin`
+**Password:** `i-<your-instance-id>`
+
+Example: If your instance ID is `i-1234567890abcdef0`, your password is `i-1234567890abcdef0`
+
+You can find your instance ID in the AWS EC2 Console.
+
 #### No site loads or there is an Nginx 404 error
 
 Wait a few minutes for the system to finish starting. If the problem persists for more than 5-10min, log in, run `docker ps`, and for each failing service, restart it. If problems persist further, please report the results of `docker logs <service>` to the Graphistry support team and we will help out.
