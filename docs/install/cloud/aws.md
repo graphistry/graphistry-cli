@@ -34,6 +34,12 @@ Start with one of the following Linux distributions, and configure it using the 
 * Instance: See [cloud hw/sw recommendations](../../planning/hardware-software.md#cloud)
 * Security groups: ssh, http, https
 
+## AWS Marketplace Initial Access
+
+> **Hint:** For AWS Marketplace deployments, the admin account default login credentials are:
+> - **Username:** `admin`
+> - **Password:** `i-<instance-id>` (e.g., if your instance ID is `i-1234567890abcdef0`, the password is `i-1234567890abcdef0`)
+
 # 3. General installation
 
 Proceed to the instructions for [general installation](https://github.com/graphistry/graphistry-cli) and check [AWS Marketplace](aws_marketplace.md) for common AWS-specific configurations
