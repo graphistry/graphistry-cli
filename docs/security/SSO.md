@@ -25,7 +25,7 @@
 
 ### OKTA OIDC SETUP
 
-1. After logging in your OKTA account, if it show this page, click admin button. <br>
+1. After logging in your OKTA account, if it shows this page, click admin button. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_1.png">
 
 2. Go to the application page and click “Create App Integration” to create a new application. <br>
@@ -37,8 +37,8 @@
 4. Change the application name as you like and you can upload a logo for this application. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_4.png">
 
-5. <a name="okta_1_1_5"></a> Change the sign-in redirect url in the following format. Change the field in bracket to relative field. For example, this is one of the urls used in development `http://localhost:8000/o/{organization_id}/sso/oidc/{idp_name}/login/callback`
-If you are using an enterprise plan, this is the callback url for it. `http://localhost:8000/g/sso/oidc/{idp_name}/login/callback` <br>
+5. <a name="okta_1_1_5"></a> Change the sign-in redirect url using the following format. Change the field in brackets to relevant fields. For example, this is an example of a URL used in development, `http://localhost:8000/o/{organization_id}/sso/oidc/{idp_name}/login/callback`
+If you are using Site-wide SSO, the format would be: `http://localhost:8000/g/sso/oidc/{idp_name}/login/callback` <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_5.png">
 
 6. Choose “Skip group assignment for now” and save the changes. We will assign the user/group later. <br>
@@ -63,7 +63,7 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 1. Add a new person. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_2_1.png">
 
-2. Fill in the relative field. If the Activation is set to "Activate later", users will receive an email to set their password and activate the account. <br>
+2. Fill in the relevant fields. If the Activation is set to "Activate later", users will receive an email to set their password and activate the account. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_2_2.png">
 
 3. If the Activation is set to "Activate now", it will show some options for setting the password. If the "I will set password" option is ticked, you can enter a temporary password and specify if the user changes their password after initial login. <br>
@@ -78,7 +78,7 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 2. Give a name to the group. Optionally, you can add a description. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_3_2.png">
 
-3. Click the group name you create to manage the group. <br>
+3. Click the group name you created to manage the group. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_3_3.png">
 
 4. Click "Assign people" to add a person to the group. You can also remove user from group by clicking "remove". <br>
@@ -107,8 +107,8 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 5. Go to “Settings” to get “Domain”, “Client ID” and “Client Secret”.  We have to use these fields to register an Organization SSO ID Provider in Graphistry. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_1_5.png">
 
-6. Change the sign-in redirect url in the following format. Change the field in bracket to relative field. For example, this is one of the urls used in development `http://localhost:8000/o/admin/sso/oidc/test_admin/login/callback/` 
-If you are using an enterprise plan, this is the callback url for it. `http://localhost:8000/g/sso/oidc/Site_wide_SSO_Provider/login/callback/` <br>
+6. Change the sign-in redirect url using the following format. Change the field in brackets to relevant fields. For example, this is an example of a URL used in development, `http://localhost:8000/o/admin/sso/oidc/test_admin/login/callback/` 
+If you are using Site-wide SSO, the format would be: `http://localhost:8000/g/sso/oidc/Site_wide_SSO_Provider/login/callback/` <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_1_6.png">
 
 7. Save changes after completing add callback urls. <br>
@@ -161,7 +161,7 @@ If you are using an enterprise plan, this is the callback url for it. `http://lo
 
 ### KEYCLOAK OIDC SERVER SETUP
 
-1. Login to the keycloak admin console. Default username is “admin” and passwords is “graphistry”. <br>
+1. Login to the keycloak admin console. Default username is “admin” and password is “graphistry”. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_1_1.png">	
 
 2. Create a new realm for OIDC server. Move your mouse cursor to “Master” and the “add realm” button will show up. <br>
