@@ -39,7 +39,7 @@ Note:  Graphistry Hub users are required to have paid Organization account. [Sig
 <img src="static/img/OIDC_setup/oidc_setup_graphistry_1_2.png">
 
 3. Fill the information for the organization and click the create button, the "Organization ID" is unique. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_3.png">
+<img src="_static/img/OIDC_setup/oidc_setup_graphistry_1_3.png">
 
 4. Click the orange button, which is "configure SSO" button. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_4.png">
