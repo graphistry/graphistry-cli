@@ -1,6 +1,79 @@
-# OIDC Server Setup
+# Graphistry SSO Configuration Guide
 
-## Table of contents
+## Overview
+
+Graphistry Enterprise Server supports Single Sign-On (SSO) through [OIDC (OpenID Connect)](https://openid.net/connect/) providers such as **Okta**, **Entra**, **Auth0** and others. Options for SSO auth include **site-wide** for all site users or **per organization**, depending on your multi-tenancy needs.
+
+This guide walks you through configuring SSO in Graphistry. 
+---
+
+## Prerequisites
+
+Before setting up SSO:
+
+* Deploy Graphistry Enterprise Server (self-hosted or cloud)
+* Ensure TLS is configured properly (especially when using external proxies or load balancers) 
+
+---
+
+## Configuration Paths
+
+SSO setup can be done **site-wide** or at the **org-level**
+### 1. Site-wide SSO
+
+Note:  Graphistry Hub users are not able to configure Site-wide SSO, see the Organization-specific config below. 
+
+1. Click the admin user drop-down menu and select **Manage site-wide SSO** 
+
+* (Recommended) Disable traditional account creation
+* (Recommended) Set up outgoing email (for invites and notifications)
+
+### 2. Organization-specific SSO
+
+Note:  Graphistry Hub users are required to have paid Organization account. [Sign up for an Organization account on graphistry hub](https://hub.graphistry.com/users/stripe/select_org/team-annually/). 
+
+1. After login to your graphistry account, click the "Manage organization" button. <br>
+<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_1.png">
+
+2. Click the "+" button to add a new organization. <br>
+<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_2.png">
+
+3. Fill the information for the organization and click the create button, the "Organization ID" is unique. <br>
+<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_3.png">
+
+4. Click the orange button, which is "configure SSO" button. <br>
+<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_4.png">
+
+5. Click the "+" button to add new SSO providers. <br>
+<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_5.png">
+
+6. Fill the IDP Name, Host URL, Client ID and select the SSO provider. <br>
+<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_6.png">
+
+7. Example for Okta, "Client ID" and "Host URL" can found in [“Client ID”, and “Okta domain”](#okta_1_1_7) respectively. <br>
+<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_7.png">
+
+8. The SSO Provider for the organization was shown. Remember to setup the Sign-in redirect URIs in [picture](#okta_1_1_5), fill it with 
+`http://{hostname}/o/{organization_id}/sso/oidc/{idp_name}/login/callback`. <br>
+<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_8.png">
+
+
+# Configure the identity provider (OIDC details)
+
+---
+
+## Identity Provider (IdP) Setup
+
+Graphistry supports **OIDC-compliant providers**. Setup generally includes:
+
+- Refer to your IdP's documentation for creating OIDC apps and obtaining credentials.
+- Choosing the correct SSO IdP template
+- Create a name for IdP connection
+- Set the IdP Hostname and Client ID (Note: some providers may require additional fields)
+- Testing the SSO connection 
+
+## Select an IdP and follow the steps to configure the SSO connection: 
+
 1. [OKTA SETUP](#OKTA-SETUP)
     1. [OKTA OIDC SETUP](#okta-oidc-setup)
     2. [OKTA PEOPLE SETUP](#okta-people-setup)
@@ -221,31 +294,3 @@ If you are using Site-wide SSO, the format would be: `http://localhost:8000/g/ss
 
 <hr>
 
-## GRAPHISTRY SETUP
-
-### ORGANIZATION CONFIGURE SSO
-
-1. After login to your graphistry account, click the "Manage organization" button. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_1.png">
-
-2. Click the "+" button to add a new organization. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_2.png">
-
-3. Fill the information for the organization and click the create button, the "Organization ID" is unique. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_3.png">
-
-4. Click the orange button, which is "configure SSO" button. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_4.png">
-
-5. Click the "+" button to add new SSO providers. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_5.png">
-
-6. Fill the IDP Name, Host URL, Client ID and select the SSO provider. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_6.png">
-
-7. Example for Okta, "Client ID" and "Host URL" can found in [“Client ID”, and “Okta domain”](#okta_1_1_7) respectively. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_7.png">
-
-8. The SSO Provider for the organization was shown. Remember to setup the Sign-in redirect URIs in [picture](#okta_1_1_5), fill it with 
-`http://{hostname}/o/{organization_id}/sso/oidc/{idp_name}/login/callback`. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_8.png">
