@@ -33,10 +33,10 @@ Note:  Graphistry Hub users are not able to configure Site-wide SSO, see the Org
 Note:  Graphistry Hub users are required to have paid Organization account. [Sign up for an Organization account on graphistry hub](https://hub.graphistry.com/users/stripe/select_org/team-annually/). 
 
 1. After login to your graphistry account, click the "Manage organization" button. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_1.png">
+<img src="./static/img/OIDC_setup/oidc_setup_graphistry_1_1.png">
 
 2. Click the "+" button to add a new organization. <br>
-<img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_2.png">
+<img src="static/img/OIDC_setup/oidc_setup_graphistry_1_2.png">
 
 3. Fill the information for the organization and click the create button, the "Organization ID" is unique. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_3.png">
