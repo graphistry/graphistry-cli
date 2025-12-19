@@ -7,6 +7,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Development]
 
+### Added
+
+* GPU Configuration Wizard documentation (`docs/tools/gpu-config-wizard.md`)
+* Environment Variables Reference page (`docs/app-config/environment-variables.md`)
+* GPU Memory Watcher documentation in performance tuning
+
+### Changed
+
+* `./graphistry` command documentation clarified as docker compose wrapper with GPU, telemetry, and cluster context
+* Updated commands.md with improved docker compose wrapper explanation
+* Enhanced performance tuning documentation with GPU memory management
+* Updated hardware-software requirements documentation
+
 ## [v2.41.8 - 2024-10-27]
 
 ### Added

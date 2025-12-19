@@ -2,7 +2,7 @@
 
 Graphistry supports advanced command-line administration via the `./graphistry` wrapper script, `.yml` / `.env` files, and `caddy` reverse-proxy configuration.
 
-**Important**: Always use `./graphistry` instead of raw `docker compose` commands. The `./graphistry` script is a wrapper that properly loads GPU configuration, environment variables, and other settings from `data/config/custom.env`.
+**Important**: Always use `./graphistry` instead of raw `docker compose` commands. The `./graphistry` script wraps `docker compose` with required environment context: GPU assignments, telemetry, and cluster mode settings. Configuration is loaded from `data/config/custom.env`, `data/config/telemetry.env`, and `data/config/cluster.env`. Users familiar with docker compose will find the same subcommands work (up, down, ps, logs, exec, etc.).
 
 ## Login to server
 
