@@ -211,6 +211,33 @@ In the Admin portal, go to Sites and change the `Domain name` to your domain, su
 This aids scenarios such as when using an outside proxy and ensuring that web users see the intended external domain instead of the internal one leaking through
 
 
+## GPU Configuration
+
+For multi-GPU setups and GPU memory management, Graphistry provides several configuration options:
+
+* **GPU Memory Watcher**: Monitor GPU memory and automatically terminate runaway processes before OOM errors
+* **Per-Service GPU Assignment**: Assign specific GPUs to specific services for workload isolation
+* **Multi-Worker Configuration**: Configure worker counts to match your GPU configuration
+
+### Quick Setup
+
+Auto-configure optimal GPU settings using the GPU configuration wizard:
+
+```bash
+# Interactive mode
+./etc/scripts/gpu-config-wizard.sh
+
+# Export to custom.env
+./etc/scripts/gpu-config-wizard.sh -E ./data/config/custom.env
+
+# Use hardware preset (140+ available)
+./etc/scripts/gpu-config-wizard.sh -p aws-p3-8xlarge
+```
+
+See [GPU Configuration Wizard](../tools/gpu-config-wizard.md) for the full preset list and usage details.
+
+For detailed GPU configuration options, see [Performance Tuning - Multi-GPU](../debugging/performance-tuning.md#multi-gpu-tuning).
+
 ## Performance
 
 See [performance tuning](../debugging/performance-tuning.md)

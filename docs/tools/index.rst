@@ -10,3 +10,4 @@ Operations & Tools
   update-backup-migrate
   bridge
   nvidia-docker-in-docker
+  gpu-config-wizard

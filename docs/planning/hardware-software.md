@@ -181,11 +181,11 @@ Graphistry runs out-of-the-box without network access
 
 ### GPUs, GPU RAM, GPU drivers
 
-Graphistry requires [NVIDIA RAPIDS](https://rapids.ai/)-compatible  GPUs. If you can make a RAPIDS Docker container work, Graphistry should also work. 
+Graphistry requires [NVIDIA RAPIDS](https://rapids.ai/)-compatible  GPUs. If you can make a RAPIDS Docker container work, Graphistry should also work.
 
 The following GPUs, Pascal and later (Pascal, Tesla, Turing, Volta, RTX) are known to work with Graphistry:
 
-* T4, P100, V100, RTX, A100
+* T4, P100, V100, RTX, A100, H100
 * ... Found in DGX, DGX2, and AWS/Azure/GCP
 
 The GPU should provide 1+ GB of memory per concurrent user. A minimum of 4GB of GPU RAM is required, and 12GB+ is recommended. Lower is possible for development. For help evaluating GPUs, we recommend reaching out to the Graphistry team or the [RAPIDS.ai community](https://rapids.ai/community.html).
@@ -193,6 +193,30 @@ The GPU should provide 1+ GB of memory per concurrent user. A minimum of 4GB of 
 RAPIDS requires specific Nvidia drivers. Graphistry releases align with [Nvidia RAPIDS.ai](https://rapids.ai/) releases, so pick drivers compatible with the RAPIDS.ai distribution from the same time period. At time of writing, this would be CUDA 11.0 (RAPIDS 2022.x) or 11.5+ (Graphistry AI extensions)
 
 If also using a hypervisor, the hypervisor GPU driver should match the guest OS GPU driver, and due to vGPUs not currently supporting CUDA Unified Memory, set `RMM_ALLOCATOR=default` in Graphistry setting file `data/config/custom.env`.
+
+### GPU Memory Protection
+
+For production deployments, enable the **GPU Memory Watcher** to automatically monitor GPU memory usage and terminate runaway processes before they cause OOM (Out of Memory) errors:
+
+```bash
+# In data/config/custom.env
+FEP_GPU_WATCHER_ENABLED=1
+FEP_GPU_WATCHER_WARN_THRESHOLD=70%
+FEP_GPU_WATCHER_KILL_THRESHOLD=90%
+FEP_GPU_WATCHER_EMERGENCY_THRESHOLD=95%
+```
+
+See [Performance Tuning - GPU Memory Watcher](../debugging/performance-tuning.md#gpu-memory-watcher) for detailed configuration.
+
+### GPU Configuration Tools
+
+Use the [GPU Configuration Wizard](../tools/gpu-config-wizard.md) to auto-generate optimal GPU settings for your hardware:
+
+```bash
+./etc/scripts/gpu-config-wizard.sh -E ./data/config/custom.env
+```
+
+The wizard supports 140+ hardware presets for AWS, Azure, GCP, NVIDIA DGX, and more. See [GPU Configuration Wizard](../tools/gpu-config-wizard.md) for the full preset list and usage details.
 
 ### CPU Cores & CPU RAM
 
