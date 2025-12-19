@@ -37,7 +37,7 @@ Starting with `2.23.0`, you can use old bridge server versions with new Graphist
 ### Generate a key
 
 * Can be any string
-* Ex: Unguessable strings via `docker compose exec pivot /bin/bash -c "../../../node_modules/uuid/bin/uuid v4"` => `<my_key_1>`
+* Ex: Unguessable strings via `./graphistry exec pivot /bin/bash -c "../../../node_modules/uuid/bin/uuid v4"` => `<my_key_1>`
 
 ### Graphistry GPU application server
 
@@ -56,7 +56,7 @@ SPLUNK_SERVER_KEY=my_key_1
 SPLUNK_PROXY_KEY=my_key_2
 ```
 
-* Launch: Restart Graphistry via `docker compose stop pivot && docker compose up -d pivot`. 
+* Launch: Restart Graphistry via `./graphistry stop pivot && ./graphistry up -d pivot`. 
 
 The connector will start looking for the data bridge.
 
@@ -94,7 +94,7 @@ Edit `.env`. See above example.
 3. Launch
 
 ```
-docker compose up -d
+./graphistry up -d
 ```
 
 The data bridge will autoconnect to your Graphistry application server. 
@@ -119,7 +119,7 @@ The bridge is a standard minimal Docker container (alpine):
 
 * Login as root (user 0): `docker exec -it -u 0 <container_id>`
 * Install packages as root: `apt add curl`
-* Watch logs via `docker compose logs -f -t --tail=1`
+* Watch logs via `./graphistry logs -f -t --tail=1`
 
 ## Debugging
 
@@ -132,7 +132,7 @@ DEBUG=*
 GRAPHISTRY_LOG_LEVEL=TRACE
 ```
 
-Watch your bridge's logs and your app server's logs: `docker compose logs -f -t --tail=1`
+Watch your bridge's logs and your app server's logs: `./graphistry logs -f -t --tail=1`
 
 
 ### Diagnose

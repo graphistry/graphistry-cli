@@ -76,7 +76,7 @@ Graphistry leverages `docker-compose` and the AWS Marketplace AMI preconfigures 
 
 ```bash
 cd ~/graphistry
-sudo docker compose ps
+sudo ./graphistry ps
 ```
 
 =>

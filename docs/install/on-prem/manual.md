@@ -27,7 +27,7 @@ If `nvidia` is already your `docker info | grep Default` runtime:
 wget -O release.tar.gz "https://..."
 tar -xvvf release.tar.gz
 docker load -i containers.tar.gz
-docker compose up -d
+./graphistry up -d
 ```
 
 ## 1. Prerequisites
@@ -84,6 +84,6 @@ docker load -i containers.tar
 
 ## 5. Start
 
-Launch with `docker compose up`, and stop with `ctrl-c`. To start as a background daemon, use `docker compose up -d`.
+Launch with `./graphistry up`, and stop with `ctrl-c`. To start as a background daemon, use `./graphistry up -d`.
 
 Congratulations, you have installed Graphistry!

@@ -17,7 +17,7 @@ A *baremetal OS* (no hypervisor) or *passthrough driver* (hypervisor with non-vG
   * Graphistry already automatically uses all GPUs exposed to it, primarily for scaling to more user sessions
   * New APIs are starting to use multi-GPUs for acceleration as well
 * Multiple Graphistry installs
-  * You can launch concurrent instances of Graphistry using docker: `docker compose up -p my_unique_namespace_123`
+  * You can launch concurrent instances of Graphistry using docker: `./graphistry -p my_unique_namespace_123 up`
   * You can configure docker to use different GPUs or share the same ones
 * Isolate Graphistry from other GPU software
   * Docker allows picking which GPUs + CPUs are used

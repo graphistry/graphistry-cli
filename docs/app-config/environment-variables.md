@@ -4,9 +4,9 @@ This page provides a centralized reference for all environment variables that ca
 
 For changes to take effect, restart the affected services:
 ```bash
-./release stop && ./release up -d
+./graphistry stop && ./graphistry up -d
 # Or for specific services:
-./release stop forge-etl-python && ./release up -d
+./graphistry stop forge-etl-python && ./graphistry up -d
 ```
 
 ## Logging Configuration

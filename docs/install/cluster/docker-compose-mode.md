@@ -190,7 +190,7 @@ Now that the NFS share is set up, we can configure **Docker Compose** for **Grap
     On the leader and on each follower node, run the following command to start the Docker Compose instance:
 
     ```bash
-    ./release up -d
+    ./graphistry up -d
     ```
 
     This will start the **Graphistry** containers across all nodes, enabling them to connect to the PostgreSQL instance on the leader node. If the leader is not ready, the followers will wait for the PostgreSQL service to become available. Once the leader is online, the followers will resume their operations, ensuring a smooth startup. For example, follower nodes will log messages like:
@@ -219,7 +219,7 @@ After the deployment, ensure that the following checks are in place:
 To verify the operation, you can check the logs of each node using:
 
 ```bash
-./release logs
+./graphistry logs
 ```
 
 ## Usage

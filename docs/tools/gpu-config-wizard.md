@@ -281,7 +281,7 @@ After generating settings:
 2. Restart GPU services:
 
 ```bash
-./release up --force-recreate forge-etl-python streamgl-gpu dask-cuda-worker
+./graphistry up --force-recreate forge-etl-python streamgl-gpu dask-cuda-worker
 ```
 
 ## Fine-Grained Control

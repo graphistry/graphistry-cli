@@ -20,9 +20,9 @@ See [user creation docs](../tools/user-creation.md)
 * Graphistry is primarily configured by setting values in `data/config/custom.env`
 * Connector, ontology, and pivot configuration is optionally via `data/pivot-db/config/config.json`. Many relevant options are [detailed in a reference page](configure-investigation.md).
 
-Between edits, restart one or all Graphistry services: `docker compose stop`  and `docker compose up -d`.
+Between edits, restart one or all Graphistry services: `./graphistry stop`  and `./graphistry up -d`.
 
-We typically recommend doing targeted and localized restarts via `docker compose stop service1 service2 ...` and `docker compose up -d --force-recreate --no-deps service1 service2 ...`. Contact staff for guidance.
+We typically recommend doing targeted and localized restarts via `./graphistry stop service1 service2 ...` and `./graphistry up -d --force-recreate --no-deps service1 service2 ...`. Contact staff for guidance.
 
 
 ### Secondary:: docker-compose.yml, Caddyfile, `pivot-db/`
@@ -99,7 +99,7 @@ For visualizations to be embeddable in different origin sites, enable `COOKIE_SE
 COOKIE_SAMESITE=None
 ```
 
-... then restart: `docker compose up -d --force-recreate --no-deps nexus`
+... then restart: `./graphistry up -d --force-recreate --no-deps nexus`
 
 
 ### Setup free Automatic TLS
@@ -182,8 +182,8 @@ Custom TLS setups often fail due to the certificate, OS, network, Caddy config, 
 * Test the certificate
 * Test a [standalone Caddy static file server](https://www.baty.net/2018/using-caddy-for-serving-static-content/)
 * ... Including on another box, if OS/network issues are suspected
-* Check the logs of `docker compose logs -f -t caddy nginx`
-* Test whether the containers are up and ports match via `docker compose ps`, `curl`, and `curl` from within a docker container (so within the docker network namespace)
+* Check the logs of `./graphistry logs -f -t caddy nginx`
+* Test whether the containers are up and ports match via `./graphistry ps`, `curl`, and `curl` from within a docker container (so within the docker network namespace)
 
 If problems persist, please reach out to your Graphistry counterparts. Additional workarounds are possible.
 
@@ -308,7 +308,7 @@ SPLUNK_HOST=...
 
 2. Restart `graphistry`, or at least the `pivot` service:
 
-`docker compose stop && docker compose up -d` or `docker compose stop nginx pivot && docker compose up -d`
+`./graphistry stop && ./graphistry up -d` or `./graphistry stop nginx pivot && ./graphistry up -d`
 
 3. Test
 

@@ -28,7 +28,7 @@ Note: In previous versions (< `v2.35`), the file was `containers.tar`
 **2. Launch** from the folder with `docker-compose.yml` if not already up, and likely using `sudo`:
 
 ```bash
-docker compose up -d
+./graphistry up -d
 ```
 
 Note: Takes 1-3 min, and around 5 min, `docker ps` should report all services as `healthy`

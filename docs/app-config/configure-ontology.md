@@ -15,7 +15,7 @@ See below for the list of built-in types they map to.
 ## Define custom ontologies
 
 1. Edit `data/investigations/config/config.json` as per below
-2. Restart docker service `pivot`: `docker compose restart pivot`
+2. Restart docker service `pivot`: `./graphistry restart pivot`
 
 Generally, you can limit the amount of work by mapping custom column names to built-in types, and thereby reuse their preconfigured settings.
 
@@ -73,7 +73,7 @@ For example, to create a new node type `ip`,
 
 2. Restart the pivot service:
 
-```user@server.com:/var/graphistry $ docker compose stop pivot nginx && docker compose up -d```
+```user@server.com:/var/graphistry $ ./graphistry stop pivot nginx && ./graphistry up -d```
 
 ### Override default node/edge titles
 
@@ -128,7 +128,7 @@ For example, to recognize `src_ip` and `dest_ip` columns as both generating `ip`
 
 2. Restart the pivot service:
 ```
-user@server.com:/var/graphistry $ docker compose stop pivot nginx && docker compose up -d
+user@server.com:/var/graphistry $ ./graphistry stop pivot nginx && ./graphistry up -d
 ```
 
 ## Built-in types
@@ -190,7 +190,7 @@ You can put any regular expression here:
 Graphistry tries to detect syntax error, and upon one, logs the error and stops. To see what is going on:
 
 `docker ps` <- see if `pivot` is unhealthy or in a restart loop
-`docker compose logs pivot` <- see the precise error message
+`./graphistry logs pivot` <- see the precise error message
 
 2. Satisfactory configuration
 
