@@ -50,7 +50,7 @@ Note:  Graphistry Hub users are required to have paid Organization account. [Sig
 6. Fill the IDP Name, Host URL, Client ID and select the SSO provider. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_6.png">
 
-7. Example for Okta, "Client ID" and "Host URL" can found in [“Client ID”, and “Okta domain”](#okta_1_1_7) respectively. <br>
+7. Example for Okta, "Client ID" and "Host URL" can found in ["Client ID", and "Okta domain"](#okta_1_1_7) respectively. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_graphistry_1_7.png">
 
 8. The SSO Provider for the organization was shown. Remember to setup the Sign-in redirect URIs in [picture](#okta_1_1_5), fill it with 
@@ -101,10 +101,10 @@ Graphistry supports **OIDC-compliant providers**. Setup generally includes:
 1. After logging in your OKTA account, if it shows this page, click admin button. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_1.png">
 
-2. Go to the application page and click “Create App Integration” to create a new application. <br>
+2. Go to the application page and click "Create App Integration" to create a new application. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_2.png">
 
-3. Select “OIDC - OpenID Connect” in the Sign-in method section and “Single-Page Application” at the Application Type section. <br>
+3. Select "OIDC - OpenID Connect" in the Sign-in method section and "Single-Page Application" at the Application Type section. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_3.png">
 
 4. Change the application name as you like and you can upload a logo for this application. <br>
@@ -114,20 +114,20 @@ Graphistry supports **OIDC-compliant providers**. Setup generally includes:
 If you are using Site-wide SSO, the format would be: `http://localhost:8000/g/sso/oidc/{idp_name}/login/callback` <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_5.png">
 
-6. Choose “Skip group assignment for now” and save the changes. We will assign the user/group later. <br>
+6. Choose "Skip group assignment for now" and save the changes. We will assign the user/group later. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_6.png">
 
-7. Record the field named “Client ID”, and “Okta domain”. Using these fields allows you to register an Organization SSO ID Provider in Graphistry.  <a name="okta_1_1_7"></a> <br>
+7. Record the field named "Client ID", and "Okta domain". Using these fields allows you to register an Organization SSO ID Provider in Graphistry.  <a name="okta_1_1_7"></a> <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_7.png">
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_8.png">
 
 8. Assign persons to application. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_9.png">
 
-9. Click “Assign” on the line of the person you want to assign the application. <br>
+9. Click "Assign" on the line of the person you want to assign the application. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_10.png">
 
-10. Click “Assign” on the line of the group you want to assign the application. If assigned by group, all people in the group can login to this application. <br>
+10. Click "Assign" on the line of the group you want to assign the application. If assigned by group, all people in the group can login to this application. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_okta_1_11.png">
 
 
@@ -165,19 +165,19 @@ If you are using Site-wide SSO, the format would be: `http://localhost:8000/g/ss
 
 ### AUTH0 OIDC SETUP
 
-1. After signing an account for Auth0, select “Company” as the account type so you can restrict who can log in to this organization. Fill in the company's name and select size for company. <br>
+1. After signing an account for Auth0, select "Company" as the account type so you can restrict who can log in to this organization. Fill in the company's name and select size for company. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_1_1.png">
 
 2. You can change the domain name and country. Changing the country will change the host url. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_1_2.png">
 
-3. Click the “Application” in the Application section to go to the application page. Under the application panel, click “Create Application” to create a new application. <br>
+3. Click the "Application" in the Application section to go to the application page. Under the application panel, click "Create Application" to create a new application. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_1_3.png">
 
-4. Name your application and select “Single Page Web Applications”. <br>
+4. Name your application and select "Single Page Web Applications". <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_1_4.png">
 
-5. Go to “Settings” to get “Domain”, “Client ID” and “Client Secret”.  We have to use these fields to register an Organization SSO ID Provider in Graphistry. <br>
+5. Go to "Settings" to get "Domain", "Client ID" and "Client Secret".  We have to use these fields to register an Organization SSO ID Provider in Graphistry. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_1_5.png">
 
 6. Change the sign-in redirect url using the following format. Change the field in brackets to relevant fields. For example, this is an example of a URL used in development, `http://localhost:8000/o/admin/sso/oidc/test_admin/login/callback/` 
@@ -189,36 +189,36 @@ If you are using Site-wide SSO, the format would be: `http://localhost:8000/g/ss
 8. Disable grants to use organization function. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_1_7.png">
 
-9. Change the Organization setting to “Team members of organizations” and click “Save Changes“. <br>
+9. Change the Organization setting to "Team members of organizations" and click "Save Changes". <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_1_8.png">
 
 
 ### AUTH0 USER SETUP
 
-1. Go to ”User Management” and select the user to go to the user page. Click “Create User” to create a new user. <br>
+1. Go to "User Management" and select the user to go to the user page. Click "Create User" to create a new user. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_2_1.png">
 
-2. Fill in all of the fields and click “Create” to create a new user. <br>
+2. Fill in all of the fields and click "Create" to create a new user. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_2_2.png">
 
 ### AUTH0 ORGANIZATION
 
-1. Go to “Organizations” and click “Create Organization” to create a new organization. <br>
+1. Go to "Organizations" and click "Create Organization" to create a new organization. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_3_1.png">	
 
 2. Name your organization and set your displayed name. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_3_2.png">	
 
-3. Record your “Organization ID” which you'll need when you create your org sso id provider. <br>
+3. Record your "Organization ID" which you'll need when you create your org sso id provider. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_3_3.png">	
 
 4. You can change these fields to adjust the UI of the login page. Make sure to save your changes. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_3_4.png">	
 
-5. Go to the “Member” session and click “Add Members” to add members to your organization. <br>
+5. Go to the "Member" session and click "Add Members" to add members to your organization. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_3_5.png">	
 
-6. After selecting the user you want to add, click “Add Member” to add them to the organization. <br>
+6. After selecting the user you want to add, click "Add Member" to add them to the organization. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_auth0_3_6.png">	
 
 7. Go to "Connections" session and click "Enable Connections" to add connections to organization. <br>
@@ -234,35 +234,35 @@ If you are using Site-wide SSO, the format would be: `http://localhost:8000/g/ss
 
 ### KEYCLOAK OIDC SERVER SETUP
 
-1. Login to the keycloak admin console. Default username is “admin” and password is “graphistry”. <br>
+1. Login to the keycloak admin console. Default username is "admin" and password is "graphistry". <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_1_1.png">	
 
-2. Create a new realm for OIDC server. Move your mouse cursor to “Master” and the “add realm” button will show up. <br>
+2. Create a new realm for OIDC server. Move your mouse cursor to "Master" and the "add realm" button will show up. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_1_2.png">	
 
 3. Add a name to this realm. We will take this realm name as idp name when you create an OrgSSO object. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_1_3.png">	
 
-4. After realm creation success, go to the “clients” section and click “create” to create a new client for OIDC. <br>
+4. After realm creation success, go to the "clients" section and click "create" to create a new client for OIDC. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_1_4.png">	
 
-5. Fill in “client id” for and this client id is the Client ID you have to use when create OrgSSO object. <br>
+5. Fill in "client id" for and this client id is the Client ID you have to use when create OrgSSO object. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_1_5.png">
 
-6. Change the “Access type” from public to confidential. Add valid Redirect URls to it. For example, `http://localhost/*` , the * means it will take anything after the host. <br>
+6. Change the "Access type" from public to confidential. Add valid Redirect URls to it. For example, `http://localhost/*` , the * means it will take anything after the host. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_1_6.png">
 
-7. Go to “Credentials” to get the secret key. <br>
+7. Go to "Credentials" to get the secret key. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_1_7.png">
 
 ### KEYCLOAK USER SETUP
-1. Go to the “User” section and click “add user”. <br>
+1. Go to the "User" section and click "add user". <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_2_1.png">	
 
-2. Fill in the info when you create a user. Only username attribute is required. For the “Required User Actions” attribute, you can choose the action for the user to verify their email or update password for the first time they login. <br>
+2. Fill in the info when you create a user. Only username attribute is required. For the "Required User Actions" attribute, you can choose the action for the user to verify their email or update password for the first time they login. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_2_2.png">
 
-3. Go to the “Credentials” section, create a password for this user so they can log in to this server. If you toggle on the “Temporary”, users have to update the password for the first time they login. <br>
+3. Go to the "Credentials" section, create a password for this user so they can log in to this server. If you toggle on the "Temporary", users have to update the password for the first time they login. <br>
 <img src="../static/img/OIDC_setup/oidc_setup_keycloak_2_3.png">
 
 

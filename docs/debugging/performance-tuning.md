@@ -261,8 +261,8 @@ Configure worker counts to match your GPU configuration:
 - Workers = GPUs: One-to-one assignment (optimal)
 
 **Round-robin GPU assignment examples:**
-- 2 GPUs, 5 workers → GPU 0 gets workers [0,2,4], GPU 1 gets [1,3]
-- 4 GPUs, 1 worker → GPU 0 gets worker [0], GPUs [1,2,3] idle
+- 2 GPUs, 5 workers -> GPU 0 gets workers [0,2,4], GPU 1 gets [1,3]
+- 4 GPUs, 1 worker -> GPU 0 gets worker [0], GPUs [1,2,3] idle
 
 **Recommended configurations:**
 

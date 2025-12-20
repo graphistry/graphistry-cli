@@ -74,7 +74,7 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
 
 3. **Set appropriate permissions on the shared directory**:
 
-    To ensure the shared directory has the correct permissions and can be written to by NFS clients, it’s important to verify and configure access properly. The user is responsible for ensuring that the shared directory has the necessary permissions to allow remote follower nodes to read, write, and modify files as needed. For instance, you may need to apply the following changes to make sure the shared directory is accessible by NFS clients:
+    To ensure the shared directory has the correct permissions and can be written to by NFS clients, it's important to verify and configure access properly. The user is responsible for ensuring that the shared directory has the necessary permissions to allow remote follower nodes to read, write, and modify files as needed. For instance, you may need to apply the following changes to make sure the shared directory is accessible by NFS clients:
 
     ```bash
     # Set permissions to allow full access (read, write, execute) for all users
@@ -105,7 +105,7 @@ NFS will be used to share the dataset directory between nodes. Follow the steps 
     - `rw`: Allows read and write access.
     - `sync`: Ensures that changes are written to disk before responding to the client.
     - `no_subtree_check`: Disables subtree checking to improve performance.
-    - `no_root_squash`: Retains root access for the client’s root user on the shared directory, which can be necessary for certain tasks but should be used with caution due to the elevated permissions.
+    - `no_root_squash`: Retains root access for the client's root user on the shared directory, which can be necessary for certain tasks but should be used with caution due to the elevated permissions.
 
     *Notice: The following NFS configuration is provided as an example. Please ensure the settings align with your security policies.*
 

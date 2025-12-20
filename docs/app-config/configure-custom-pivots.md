@@ -77,7 +77,7 @@ Derived system pivot {
 * Followed by, in production mode:
 
 ```
-✅ Loaded pivot [neo4j-schema-neo4j-connector][Neo4j: View schema]...
+[OK] Loaded pivot [neo4j-schema-neo4j-connector][Neo4j: View schema]...
 ```
 
 ### Overriding parameters

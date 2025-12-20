@@ -5,7 +5,7 @@ These steps show how to capture JavaScript Console Logs, Network Logs & Iframe U
 ### Step 1: Open Chrome Developer Tools
 
 1. Open the webapp in Chrome and reproduce the issue
-2. Right-click ➜ Inspect
+2. Right-click > Inspect
    Or Ctrl+Shift+I (Windows/Linux) / Cmd+Option+I (Mac)
 
 
@@ -28,7 +28,7 @@ These steps show how to capture JavaScript Console Logs, Network Logs & Iframe U
 3. Reload the page so all requests (including iframe loads) are captured
 4. In the filter/search bar, type: graph.html
 5. *Click on the matching request for your issue*
-6. You’ll now see detailed tabs:
+6. You'll now see detailed tabs:
    - Headers: View full Request and Response headers
    - Preview/Response: See content
 7. To export:
@@ -42,7 +42,7 @@ These steps show how to capture JavaScript Console Logs, Network Logs & Iframe U
 1. Go to Elements tab
 2. Press Ctrl + F and search for: iframe
 3. Find the iframe element that loads graph.html
-4. Check the src attribute — this is the full URL
+4. Check the src attribute - this is the full URL
 
 ### Example:
 
@@ -51,7 +51,7 @@ These steps show how to capture JavaScript Console Logs, Network Logs & Iframe U
 ```
 ![image](https://github.com/user-attachments/assets/2a9efc29-297e-4fa1-aef1-15c893298607)
 
-Right-click ➜ Copy link address
+Right-click > Copy link address
 
 Send back this link address to Graphistry Support Team so we can see:  `protocol` + `domain` + `subpath`
 
@@ -67,7 +67,7 @@ While still in DevTools:
 window.location.href
 ```
 
-This gives the parent frame's full URL — e.g.,
+This gives the parent frame's full URL, e.g.,
 
 ```
 https://myserver.domain.com/path

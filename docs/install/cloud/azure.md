@@ -57,7 +57,7 @@ See general installation instructions for currently supported Linux versions (su
 3. **Basics**: As desired; make sure can login, such as by SSH public key; needs to be a region with GPU quota
 4. **Size**: GPU of all disk types, e.g., NC6v2 (hdd) is cheapest for development
 5. **Settings**: Open ports for administration (SSH) and usage (HTTP, HTTPS)
-6. **Summary**: Should say “`Validation passed`” at the top -> visually audit settings + hit `Create`
+6. **Summary**: Should say "`Validation passed`" at the top -> visually audit settings + hit `Create`
 
 ## 2. Confirm proper instance
 
