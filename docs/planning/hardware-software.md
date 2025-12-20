@@ -63,7 +63,7 @@ For all of the below, ensure ports 22, 80, 443, and 100GB+ disk
 * g4dn.2xlarge+ / P3.2+ (V100) / P4+ (A100) ***Recommended for team use***
 
 AWS support includes Marketplace, prebuilt AMIs / BYOL, and from-source automation
-Pricing: http://ec2instances.info ($1.4K+/mo at time of writing)
+Pricing: https://ec2instances.info ($1.4K+/mo at time of writing)
 
 *Supported Azure instances*:
 

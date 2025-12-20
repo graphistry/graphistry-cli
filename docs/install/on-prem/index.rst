@@ -39,7 +39,7 @@ http://localhost
 ```
 
 * Create an account, and then try running a prebuilt Jupyter Notebook from the dashboard!
-  * The first account gets an admin role, upon which account self-registration closes. Admins can then invite users or open self-registration. See [User Creation](user-creation.md) for more information.
+  * The first account gets an admin role, upon which account self-registration closes. Admins can then invite users or open self-registration. See [User Creation](../../tools/user-creation.md) for more information.
 
 * Try a visualization like http://localhost/graph/graph.html?dataset=Facebook&play=5000&splashAfter=false 
   * **Warning**: First viz load may be slow (1 min) as RAPIDS generates **just-in-time** code for each GPU worker upon first encounter, and/or require a page refresh

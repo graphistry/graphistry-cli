@@ -37,6 +37,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - Ubuntu 18.04 LTS (EOL April 2023)
   - RHEL 7.6 (Maintenance Support ended June 2024)
 
+### Fixed
+
+* Broken internal links in benchmarking.md (telemetry path corrected)
+* User-creation.md reference path in on-prem installation guide
+* Orphan file `debugging-front-end.md` added to debugging toctree
+* HTTP to HTTPS for external URLs (hub.graphistry.com, github.com, ec2instances.info)
+* Microsoft docs URLs updated from docs.microsoft.com to learn.microsoft.com
+
 ## [v2.41.8 - 2024-10-27]
 
 ### Added

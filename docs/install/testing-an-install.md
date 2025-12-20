@@ -303,7 +303,7 @@ Tests Nvidia RAPIDS  (VERSION is your Graphistry version)
     * Check browser and network logs for Websocket errors, which may require a change in `Caddy` reverse proxying
 * Notebooks
   * Running the analyst notebook example generates running visualizations (see logged-in homepage)
-  * For further information about the Notebook client, see the OSS project [PyGraphistry](http://github.com/graphistry/pygraphistry) ( [PyPI](https://pypi.org/project/graphistry/) ).
+  * For further information about the Notebook client, see the OSS project [PyGraphistry](https://github.com/graphistry/pygraphistry) ( [PyPI](https://pypi.org/project/graphistry/) ).
 * Investigations
   * ``site.com/pivot`` loads
   * ``site.com/pivot/connectors`` loads a list of connectors

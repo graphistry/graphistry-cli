@@ -1,7 +1,7 @@
 
 # FAQ
 
-* Where are the docs? See this [GitHub repository](https://github.com/graphistry/graphistry-cli) for admin docs and [Graphistry Hub docs](http://hub.graphistry.com/docs) (or http://your_graphistry/docs) for analyst and developer docs
+* Where are the docs? See this [GitHub repository](https://github.com/graphistry/graphistry-cli) for admin docs and [Graphistry Hub docs](https://hub.graphistry.com/docs) (or http://your_graphistry/docs) for analyst and developer docs
 
 * Where do I get help? Whether community chat, email, tickets, a call, or even a training, [pick the most convienent option](https://www.graphistry.com/support)
 

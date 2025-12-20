@@ -1,6 +1,6 @@
 # Configure Dashboards
 
-Graphistry maintains [graph-app-kit](http://github.com/graphistry/graph-app-kit), which extends [Streamlit](https://streamlit.io/) with Docker, multi-app, graph, and other practical extensions.
+Graphistry maintains [graph-app-kit](https://github.com/graphistry/graph-app-kit), which extends [Streamlit](https://streamlit.io/) with Docker, multi-app, graph, and other practical extensions.
 
 ## Default configuration
 

@@ -5,6 +5,7 @@ Debugging & Performance Tuning
    :maxdepth: 1
 
    troubleshooting
+   debugging-front-end
    debug-container-networking
    debug-logs
    performance-tuning
