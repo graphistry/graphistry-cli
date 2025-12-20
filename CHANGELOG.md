@@ -16,6 +16,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 * Legacy setup guides subfolder with EOL documentation (`docs/install/on-prem/legacy/`)
 * CUDA compatibility matrix and GPU architecture support table in hardware-software.md
 * Documentation build wrapper script (`build-docs.sh`) with `--help`, format selection, auto-clean, and error handling
+* Scripts Reference page (`docs/tools/scripts-reference.md`) - comprehensive index of all admin/operator scripts with cross-references to existing documentation
 
 ### Changed
 
@@ -45,6 +46,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 * HTTP to HTTPS for external URLs (hub.graphistry.com, github.com, ec2instances.info)
 * Microsoft docs URLs updated from docs.microsoft.com to learn.microsoft.com
 * Air-gapped environment support: README.md absolute URLs converted to relative paths during docs build
+* REST API auth documentation URL corrected from `/docs/api/2/rest/auth/` to `/docs/api/1/rest/auth/`
 
 ## [v2.41.8 - 2024-10-27]
 

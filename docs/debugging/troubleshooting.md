@@ -546,7 +546,7 @@ Common issues:
 ```
 
 Common issues:
-- OpenCL UUID format: Use integer format (`0,1,2`) not UUID format for `STREAMGL_GPU_CUDA_VISIBLE_DEVICES`
+- OpenCL UUID format: Use integer format (`0,1,2`) not UUID format for `STREAMGL_CUDA_VISIBLE_DEVICES`
 - PM2 process manager issues: Check for worker spawn errors
 
 ### streamgl-viz

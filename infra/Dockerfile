@@ -33,6 +33,7 @@ RUN sed -i '\
     s|\[Debugging \& performance\](https://graphistry-admin-docs.readthedocs.io/en/latest/debugging/index.html)|<a href="debugging/index.html">Debugging \& performance</a>|g; \
     s|\[Security\](https://graphistry-admin-docs.readthedocs.io/en/latest/security/index.html)|<a href="security/index.html">Security</a>|g; \
     s|\[Operations \& tools\](https://graphistry-admin-docs.readthedocs.io/en/latest/tools/index.html)|<a href="tools/index.html">Operations \& tools</a>|g; \
+    s|\[Scripts reference\](https://graphistry-admin-docs.readthedocs.io/en/latest/tools/scripts-reference.html)|<a href="tools/scripts-reference.html">Scripts reference</a>|g; \
     s|\[FAQ\](https://graphistry-admin-docs.readthedocs.io/en/latest/faq/index.html)|<a href="faq.html">FAQ</a>|g; \
     s|\[support options\](https://graphistry-admin-docs.readthedocs.io/en/latest/support.html)|<a href="support.html">support options</a>|g' \
     /docs/source/README.md

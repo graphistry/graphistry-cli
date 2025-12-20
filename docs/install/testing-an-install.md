@@ -8,7 +8,7 @@ Most of the testing and inspection is standard for Docker-based web apps: `docke
 
 * For logs throughout your session, you can run `./graphistry logs -f -t --tail=1` and `./graphistry logs -f -t --tail=1 SOME_SERVICE_NAME` to see the effects of your activities. Modify `custom.env` to increase `GRAPHISTRY_LOG_LEVEL` and `LOG_LEVEL` to `DEBUG` for increased logging, and `/etc/docker/daemon.json` to use log driver `json-file` for local logs.
 
-**NOTE**: Sections 4a and 4b below reference the **removed** 1.0 REST upload API (returns HTTP 410 Gone). For current API testing, use the [v2 REST API with JWT authentication](https://hub.graphistry.com/docs/api/2/rest/auth/).
+**NOTE**: Sections 4a and 4b below reference the **removed** 1.0 REST upload API (returns HTTP 410 Gone). For current API testing, use the [v2 REST API with JWT authentication](https://hub.graphistry.com/docs/api/1/rest/auth/).
 
 ## 1. Start
 
@@ -83,7 +83,7 @@ f0bc21b5bda2   compose_redis_1                   0.05%     6.781MiB / 31.27GiB  
 ## 4a. ~~Test 1.0 API uploads~~ (REMOVED)
 
 > **WARNING**: API v1 VGraph has been permanently removed and returns HTTP 410 Gone.
-> Use the [v2 REST API with JWT authentication](https://hub.graphistry.com/docs/api/2/rest/auth/) instead.
+> Use the [v2 REST API with JWT authentication](https://hub.graphistry.com/docs/api/1/rest/auth/) instead.
 > PyGraphistry 0.47.0+ requires JWT authentication.
 
 <details>

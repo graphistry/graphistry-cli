@@ -116,9 +116,9 @@ Each GPU service can be assigned to specific GPUs via environment variables:
 CUDA_VISIBLE_DEVICES=0,1,2,3
 
 # Per-service overrides
-FEP_CUDA_VISIBLE_DEVICES=0,1          # forge-etl-python
-STREAMGL_GPU_CUDA_VISIBLE_DEVICES=2,3 # streamgl-gpu
-DCW_CUDA_VISIBLE_DEVICES=0,1          # dask-cuda-worker
+FORGE_CUDA_VISIBLE_DEVICES=0,1     # forge-etl-python
+STREAMGL_CUDA_VISIBLE_DEVICES=2,3  # streamgl-gpu
+DCW_CUDA_VISIBLE_DEVICES=0,1       # dask-cuda-worker
 ```
 
 See [Environment Variables](../app-config/environment-variables.md#per-service-gpu-assignment) for details.

@@ -4,6 +4,7 @@ Operations & Tools
 .. toctree::
   :maxdepth: 1
 
+  scripts-reference
   user-creation
   developer
   backup-and-restore

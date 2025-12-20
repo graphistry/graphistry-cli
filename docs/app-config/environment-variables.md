@@ -86,15 +86,15 @@ See [Performance Tuning - GPU Memory Watcher](../debugging/performance-tuning.md
 By default, `CUDA_VISIBLE_DEVICES` applies to all GPU services. For advanced multi-GPU configurations, override per service.
 
 **Fallback chain**:
-1. Service-specific variable (e.g., `FEP_CUDA_VISIBLE_DEVICES`)
+1. Service-specific variable (e.g., `FORGE_CUDA_VISIBLE_DEVICES`)
 2. Global `CUDA_VISIBLE_DEVICES`
 3. Default: GPU 0
 
 | Variable | Service |
 |----------|---------|
 | `CUDA_VISIBLE_DEVICES` | Global default for all services |
-| `FEP_CUDA_VISIBLE_DEVICES` | forge-etl-python |
-| `STREAMGL_GPU_CUDA_VISIBLE_DEVICES` | streamgl-gpu |
+| `FORGE_CUDA_VISIBLE_DEVICES` | forge-etl-python |
+| `STREAMGL_CUDA_VISIBLE_DEVICES` | streamgl-gpu |
 | `DCW_CUDA_VISIBLE_DEVICES` | dask-cuda-worker |
 | `DASK_SCHEDULER_CUDA_VISIBLE_DEVICES` | dask-scheduler |
 | `GAK_PUBLIC_CUDA_VISIBLE_DEVICES` | graph-app-kit-public |
@@ -112,8 +112,8 @@ By default, `CUDA_VISIBLE_DEVICES` applies to all GPU services. For advanced mul
 # Leave all commented out, defaults to GPU 0
 
 # Multi-GPU isolation
-FEP_CUDA_VISIBLE_DEVICES=0
-STREAMGL_GPU_CUDA_VISIBLE_DEVICES=1
+FORGE_CUDA_VISIBLE_DEVICES=0
+STREAMGL_CUDA_VISIBLE_DEVICES=1
 
 # Multi-GPU shared (round-robin assignment)
 CUDA_VISIBLE_DEVICES=0,1,2,3

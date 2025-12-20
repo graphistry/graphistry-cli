@@ -210,7 +210,7 @@ See [GPU Configuration Wizard](../tools/gpu-config-wizard.md) for full documenta
 For advanced multi-GPU configurations, you can assign specific GPUs to specific services via `data/config/custom.env`.
 
 **Fallback chain** for each service:
-1. Service-specific variable (e.g., `FEP_CUDA_VISIBLE_DEVICES`)
+1. Service-specific variable (e.g., `FORGE_CUDA_VISIBLE_DEVICES`)
 2. Global `CUDA_VISIBLE_DEVICES`
 3. Default: GPU 0
 
@@ -218,8 +218,8 @@ For advanced multi-GPU configurations, you can assign specific GPUs to specific 
 
 | Variable | Service |
 |----------|---------|
-| `FEP_CUDA_VISIBLE_DEVICES` | forge-etl-python |
-| `STREAMGL_GPU_CUDA_VISIBLE_DEVICES` | streamgl-gpu |
+| `FORGE_CUDA_VISIBLE_DEVICES` | forge-etl-python |
+| `STREAMGL_CUDA_VISIBLE_DEVICES` | streamgl-gpu |
 | `DCW_CUDA_VISIBLE_DEVICES` | dask-cuda-worker |
 | `DASK_SCHEDULER_CUDA_VISIBLE_DEVICES` | dask-scheduler |
 | `GAK_PUBLIC_CUDA_VISIBLE_DEVICES` | graph-app-kit-public |
@@ -235,8 +235,8 @@ For advanced multi-GPU configurations, you can assign specific GPUs to specific 
 
 ```bash
 # Isolate GPU workloads (dedicated GPUs per service)
-FEP_CUDA_VISIBLE_DEVICES=0
-STREAMGL_GPU_CUDA_VISIBLE_DEVICES=1
+FORGE_CUDA_VISIBLE_DEVICES=0
+STREAMGL_CUDA_VISIBLE_DEVICES=1
 
 # Share all GPUs (round-robin assignment)
 CUDA_VISIBLE_DEVICES=0,1,2,3

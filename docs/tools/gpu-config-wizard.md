@@ -294,9 +294,9 @@ For advanced tuning beyond the wizard, set these environment variables directly 
 - `DASK_NUM_WORKERS` - dask-cuda-worker instances
 
 **Per-service GPU assignment:**
-- `FEP_CUDA_VISIBLE_DEVICES` - forge-etl-python
+- `FORGE_CUDA_VISIBLE_DEVICES` - forge-etl-python
 - `DCW_CUDA_VISIBLE_DEVICES` - dask-cuda-worker
-- `STREAMGL_GPU_CUDA_VISIBLE_DEVICES` - streamgl-gpu
+- `STREAMGL_CUDA_VISIBLE_DEVICES` - streamgl-gpu
 - `DASK_SCHEDULER_CUDA_VISIBLE_DEVICES` - dask-scheduler
 - `GAK_PUBLIC_CUDA_VISIBLE_DEVICES` - graph-app-kit-public
 - `GAK_PRIVATE_CUDA_VISIBLE_DEVICES` - graph-app-kit-private
