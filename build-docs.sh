@@ -82,6 +82,16 @@ echo "====================================="
 echo "Format: $DOCS_FORMAT"
 echo ""
 
+# Clean previous build artifacts to avoid stale files
+# Use docker compose to clean since files may be owned by root from previous builds
+echo "Cleaning previous build artifacts..."
+if [ -d "_build" ] || [ -d "doctrees" ]; then
+    docker compose -f "$COMPOSE_FILE" run --rm sphinx \
+        sh -c "rm -rf /docs/_build/html /docs/_build/epub /docs/_build/latexpdf /docs/doctrees/*" 2>/dev/null || true
+fi
+echo "Clean complete."
+echo ""
+
 # Build docs using docker compose
 BUILD_EXIT_CODE=0
 DOCS_FORMAT="$DOCS_FORMAT" docker compose -f "$COMPOSE_FILE" up --build || BUILD_EXIT_CODE=$?

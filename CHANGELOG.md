@@ -15,7 +15,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 * Troubleshooting guide (`docs/debugging/troubleshooting.md`)
 * Legacy setup guides subfolder with EOL documentation (`docs/install/on-prem/legacy/`)
 * CUDA compatibility matrix and GPU architecture support table in hardware-software.md
-* Documentation build wrapper script (`build-docs.sh`) with `--help`, format selection, and error handling
+* Documentation build wrapper script (`build-docs.sh`) with `--help`, format selection, auto-clean, and error handling
 
 ### Changed
 
