@@ -25,19 +25,20 @@ Graphistry's built-in Jupyter server comes with a predefined `graphistry.config`
 ### General
 | Setting | Default | Type | Description
 |---|---|---|---|
-| `api` | 1 | `1` _JSON_ <br> `2` _protobuf_ <br>` 3` (recommended: JWT+Arrow) | Upload format and wire protocol |
+| `api` | 3 | `3` (required: JWT+Arrow) | Upload format and wire protocol. API 1 and 2 have been removed. |
 | `certificate_validation` | `True` | boolean | Unsafe: Disable to allow ignore TLS failures such as for known-faulty CAs |
 | `client_protocol_hostname` | `None` | FQDN, including protocol, for overriding `protocol` and `hostname` for what URL is used in browsers from displaying visualizations |
 | `hostname` | `"hub.graphistry.com"` | string | Domain (and optional path) for where to upload data and load visualizations
 | `protocol` | `"https"` | `"https"` or `"http"` | |
 
-### 1.0 API (DEPRECATED)
+### ~~1.0 API~~ (REMOVED)
 
-Deprecated 1.0 API option (api=1, api=2)
+> **WARNING**: API v1 (api=1, api=2) has been permanently removed. The server returns HTTP 410 Gone for `/etl` endpoints. Use `api=3` with JWT authentication.
 
 | Setting | Default | Type | Description
-| `api_key` | `None` | string | *deprecated* |
-| `dataset_prefix` | `"PyGraphistry/"` | string | *deprecated* Prefix on upload location |
+|---|---|---|---|
+| ~~`api_key`~~ | `None` | string | **REMOVED** - Use JWT authentication instead |
+| ~~`dataset_prefix`~~ | `"PyGraphistry/"` | string | **REMOVED** |
 
 
 ## Usage Modes
@@ -94,12 +95,14 @@ g.cypher("MATCH (a)-[b]->(c) RETURN a,b,c LIMIT 100000").plot()
 | `protocol` | `GRAPHISTRY_PROTOCOL` ||
 | | `PYGRAPHISTRY_CONFIG` | Absolute path of `graphistry.config`
 
-#### 1.0 API (DEPRECATED)
+#### ~~1.0 API~~ (REMOVED)
+
+> **WARNING**: These environment variables are no longer functional. Use JWT authentication.
 
 | Graphistry Setting | Environment Variable | Description |
 |:---|:---|:---|
-| `api_key` | `GRAPHISTRY_API_KEY` ||
-| `dataset_prefix` | `GRAPHISTRY_DATASET_PREFIX` ||
+| ~~`api_key`~~ | ~~`GRAPHISTRY_API_KEY`~~ | **REMOVED** |
+| ~~`dataset_prefix`~~ | ~~`GRAPHISTRY_DATASET_PREFIX`~~ | **REMOVED** |
 
 There are multiple common ways to set environment variables:
 
@@ -174,19 +177,11 @@ import graphistry
 graphistry.register(api=3, username='..', password='...')
 ```
 
-### Preset a 1.0 API key for all system users
+### ~~Preset a 1.0 API key for all system users~~ (REMOVED)
 
-Create Python-readable `/etc/graphistry/.pygraphistry`:
+> **WARNING**: API v1 keys are no longer supported. Use JWT authentication with `api=3`.
 
-```json
-{
-    "api_key": "SHARED_USERS_KEY", 
-    "protocol": "https",
-    "hostname":"my.server.com"
-}
-```
-
-For Jupyter notebooks, you may want to create per-user login `.pygraphistry` files. Please contact staff for further options and requests.
+For Jupyter notebooks, the built-in Graphistry notebook server auto-configures JWT authentication. For custom environments, use `graphistry.register(api=3, username='...', password='...')`.
 
 ###  Different URLs for internal upload vs external viewing
 
@@ -204,8 +199,11 @@ os.environ['GRAPHISTRY_HOSTNAME'] = "localhost"
 os.environ['GRAPHISTRY_CLIENT_PROTOCOL_HOSTNAME'] = "https://graph.site.ngo/graphistry"
 
 graphistry.register(
-    key='MY_API_KEY',
-    protocol=GRAPHISTRY_HOSTNAME_PROTOCOL
+    api=3,
+    protocol=GRAPHISTRY_HOSTNAME_PROTOCOL,
+    server='localhost',
+    username='MY_USERNAME',
+    password='MY_PASSWORD'
 )
 ```
 

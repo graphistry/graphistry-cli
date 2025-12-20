@@ -8,15 +8,15 @@ Most of the testing and inspection is standard for Docker-based web apps: `docke
 
 * For logs throughout your session, you can run `./graphistry logs -f -t --tail=1` and `./graphistry logs -f -t --tail=1 SOME_SERVICE_NAME` to see the effects of your activities. Modify `custom.env` to increase `GRAPHISTRY_LOG_LEVEL` and `LOG_LEVEL` to `DEBUG` for increased logging, and `/etc/docker/daemon.json` to use log driver `json-file` for local logs.
 
-NOTE: Below tests use the deprecated 1.0 REST upload API.
+**NOTE**: Sections 4a and 4b below reference the **removed** 1.0 REST upload API (returns HTTP 410 Gone). For current API testing, use the [v2 REST API with JWT authentication](https://hub.graphistry.com/docs/api/2/rest/auth/).
 
 ## 1. Start
 
 * Put the container in `/var/home/my_user/releases/my_release_1`: Ensures relative paths work, and good persistence hygiene across upgrades
 * Go time!
-```
+```bash
 docker load -i containers.tar.gz
-docker-compose up
+./graphistry up  # wrapper for docker compose with GPU, telemetry, and cluster config
 ```
 
 * Check health status via `docker ps` or via the [health check REST APIs](https://hub.graphistry.com/docs/api/2/rest/health/#healthchecks). Check resource consumption via `docker stats`, `nvidia-smi`, and `htop`. Note that the set of services evolves across releases:
@@ -80,7 +80,14 @@ f0bc21b5bda2   compose_redis_1                   0.05%     6.781MiB / 31.27GiB  
 * Check `./graphistry logs -f -t --tail=1` and `docker ps` in case config or GPU driver issues, especially for GPU services listed above
 * Upon failures, see below section on GPU testing
 
-## 4a. Test 1.0 API uploads, Jupyter, and the PyGraphistry client API
+## 4a. ~~Test 1.0 API uploads~~ (REMOVED)
+
+> **WARNING**: API v1 VGraph has been permanently removed and returns HTTP 410 Gone.
+> Use the [v2 REST API with JWT authentication](https://hub.graphistry.com/docs/api/2/rest/auth/) instead.
+> PyGraphistry 0.47.0+ requires JWT authentication.
+
+<details>
+<summary>Legacy 1.0 API documentation (for reference only)</summary>
 
 Do via notebook if possible, else `curl`
 
@@ -112,7 +119,9 @@ df = pd.DataFrame({'s': [0,1,2], 'd': [1,2,0]})
 graphistry.bind(source='s', destination='d').plot(df)
 ```
 
-## 4b. Test `/etl` by commandline
+## 4b. ~~Test `/etl` by commandline~~ (REMOVED)
+
+> **WARNING**: The `/etl` endpoint has been permanently removed and returns HTTP 410 Gone.
 
 If you cannot do **3a**, test from the host via `curl` or `wget`:
 
@@ -161,10 +170,11 @@ Login and get the API key from your dashboard homepage, or run the following:
 curl -H "Content-type: application/json" -X POST -d @samplegraph.json https://graphistry/etl?key=YOUR_API_KEY_HERE
 ```
 
-* From response, go to corresponding https://graphistry/graph/graph.html?dataset=... 
-  * check the viz loads 
+* From response, go to corresponding https://graphistry/graph/graph.html?dataset=...
+  * check the viz loads
   * check the GPU iteratively clusters
 
+</details>
 
 ## 5. Test pivot
 
@@ -186,10 +196,10 @@ Nodes: x y
 
 ### 5c. Configurations
 
-* Edit `data/config/custom.env` and `docker-compose.yml` as per below
-  * Set each config in one go so you can test more quickly, vs start/stop. 
+* Edit `data/config/custom.env` as per below
+  * Set each config in one go so you can test more quickly, vs start/stop.
 * Run
-```
+```bash
 ./graphistry stop
 ./graphistry up
 ```
@@ -270,7 +280,7 @@ Most of the below tests can be automatically run by `cd etc/scripts && ./test-gp
   * `nvidia-smi` reports available GPUs  <-- tests host has a GPU configured with expected GPU driver version number
   * `docker run --gpus=all docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
   * `docker run --runtime=nvidia docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
-  * `docker run --rm docker.io/rapidsai/base:24.04-cuda11.8-py3.10  nvidia-smi` reports available GPUs <-- tests Docker GPU defaults (used by docker-compose via `/etc/docker/daemon.json`)
+  * `docker run --rm docker.io/rapidsai/base:24.04-cuda11.8-py3.10  nvidia-smi` reports available GPUs <-- tests Docker GPU defaults (used by `./graphistry` wrapper via `/etc/docker/daemon.json`)
   * ``docker run --rm graphistry/graphistry-forge-base:`cat VERSION`-11.8 nvidia-smi``
 Reports available GPUs (public base image) <- tests Graphistry container CUDA versions are compatible with host versions
   * ``docker run --rm graphistry/etl-server-python:`cat VERSION`-11.8 nvidia-smi``
@@ -283,7 +293,7 @@ Tests Nvidia RAPIDS  (VERSION is your Graphistry version)
 * Health checks
   * CLI: Check `docker ps` for per-service status, may take 1-2min for services to connect and warm up
     * Per-service checks run every ~30s after a ~1min initialization delay, with several retries before capped restart
-    * Configure via `docker-compose.yml`
+    * Configure via `data/config/custom.env` and restart: `./graphistry up -d --force-recreate`
   * URLs: See [official list](https://hub.graphistry.com/docs/api/2/rest/health/)
 * Pages load
   * ``site.com`` shows Graphistry homepage and is stylized <-- Static assets are functioning

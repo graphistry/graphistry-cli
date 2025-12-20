@@ -31,7 +31,7 @@ GRAPHISTRY_LOG_LEVEL=DEBUG
 
 For more fidelity, use `TRACE`. Make sure to set back to `INFO` or higher after: This fixes performance and prevents leaking secrets.
 
-To debug a specific service, you can selectively modify its log level through an environment variable for it `docker-compose.yml`.
+To debug a specific service, you can selectively modify its log level through an environment variable in `data/config/custom.env` and restart: `./graphistry up -d --force-recreate`.
 
 3. Restart Graphistry (`docker restart <containerid>`)
 

@@ -5,16 +5,15 @@ On-Prem Installation
   :maxdepth: 1
 
   manual
-  rhel_7_6_setup
-  ubuntu_18_04_lts_setup
   vGPU
+  legacy/index
 
 
 
 Quick launch: Manual
 ------------------------
 
-Requirements: [Download Graphistry](https://graphistry.zendesk.com/hc/en-us/articles/360033184174) and [verify docker-compose is setup for Nvidia runtimes](testing-an-install.md#6-quick-testing-and-test-gpu)
+Requirements: [Download Graphistry](https://graphistry.zendesk.com/hc/en-us/articles/360033184174) and [verify Docker is setup with Nvidia runtime as default](testing-an-install.md#6-quick-testing-and-test-gpu)
 
 **1. Install** if not already available from the folder with `containers.tar.gz`, and likely using `sudo`:
 
@@ -25,7 +24,7 @@ docker load -i containers.tar.gz
 Note: In previous versions (< `v2.35`), the file was `containers.tar`
 
 
-**2. Launch** from the folder with `docker-compose.yml` if not already up, and likely using `sudo`:
+**2. Launch** from the Graphistry folder using the `./graphistry` wrapper (wraps docker compose), likely using `sudo`:
 
 ```bash
 ./graphistry up -d

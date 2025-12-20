@@ -9,7 +9,7 @@ For AWS Marketplace users and additional AWS configuration tips, instead see [AW
 
 Contents:
 
-  1. Pick Linux distribution: Ubuntu 18.04 LTS (Others supported, but not by our nvidia drivers bootstrapper)
+  1. Pick Linux distribution: Ubuntu 24.04/22.04 LTS (Others supported, see `etc/scripts/bootstrap`)
   2. Configure instance
   3. General installation
 
@@ -20,13 +20,14 @@ Subsequent reading: [General installation](https://github.com/graphistry/graphis
 # 1. Pick Linux distribution
 Start with one of the following Linux distributions, and configure it using the instructions below under 'Configure instance'.
 
-## Ubuntu 18.04 LTS
+## Ubuntu 24.04/22.04 LTS (Recommended)
   * Available on official AWS launch homepage
   * Follow provisioning instructions from AWS install
   * Hardware type: See [cloud hw/sw recommendations](../../planning/hardware-software.md#cloud)
   * Login: ssh -i ...private_key.pem ubuntu@public.dns
 
-**RHEL, CentOS temporarily not supported by our bootstrapper while conflicting nvidia-docker<>CUDA changes get fixed in the Linux ecosystem**
+## RHEL 8.x/9.x
+  * See `etc/scripts/bootstrap` in your Graphistry distribution for setup scripts
 
 
 # 2. Configure instance

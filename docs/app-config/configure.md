@@ -247,7 +247,7 @@ See [performance tuning](../debugging/performance-tuning.md)
 
 ### Built-in proxying
 
-Graphistry routes all public traffic through Docker container Caddy, so you generally modify Docker settings for service `caddy:` in `docker-compose.yml` (or `data/config/custom.env`)  or Caddy settings in `data/config/Caddyfile`. Further internal proxying may occur, but we do not advise manipulating internal tiers.
+Graphistry routes all public traffic through Docker container Caddy (or Caddy pod in Kubernetes), so you generally modify settings in `data/config/custom.env`, `docker-compose.yml`, or Caddy settings in `data/config/Caddyfile`. Further internal proxying may occur, but we do not advise manipulating internal tiers.
 
 ### External proxies
 
@@ -259,7 +259,13 @@ You may externally redirect traffic, such as through an AWS Load Balancer or Clo
 
 ### Change public port
 
-If `80` / `443` are already taken, such as when running multiple Graphistry instances on the same box, you may want to change to another port. For example, to expose public port `8888` for Graphistry's HTTP traffic instead of `80`, configure `docker-compose.yml` to map it as follows:
+If `80` / `443` are already taken, such as when running multiple Graphistry instances on the same box, you may want to change to another port. For example, to expose public port `8888` for Graphistry's HTTP traffic instead of `80`, set in `data/config/custom.env`:
+
+```bash
+CADDY_HTTP_PORT=8888
+```
+
+Or alternatively configure `docker-compose.yml` to map it as follows:
 
 ```yaml
   caddy:

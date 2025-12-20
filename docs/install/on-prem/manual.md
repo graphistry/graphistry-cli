@@ -53,9 +53,9 @@ Skip almost all of these steps by instead running through [AWS Marketplace](../c
 
 * **Start from an Nvidia instace**
 <br>You can skip most of the steps by starting with an Nvidia NGC or Tensorflow instance. 
-  * These still typically require installing `docker compose` (and testing it), setting `/etc/docker/daemon.json` to default to the `nvidia-docker` runtime, and restarting `docker` (and testing it). See end of [RHEL 7.6](rhel_7_6_setup.md) and [Ubuntu 18.04 LTS](ubuntu_18_04_lts_setup.md) sample scripts for install and test instruction.
+  * These still typically require setting `/etc/docker/daemon.json` to default to the `nvidia-docker` runtime, and restarting `docker` (and testing it). See `etc/scripts/bootstrap/` in your Graphistry distribution for current setup scripts.
 * **Start from raw Ubuntu/RHEL**
-<br>You can build from scratch by picking a fully unconfigured starting point and following the [RHEL 7.6](rhel_7_6_setup.md) and [Ubuntu 18.04 LTS](ubuntu_18_04_lts_setup.md) On-Prem Sample instructions. Contact Graphistry staff for automation script assistance if also applicable.
+<br>You can build from scratch by picking a fully unconfigured starting point. See `etc/scripts/bootstrap/` in your Graphistry distribution for Ubuntu and RHEL setup scripts. Contact Graphistry staff for automation script assistance if also applicable.
 
 ### On-Prem
 
@@ -70,7 +70,7 @@ Graphistry runs airgapped without any additional configuration.
 
 The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) and [Nvidia Docker](https://github.com/NVIDIA/nvidia-docker) via `Docker Compose 3`, and ships with all other dependencies built in. 
 
-See our sample scripts for [RHEL 7.6](rhel_7_6_setup.md) and [Ubuntu 18.04 LTS](ubuntu_18_04_lts_setup.md). For automating this process, please contact Graphistry staff.
+See `etc/scripts/bootstrap/` in your Graphistry distribution for Ubuntu and RHEL setup scripts. For legacy OS references, see [Legacy Setup Guides](legacy/index.rst). For automating this process, please contact Graphistry staff.
 
 
 
