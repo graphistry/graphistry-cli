@@ -44,6 +44,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 * Orphan file `debugging-front-end.md` added to debugging toctree
 * HTTP to HTTPS for external URLs (hub.graphistry.com, github.com, ec2instances.info)
 * Microsoft docs URLs updated from docs.microsoft.com to learn.microsoft.com
+* Air-gapped environment support: README.md absolute URLs converted to relative paths during docs build
 
 ## [v2.41.8 - 2024-10-27]
 
