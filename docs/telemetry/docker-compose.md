@@ -14,7 +14,7 @@ When telemetry services are enabled, the OpenTelemetry Collector will be include
 In this mode, Graphistry forwards telemetry data to external services compatible with the OpenTelemetry Protocol (OTLP), such as Grafana Cloud.  The deployment will include only the OpenTelemetry Collector, which handles the data forwarding.
 
 ### Using Packaged Observability Tools
-When using the local observability tools bundled with Graphistry —Prometheus, Jaeger, and Grafana— the OpenTelemetry Collector exports data to these services.  In this mode, you can configure Caddy to expose the observability tools to allow external access; the OpenTelemetry Collector URL won't be affected by Caddy (see [behind Caddy](#caddyfile---reverse-proxy-set-up)).  By default, the data is ephemeral, stored inside the containers, and won’t persist across restarts.  To enable data persistence, create a custom Docker Compose file named `custom_telemetry.yml` based on `telemetry.yml` or `telemetry.cloud.yml` as a reference.  In this file, configure persistent storage settings and update the environment variable `OTEL_COMPOSE_FILE` in the configuration file (`$GRAPHISTRY_HOME/data/config/telemetry.env`) to point to your `custom_telemetry.yml`.
+When using the local observability tools bundled with Graphistry --Prometheus, Jaeger, and Grafana-- the OpenTelemetry Collector exports data to these services.  In this mode, you can configure Caddy to expose the observability tools to allow external access; the OpenTelemetry Collector URL won't be affected by Caddy (see [behind Caddy](#caddyfile---reverse-proxy-set-up)).  By default, the data is ephemeral, stored inside the containers, and won't persist across restarts.  To enable data persistence, create a custom Docker Compose file named `custom_telemetry.yml` based on `telemetry.yml` or `telemetry.cloud.yml` as a reference.  In this file, configure persistent storage settings and update the environment variable `OTEL_COMPOSE_FILE` in the configuration file (`$GRAPHISTRY_HOME/data/config/telemetry.env`) to point to your `custom_telemetry.yml`.
 
 ### Hybrid Mode
 This option combines both local observability tools and forwarding to external services.  The OpenTelemetry Collector is configured to export telemetry data to both local tools (Prometheus, Jaeger, Grafana) and external services (e.g., Grafana Cloud).  To enable this mode, you can create your own `custom_telemetry.yml` file as well, allowing you to configure and tailor the hybrid setup according to your specific needs.
@@ -23,12 +23,12 @@ This option combines both local observability tools and forwarding to external s
 
 By default, the telemetry services are disabled. To enable, set `ENABLE_OPEN_TELEMETRY=true` in `$GRAPHISTRY_HOME/data/config/telemetry.env`.
 
-The `./release` script in $GRAPHISTRY_HOME will automatically start those services when `ENABLE_OPEN_TELEMETRY=true`.  The `./release` script is a convenient wrapper around `docker compose ...`, but will not trigger telemetry collection, forwarding, nor telemetry UIs unless ENABLE_OPEN_TELEMETRY is set to true and the services are properly configured.
+The `./graphistry` script in $GRAPHISTRY_HOME will automatically start those services when `ENABLE_OPEN_TELEMETRY=true`.  The `./graphistry` script is a convenient wrapper around `docker compose ...`, but will not trigger telemetry collection, forwarding, nor telemetry UIs unless ENABLE_OPEN_TELEMETRY is set to true and the services are properly configured.
 
 To start the telemetry services after setting up `ENABLE_OPEN_TELEMETRY=true`, run:
 ```
 cd $GRAPHISTRY_HOME
-./release up -d
+./graphistry up -d
 ```
 
 ### Managing Individual Telemetry Services
@@ -37,22 +37,22 @@ If you need to manage individual telemetry services, you can use the following c
 
 ```bash
 # Start the Node Exporter to collect and expose system-level metrics (e.g., CPU, memory, disk, and network).
-./release up -d node-exporter
+./graphistry up -d node-exporter
 
 # Start the NVIDIA Data Center GPU Manager Exporter (DCGM Exporter) for GPU monitoring
-./release up -d dcgm-exporter
+./graphistry up -d dcgm-exporter
 
 # Start Prometheus for metrics collection and storage
-./release up -d prometheus
+./graphistry up -d prometheus
 
 # Start Grafana for visualization and dashboarding
-./release up -d grafana
+./graphistry up -d grafana
 
 # Start Jaeger for distributed tracing
-./release up -d jaeger
+./graphistry up -d jaeger
 
 # Start the OpenTelemetry Collector for collecting and exporting telemetry data
-./release up -d opentelemetry-collector
+./graphistry up -d opentelemetry-collector
 ```
 
 ## Accessing Telemetry Dashboards and Services
@@ -87,8 +87,8 @@ Grafana will include GPU metrics and dashboards from NVIDIA Data Center GPU Mana
 The file `$GRAPHISTRY_HOME/data/config/telemetry.env` has the environment variables to enable and configure the telemetry services (including the `opentelemetry-collector`), by default, the file is either commented out or empty, so by default Graphistry does not collect and export OpenTelemetry data.
 These are the core environment variables:
 
-- `ENABLE_OPEN_TELEMETRY`: Supports `true` or `false`.  After setting this to `true` and restarting the deployment with `./release up -d` the telemetry services will be started and the Graphistry services will export telemetry data.
-- `OTEL_COMPOSE_FILE`: Specifies the Docker Compose file for telemetry services to be deployed alongside the main Graphistry Docker Compose file (`docker-compose.yml`) when `ENABLE_OPEN_TELEMETRY` is `true`.  Graphistry offers two files: `telemetry.yml` for the [Using Packaged Observability Tools mode](#using-packaged-observability-tools), which includes local telemetry tools, and `telemetry.cloud.yml` for the [Forwarding to External Services mode](#forwarding-to-external-services), which exports data to external services like Grafana Cloud.  You can also create a `custom_telemetry.yml` file for additional flexibility, such as configuring persistence in the [Using Packaged Observability Tools mode](#using-packaged-observability-tools) or combining local and external services in the [Hybrid Mode](#hybrid-mode).  The inclusion of the `OTEL_COMPOSE_FILE` is managed by the `release.sh` script, a convenience wrapper around Docker Compose, which determines whether to include this additional telemetry Docker Compose file in the deployment.
+- `ENABLE_OPEN_TELEMETRY`: Supports `true` or `false`.  After setting this to `true` and restarting the deployment with `./graphistry up -d` the telemetry services will be started and the Graphistry services will export telemetry data.
+- `OTEL_COMPOSE_FILE`: Specifies the Docker Compose file for telemetry services to be deployed alongside the main Graphistry Docker Compose file (`docker-compose.yml`) when `ENABLE_OPEN_TELEMETRY` is `true`.  Graphistry offers two files: `telemetry.yml` for the [Using Packaged Observability Tools mode](#using-packaged-observability-tools), which includes local telemetry tools, and `telemetry.cloud.yml` for the [Forwarding to External Services mode](#forwarding-to-external-services), which exports data to external services like Grafana Cloud.  You can also create a `custom_telemetry.yml` file for additional flexibility, such as configuring persistence in the [Using Packaged Observability Tools mode](#using-packaged-observability-tools) or combining local and external services in the [Hybrid Mode](#hybrid-mode).  The inclusion of the `OTEL_COMPOSE_FILE` is managed by the `./graphistry` script, a convenience wrapper around Docker Compose, which determines whether to include this additional telemetry Docker Compose file in the deployment.
 
 These environment variables are used when we want to use `OTEL_COMPOSE_FILE=telemetry.yml`:
 - `GF_SERVER_ROOT_URL`: Set `GF_SERVER_ROOT_URL` when using Grafana [behind Caddy](#caddyfile---reverse-proxy-set-up). The value pattern should be `http(s)://$GRAPHISTRY_HOST/grafana/`.
@@ -263,7 +263,7 @@ To acces the telemetry services, you need to use the template file `$GRAPHISTRY_
 4. Restart `caddy` with:
    ```bash
    cd $GRAPHISTRY_HOME
-   ./release up -d --force-recreate caddy
+   ./graphistry up -d --force-recreate caddy
    ```
 5. Access the telemetry services and dashboards. For details, refer to the sections on [accessing telemetry services](#accessing-telemetry-dashboards-and-services) and [using the dashboards](#how-to-use-the-telemetry-data).
 

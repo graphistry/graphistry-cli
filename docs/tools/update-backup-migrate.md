@@ -36,7 +36,7 @@ volumes:
 Launch under a unique name using `-p`:  
 
 ```
-docker compose -p my_unique_name up -d
+./graphistry -p my_unique_name up -d
 ```
 
 ## The config and data files

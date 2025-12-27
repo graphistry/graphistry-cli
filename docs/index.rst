@@ -2,9 +2,6 @@
    :parser: myst
 
 
-Indices and tables
-==================
-
 .. toctree::
    :maxdepth: 3
    :hidden:
@@ -12,9 +9,7 @@ Indices and tables
 
    admin
 
-.. toctree::
-   :maxdepth: 3
+Search
+======
 
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`

@@ -10,7 +10,7 @@ See also [security hardening](configure-security.md), [general configuration](..
 
 Graphistry authentication uses standard web software layers:
 
-* Container: Docker / docker-compose
+* Container: Docker with `./graphistry` wrapper (wraps docker compose)
   * Determine ports for http and/or https
 
 * Reverse proxy: Caddy (`caddy`)
@@ -65,14 +65,14 @@ Graphistry authentication uses standard web software layers:
     * The administrator may want to open account creation or manually elevate the role of different users
     * Organization administrators may control whether their organization is open for joining at all, including whether SSO users can self-join or require an explicit invitation
 
-* API users, upon getting an account, will make their code [programmatically generate short-lived JWT tokens and refresh them](https://hub.graphistry.com/docs/api/1/rest/auth/#auth2).
+* API users, upon getting an account, will make their code [programmatically generate short-lived JWT tokens and refresh them](https://hub.graphistry.com/docs/api/1/rest/auth/).
 
 
 ## Configuration
   
 The most typical authentication configurations are:
 
-1. Set TLS via `Caddyfile`, with optional manual TLS credential volume mount in the `docker-compose.yml`. See TLS [docs](../app-config/configure.md#tls-caddyfile).
+1. Set TLS via `Caddyfile`. See TLS [docs](../app-config/configure.md#tls).
 
 2. Open/close account registration and invite users. See [user creation docs](../tools/user-creation.md). Contact staff for more advanced options, such as social logins and LDAP/SAML.
 

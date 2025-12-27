@@ -59,7 +59,7 @@ JWT_EXPIRATION_DELTA=3600
 SESSION_COOKIE_AGE=1209600
 ```
 
-Upon changing, restart the web server with the fresh environment: `docker compose up -d --force-recreate --no-deps nexus`
+Upon changing, restart the web server with the fresh environment: `./graphistry up -d --force-recreate --no-deps nexus`
 
 
 ## Recommended network config: TLS, IPs, Ports
@@ -120,9 +120,9 @@ GRAPHISTRY_NEXUS_ENCRYPTION_KEYS="..."
 GRAPHISTRY_NEXUS_SIGNING_KEY="..."
 ```
 
-After, restart nexus with a fresh environment: `docker compose up -d --force-recreate --no-deps nexus`.
+After, restart nexus with a fresh environment: `./graphistry up -d --force-recreate --no-deps nexus`.
 
-These are best to setup on a fresh installation with an empty database: `docker compose down -v && docker compose up -d`.
+These are best to setup on a fresh installation with an empty database: `./graphistry down -v && ./graphistry up -d`.
 
 
 ## Connector configuration

@@ -11,7 +11,7 @@ Benchmarking helps identify the high-watermarks of system resources like GPU mem
 - **Manage costs:** Right-size footprint for current and upcoming workloads and  negotiate longterm hardware commitments.
 
 Additional details can be found here:
-- [Graphistry Admin Guide - Telemetry](../tools/telemetry.md)
+- [Graphistry Admin Guide - Telemetry](../telemetry/docker-compose.md)
 - [Graphistry Admin Guide - Planning a Graphistry Deployment](deployment-planning.md)
 - [Graphistry Admin Guide - Recommended Deployment Configurations: Client, Server Software, Server Hardware](hardware-software.md)
 
@@ -44,7 +44,7 @@ Choose the different use cases to capture system metrics at scale. Examples incl
 - **Hardware Configuration:** Start with a baseline hardware setup. If possible, using the largest sized servers available will allow for consistent scaling of the workload. It is possible to scale up the size of the server as usage and data volume increases, but this might create skew in the performance tests and take longer.
 - **Software Configuration:** Deploy Graphistry Enterprise with default configurations and adjust configuration settings as needed.
 - **Benchmarking Tools:** Graphistry provides tools to help capture these metrics both as bash scripts as well as OpenTelemetry and associated dashboards. You may also find basic htop (CPU/RAM), iftop (network), and nvidia-smi (GPU) get you far.
-  - Open Telemetry Traces: Utilize telemetry traces to gain deeper insights into system behavior and performance bottlenecks. Graphistry supports [OpenTelemetry](../tools/telemetry.md), enabling comprehensive performance monitoring and analysis.
+  - Open Telemetry Traces: Utilize telemetry traces to gain deeper insights into system behavior and performance bottlenecks. Graphistry supports [OpenTelemetry](../telemetry/docker-compose.md), enabling comprehensive performance monitoring and analysis.
   - Bash Script: [system-metrics-to-csv.sh](../debugging/system-metrics-to-csv.sh) is also provided if open telemetry is not enabled to assist with capturing metrics for benchmarking.
    
 ### Step 4: Conduct Benchmark Tests

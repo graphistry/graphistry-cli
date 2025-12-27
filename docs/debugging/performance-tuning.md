@@ -11,7 +11,7 @@ See also [deployment planning](../planning/deployment-planning.md) and [hw/sw pl
   * Check for both memory compute, and network consumption, and by which process 
 * Check logs for potential errors
   * System: Standard OS logs
-  * App: `docker compose logs`
+  * App: `./graphistry logs`
 * Log level impacts performance
   * TRACE: Slow due to heavy CPU <> GPU traffic
   * DEBUG: Will cause large log volumes that require rotation
@@ -68,7 +68,7 @@ Add environment variables to `data/config/custom.env` to control:
 
 ### RMM GPU settings
 
-RAPIDS-using services will try to use all available GPU RAM and mirror it on the CPU via Nvidia RMM. This includes the visualization services `forge-etl-python` + `dask-cuda-worker`, and the notebook/dashboard services `notebook`, `graph-app-kit-public`, and `graph-app-kit-private`. 
+RAPIDS-using services will try to use all available GPU RAM and mirror it on the CPU via Nvidia RMM. This includes the visualization services `forge-etl-python` + `dask-cuda-worker`, and the notebook/dashboard services `notebook`, `graph-app-kit-public`, and `graph-app-kit-private`.
 
 Experiment with [RMM settings](https://github.com/rapidsai/rmm) in your `data/config/custom.env` to control their GPU allocations:
       * `RMM_ALLOCATOR`: `default` or `managed` (default)
@@ -76,6 +76,54 @@ Experiment with [RMM settings](https://github.com/rapidsai/rmm) in your `data/co
       * `RMM_INITIAL_POOL_SIZE`: None or # bytes (default: `33554432` for 32MB)
       * `RMM_MAXIMUM_POOL_SIZE`: None or # bytes (default: None, meaning full GPU)
       * `RMM_ENABLE_LOGGING`: `TRUE` or `FALSE` (default)
+
+### GPU Memory Watcher
+
+Optional safety feature that monitors GPU memory usage and can automatically terminate runaway processes before they cause OOM (Out of Memory) errors. This is particularly useful for production deployments where uncontrolled memory growth could impact system stability.
+
+**Enable the watcher** by adding to `data/config/custom.env`:
+
+```bash
+FEP_GPU_WATCHER_ENABLED=1
+```
+
+**Configuration options** (all optional, showing defaults):
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `FEP_GPU_WATCHER_ENABLED` | Enable GPU memory monitoring | disabled |
+| `FEP_GPU_WATCHER_POLL_SECONDS` | How often to check GPU memory | 15 |
+| `FEP_GPU_WATCHER_HEARTBEAT_SECONDS` | Log heartbeat interval (0 = disabled) | disabled |
+| `FEP_GPU_WATCHER_WARN_THRESHOLD` | Log warning when memory exceeds this | disabled |
+| `FEP_GPU_WATCHER_KILL_THRESHOLD` | Start deferred kill process | disabled |
+| `FEP_GPU_WATCHER_IDLE_THRESHOLD` | Kill if still above this after defer period | disabled |
+| `FEP_GPU_WATCHER_KILL_DEFER_SECONDS` | Wait time before killing (allows job completion) | 300 |
+| `FEP_GPU_WATCHER_EMERGENCY_THRESHOLD` | Immediate kill, no defer period | disabled |
+
+Thresholds can be specified as:
+- **Percentage**: `70%`, `90%`, `95%`
+- **Absolute MB**: `8192MB`, `16384MB`
+
+**Example production configuration:**
+
+```bash
+# Enable GPU memory watcher with production thresholds
+FEP_GPU_WATCHER_ENABLED=1
+FEP_GPU_WATCHER_POLL_SECONDS=30
+FEP_GPU_WATCHER_HEARTBEAT_SECONDS=300
+FEP_GPU_WATCHER_WARN_THRESHOLD=70%
+FEP_GPU_WATCHER_KILL_THRESHOLD=90%
+FEP_GPU_WATCHER_IDLE_THRESHOLD=60%
+FEP_GPU_WATCHER_KILL_DEFER_SECONDS=300
+FEP_GPU_WATCHER_EMERGENCY_THRESHOLD=95%
+```
+
+This configuration:
+- Checks memory every 30 seconds
+- Logs heartbeat every 5 minutes
+- Warns at 70% memory usage
+- Starts deferred kill at 90%, waiting 5 minutes for job completion
+- Kills immediately at 95% (emergency)
 
 ### Cache size
 
@@ -137,22 +185,112 @@ When pushing datasets via the REST API or users upload via the browser, you can 
 
 ## Multi-GPU tuning
 
-By default, Graphistry will use all available Nvidia GPUs and CPU cores on a server to spread tasks from concurrent users:
+By default, Graphistry will use all available Nvidia GPUs and CPU cores on a server to spread tasks from concurrent users.
+
+### GPU Configuration Wizard
+
+The easiest way to configure multi-GPU settings is using the GPU configuration wizard:
+
+```bash
+# Interactive mode - displays recommended settings
+./etc/scripts/gpu-config-wizard.sh
+
+# Export mode - writes to custom.env
+./etc/scripts/gpu-config-wizard.sh -E ./data/config/custom.env
+
+# Use hardware preset (140+ available)
+./etc/scripts/gpu-config-wizard.sh -p aws-p3-8xlarge
+./etc/scripts/gpu-config-wizard.sh -p dgx-a100
+```
+
+See [GPU Configuration Wizard](../tools/gpu-config-wizard.md) for full documentation and preset list.
+
+### Per-Service GPU Assignment
+
+For advanced multi-GPU configurations, you can assign specific GPUs to specific services via `data/config/custom.env`.
+
+**Fallback chain** for each service:
+1. Service-specific variable (e.g., `FORGE_CUDA_VISIBLE_DEVICES`)
+2. Global `CUDA_VISIBLE_DEVICES`
+3. Default: GPU 0
+
+**Service-specific GPU variables:**
+
+| Variable | Service |
+|----------|---------|
+| `FORGE_CUDA_VISIBLE_DEVICES` | forge-etl-python |
+| `STREAMGL_CUDA_VISIBLE_DEVICES` | streamgl-gpu |
+| `DCW_CUDA_VISIBLE_DEVICES` | dask-cuda-worker |
+| `DASK_SCHEDULER_CUDA_VISIBLE_DEVICES` | dask-scheduler |
+| `GAK_PUBLIC_CUDA_VISIBLE_DEVICES` | graph-app-kit-public |
+| `GAK_PRIVATE_CUDA_VISIBLE_DEVICES` | graph-app-kit-private |
+| `NOTEBOOK_CUDA_VISIBLE_DEVICES` | notebook |
+
+**Format support:**
+- Integer format: `0,1,2,3` (standard CUDA format)
+- UUID format: `GPU-xxx,GPU-yyy` (VMware/Nutanix/MIG environments)
+- Mixed format NOT supported
+
+**Examples:**
+
+```bash
+# Isolate GPU workloads (dedicated GPUs per service)
+FORGE_CUDA_VISIBLE_DEVICES=0
+STREAMGL_CUDA_VISIBLE_DEVICES=1
+
+# Share all GPUs (round-robin assignment)
+CUDA_VISIBLE_DEVICES=0,1,2,3
+
+# VMware/Nutanix/MIG environments
+CUDA_VISIBLE_DEVICES=GPU-abc123,GPU-def456
+```
+
+### Multi-Worker Configuration
+
+Configure worker counts to match your GPU configuration:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `FORGE_NUM_WORKERS` | forge-etl-python Hypercorn workers | 4 |
+| `STREAMGL_NUM_WORKERS` | streamgl-gpu workers | 4 |
+| `DASK_NUM_WORKERS` | dask-cuda-worker instances | 1 |
+
+**GPU underutilization policy** (matches PyTorch/dask-cuda behavior):
+- Workers < GPUs: Service logs WARNING, unused GPUs remain idle
+- Workers > GPUs: Round-robin assignment distributes workers evenly
+- Workers = GPUs: One-to-one assignment (optimal)
+
+**Round-robin GPU assignment examples:**
+- 2 GPUs, 5 workers -> GPU 0 gets workers [0,2,4], GPU 1 gets [1,3]
+- 4 GPUs, 1 worker -> GPU 0 gets worker [0], GPUs [1,2,3] idle
+
+**Recommended configurations:**
+
+```bash
+# Dual GPU setup
+CUDA_VISIBLE_DEVICES=0,1
+FORGE_NUM_WORKERS=8
+STREAMGL_NUM_WORKERS=8
+DASK_NUM_WORKERS=2
+
+# Quad GPU setup
+CUDA_VISIBLE_DEVICES=0,1,2,3
+FORGE_NUM_WORKERS=16
+STREAMGL_NUM_WORKERS=16
+DASK_NUM_WORKERS=4
+```
+
+### General Multi-GPU Guidelines
 
 * The GPU-using services are `streamgl-gpu`, `forge-etl-python`, and `dask-cuda-worker`
-* You may want to increase support CPU worker counts accordingly as well, see above
-* Each service used all GPUs by default
-* Pick which GPUs a service's workers can access by setting environment variable NVIDIA_VISIBLE_DEVICES
-  * Ex: `NVIDIA_VISIBLE_DEVICES=""` <-- no GPUs (CPU-only)
-  * Ex: `NVIDIA_VISIBLE_DEVICES=0` <-- GPU 0
-  * Ex: `NVIDIA_VISIBLE_DEVICES=0,3` <-- GPUs 0 and 3
-  * Every GPU exposed to `forge-etl-python` should also be exposed to `dask-cuda-worker`
+* You may want to increase CPU worker counts accordingly as well (see above)
+* Every GPU exposed to `forge-etl-python` should also be exposed to `dask-cuda-worker`
 * By default, each GPU worker can use any CPU core
   * In general, there should be 4+ CPU cores per GPU
   * Consider matching the CPUs for a GPU worker to the GPU NUMA hierarchy, especially on bigger nodes
 * You can further configure `dask-cuda-worker` using [standard settings](https://dask-cuda.readthedocs.io/en/stable/worker.html)
 * Services use load balancing strategies like sticky IP sessions
-  * Artifical benchmarks may be deceptively reporting non-multi-GPU behavior due to this
+  * Artificial benchmarks may be deceptively reporting non-multi-GPU behavior due to this
 
 We encourage reaching out to staff as part of configuring and testing more advanced configurations.
 

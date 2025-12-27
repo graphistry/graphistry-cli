@@ -20,9 +20,9 @@ See [user creation docs](../tools/user-creation.md)
 * Graphistry is primarily configured by setting values in `data/config/custom.env`
 * Connector, ontology, and pivot configuration is optionally via `data/pivot-db/config/config.json`. Many relevant options are [detailed in a reference page](configure-investigation.md).
 
-Between edits, restart one or all Graphistry services: `docker compose stop`  and `docker compose up -d`.
+Between edits, restart one or all Graphistry services: `./graphistry stop`  and `./graphistry up -d`.
 
-We typically recommend doing targeted and localized restarts via `docker compose stop service1 service2 ...` and `docker compose up -d --force-recreate --no-deps service1 service2 ...`. Contact staff for guidance.
+We typically recommend doing targeted and localized restarts via `./graphistry stop service1 service2 ...` and `./graphistry up -d --force-recreate --no-deps service1 service2 ...`. Contact staff for guidance.
 
 
 ### Secondary:: docker-compose.yml, Caddyfile, `pivot-db/`
@@ -99,7 +99,7 @@ For visualizations to be embeddable in different origin sites, enable `COOKIE_SE
 COOKIE_SAMESITE=None
 ```
 
-... then restart: `docker compose up -d --force-recreate --no-deps nexus`
+... then restart: `./graphistry up -d --force-recreate --no-deps nexus`
 
 
 ### Setup free Automatic TLS
@@ -182,8 +182,8 @@ Custom TLS setups often fail due to the certificate, OS, network, Caddy config, 
 * Test the certificate
 * Test a [standalone Caddy static file server](https://www.baty.net/2018/using-caddy-for-serving-static-content/)
 * ... Including on another box, if OS/network issues are suspected
-* Check the logs of `docker compose logs -f -t caddy nginx`
-* Test whether the containers are up and ports match via `docker compose ps`, `curl`, and `curl` from within a docker container (so within the docker network namespace)
+* Check the logs of `./graphistry logs -f -t caddy nginx`
+* Test whether the containers are up and ports match via `./graphistry ps`, `curl`, and `curl` from within a docker container (so within the docker network namespace)
 
 If problems persist, please reach out to your Graphistry counterparts. Additional workarounds are possible.
 
@@ -211,6 +211,33 @@ In the Admin portal, go to Sites and change the `Domain name` to your domain, su
 This aids scenarios such as when using an outside proxy and ensuring that web users see the intended external domain instead of the internal one leaking through
 
 
+## GPU Configuration
+
+For multi-GPU setups and GPU memory management, Graphistry provides several configuration options:
+
+* **GPU Memory Watcher**: Monitor GPU memory and automatically terminate runaway processes before OOM errors
+* **Per-Service GPU Assignment**: Assign specific GPUs to specific services for workload isolation
+* **Multi-Worker Configuration**: Configure worker counts to match your GPU configuration
+
+### Quick Setup
+
+Auto-configure optimal GPU settings using the GPU configuration wizard:
+
+```bash
+# Interactive mode
+./etc/scripts/gpu-config-wizard.sh
+
+# Export to custom.env
+./etc/scripts/gpu-config-wizard.sh -E ./data/config/custom.env
+
+# Use hardware preset (140+ available)
+./etc/scripts/gpu-config-wizard.sh -p aws-p3-8xlarge
+```
+
+See [GPU Configuration Wizard](../tools/gpu-config-wizard.md) for the full preset list and usage details.
+
+For detailed GPU configuration options, see [Performance Tuning - Multi-GPU](../debugging/performance-tuning.md#multi-gpu-tuning).
+
 ## Performance
 
 See [performance tuning](../debugging/performance-tuning.md)
@@ -220,7 +247,7 @@ See [performance tuning](../debugging/performance-tuning.md)
 
 ### Built-in proxying
 
-Graphistry routes all public traffic through Docker container Caddy, so you generally modify Docker settings for service `caddy:` in `docker-compose.yml` (or `data/config/custom.env`)  or Caddy settings in `data/config/Caddyfile`. Further internal proxying may occur, but we do not advise manipulating internal tiers.
+Graphistry routes all public traffic through Docker container Caddy (or Caddy pod in Kubernetes), so you generally modify settings in `data/config/custom.env`, `docker-compose.yml`, or Caddy settings in `data/config/Caddyfile`. Further internal proxying may occur, but we do not advise manipulating internal tiers.
 
 ### External proxies
 
@@ -232,7 +259,13 @@ You may externally redirect traffic, such as through an AWS Load Balancer or Clo
 
 ### Change public port
 
-If `80` / `443` are already taken, such as when running multiple Graphistry instances on the same box, you may want to change to another port. For example, to expose public port `8888` for Graphistry's HTTP traffic instead of `80`, configure `docker-compose.yml` to map it as follows:
+If `80` / `443` are already taken, such as when running multiple Graphistry instances on the same box, you may want to change to another port. For example, to expose public port `8888` for Graphistry's HTTP traffic instead of `80`, set in `data/config/custom.env`:
+
+```bash
+CADDY_HTTP_PORT=8888
+```
+
+Or alternatively configure `docker-compose.yml` to map it as follows:
 
 ```yaml
   caddy:
@@ -281,7 +314,7 @@ SPLUNK_HOST=...
 
 2. Restart `graphistry`, or at least the `pivot` service:
 
-`docker compose stop && docker compose up -d` or `docker compose stop nginx pivot && docker compose up -d`
+`./graphistry stop && ./graphistry up -d` or `./graphistry stop nginx pivot && ./graphistry up -d`
 
 3. Test
 

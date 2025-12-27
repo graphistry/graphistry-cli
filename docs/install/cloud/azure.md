@@ -53,11 +53,11 @@ Expect 1-3 days based on your requested `Severity` rating and who Azure assigns 
 See general installation instructions for currently supported Linux versions (subject to above Azure restrictions and general support restrictions.)
 
 1. **Virtual machines** -> `Create virtual machine`
-2. **Ubuntu 16.04 LTS** Please let us know if another OS is required
+2. **Ubuntu 22.04 LTS** (or 24.04 LTS)
 3. **Basics**: As desired; make sure can login, such as by SSH public key; needs to be a region with GPU quota
 4. **Size**: GPU of all disk types, e.g., NC6v2 (hdd) is cheapest for development
 5. **Settings**: Open ports for administration (SSH) and usage (HTTP, HTTPS)
-6. **Summary**: Should say “`Validation passed`” at the top -> visually audit settings + hit `Create`
+6. **Summary**: Should say "`Validation passed`" at the top -> visually audit settings + hit `Create`
 
 ## 2. Confirm proper instance
 
@@ -73,12 +73,12 @@ $ lspci -vnn | grep VGA -A 12
 	Kernel driver in use: hyperv_fb
 	Kernel modules: hyperv_fb
 
-5dc5:00:00.0 3D controller [0302]: NVIDIA Corporation GK210GL [Tesla K80] [10de:102d] (rev a1)
-	Subsystem: NVIDIA Corporation GK210GL [Tesla K80] [10de:106c]
+# Example output - GPU type varies by instance (T4, V100, A100, etc.)
+xxxx:00:00.0 3D controller [0302]: NVIDIA Corporation [GPU Model]
+	Subsystem: NVIDIA Corporation [GPU Model]
 	Flags: bus master, fast devsel, latency 0, IRQ 24, NUMA node 0
-	Memory at 21000000 (32-bit, non-prefetchable) [size=16M]
-	Memory at 1000000000 (64-bit, prefetchable) [size=16G]
-	Memory at 1400000000 (64-bit, prefetchable) [size=32M]
+	Memory at xxxxxxxx (32-bit, non-prefetchable) [size=16M]
+	Memory at xxxxxxxxxx (64-bit, prefetchable) [size varies by GPU]
 ```
 
 
@@ -89,13 +89,6 @@ Login to your instance (see **Test login** above) and use the instructions for [
 
 For steps involving an IP address, see needed IP value at Azure console in `Overview` -> `Public IP address`
 
-Install docker-compose:
+Ensure Docker includes the `docker compose` plugin (Docker 20.10+ includes it by default). NGC base images set the default runtime to nvidia (`/etc/docker/daemon.json`).
 
-```bash
-sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-```
-
-NGC already sets the default docker runtime to nvidia for you (`/etc/docker/daemon.json`).
-
-From here, you can perform a general installation.
+From here, you can perform a general installation using `./graphistry up -d` (which is a wrapper for docker compose with GPU, telemetry, and cluster configuration).

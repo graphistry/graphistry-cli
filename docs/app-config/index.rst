@@ -36,3 +36,4 @@ System
    configure-python
    configure-pygraphistry
    email
+   environment-variables

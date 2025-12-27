@@ -17,7 +17,7 @@ A *baremetal OS* (no hypervisor) or *passthrough driver* (hypervisor with non-vG
   * Graphistry already automatically uses all GPUs exposed to it, primarily for scaling to more user sessions
   * New APIs are starting to use multi-GPUs for acceleration as well
 * Multiple Graphistry installs
-  * You can launch concurrent instances of Graphistry using docker: `docker compose up -p my_unique_namespace_123`
+  * You can launch concurrent instances of Graphistry using docker: `./graphistry -p my_unique_namespace_123 up`
   * You can configure docker to use different GPUs or share the same ones
 * Isolate Graphistry from other GPU software
   * Docker allows picking which GPUs + CPUs are used
@@ -104,7 +104,7 @@ Follow the standard Graphistry + vGPU instructions
 Helpful links and configurations:
 
 * Drivers: Download a hypervisor + guest OS driver pair from [an Nvidia.com vGPU account](https://nvid.nvidia.com/siteminderagent/forms/login.fcc) that comes with your hardware purchase. Alternatively, if allowed, Nutanix provides [hypervisor drivers](https://portal.nutanix.com/page/downloads?product=ahv&bit=NVIDIA) and Google Cloud hosts [guest OS drivers](https://cloud.google.com/compute/docs/gpus/grid-drivers-table).
-* OS: Ubuntu 18.04 LTS (plain). Do **not** use the listed Snap-based add-on for Docker.
+* OS: Ubuntu 24.04/22.04 LTS (plain). Do **not** use the listed Snap-based add-on for Docker.
 * Docs: Check [main Nutanix.com Nvidia docs](https://portal.nutanix.com/page/documents/details?targetId=AHV-Admin-Guide-v5_19:ahv-gpu-support-on-ahv-c.html) and [supporting Nvidia.com Nutanux docs](https://docs.nvidia.com/grid/10.0/grid-vgpu-release-notes-nutanix-ahv/index.html)
 
 

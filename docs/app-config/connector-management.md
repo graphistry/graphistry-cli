@@ -83,7 +83,7 @@ Running the immediately prior checking script should find and list your keys.
 Once confirmed, restart the Nexus service to switch to the new signing keys:
 
 ```bash
-./release up -d --force-recreate --no-deps nexus
+./graphistry up -d --force-recreate --no-deps nexus
 ```
 
 ## How to Use: Remote bash client over the REST API

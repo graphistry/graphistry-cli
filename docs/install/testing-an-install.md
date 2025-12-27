@@ -6,17 +6,17 @@ Most of the testing and inspection is standard for Docker-based web apps: `docke
 
 * To test your base Docker environment for GPU RAPIDS, see the in-depth GPU testing section below.
 
-* For logs throughout your session, you can run `docker compose logs -f -t --tail=1` and `docker compose logs -f -t --tail=1 SOME_SERVICE_NAME` to see the effects of your activities. Modify `custom.env` to increase `GRAPHISTRY_LOG_LEVEL` and `LOG_LEVEL` to `DEBUG` for increased logging, and `/etc/docker/daemon.json` to use log driver `json-file` for local logs.
+* For logs throughout your session, you can run `./graphistry logs -f -t --tail=1` and `./graphistry logs -f -t --tail=1 SOME_SERVICE_NAME` to see the effects of your activities. Modify `custom.env` to increase `GRAPHISTRY_LOG_LEVEL` and `LOG_LEVEL` to `DEBUG` for increased logging, and `/etc/docker/daemon.json` to use log driver `json-file` for local logs.
 
-NOTE: Below tests use the deprecated 1.0 REST upload API.
+**NOTE**: Sections 4a and 4b below reference the **removed** 1.0 REST upload API (returns HTTP 410 Gone). For current API testing, use the [v2 REST API with JWT authentication](https://hub.graphistry.com/docs/api/1/rest/auth/).
 
 ## 1. Start
 
 * Put the container in `/var/home/my_user/releases/my_release_1`: Ensures relative paths work, and good persistence hygiene across upgrades
 * Go time!
-```
+```bash
 docker load -i containers.tar.gz
-docker-compose up
+./graphistry up  # wrapper for docker compose with GPU, telemetry, and cluster config
 ```
 
 * Check health status via `docker ps` or via the [health check REST APIs](https://hub.graphistry.com/docs/api/2/rest/health/#healthchecks). Check resource consumption via `docker stats`, `nvidia-smi`, and `htop`. Note that the set of services evolves across releases:
@@ -54,9 +54,9 @@ f0bc21b5bda2   compose_redis_1                   0.05%     6.781MiB / 31.27GiB  
 | Jupyter notebooks | `notebook` (heavy) |
 | Dashboards | `graph-app-kit-public`, `graph-app-kit-private` |
    
-* It is safe to reset any individual container **except** `postgres`, which is stateful: `docker compose up -d --force-recreate --no-deps <some_stateless_services>`
+* It is safe to reset any individual container **except** `postgres`, which is stateful: `./graphistry up -d --force-recreate --no-deps <some_stateless_services>`
 
-* For any unhealthy container, such as stuck in a restart loop, check `docker compose logs -f -t --tail=1000 that_service`. To further diagnose, potentially increase the system log level (edit `data/config/custom.env` to have `LOG_LEVEL=DEBUG`, `GRAPHISTRY_LOG_LEVEL=DEBUG`) and recreate + restart the unhealthy container
+* For any unhealthy container, such as stuck in a restart loop, check `./graphistry logs -f -t --tail=1000 that_service`. To further diagnose, potentially increase the system log level (edit `data/config/custom.env` to have `LOG_LEVEL=DEBUG`, `GRAPHISTRY_LOG_LEVEL=DEBUG`) and recreate + restart the unhealthy container
 
 * Check `data/config/custom.env` has system-local keys (ex: `STREAMGL_SECRET_KEY`) with fallback to `.env`
 
@@ -77,17 +77,24 @@ f0bc21b5bda2   compose_redis_1                   0.05%     6.781MiB / 31.27GiB  
   * If points still do not load, or appear and freeze, likely issues with GPU init (driver) or websocket (firewall)
   * Can also be because preloaded datasets are unavailable: not provided, or externally mounted data sources
     * In this case, use ETL test, and ensure clustering runs for a few seconds (vs. just initial pageload)
-* Check `docker compose logs -f -t --tail=1` and `docker ps` in case config or GPU driver issues, especially for GPU services listed above
+* Check `./graphistry logs -f -t --tail=1` and `docker ps` in case config or GPU driver issues, especially for GPU services listed above
 * Upon failures, see below section on GPU testing
 
-## 4a. Test 1.0 API uploads, Jupyter, and the PyGraphistry client API
+## 4a. ~~Test 1.0 API uploads~~ (REMOVED)
+
+> **WARNING**: API v1 VGraph has been permanently removed and returns HTTP 410 Gone.
+> Use the [v2 REST API with JWT authentication](https://hub.graphistry.com/docs/api/1/rest/auth/) instead.
+> PyGraphistry 0.47.0+ requires JWT authentication.
+
+<details>
+<summary>Legacy 1.0 API documentation (for reference only)</summary>
 
 Do via notebook if possible, else `curl`
 
 * Get a 1.0 API key by logging into your user's dashboard, or generating a new one using host access:
 
 ```
-docker compose exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME
+./graphistry exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME
 ```
 
 * Install PyGraphistry and check recent version number (Latest: https://pypi.org/project/graphistry/), or use the provided `/notebook` install:
@@ -112,7 +119,9 @@ df = pd.DataFrame({'s': [0,1,2], 'd': [1,2,0]})
 graphistry.bind(source='s', destination='d').plot(df)
 ```
 
-## 4b. Test `/etl` by commandline
+## 4b. ~~Test `/etl` by commandline~~ (REMOVED)
+
+> **WARNING**: The `/etl` endpoint has been permanently removed and returns HTTP 410 Gone.
 
 If you cannot do **3a**, test from the host via `curl` or `wget`:
 
@@ -152,7 +161,7 @@ If you cannot do **3a**, test from the host via `curl` or `wget`:
 Login and get the API key from your dashboard homepage, or run the following:
 
 ```
-docker compose exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME
+./graphistry exec central curl -s http://localhost:10000/api/internal/provision?text=MYUSERNAME
 ```
 
 * Upload your 1.0 API data using the key
@@ -161,10 +170,11 @@ docker compose exec central curl -s http://localhost:10000/api/internal/provisio
 curl -H "Content-type: application/json" -X POST -d @samplegraph.json https://graphistry/etl?key=YOUR_API_KEY_HERE
 ```
 
-* From response, go to corresponding https://graphistry/graph/graph.html?dataset=... 
-  * check the viz loads 
+* From response, go to corresponding https://graphistry/graph/graph.html?dataset=...
+  * check the viz loads
   * check the GPU iteratively clusters
 
+</details>
 
 ## 5. Test pivot
 
@@ -186,12 +196,12 @@ Nodes: x y
 
 ### 5c. Configurations
 
-* Edit `data/config/custom.env` and `docker-compose.yml` as per below
-  * Set each config in one go so you can test more quickly, vs start/stop. 
+* Edit `data/config/custom.env` as per below
+  * Set each config in one go so you can test more quickly, vs start/stop.
 * Run
-```
-docker compose stop
-docker compose up
+```bash
+./graphistry stop
+./graphistry up
 ```
 
 
@@ -203,7 +213,7 @@ docker compose up
 #### 5c.ii Connector - Splunk
 
 * Edit `data/custom/custom.env` for `SPLUNK_HOST`, `SPLUNK_PORT`, `SPLUNK_USER`, `SPLUNK_KEY`
-* Restart the `/pivot` service: `docker compose restart pivot`
+* Restart the `/pivot` service: `./graphistry restart pivot`
 * In `/pivot/connectors`, the `Live Connectors` should list `Splunk`, and clicking `Status` will test logging in
 * In `Investigations and Templates`, create a new investigation:
   * Create and run one pivot:
@@ -244,18 +254,18 @@ Cloud:
   * In Route53/DNS: Assign a domain to your IP, ex: `mytest.graphistry.com`
 * Modify `data/config/Caddyfile` to use your domain name
   * Unlikely: If needed, run `DOMAIN=my.site.com ./scripts/letsencrypt.sh` and `./gen_dhparam.sh`
-  * Restart `docker compose restart caddy`, check pages load
+  * Restart `./graphistry restart caddy`, check pages load
 * Try a notebook upload with `graphistry.register(...., protocol='https')`
 
 ## 7. Quick Testing and Test GPU
 
 Most of the below tests can be automatically run by `cd etc/scripts && ./test-gpu.sh`:
   * Checks `nvidia-smi` works in your OS
-  * Checks `nvidia-smi` works in Docker, including runtime defaults used by `docker compose`
+  * Checks `nvidia-smi` works in Docker, including runtime defaults used by `./graphistry`
   * Checks Nvidia RAPIDS can successfully create CUDA contexts and run a simple on-GPU compute and I/O task of `1 + 1 == 2`
 
 `docker ps` reports no "unhealthy", "restarting", or prolonged "starting" services:
-  * check `docker compose logs`, `docker compose logs <service>`, `docker compose logs -f -t --tail=100 <service>`
+  * check `./graphistry logs`, `./graphistry logs <service>`, `./graphistry logs -f -t --tail=100 <service>`
   * unhealthy `streamgl-gpu`, `forge-etl-python` on start: likely GPU driver issue
     * GPU is not the default runtime in `/etc/docker/deamon.json` (`docker info | grep Default`)
     * `OpenlCL` Initialization error: GPU drivers insufficently setup
@@ -270,7 +280,7 @@ Most of the below tests can be automatically run by `cd etc/scripts && ./test-gp
   * `nvidia-smi` reports available GPUs  <-- tests host has a GPU configured with expected GPU driver version number
   * `docker run --gpus=all docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
   * `docker run --runtime=nvidia docker.io/rapidsai/base:24.04-cuda11.8-py3.10 nvidia-smi` reports available GPUs <-- tests nvidia-docker installation
-  * `docker run --rm docker.io/rapidsai/base:24.04-cuda11.8-py3.10  nvidia-smi` reports available GPUs <-- tests Docker GPU defaults (used by docker-compose via `/etc/docker/daemon.json`)
+  * `docker run --rm docker.io/rapidsai/base:24.04-cuda11.8-py3.10  nvidia-smi` reports available GPUs <-- tests Docker GPU defaults (used by `./graphistry` wrapper via `/etc/docker/daemon.json`)
   * ``docker run --rm graphistry/graphistry-forge-base:`cat VERSION`-11.8 nvidia-smi``
 Reports available GPUs (public base image) <- tests Graphistry container CUDA versions are compatible with host versions
   * ``docker run --rm graphistry/etl-server-python:`cat VERSION`-11.8 nvidia-smi``
@@ -279,11 +289,11 @@ Reports available GPUs (public base image) <- tests Graphistry container CUDA ve
     ``docker run --rm -it --entrypoint=/bin/bash graphistry/etl-server-python:`cat VERSION`-11.8 -c "source activate base && python3 -c \"import cudf; print(cudf.DataFrame({'x': [0,1,2]})['x'].sum())\""``
 Tests Nvidia RAPIDS  (VERSION is your Graphistry version)
   * `docker run graphistry/cljs:1.1 npm test` reports success  <-- tests driver versioning, may be a faulty test however
-  * If running in a hypervisor, ensure `RMM_ALLOCATOR=default` in `data/config/custom.env`, and check the startup logs of `docker compose logs -f -t --tail=1000 forge-etl-python` that `cudf` / `cupy` are respecting that setting (`LOG_LEVEL=INFO`)
+  * If running in a hypervisor, ensure `RMM_ALLOCATOR=default` in `data/config/custom.env`, and check the startup logs of `./graphistry logs -f -t --tail=1000 forge-etl-python` that `cudf` / `cupy` are respecting that setting (`LOG_LEVEL=INFO`)
 * Health checks
   * CLI: Check `docker ps` for per-service status, may take 1-2min for services to connect and warm up
     * Per-service checks run every ~30s after a ~1min initialization delay, with several retries before capped restart
-    * Configure via `docker-compose.yml`
+    * Configure via `data/config/custom.env` and restart: `./graphistry up -d --force-recreate`
   * URLs: See [official list](https://hub.graphistry.com/docs/api/2/rest/health/)
 * Pages load
   * ``site.com`` shows Graphistry homepage and is stylized <-- Static assets are functioning
@@ -293,11 +303,11 @@ Tests Nvidia RAPIDS  (VERSION is your Graphistry version)
     * Check browser and network logs for Websocket errors, which may require a change in `Caddy` reverse proxying
 * Notebooks
   * Running the analyst notebook example generates running visualizations (see logged-in homepage)
-  * For further information about the Notebook client, see the OSS project [PyGraphistry](http://github.com/graphistry/pygraphistry) ( [PyPI](https://pypi.org/project/graphistry/) ).
+  * For further information about the Notebook client, see the OSS project [PyGraphistry](https://github.com/graphistry/pygraphistry) ( [PyPI](https://pypi.org/project/graphistry/) ).
 * Investigations
   * ``site.com/pivot`` loads
   * ``site.com/pivot/connectors`` loads a list of connectors
-    * When clicking the ``Status`` button for each connector, it reports green. Check error reported in UI or docker logs (`docker compose logs -f -t pivot`): likely configuration issues such as password, URL domain vs fqdn, or firewall.
+    * When clicking the ``Status`` button for each connector, it reports green. Check error reported in UI or docker logs (`./graphistry logs -f -t pivot`): likely configuration issues such as password, URL domain vs fqdn, or firewall.
   *  Opening and running an investigation in ``site.com/pivot`` uploads and shows a graph
 
 

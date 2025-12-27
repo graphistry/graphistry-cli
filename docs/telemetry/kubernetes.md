@@ -9,13 +9,13 @@ Graphistry services export telemetry data (metrics and traces) using the OpenTel
 Kubernetes supports two primary modes of telemetry deployment, similar to Docker Compose:
 
 ### Forwarding to External Services (Cloud Mode)
-When the Helm value `telemetryStack.OTEL_CLOUD_MODE` is `true`, telemetry data is forwarded to external services like `Grafana Cloud`, similar to [Docker Compose’s Forwarding to External Services mode](./docker-compose.md#forwarding-to-external-services).
+When the Helm value `telemetryStack.OTEL_CLOUD_MODE` is `true`, telemetry data is forwarded to external services like `Grafana Cloud`, similar to [Docker Compose's Forwarding to External Services mode](./docker-compose.md#forwarding-to-external-services).
 
 ### Using Packaged Observability Tools
-When the Helm value `telemetryStack.OTEL_CLOUD_MODE` is `false`, the stack bundled with Graphistry (Prometheus, Jaeger, Grafana) is deployed, and telemetry data is exported to these tools, similar to [Docker Compose’s Using Packaged Observability Tools mode](docker-compose.md#using-packaged-observability-tools).
+When the Helm value `telemetryStack.OTEL_CLOUD_MODE` is `false`, the stack bundled with Graphistry (Prometheus, Jaeger, Grafana) is deployed, and telemetry data is exported to these tools, similar to [Docker Compose's Using Packaged Observability Tools mode](docker-compose.md#using-packaged-observability-tools).
 
 ### Hybrid Mode
-You can also configure a Hybrid Mode, combining both local tools and external services.  This requires custom Helm chart adjustments to forward data to both local and external observability services.  See [Docker Compose’s Hybrid Mode](docker-compose.md#hybrid-mode) for more information.
+You can also configure a Hybrid Mode, combining both local tools and external services.  This requires custom Helm chart adjustments to forward data to both local and external observability services.  See [Docker Compose's Hybrid Mode](docker-compose.md#hybrid-mode) for more information.
 
 ## Prerequisites
 

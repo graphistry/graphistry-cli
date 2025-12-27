@@ -12,6 +12,7 @@ Graphistry is the most scalable graph-based visual analysis and investigation au
 * [Debugging & performance](https://graphistry-admin-docs.readthedocs.io/en/latest/debugging/index.html)
 * [Security](https://graphistry-admin-docs.readthedocs.io/en/latest/security/index.html)
 * [Operations & tools](https://graphistry-admin-docs.readthedocs.io/en/latest/tools/index.html)
+* [Scripts reference](https://graphistry-admin-docs.readthedocs.io/en/latest/tools/scripts-reference.html)
 * [FAQ](https://graphistry-admin-docs.readthedocs.io/en/latest/faq/index.html) & [support options](https://graphistry-admin-docs.readthedocs.io/en/latest/support.html)
 
 ## Further reading

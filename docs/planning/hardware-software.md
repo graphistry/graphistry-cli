@@ -19,9 +19,9 @@ Graphistry Enterprise also ships as a Docker container that runs in Linux Nvidia
 * **Client**: Chrome/Firefox from the last 3 years, WebGL enabled (1.0+), and 100KB/s download ability
 * **Server**: 
 - Minimal: x86 Linux server with 4+ CPU cores, 16+ GB CPU RAM (3GB per concurrent user), 150GB+ disk, and 1+ Nvidia GPUs (Pascal onwards for [NVIDIA RAPIDS](https://rapids.ai/)) with 4+ GB RAM each (1+ GB per concurrent user), 64 GB disk
-- Recommended: Ubuntu 18.04 LTS, 8+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Tesla, Turing, Volta, RTX, ...) with 12+GB GPU RAM and 100GB+ disk
+- Recommended: Ubuntu 24.04 LTS (22.04 and 20.04 LTS also supported), 8+ CPU cores, 64GB+ CPU RAM, 150GB+ disk, Nvidia Pascal or later (Tesla, Turing, Volta, RTX, ...) with 12+GB GPU RAM and 100GB+ disk
 - CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) 
-- [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker) set as default runtime for [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.5+)
+- [Nvidia Docker runtime](https://github.com/NVIDIA/nvidia-docker) set as default runtime for Docker. Use `./graphistry` wrapper (wraps docker compose with GPU, telemetry, and cluster configuration).
  
 
 ## Client
@@ -63,7 +63,7 @@ For all of the below, ensure ports 22, 80, 443, and 100GB+ disk
 * g4dn.2xlarge+ / P3.2+ (V100) / P4+ (A100) ***Recommended for team use***
 
 AWS support includes Marketplace, prebuilt AMIs / BYOL, and from-source automation
-Pricing: http://ec2instances.info ($1.4K+/mo at time of writing)
+Pricing: https://ec2instances.info ($1.4K+/mo at time of writing)
 
 *Supported Azure instances*:
 
@@ -118,15 +118,15 @@ Graphistry runs preconfigured with a point-and-click launch on Amazon Marketplac
 
 Graphistry regularly runs on:
 
-* Ubuntu 18.04 LTS+ ***Recommended***
-* Red Hat (RHEL) 7.x, 8.x: Contact staff for reference Docker environment setup scripts (via Centos 7)
+* Ubuntu 24.04 LTS ***Recommended*** (22.04 and 20.04 LTS also supported)
+* Red Hat (RHEL) 8.x, 9.x: See `etc/scripts/bootstrap` for setup scripts
 
 Both support Nvidia / Docker:
 
 * CUDA driver rated for [NVIDIA RAPIDS](https://rapids.ai/) (CUDA 11.0 for RAPIDS 2022.x, and 11.5+ for Graphistry AI extensions)
 * [Nvidia Docker *native* runtime](https://github.com/NVIDIA/nvidia-docker)  (for after Docker 19.03)
-* [docker-compose 1.20.0+](https://docs.docker.com/release-notes/docker-compose/) (yml file format 3.6+) 
-  * Ensure the default Docker runtime set as `nvidia` at time of launch (check: `docker info | grep -i runtime` => default `nvidia`)
+* Docker with nvidia runtime as default (check: `docker info | grep -i runtime` => default `nvidia`)
+  * Use `./graphistry` wrapper instead of raw `docker compose` - it wraps docker compose with GPU, telemetry, and cluster configuration
 
 Common Docker tweaks:
 
@@ -181,18 +181,71 @@ Graphistry runs out-of-the-box without network access
 
 ### GPUs, GPU RAM, GPU drivers
 
-Graphistry requires [NVIDIA RAPIDS](https://rapids.ai/)-compatible  GPUs. If you can make a RAPIDS Docker container work, Graphistry should also work. 
+Graphistry requires [NVIDIA RAPIDS](https://rapids.ai/)-compatible  GPUs. If you can make a RAPIDS Docker container work, Graphistry should also work.
 
 The following GPUs, Pascal and later (Pascal, Tesla, Turing, Volta, RTX) are known to work with Graphistry:
 
-* T4, P100, V100, RTX, A100
+* T4, P100, V100, RTX, A100, H100
 * ... Found in DGX, DGX2, and AWS/Azure/GCP
 
 The GPU should provide 1+ GB of memory per concurrent user. A minimum of 4GB of GPU RAM is required, and 12GB+ is recommended. Lower is possible for development. For help evaluating GPUs, we recommend reaching out to the Graphistry team or the [RAPIDS.ai community](https://rapids.ai/community.html).
 
-RAPIDS requires specific Nvidia drivers. Graphistry releases align with [Nvidia RAPIDS.ai](https://rapids.ai/) releases, so pick drivers compatible with the RAPIDS.ai distribution from the same time period. At time of writing, this would be CUDA 11.0 (RAPIDS 2022.x) or 11.5+ (Graphistry AI extensions)
+RAPIDS requires specific Nvidia drivers. Graphistry releases align with [Nvidia RAPIDS.ai](https://rapids.ai/) releases, so pick drivers compatible with the RAPIDS.ai distribution from the same time period.
+
+### CUDA Compatibility Matrix
+
+| Graphistry Version | RAPIDS Version | CUDA Version | Min Driver | Recommended Driver |
+|-------------------|----------------|--------------|------------|-------------------|
+| 2.45.x+ | 24.10+ | 11.8 or 12.8 | 520.x | 535.x+ |
+| 2.42.x - 2.44.x | 24.06 | 11.8 or 12.4 | 520.x | 535.x+ |
+| 2.40.x - 2.41.x | 23.10 | 11.8 | 520.x | 525.x+ |
+| 2.38.x - 2.39.x | 23.06 | 11.8 | 515.x | 525.x+ |
+
+**Notes**:
+- Graphistry ships dual CUDA builds (11.8 + 12.x) for driver flexibility
+- CUDA 12.8 provides native Blackwell support and better performance on Hopper/Ada GPUs
+- CUDA 11.8 provides broader driver compatibility for older systems
+- Check driver compatibility: `nvidia-smi` shows max supported CUDA version
+
+### GPU Architecture Support
+
+| Architecture | Compute Capability | GPUs | Min CUDA | Status |
+|-------------|-------------------|------|----------|--------|
+| Blackwell | 10.0, 10.3 | B100, B200, GB200, B300 | 12.8 (native) | Full support |
+| Hopper | 9.0 | H100, H200, GH200 | 11.8+ | Full support |
+| Ada Lovelace | 8.9 | L40S, RTX 4090 | 11.8+ | Full support |
+| Ampere | 8.0, 8.6 | A100, A10, A30, RTX 3090 | 11.0+ | Full support |
+| Turing | 7.5 | T4, RTX 2080 | 10.2+ | Full support |
+| Volta | 7.0 | V100 | 10.0+ | Full support |
+| Pascal | 6.0, 6.1 | P100, P40, GTX 1080 | 9.2+ | Full support |
+
+**Blackwell Note**: CUDA 12.8+ generates native Blackwell cubins. Older CUDA versions can run on Blackwell via PTX JIT compilation but without architecture-specific optimizations.
 
 If also using a hypervisor, the hypervisor GPU driver should match the guest OS GPU driver, and due to vGPUs not currently supporting CUDA Unified Memory, set `RMM_ALLOCATOR=default` in Graphistry setting file `data/config/custom.env`.
+
+### GPU Memory Protection
+
+For production deployments, enable the **GPU Memory Watcher** to automatically monitor GPU memory usage and terminate runaway processes before they cause OOM (Out of Memory) errors:
+
+```bash
+# In data/config/custom.env
+FEP_GPU_WATCHER_ENABLED=1
+FEP_GPU_WATCHER_WARN_THRESHOLD=70%
+FEP_GPU_WATCHER_KILL_THRESHOLD=90%
+FEP_GPU_WATCHER_EMERGENCY_THRESHOLD=95%
+```
+
+See [Performance Tuning - GPU Memory Watcher](../debugging/performance-tuning.md#gpu-memory-watcher) for detailed configuration.
+
+### GPU Configuration Tools
+
+Use the [GPU Configuration Wizard](../tools/gpu-config-wizard.md) to auto-generate optimal GPU settings for your hardware:
+
+```bash
+./etc/scripts/gpu-config-wizard.sh -E ./data/config/custom.env
+```
+
+The wizard supports 140+ hardware presets for AWS, Azure, GCP, NVIDIA DGX, and more. See [GPU Configuration Wizard](../tools/gpu-config-wizard.md) for the full preset list and usage details.
 
 ### CPU Cores & CPU RAM
 
@@ -226,7 +279,7 @@ Graphistry resiliency typically comes in multiple forms:
 
 * Logical separation & replication: You may want to further tune software replication factors. Graphistry runs as multiple containerized shared services with distinct internal replication modes and automatic restarts. Depending on the service, a software failure may impact live sessions of cotenant users or prevent service for 3s-1min.  Within a node, you may choose to either tune internal service replication or run multiple Graphistry instances.
 
-* Safe upgrades: Due to Graphistry's use of version-tagged Docker images and project-namespaceable docker-compose orchestrations, upgrades can be performed through:
+* Safe upgrades: Due to Graphistry's use of version-tagged Docker images and project-namespaceable orchestrations (via `./graphistry` wrapper for docker compose), upgrades can be performed through:
   * New instances (e.g., DNS switch): recommended, especially for cloud
   * Installation of a concurrent version
 Contact support staff for migration information. 

@@ -1,7 +1,7 @@
 
 # FAQ
 
-* Where are the docs? See this [GitHub repository](https://github.com/graphistry/graphistry-cli) for admin docs and [Graphistry Hub docs](http://hub.graphistry.com/docs) (or http://your_graphistry/docs) for analyst and developer docs
+* Where are the docs? See this [GitHub repository](https://github.com/graphistry/graphistry-cli) for admin docs and [Graphistry Hub docs](https://hub.graphistry.com/docs) (or http://your_graphistry/docs) for analyst and developer docs
 
 * Where do I get help? Whether community chat, email, tickets, a call, or even a training, [pick the most convienent option](https://www.graphistry.com/support)
 
@@ -14,8 +14,8 @@
   
 * Can Graphistry run in ...
   * A VM: [Yes, including VMWare vSphere, Nutanix AHV, and anywhere else Nvidia RAPIDS.ai runs](install/on-prem/vGPU.md). Just set `RMM_ALLOCATOR=default` in your `data/config/custom.env` to avoid relying on CUDA Unified Memory, which vGPUs do not support.
-  * Ubuntu / Red Hat / ... : Yes, just ensure the Nvidia Docker runtime is set as the default for docker-compose. We can assist with reference environment bootstrap scripts.
-  * Podman: Maybe! We have confirmed our core containers run on RHEL 8.3 with Podman, Nvidia container runtime, and docker-compose cli. Please contact our staff for the possibility of an alternate podman-compatible tarball. 
+  * Ubuntu / Red Hat / ... : Yes, just ensure the Nvidia Docker runtime is set as the default for Docker. We can assist with reference environment bootstrap scripts.
+  * Podman: Maybe! We have confirmed our core containers run on RHEL 8.3 with Podman and the Nvidia container runtime. Please contact our staff for the possibility of an alternate podman-compatible tarball. 
   
 * How do I do license management? 
   * Graphistry does not require software-managed license registration, we can work with your procurement team on self-reported use

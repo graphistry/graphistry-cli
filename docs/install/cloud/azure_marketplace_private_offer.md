@@ -8,7 +8,7 @@ Upon launch, proceed with regular [Azure Marketplace (public) instructions](azur
 
 ## Check the latest official Microsoft istructions
 
-The steps are based on [Microsoft's offical instructions](https://docs.microsoft.com/en-us/azure/marketplace/private-plans#deploying-a-private-plan)
+The steps are based on [Microsoft's official instructions](https://learn.microsoft.com/en-us/marketplace/private-plans#deploying-a-private-plan)
 
 ## Ahead of time
 
@@ -16,7 +16,7 @@ The steps are based on [Microsoft's offical instructions](https://docs.microsoft
 
 * [Get Azure GPU quota in the desired region](azure_marketplace.md#3-solve-gpu-availability-errors)
 
-* Share your [Azure Subscription ID](https://docs.microsoft.com/en-us/azure/media-services/latest/setup-azure-subscription-how-to?tabs=portal) with your Graphistry support agent
+* Share your [Azure Subscription ID](https://learn.microsoft.com/en-us/azure/media-services/latest/setup-azure-subscription-how-to?tabs=portal) with your Graphistry support agent
 
 * Within 1 hour of sharing, and occasionally 4 days when a Azure Marketplace incident, your BYOL plan will be available for quicklaunches
 

@@ -30,7 +30,7 @@ Cluster Configuration Overview
    All nodes will access the same **datasets directory** using a **Distributed File System**. This ensures that the leader and followers use the same dataset, maintaining consistency across all nodes.
 
 4. **PostgreSQL**:  
-   The PostgreSQL instance on the **Leader** node is used by all nodes for querying. The **Nexus** service on the **Leader** manages access to the database, while **Follower** nodes also use the **Leader’s** PostgreSQL instance. Both **Leader** and **Follower** nodes can perform actions like user sign-ups and settings modifications through their own **Nexus** dashboards, with changes applied system-wide for consistency across all nodes.
+   The PostgreSQL instance on the **Leader** node is used by all nodes for querying. The **Nexus** service on the **Leader** manages access to the database, while **Follower** nodes also use the **Leader's** PostgreSQL instance. Both **Leader** and **Follower** nodes can perform actions like user sign-ups and settings modifications through their own **Nexus** dashboards, with changes applied system-wide for consistency across all nodes.
 
 5. **Redis**:  
    The Redis instance on the **Leader** will be used by all **Nexus** and **forge-etl-python** services on the **Follower** nodes. However, for **StreamGL** visualizations, each **Graphistry** instance will have its own Redis instance.

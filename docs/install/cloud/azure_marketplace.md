@@ -78,11 +78,11 @@ Many `ssh` clients may require you to first run `chmod 400 my_key.pem` or `chmod
 
 ### 5. Docker
 
-Graphistry leverages `docker compose` and the Azure image preconfigures the `nvidia` runtime for `docker`.  Note that Graphistry in Azure requires `sudo`.
+Graphistry leverages the `./graphistry` wrapper script (which wraps `docker compose` with proper environment settings) and the Azure image preconfigures the `nvidia` runtime for `docker`.  Note that Graphistry in Azure requires `sudo`.
 
 ```bash
 cd /var/graphistry
-docker compose ps
+./graphistry ps
 ```
 
 =>
