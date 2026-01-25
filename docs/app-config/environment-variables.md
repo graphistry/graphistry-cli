@@ -226,6 +226,21 @@ COOKIE_SECURE=true
 COOKIE_SAMESITE=None
 ```
 
+## Maps / Geospatial
+
+Enable Kepler.gl-based geospatial map visualizations.
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `GRAPHISTRY_ENABLE_KEPLER` | Enable geospatial map support | `false` |
+
+**Example**:
+```bash
+GRAPHISTRY_ENABLE_KEPLER=true
+```
+
+See the [PyGraphistry Maps documentation](https://pygraphistry.readthedocs.io/en/latest/visualization/maps.html) for usage details.
+
 ## Quick Reference by Use Case
 
 ### Production Hardening
@@ -257,4 +272,9 @@ GRAPHISTRY_LOG_LEVEL=DEBUG
 ```bash
 RMM_ALLOCATOR=default
 CUDA_VISIBLE_DEVICES=GPU-xxx,GPU-yyy
+```
+
+### Maps / Geospatial
+```bash
+GRAPHISTRY_ENABLE_KEPLER=true
 ```
