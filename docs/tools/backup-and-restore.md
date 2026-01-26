@@ -36,7 +36,7 @@ export AWS_SECRET_ACCESS_KEY=<MY_SECRET_ACCESS_KEY>
 
 export RESTIC_REPOSITORY=s3:s3.amazonaws.com/<bucket_name>/<path>
 export RESTIC_PASSWORD=<restic_repo_password>
-````
+```
 
 ### Azure
 
