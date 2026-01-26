@@ -1,48 +1,48 @@
-# Backup and Restore Instructions: 
+# Backup and Restore Instructions
 
 ## Overview
 
-Backup and restore scripts are provided that will backup your graphistry environment to remote blob storage (AWS s3, Azure Blob Storage or Google Cloud Storage). Graphistry uses [restic](https://restic.net/) backup utility which provides fast and secure incremental backups to remote blob storage. More details can be found in the [restic documentation](https://restic.readthedocs.io/en/stable/index.html).
+Backup and restore scripts are provided that will backup your Graphistry environment to remote blob storage (AWS S3, Azure Blob Storage, or Google Cloud Storage). Graphistry uses [restic](https://restic.net/), a fast and secure incremental backup utility for remote blob storage. More details can be found in the [restic documentation](https://restic.readthedocs.io/en/stable/index.html).
 
 <br>
 
-> **Warning** 
-> On a restore, the existing postgres database and data directory are irrevocably lost. If think you may need the postgres and/or data directory on the restore server, either run backup.sh from the restore server or manually copy the data directory and export from the postgres database. See `${FROM_PATH}/etc/scripts/copy-db-local.sh` for details on manually exporting postgres. 
+> **Warning**  
+> On restore, the existing Postgres database and data directory are irrevocably lost. If you think you may need the Postgres database and/or data directory on the restore server, either run `backup.sh` from the restore server or manually copy the data directory and export from the Postgres database.  
+>  
+> See `${FROM_PATH}/etc/scripts/copy-db-local.sh` for details on manually exporting Postgres.
 
-<br> 
+<br>
 
+### [Configuration](#configuration)
+### [Backup](#backup)
+### [Restore](#restore)
+### [Scheduling Backups](#scheduling-backups)
 
-### [Configuration](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#configuration)
-### [Backup](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#backup)
-### [Restore](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#restore)
-### [Scheduling Backups](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#scheduling-backups)
-
-<br>  
+<br>
 
 ## Configuration
 
-The following environment variables are required for depending on the cloud provider: 
+The following environment variables are required depending on the cloud provider.
 
-[**AWS:**](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#amazon-s3)
+### AWS
 
-We recommend adding these to ~/.bashrc or ~/.profile and re-starting the shell or sourcing the file to pick up the changes: 
+See the [restic Amazon S3 documentation](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#amazon-s3).
 
-```
+We recommend adding these to `~/.bashrc` or `~/.profile`, then restarting the shell or sourcing the file:
+
+```bash
 export AWS_ACCESS_KEY_ID=<MY_ACCESS_KEY>
 export AWS_SECRET_ACCESS_KEY=<MY_SECRET_ACCESS_KEY>
 
 export RESTIC_REPOSITORY=s3:s3.amazonaws.com/<bucket_name>/<path>
 export RESTIC_PASSWORD=<restic_repo_password>
-
 ```
 
-[**Azure:**](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#microsoft-azure-blob-storage)
+### Azure
 
-We recommend adding these to ~/.bashrc or ~/.profile and re-starting the shell or sourcing the file to pick up the changes: 
+See the [restic Azure Blob Storage documentation](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#microsoft-azure-blob-storage).
 
-```
-# we recommend adding these to ~/.bashrc or ~/.profile 
-
+```bash
 export AZURE_ACCOUNT_NAME=<ACCOUNT_NAME>
 export AZURE_ACCOUNT_KEY=<SECRET_KEY>
 
@@ -51,240 +51,193 @@ export AZURE_ACCOUNT_KEY=<SECRET_KEY>
 export AZURE_ACCOUNT_NAME=<ACCOUNT_NAME>
 export AZURE_ACCOUNT_SAS=<SAS_TOKEN>
 
-# and 
-
-export RESTIC_REPOSITORY=azure:<storage_account>:/<path> 
+export RESTIC_REPOSITORY=azure:<storage_account>:/<path>
 export RESTIC_PASSWORD=<restic_repo_password>
-
 ```
 
-[**Google Cloud Storage Authentication**](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#google-cloud-storage): 
+### Google Cloud Storage
 
-Restic supports using a Service Account to access the storage bucket, see instructions in the link above, or you can follow these steps from the [Google CLI](https://cloud.google.com/sdk/gcloud): 
+See the [restic Google Cloud Storage documentation](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#google-cloud-storage).
 
-```
-# define the project: 
+You may also use the [Google Cloud CLI](https://cloud.google.com/sdk/gcloud):
+
+```bash
 project=<gcp_project_name>
-
-# define the bucket: 
 bucket=gs://<bucket_name>/
 
-# define the default compute service account credential file path: 
 GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gs-secret-restic-key.json
 
-# get the default service account email address:
-service_acct=$(gcloud --project=${project} iam service-accounts list --format=json | jq -r '.[] | select(.displayName=="Compute Engine default service account")| .email')
+service_acct=$(gcloud --project=${project} iam service-accounts list --format=json \
+  | jq -r '.[] | select(.displayName=="Compute Engine default service account") | .email')
 
-# get the service account key file:
-gcloud iam service-accounts keys create ${GOOGLE_APPLICATION_CREDENTIALS} --iam-account=${service_acct}
+gcloud iam service-accounts keys create ${GOOGLE_APPLICATION_CREDENTIALS} \
+  --iam-account=${service_acct}
 
-# grant the default service account required permissions to access the bucket: 
-gsutil iam ch serviceAccount:${service_account}:objectCreator,objectViewer,objectAdmin ${bucket}
-
+gsutil iam ch serviceAccount:${service_acct}:objectCreator,objectViewer,objectAdmin ${bucket}
 ```
 
-We recommend adding these to ~/.bashrc or ~/.profile and re-starting the shell or sourcing the file to pick up the changes: 
+Add the following to your shell environment:
 
-```
-
+```bash
 export GOOGLE_PROJECT_ID=123123123123
 export GOOGLE_APPLICATION_CREDENTIALS=$HOME/.config/gs-secret-restic-key.json
 
 export RESTIC_REPOSITORY=gs:<bucket_name>:/<bucket_path>
 export RESTIC_PASSWORD=<restic_repo_password>
-
 ```
 
 <br>
 
 ## Backup
 
-backup config options: 
+Backup configuration options:
 
-| variable          | default if unset                      | description                    |
-|-------------------|---------------------------------------|--------------------------------|
-| FROM_PATH         | /home/ubuntu/graphistry               | graphistry install dir         |
-| DATA_DIR          | ${FROM_PATH}/data                     | override if symlinked data dir |
-| LOCAL_SUDO_DISK   | sudo                                  | set to empty str to override   |
-| LOCAL_SUDO_DOCKER | sudo                                  | set to empty str to override   |
-| DRY_RUN           | False                                 | dry run only                   |
-| RESTIC_TAGS       | "graphistry"                          | space separated list of tags   |
+| Variable          | Default if unset        | Description                             |
+| ----------------- | ----------------------- | --------------------------------------- |
+| FROM_PATH         | /home/ubuntu/graphistry | Graphistry install directory            |
+| DATA_DIR          | ${FROM_PATH}/data       | Override if data directory is symlinked |
+| LOCAL_SUDO_DISK   | sudo                    | Set to empty string to disable sudo     |
+| LOCAL_SUDO_DOCKER | sudo                    | Set to empty string to disable sudo     |
+| DRY_RUN           | False                   | Dry run only                            |
+| RESTIC_TAGS       | "graphistry"            | Space-separated list of snapshot tags   |
 
-<br><br>
+<br>
 
-1. Make sure you have defined RESTIC_REPOSTITORY, RESTIC_PASSWORD and the other authentication variables required for the cloud provider in the [configuration](https://github.com/graphistry/graphistry-cli/blob/master/docs/backup-and-restore.md#configuration) section above. 
+1. Define `RESTIC_REPOSITORY`, `RESTIC_PASSWORD`, and provider-specific credentials as described in the [Configuration](#configuration) section.
+2. SSH into the Graphistry server:
 
-2. ssh into the graphistry server e.g. `ssh -i </path/to/private_key> ubuntu@IP_addr`
+   ```bash
+   ssh -i </path/to/private_key> ubuntu@<IP_addr>
+   ```
+3. Change to the scripts directory:
 
-3. cd to the scripts directory in <GRAPHISTRY_HOME>
-
-```
-# AWS: 
+```bash
+# AWS
 cd /home/ubuntu/graphistry/compose/etc/scripts
 
-# Azure 
+# Azure
 cd /var/graphistry/compose/etc/scripts
-
 ```
 
-4. Run the backup script: 
+4. Run the backup script:
 
-```
+```bash
 # AWS
 ./backup.sh
 
 # Azure
-FROM_PATH=/var/graphistry/ ./backup.sh 
+FROM_PATH=/var/graphistry ./backup.sh
 ```
 
 ### Additional examples
 
-```
-# dry-run: will only print the commands and execute restic with --dry-run option flag for testing purposes
+```bash
+# Dry run
+DRY_RUN=True ./backup.sh
 
-DRY_RUN=True ./backup.sh 
-
-# adding tags to a back (useful if you are using the same repo for multiple graphistry servers) this example creates three tags attached to the restic snapshot: server1, dev and nightly: 
-
+# Add snapshot tags
 RESTIC_TAGS="server_1 dev nightly" ./backup.sh
 
-# if your data directory is a symlink, you need to override the DATA_DIR with the path to mount point as restic does not follow symlinks
-
+# Override data directory if symlinked
 DATA_DIR=/mnt/data ./backup.sh
-
 ```
-
 
 <br>
 
 ## Restore
 
-| variable          | default if unset                      | description                    |
-|-------------------|---------------------------------------|--------------------------------|
-| TO_PATH           | /home/ubuntu/graphistry               | graphistry install dir         |
-| DATA_DIR          | ${FROM_PATH}/data                     | override if symlinked data dir |
-| LOCAL_SUDO_DISK   | sudo                                  | set to empty str to override   |
-| LOCAL_SUDO_DOCKER | sudo                                  | set to empty str to override   |
-| DRY_RUN           | False                                 | dry run only                   |
-| RESTIC_TAGS       | "graphistry"                          | space separated list of tags   |
+Restore configuration options:
 
-<br><br>
+| Variable          | Default if unset        | Description                             |
+| ----------------- | ----------------------- | --------------------------------------- |
+| TO_PATH           | /home/ubuntu/graphistry | Graphistry install directory            |
+| DATA_DIR          | ${FROM_PATH}/data       | Override if data directory is symlinked |
+| LOCAL_SUDO_DISK   | sudo                    | Set to empty string to disable sudo     |
+| LOCAL_SUDO_DOCKER | sudo                    | Set to empty string to disable sudo     |
+| DRY_RUN           | False                   | Dry run only                            |
+| RESTIC_TAGS       | "graphistry"            | Space-separated list of snapshot tags   |
 
-1. ssh into the graphistry server e.g. `ssh -i </path/to/private_key> ubuntu@IP_addr`
+<br>
 
-2. cd to the scripts directory in <GRAPHISTRY_HOME>
+1. SSH into the Graphistry server.
+2. Change to the scripts directory:
 
-```
-# AWS: 
+```bash
+# AWS
 cd /home/ubuntu/graphistry/compose/etc/scripts
 
-# Azure 
+# Azure
 cd /var/graphistry/compose/etc/scripts
-
 ```
 
-3. Run the backup script: 
+3. Run the restore script:
 
-
-```
+```bash
 # AWS
-
 ./restore.sh
 ```
 
-<br> 
-
-```
+```bash
 # Azure
-
-TO_PATH=/var/graphistry/ ./restore.sh 
+TO_PATH=/var/graphistry ./restore.sh
 ```
 
 <br>
 
 ## Scheduling Backups
 
-Any scheduler can be used, but below are some examples of setting up cron to schedule nightly or weekly backups. 
+Any scheduler can be used. Below are cron examples.
 
-```
-# list your current crontab entries: 
-
-crontab -l 
-```
-
-<br> 
-
-```
-# edit your contrab
-
-crontab -e 
+```bash
+crontab -l
+crontab -e
 ```
 
-<br> 
+### AWS cron examples
 
-### AWS crontab examples
-```
-# add the following line to run backup either daily: 
+```bash
+# Daily
+0 0 * * * /home/ubuntu/graphistry/compose/etc/scripts/backup.sh
 
-0 0 * * * /home/ubuntu/graphistry/compose/etc/scripts/backup.sh 
-
-# add the following line to run backup either weekly: 
-
+# Weekly
 0 0 * * 0 /home/ubuntu/graphistry/compose/etc/scripts/backup.sh
 ```
 
-<br> 
+### Azure cron examples
 
-### Azure crontab examples
+```bash
+# Daily
+0 0 * * * TO_PATH=/var/graphistry /var/graphistry/compose/etc/scripts/backup.sh
 
-```
-# add the following line to run backup either daily: 
-
-0 0 * * * TO_PATH=/var/graphistry/ /var/graphistry/compose/etc/scripts/backup.sh 
-
-# add the following line to run backup either weekly: 
-
-0 0 * * 0 TO_PATH=/var/graphistry/ /var/graphistry/compose/etc/scripts/backup.sh
+# Weekly
+0 0 * * 0 TO_PATH=/var/graphistry /var/graphistry/compose/etc/scripts/backup.sh
 ```
 
-#### Creating a script that has several variables that your crontab entry will call
+### Wrapper script example
 
-```
+```bash
 #!/bin/bash
 
 export AZURE_ACCOUNT_NAME=<ACCOUNT_NAME>
 export AZURE_ACCOUNT_KEY=<SECRET_KEY>
 
-export RESTIC_REPOSITORY=azure:<storage_account>:/<path> 
+export RESTIC_REPOSITORY=azure:<storage_account>:/<path>
 export RESTIC_PASSWORD=<restic_repo_password>
 
 export FROM_PATH=/var/graphistry
-
 export RESTIC_TAGS="server2 prod nightly"
 
 ${FROM_PATH}/compose/etc/scripts/backup.sh
-
 ```
 
-make the script executable: 
+Make executable:
 
-```
+```bash
 chmod +x ~/scripts/my_backup_script.sh
 ```
 
-add the path to the above to your crontab: 
+Add to crontab:
 
-```
-crontab -e 
-
-# then add the following for nightly backups: 
-
+```bash
 0 0 * * * ~/scripts/my_backup_script.sh
-
 ```
-
-
-
-
-
-
