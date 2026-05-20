@@ -93,7 +93,7 @@ Also inform the Graphistry application servers to use secure cookies in `data/co
 COOKIE_SECURE=true
 ```
 
-For visualizations to be embeddable in different origin sites (e.g., embedding into Louie or another web app), enable `COOKIE_SECURE` and explicitly set `COOKIE_SAMESITE=None`:
+For visualizations to be embeddable in different origin sites (e.g., embedding into Louie or another web app with a different domain name than Graphistry), enable `COOKIE_SECURE` and explicitly set `COOKIE_SAMESITE=None`:
 
 ```bash
 COOKIE_SECURE=true
