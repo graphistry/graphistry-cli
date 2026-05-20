@@ -119,7 +119,7 @@ After restarting, verify in browser DevTools → Application → Cookies on the 
 
 ##### Embedding host requirements
 
-The host embedding the Graphistry iframe must also include the Graphistry origin in its CSP `frame-src` and `child-src` directives, in addition to the cookie flags above. For Louie, see the [Graphistry Iframe Blocked in Louie](https://louieai-documentation.readthedocs.io/en/latest/admin/100_Graphistry_Iframe_Blocked.html) runbook for the full three-way (`OA2_HOST` ↔ Graphistry host ↔ Caddy CSP) checklist.
+The host embedding the Graphistry iframe must also include the Graphistry origin in its CSP `frame-src` and `child-src` directives, in addition to the cookie flags above. For Louie, see the [Graphistry Iframe Blocked in Louie](https://louieai-documentation.readthedocs.io/en/latest/admin/100_Graphistry_Iframe_Blocked.html) runbook for the full three-way (`OA2_HOST` <-> Graphistry host <-> Caddy CSP) checklist.
 
 
 ### Setup free Automatic TLS
