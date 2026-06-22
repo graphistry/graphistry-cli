@@ -226,6 +226,43 @@ COOKIE_SECURE=true
 COOKIE_SAMESITE=None
 ```
 
+## Cross-Origin Embedding (CORS)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `CORS_ALLOWED_ORIGINS` | Comma-separated list of origins allowed to embed / make cross-origin requests to Graphistry | empty (same-origin only) |
+
+`CORS_ALLOWED_ORIGINS` is the single source of truth for cross-origin access across the stack — read by
+nginx, nexus, pivot, and the visualization realtime socket. **Empty (the default) is fail-closed: only
+same-origin requests succeed.** This is intentional (earlier releases allowed all origins; that default
+was removed for security). **Most deployments need no change** — see the authoritative reference in
+`data/config/custom.env`. Two distinct cases are easy to conflate:
+
+- **Embedding `graph.html` in an iframe** (the common case): the iframe's `src` is Graphistry's own
+  origin, so its internal calls are **same-origin** — CORS does **not** apply and you do **not** need to
+  list anything. If the iframe sits inside a *cross-site* parent page, set `COOKIE_SAMESITE=None` +
+  `COOKIE_SECURE=true` (above) so the session cookie is allowed in the embedded context.
+- **A separate customer frontend calling Graphistry's API from browser JavaScript** (uncommon): list
+  that frontend's origin in `CORS_ALLOWED_ORIGINS`.
+
+```bash
+# only when a DIFFERENT frontend host calls Graphistry's API from the browser:
+CORS_ALLOWED_ORIGINS=https://dashboard.example.com
+```
+
+> **Credentialed cross-origin is not supported.** No layer emits `Access-Control-Allow-Credentials`, so
+> a separate cross-origin frontend must authenticate with a **bearer token / API key** (Authorization
+> header), **not** session cookies. (Session cookies still work for same-origin and iframe embeds.)
+
+**Realtime socket (upgrade note):** the visualization's realtime (socket.io) connection now also honors
+`CORS_ALLOWED_ORIGINS` on its handshake — including the WebSocket transport, which previously was not
+Origin-checked. A *cross-origin* socket (separate-frontend SDK use) must list its origin; same-origin
+and iframe embeds are unaffected. The socket sets no credentials, consistent with the rest of the stack.
+
+> **Marketplace / turnkey deployments** ship with `CORS_ALLOWED_ORIGINS` empty (same-origin only,
+> fail-closed) — the same secure default as every other distribution. Set it only if a separate
+> different-origin frontend needs browser-side API/socket access.
+
 ## Maps / Geospatial
 
 Enable Kepler.gl-based geospatial map visualizations.
