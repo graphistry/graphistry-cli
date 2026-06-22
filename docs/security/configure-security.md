@@ -80,6 +80,7 @@ Enabling **cross-origin authenticated use** is often desirable:
 
 * Cross-origin embedding for unauthenticated visualizations is enabled by default
 * Cross-origin embedding for authenticated visualizations is disabled by default, enable as part of [TLS configuration](../app-config/configure.md#tls)
+* Iframe embeds load Graphistry's own origin, so they are **same-origin** and need no allowlist entry; only a **separate frontend that calls Graphistry's API/socket from another origin** must list its origin in [`CORS_ALLOWED_ORIGINS`](../app-config/environment-variables.md#cross-origin-embedding-cors) (the stack-wide allowlist — nginx, nexus, pivot, and the realtime viz socket all read it; empty = fail-closed same-origin). Cross-origin clients authenticate via bearer token / API key, not session cookies (credentialed cross-origin is unsupported).
 
 ### Firewalls & SSH
 
