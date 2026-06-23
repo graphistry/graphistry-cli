@@ -30,7 +30,7 @@ For futher information, see:
   * As a web Admin, we recommend also creating a non-admin account for yourself
 * Sessions are protected with JWT tokens and HTTP-only CSRF tokens
   * TLS recommended
-  * Cross-origin embedding enabled
+  * Same-origin embedding enforced by default via CSP `frame-ancestors 'self'`; set `FRAME_ANCESTORS` in `custom.env` to allow specific cross-origin hosts
   * Cross-origin embedded login disabled (see TLS configuration section)
 * Visualizations are shared as secure web keys (unguessable IDs)
 * Unique secrets are set in managed host environments (AWS/Azure Marketplace)
@@ -78,7 +78,7 @@ After, there are additional [Caddyfile http/https header settings](https://githu
 
 Enabling **cross-origin authenticated use** is often desirable:
 
-* Cross-origin embedding for unauthenticated visualizations is enabled by default
+* Cross-origin embedding is same-origin only by default (CSP `frame-ancestors 'self'`); set `FRAME_ANCESTORS` in `data/config/custom.env` to allow specific origins (e.g., `https://*.databricks.com`)
 * Cross-origin embedding for authenticated visualizations is disabled by default, enable as part of [TLS configuration](../app-config/configure.md#tls)
 
 ### Firewalls & SSH

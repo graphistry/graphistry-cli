@@ -74,8 +74,9 @@ grphstry.my-website.org, :80 {
         # disable clients from sniffing the media type
         header_down X-Content-Type-Options nosniff
 
-        # clickjacking protection
-        header_down X-Frame-Options SAMEORIGIN
+        # clickjacking protection (CSP frame-ancestors replaces X-Frame-Options)
+        header_down Content-Security-Policy "frame-ancestors 'self' {$FRAME_ANCESTORS:}"
+        header_down -X-Frame-Options
 
         # keep referrer data off of HTTP connections
         header_down Referrer-Policy no-referrer-when-downgrade
@@ -83,7 +84,14 @@ grphstry.my-website.org, :80 {
 }
 ```
 
-Note: Configuration line `header_down X-Frame-Options SAMEORIGIN` will prevent all cross-origin embedding. By default, public content can be cross-origin embedded while private content cannot. See also `COOKIE_SAMESITE` for enabling authorized private content in cross-origin embeddings.
+Note: `frame-ancestors 'self'` (default) restricts embedding to same-origin only. To allow cross-origin embedding (e.g., Databricks, Jupyter), set `FRAME_ANCESTORS` in `data/config/custom.env`:
+
+```bash
+# Allow specific origins to embed Graphistry in iframes
+FRAME_ANCESTORS=https://*.databricks.com https://*.cloud.databricks.com
+```
+
+`X-Frame-Options` is removed — modern browsers use CSP `frame-ancestors` instead. See also `COOKIE_SAMESITE` for enabling authorized private content in cross-origin embeddings.
 
 #### Application servers
 
