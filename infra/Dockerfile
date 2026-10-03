@@ -17,6 +17,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     python3 -m pip install -r /requirements-python.txt
 
 COPY docs /graphistry-cli
+COPY tests /tests
+RUN DOCS_SOURCE=/graphistry-cli python3 -m unittest discover -s /tests -v
 
 COPY infra/build-docs.sh /build-docs.sh
 COPY docs/ /docs/source

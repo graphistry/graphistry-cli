@@ -46,7 +46,10 @@ release = version
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "_ext"))
+
 extensions = [
+    "markup_lint",
     'myst_parser',
     'nbsphinx',
     "sphinx.ext.autodoc",
@@ -552,49 +555,6 @@ def convert_md_links(app, docname, source):
 
 
 
-def log_missing_references(app, env, docnames=None):
-    if not docnames:
-        docnames = env.found_docs
-
-    unresolved_refs = {}
-    for docname in docnames:
-        doctree = env.get_doctree(docname)
-        # Only traverse 'reference' nodes
-        for ref_node in doctree.traverse(nodes.reference):
-            refuri = ref_node.get("refuri")
-            if refuri and not refuri.startswith(("http:", "https:")):
-                try:
-                    resolved = env.domains["std"].resolve_xref(
-                        env, app.builder, docname, "ref", refuri, ref_node, None
-                    )
-                    if not resolved:
-                        unresolved_refs.setdefault(docname, []).append(refuri)
-                except Exception as e:
-                    logger.warning(f"{docname}: Error resolving {refuri} - {str(e)}")
-    if unresolved_refs:
-        logger.warning(f"Unresolved references: {unresolved_refs}")
-
-
-
-def log_unresolved_references(app, env, docnames=None):
-    if not docnames:
-        docnames = env.found_docs
-
-    unresolved_refs = {}
-    for docname in docnames:
-        doctree = env.get_doctree(docname)
-        for ref_node in doctree.traverse(nodes.reference):
-            refuri = ref_node.get("refuri")
-            if refuri and not refuri.startswith(("http:", "https:")):
-                resolved = env.domains["std"].resolve_xref(env, app.builder, docname, "ref", refuri, ref_node, None)
-                if not resolved:
-                    unresolved_refs.setdefault(docname, []).append(refuri)
-                    print(f"Unresolved reference in {docname}: {refuri}")
-
-    if unresolved_refs:
-        print(f"Unresolved references: {unresolved_refs}")
-
-
 def check_paths(app):
     readme_path = os.path.join(app.confdir, 'README.md')
     logger.info(f"Checking README.md path: {readme_path} - Exists: {os.path.isfile(readme_path)}")
@@ -611,8 +571,7 @@ def setup(app: Sphinx):
     app.connect("builder-inited", check_paths)
     app.connect("source-read", validate_includes)
     app.connect("source-read", convert_md_links)
-    app.connect("env-updated", log_missing_references)
-    app.connect("env-updated", log_unresolved_references)
+    # Sphinx and MyST resolve cross-references and report missing targets.
 
 
     # Configure MyST to handle .md files in Sphinx
