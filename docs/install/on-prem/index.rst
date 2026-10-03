@@ -13,7 +13,7 @@ On-Prem Installation
 Quick launch: Manual
 ------------------------
 
-Requirements: `Download Graphistry <https://graphistry.zendesk.com/hc/en-us/articles/360033184174>`_ and `verify Docker is set up with Nvidia runtime as default <../testing-an-install.html#quick-testing-and-test-gpu>`_
+Requirements: `Download Graphistry <https://graphistry.zendesk.com/hc/en-us/articles/360033184174>`_ and :ref:`verify Docker is set up with Nvidia runtime as default <quick-testing-and-test-gpu>`
 
 **1. Install** if not already available from the folder with ``containers.tar.gz``, and likely using ``sudo``:
 
@@ -40,7 +40,7 @@ Note: Takes 1-3 min, and around 5 min, ``docker ps`` should report all services 
 
 * Create an account, and then try running a prebuilt Jupyter Notebook from the dashboard!
 
-  * The first account gets an admin role, upon which account self-registration closes. Admins can then invite users or open self-registration. See `User Creation <../../tools/user-creation.html>`_ for more information.
+  * The first account gets an admin role, upon which account self-registration closes. Admins can then invite users or open self-registration. See :doc:`User Creation </tools/user-creation>` for more information.
 
 * Try a visualization like http://localhost/graph/graph.html?dataset=Facebook&play=5000&splashAfter=false
 

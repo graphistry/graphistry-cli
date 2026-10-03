@@ -257,6 +257,8 @@ Cloud:
   * Restart `./graphistry restart caddy`, check pages load
 * Try a notebook upload with `graphistry.register(...., protocol='https')`
 
+(quick-testing-and-test-gpu)=
+
 ## 7. Quick Testing and Test GPU
 
 Most of the below tests can be automatically run by `cd etc/scripts && ./test-gpu.sh`:

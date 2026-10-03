@@ -13,7 +13,7 @@ DOCS = Path(os.environ.get("DOCS_SOURCE", Path(__file__).resolve().parents[1] / 
 
 
 class MarkupLintTests(unittest.TestCase):
-    def build(self, text, suffix="rst", extra=None, production=False):
+    def build(self, text, suffix="rst", extra=None, production=False, docname="index"):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             if production:
@@ -23,16 +23,21 @@ class MarkupLintTests(unittest.TestCase):
                 (root / "conf.py").write_text(
                     f"import sys\nsys.path.insert(0, {str(DOCS / '_ext')!r})\n"
                     "extensions = ['myst_parser', 'markup_lint']\n"
-                    "master_doc = 'index'\n"
+                    f"master_doc = {docname!r}\n"
+                    "myst_heading_anchors = 3\n"
                 )
-            (root / f"index.{suffix}").write_text(text)
+            source = root / f"{docname}.{suffix}"
+            source.parent.mkdir(parents=True, exist_ok=True)
+            source.write_text(text)
             for name, content in (extra or {}).items():
-                (root / name).write_text(content)
+                target = root / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(content)
             result = subprocess.run(
                 [sys.executable, "-m", "sphinx", "-b", "html", str(root), str(root / "_build")],
                 capture_output=True, text=True,
             )
-            html = root / "_build/index.html"
+            html = root / f"_build/{docname}.html"
             return result.returncode, result.stdout + result.stderr, html.read_text() if html.exists() else ""
 
     def test_rejects_markdown_in_rst(self):
@@ -79,24 +84,38 @@ class MarkupLintTests(unittest.TestCase):
                 self.assertEqual(code, 0, output)
                 self.assertIn('href="https://example.com"', html)
 
-    def test_production_config_allows_internal_rst_links(self):
-        code, output, html = self.build(
-            "Title\n=====\n\n`Target <target.html>`_\n",
-            extra={"target.rst": "Target\n======\n", "README.md": "# README\n"},
-            production=True,
-        )
-        self.assertEqual(code, 0, output)
-        self.assertIn('href="target.html"', html)
-
-    def test_gpu_link_fragment_exists(self):
-        code, output, html = self.build((DOCS / "install/testing-an-install.md").read_text(), "md")
-        self.assertEqual(code, 0, output)
-        self.assertIn('id="quick-testing-and-test-gpu"', html)
+    def test_production_config_checks_internal_references(self):
+        for doc, section, warning in [
+            ("target", "target-section", None),
+            ("missing", "target-section", "unknown document: 'missing'"),
+            ("target", "missing-section", "undefined label: 'missing-section'"),
+        ]:
+            with self.subTest(doc=doc, section=section):
+                code, output, html = self.build(
+                    f"Title\n=====\n\n:doc:`Target <{doc}>` and :ref:`Section <{section}>`\n",
+                    extra={"target.md": "(target-section)=\n\n# Target\n", "README.md": "# README\n"},
+                    production=True,
+                )
+                self.assertEqual(code, 0, output)
+                if warning:
+                    self.assertIn(warning, output)
+                else:
+                    self.assertNotIn("unknown document", output)
+                    self.assertNotIn("undefined label", output)
+                    self.assertIn('href="target.html"', html)
+                    self.assertIn('href="target.html#target-section"', html)
 
     def test_installation_pages_render(self):
         for page in ["on-prem", "cloud"]:
             with self.subTest(page=page):
-                code, output, html = self.build((DOCS / "install" / page / "index.rst").read_text())
+                code, output, html = self.build(
+                    (DOCS / "install" / page / "index.rst").read_text(),
+                    docname=f"install/{page}/index",
+                    extra={
+                        "install/testing-an-install.md": (DOCS / "install/testing-an-install.md").read_text(),
+                        "tools/user-creation.md": (DOCS / "tools/user-creation.md").read_text(),
+                    },
+                )
                 self.assertEqual(code, 0, output)
                 if page == "on-prem":
                     self.assertIn('id="manual-enterprise-install"', html)
