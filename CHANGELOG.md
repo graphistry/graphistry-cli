@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Added
 
+* Documentation build lint and regression tests for accidental Markdown syntax in reStructuredText pages
 * GPU Configuration Wizard documentation (`docs/tools/gpu-config-wizard.md`)
 * Environment Variables Reference page (`docs/app-config/environment-variables.md`)
 * GPU Memory Watcher documentation in performance tuning
@@ -40,6 +41,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Fixed
 
+* Raw Markdown rendering on on-prem and cloud installation pages, including internal installation links
 * Broken internal links in benchmarking.md (telemetry path corrected)
 * User-creation.md reference path in on-prem installation guide
 * Orphan file `debugging-front-end.md` added to debugging toctree
