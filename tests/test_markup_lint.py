@@ -2,6 +2,7 @@
 
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -15,20 +16,18 @@ class MarkupLintTests(unittest.TestCase):
     def build(self, text, suffix="rst", extra=None, production=False):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / "conf.py").write_text(
-                f"import sys\nsys.path.insert(0, {str(DOCS / '_ext')!r})\n"
-                "extensions = ['myst_parser', 'markup_lint']\n"
-                "master_doc = 'index'\n"
-            )
+            if production:
+                shutil.copy2(DOCS / "conf.py", root / "conf.py")
+                shutil.copytree(DOCS / "_ext", root / "_ext")
+            else:
+                (root / "conf.py").write_text(
+                    f"import sys\nsys.path.insert(0, {str(DOCS / '_ext')!r})\n"
+                    "extensions = ['myst_parser', 'markup_lint']\n"
+                    "master_doc = 'index'\n"
+                )
             (root / f"index.{suffix}").write_text(text)
             for name, content in (extra or {}).items():
                 (root / name).write_text(content)
-            if production:
-                (root / "conf.py").write_text(
-                    f"exec(compile(open({str(DOCS / 'conf.py')!r}).read(), "
-                    f"{str(DOCS / 'conf.py')!r}, 'exec'))\n"
-                    f"sys.path.insert(0, {str(DOCS / '_ext')!r})\n"
-                )
             result = subprocess.run(
                 [sys.executable, "-m", "sphinx", "-b", "html", str(root), str(root / "_build")],
                 capture_output=True, text=True,
@@ -99,7 +98,6 @@ class MarkupLintTests(unittest.TestCase):
             with self.subTest(page=page):
                 code, output, html = self.build((DOCS / "install" / page / "index.rst").read_text())
                 self.assertEqual(code, 0, output)
-                self.assertNotIn("[AWS and Azure marketplaces]", html)
                 if page == "on-prem":
                     self.assertIn('id="manual-enterprise-install"', html)
                     self.assertIn('href="../testing-an-install.html#quick-testing-and-test-gpu"', html)
@@ -107,6 +105,10 @@ class MarkupLintTests(unittest.TestCase):
                     self.assertIn('class="highlight-bash', html)
                     self.assertNotIn("environnment", html)
                     self.assertNotIn("soley", html)
+                else:
+                    self.assertIn('id="cloud-installation"', html)
+                    self.assertIn('href="https://www.graphistry.com/get-started"', html)
+                    self.assertIn('href="https://www.graphistry.com/blog/marketplace-tutorial"', html)
 
 
 if __name__ == "__main__":
