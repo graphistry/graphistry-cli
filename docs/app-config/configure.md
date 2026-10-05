@@ -93,7 +93,7 @@ Also inform the Graphistry application servers to use secure cookies in `data/co
 COOKIE_SECURE=true
 ```
 
-For visualizations to be embeddable in different origin sites (e.g., embedding into Louie or another web app with a different domain name than Graphistry), enable `COOKIE_SECURE` and explicitly set `COOKIE_SAMESITE=None`:
+For authenticated visualizations embedded across sites over HTTPS (e.g., embedding into Louie or another web app with a different site than Graphistry), enable `COOKIE_SECURE` and explicitly set `COOKIE_SAMESITE=None`:
 
 ```bash
 COOKIE_SECURE=true
@@ -104,7 +104,7 @@ COOKIE_SAMESITE=None
 
 ##### Defaults and scope
 
-`COOKIE_SECURE` defaults to `false`. `COOKIE_SAMESITE` defaults to `None` when `COOKIE_SECURE=true`, otherwise `Lax`. Both flags must be set for cross-origin iframe embedding to work.
+`COOKIE_SECURE` defaults to `false`. `COOKIE_SAMESITE` defaults to `None` when `COOKIE_SECURE=true`, otherwise `Lax`. Authenticated cross-site iframe embeds need session cookies with `SameSite=None; Secure`; browsers that block third-party cookies may still prevent login.
 
 These flags apply to the `SESSION_COOKIE`, `CSRF_COOKIE`, and `JWT_AUTH_COOKIE` attributes (`Secure` and `SameSite`).
 
@@ -113,13 +113,13 @@ These flags apply to the `SESSION_COOKIE`, `CSRF_COOKIE`, and `JWT_AUTH_COOKIE` 
 After restarting, verify in browser DevTools → Application → Cookies on the Graphistry host:
 
 * Working: session cookies show `SameSite=None; Secure`
-* Failing: session cookies show `SameSite=Lax` → the browser will drop them inside a cross-origin iframe and the user will see a login loop or a "This content is blocked" message.
+* Failing: session cookies show `SameSite=Lax` → the browser will omit them inside a cross-site iframe and the user may see a login loop.
 
 `COOKIE_SECURE=true` requires Graphistry to be served over HTTPS — TLS termination at the reverse proxy is sufficient.
 
 ##### Embedding host requirements
 
-The host embedding the Graphistry iframe must also include the Graphistry origin in its CSP `frame-src` and `child-src` directives, in addition to the cookie flags above. For Louie, see the [Graphistry Iframe Blocked in Louie](https://louieai-documentation.readthedocs.io/en/latest/admin/100_Graphistry_Iframe_Blocked.html) runbook for the full three-way (`OA2_HOST` <-> Graphistry host <-> Caddy CSP) checklist.
+For a cross-site HTTPS embed, check the parent page's CSP `frame-src` (or `child-src` fallback) allows the Graphistry HTTPS origin. The Graphistry response must also allow the parent to frame it: `X-Frame-Options: SAMEORIGIN` or `DENY`, or a restrictive CSP `frame-ancestors`, can block the embed. If the iframe uses `sandbox`, include `allow-same-origin`; without it the iframe has an opaque origin and the visualization socket sends `Origin: null`, which Graphistry rejects. The iframe's own JavaScript opens the socket from the Graphistry origin, so the parent origin does **not** belong in `CORS_ALLOWED_ORIGINS` unless JavaScript on the parent page connects directly to Graphistry. For Louie, see the [Graphistry Iframe Blocked in Louie](https://louieai-documentation.readthedocs.io/en/latest/admin/100_Graphistry_Iframe_Blocked.html) runbook for the full three-way (`OA2_HOST` <-> Graphistry host <-> Caddy CSP) checklist.
 
 
 ### Setup free Automatic TLS

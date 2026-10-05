@@ -220,7 +220,7 @@ See [Performance Tuning - Cache Size](../debugging/performance-tuning.md#cache-s
 | `COOKIE_SECURE` | Use secure cookies (requires HTTPS) | `false` |
 | `COOKIE_SAMESITE` | SameSite cookie policy | `Lax` |
 
-**For cross-origin embedding**:
+**For authenticated cross-site iframe embedding over HTTPS**:
 ```bash
 COOKIE_SECURE=true
 COOKIE_SAMESITE=None
@@ -230,23 +230,29 @@ COOKIE_SAMESITE=None
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `CORS_ALLOWED_ORIGINS` | Comma-separated list of origins allowed to embed / make cross-origin requests to Graphistry | empty (same-origin only) |
+| `CORS_ALLOWED_ORIGINS` | Comma-separated list of additional browser origins allowed for cross-origin API requests and visualization socket handshakes; does not control iframe embedding | empty (no additional origins) |
 
 `CORS_ALLOWED_ORIGINS` is the single source of truth for cross-origin access across the stack — read by
-nginx, nexus, pivot, and the visualization realtime socket. **Empty (the default) is fail-closed: only
-same-origin requests succeed.** This is intentional (earlier releases allowed all origins; that default
-was removed for security). **Most deployments need no change** — see the authoritative reference in
+nginx, nexus, pivot, and the visualization realtime socket. **Empty (the default) allows no additional
+browser origins for those requests.** This is intentional (earlier releases allowed all origins; that default
+was removed for security). It does not prevent an HTTPS site from loading a Graphistry HTTPS page in an
+iframe. **Most deployments need no change** — see the authoritative reference in
 `data/config/custom.env`. Two distinct cases are easy to conflate:
 
-- **Embedding `graph.html` in an iframe** (the common case): the iframe's `src` is Graphistry's own
-  origin, so its internal calls are **same-origin** — CORS does **not** apply and you do **not** need to
-  list anything. If the iframe sits inside a *cross-site* parent page, set `COOKIE_SAMESITE=None` +
-  `COOKIE_SECURE=true` (above) so the session cookie is allowed in the embedded context.
-- **A separate customer frontend calling Graphistry's API from browser JavaScript** (uncommon): list
-  that frontend's origin in `CORS_ALLOWED_ORIGINS`.
+- **Embedding `https://graphistry.example.com/graph.html` in an iframe on
+  `https://dashboard.example.com`**: JavaScript inside the iframe opens the visualization socket from
+  the **Graphistry origin**, which passes the socket's own-host check. Do not add the parent page's origin
+  to `CORS_ALLOWED_ORIGINS` for this embed. For authenticated cross-site embeds, session cookies need
+  `SameSite=None; Secure` (settings above), and the browser must allow third-party cookies. The parent
+  page must permit the iframe, and Graphistry's response must permit that parent to frame it. An iframe
+  sandboxed without `allow-same-origin` has an opaque origin (`Origin: null` on its socket handshake)
+  and is rejected.
+- **JavaScript running on `https://dashboard.example.com` directly calling Graphistry's API or socket**:
+  list `https://dashboard.example.com` in `CORS_ALLOWED_ORIGINS`. This admits the origin but does not
+  authenticate the request or enable credentialed cross-origin REST or socket polling by itself.
 
 ```bash
-# only when a DIFFERENT frontend host calls Graphistry's API from the browser:
+# only when JavaScript on this different host calls Graphistry directly:
 CORS_ALLOWED_ORIGINS=https://dashboard.example.com
 ```
 
@@ -259,8 +265,9 @@ CORS_ALLOWED_ORIGINS=https://dashboard.example.com
 `CORS_ALLOWED_ORIGINS` on its handshake, for both HTTP polling and WebSocket upgrade. The allowlist
 admits an origin; it does **not** authenticate a socket. The visualization socket uses cookie-backed
 authentication, and credentialed cross-origin polling is not enabled by this setting. The supported
-iframe embed loads Graphistry's own page and makes same-origin socket requests, so it needs no socket
-allowlist entry.
+iframe embed loads Graphistry's own page and makes same-origin socket requests, so its parent origin
+needs no socket allowlist entry. A sandboxed iframe without `allow-same-origin` instead sends
+`Origin: null` on its socket handshake and is refused.
 
 The graph page redirects to a URL containing `session=<Graphistry session ID>`; its built-in socket
 client carries that value on every transport request. In multi-engine Kubernetes deployments, Caddy

@@ -80,7 +80,7 @@ Enabling **cross-origin authenticated use** is often desirable:
 
 * Cross-origin embedding for unauthenticated visualizations is enabled by default
 * Cross-origin embedding for authenticated visualizations is disabled by default, enable as part of [TLS configuration](../app-config/configure.md#tls)
-* Iframe embeds load Graphistry's own origin, so their API and socket calls are **same-origin** and need no allowlist entry. A separate frontend making cross-origin browser requests must list its origin in [`CORS_ALLOWED_ORIGINS`](../app-config/environment-variables.md#cross-origin-embedding-cors). This admits the origin; it does not authenticate requests. Cross-origin REST `fetch` with cookies is unsupported, while the visualization socket uses cookie-backed authentication. See the linked configuration notes before building a direct socket client.
+* An HTTPS page on another site can embed a Graphistry HTTPS visualization iframe without listing the parent origin in [`CORS_ALLOWED_ORIGINS`](../app-config/environment-variables.md#cross-origin-embedding-cors). JavaScript inside the iframe opens the socket from Graphistry's origin, which passes the socket's own-host check. List the parent origin only when JavaScript on the parent page connects directly to Graphistry's API or socket. The allowlist admits an origin; it does not authenticate requests or enable credentialed cross-origin REST or socket polling. Authenticated cross-site embeds also need `SameSite=None; Secure` cookies that the browser permits, compatible frame policies on both sites, and an iframe without an opaque sandbox origin. A sandbox without `allow-same-origin` produces `Origin: null` on the socket handshake and is rejected.
 
 ### Firewalls & SSH
 
