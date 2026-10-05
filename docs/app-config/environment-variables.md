@@ -250,14 +250,24 @@ was removed for security). **Most deployments need no change** — see the autho
 CORS_ALLOWED_ORIGINS=https://dashboard.example.com
 ```
 
-> **Credentialed cross-origin is not supported.** No layer emits `Access-Control-Allow-Credentials`, so
-> a separate cross-origin frontend must authenticate with a **bearer token / API key** (Authorization
-> header), **not** session cookies. (Session cookies still work for same-origin and iframe embeds.)
+> **Credentialed cross-origin REST requests are not supported.** REST responses do not emit
+> `Access-Control-Allow-Credentials`; a separate frontend making browser `fetch` requests must use
+> bearer-token / API-key authentication instead of `credentials: 'include'`. Same-origin pages and
+> iframe embeds continue to use Graphistry's session cookies.
 
 **Realtime socket (upgrade note):** the visualization's realtime (socket.io) connection now also honors
-`CORS_ALLOWED_ORIGINS` on its handshake — including the WebSocket transport, which previously was not
-Origin-checked. A *cross-origin* socket (separate-frontend SDK use) must list its origin; same-origin
-and iframe embeds are unaffected. The socket sets no credentials, consistent with the rest of the stack.
+`CORS_ALLOWED_ORIGINS` on its handshake, for both HTTP polling and WebSocket upgrade. The allowlist
+admits an origin; it does **not** authenticate a socket. The visualization socket uses cookie-backed
+authentication, and credentialed cross-origin polling is not enabled by this setting. The supported
+iframe embed loads Graphistry's own page and makes same-origin socket requests, so it needs no socket
+allowlist entry.
+
+The graph page redirects to a URL containing `session=<Graphistry session ID>`; its built-in socket
+client carries that value on every transport request. In multi-engine Kubernetes deployments, Caddy
+uses it to keep polling and WebSocket requests on the same engine pod, then viz keeps them on one CPU
+worker. If you operate a direct Socket.IO client, include that `session` query on every connection and
+reconnect. A direct client that omits it can open a socket but lose its next polling request across
+engine pods. A VPN or changing browser IP does not affect this session-based route.
 
 > **Marketplace / turnkey deployments** ship with `CORS_ALLOWED_ORIGINS` empty (same-origin only,
 > fail-closed) — the same secure default as every other distribution. Set it only if a separate

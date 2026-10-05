@@ -80,7 +80,7 @@ Enabling **cross-origin authenticated use** is often desirable:
 
 * Cross-origin embedding for unauthenticated visualizations is enabled by default
 * Cross-origin embedding for authenticated visualizations is disabled by default, enable as part of [TLS configuration](../app-config/configure.md#tls)
-* Iframe embeds load Graphistry's own origin, so they are **same-origin** and need no allowlist entry; only a **separate frontend that calls Graphistry's API/socket from another origin** must list its origin in [`CORS_ALLOWED_ORIGINS`](../app-config/environment-variables.md#cross-origin-embedding-cors) (the stack-wide allowlist — nginx, nexus, pivot, and the realtime viz socket all read it; empty = fail-closed same-origin). Cross-origin clients authenticate via bearer token / API key, not session cookies (credentialed cross-origin is unsupported).
+* Iframe embeds load Graphistry's own origin, so their API and socket calls are **same-origin** and need no allowlist entry. A separate frontend making cross-origin browser requests must list its origin in [`CORS_ALLOWED_ORIGINS`](../app-config/environment-variables.md#cross-origin-embedding-cors). This admits the origin; it does not authenticate requests. Cross-origin REST `fetch` with cookies is unsupported, while the visualization socket uses cookie-backed authentication. See the linked configuration notes before building a direct socket client.
 
 ### Firewalls & SSH
 
@@ -172,4 +172,3 @@ Some environments require operation without access to the public internet
 As a Docker-based Linux system, most custom data is stored in Docker volumes. The remaining data, such as server accounts, are in standard Linux locations.
 
 In Graphistry, persistent data appears as the Postgres volume alongside the other Docker-managed volumes, and mounted subfolders of `$GRAPHISTRY_HOME/data`. Data like web login credentials are encrypted in Postgres (standard Django), with random values generated on first system start and recorded in your `${GRAPHISTRY_HOME}/data/config/custom.env`. See the migration sections for more on each. Several containers have additional named volumes used for caching purposes and, like Postgres, are managed by Docker.
-
