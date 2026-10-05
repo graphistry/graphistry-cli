@@ -269,12 +269,21 @@ iframe embed loads Graphistry's own page and makes same-origin socket requests, 
 needs no socket allowlist entry. A sandboxed iframe without `allow-same-origin` instead sends
 `Origin: null` on its socket handshake and is refused.
 
-The graph page redirects to a URL containing `session=<Graphistry session ID>`; its built-in socket
-client carries that value on every transport request. In multi-engine Kubernetes deployments, Caddy
-uses it to keep polling and WebSocket requests on the same engine pod, then viz keeps them on one CPU
-worker. If you operate a direct Socket.IO client, include that `session` query on every connection and
-reconnect. A direct client that omits it can open a socket but lose its next polling request across
-engine pods. A VPN or changing browser IP does not affect this session-based route.
+The first `GET /graph/graph.html?dataset=...` can arrive without `session`; the graph page normally
+redirects to a URL containing `session=<Graphistry session ID>`. Its built-in socket client carries
+that value on every transport request. Caddy hashes the value to the same engine pod in multi-engine
+Kubernetes, then viz keeps each Engine.IO connection on one CPU worker. This is routing, not
+authorization or a guarantee of cross-user collaboration: same-account tabs may retain one session,
+but a different authenticated user opening its URL is redirected to a fresh session. Anonymous reuse
+of an anonymous session is limited to 10 seconds. The app-level two-tab smoke test checks that closing
+one tab leaves the other operational; the proxy fixture checks transport routing only.
+
+A **direct Socket.IO handshake** without `session` differs from that expected first page GET. In
+multi-engine Kubernetes, it can open a socket but lose its next polling request across engine pods.
+Include the Graphistry `session` query on every direct-client connection and reconnect. Compose's
+single-engine path has no inter-pod risk. No server-side 422 rejection has been introduced while
+direct-client compatibility remains under review. A VPN or changing browser IP does not affect a
+session-based route.
 
 > **Marketplace / turnkey deployments** ship with `CORS_ALLOWED_ORIGINS` empty (same-origin only,
 > fail-closed) — the same secure default as every other distribution. Set it only if a separate
