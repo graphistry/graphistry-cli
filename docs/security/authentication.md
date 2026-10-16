@@ -16,7 +16,7 @@ Graphistry authentication uses standard web software layers:
 * Reverse proxy: Caddy (`caddy`)
   * Web and API calls are initially reverse-proxied through reverse proxy Docker service `caddy`
   * The Caddyfile and docker-compose.yml configurations (Docker virtual network definition) are the primary places for customizing networking
-  * TLS: System administrators should [configure automatic and manual TLS as a custom Caddyfile](../app-config/configure.md#tls)
+  * TLS: System administrators should [configure automatic and manual TLS as a custom Caddyfile](configure-tls-caddy.md)
 
 * Bastion: Nginx (`nginx`)
   * Caddy sends user HTTP requests to the Graphistry-configured reverse proxy Docker service `nginx`
@@ -51,10 +51,10 @@ Graphistry authentication uses standard web software layers:
 
  * Browser security headers
    * Unconfigured servers do nto have TLS
-   * [Add a TLS certificate](../app-config/configure.md#tls) enables TLS
-   * Further consider adding [additional security headers](../app-config/configure.md#caddy)
+   * [Add a TLS certificate](configure-tls-caddy.md) enables TLS
+   * Further consider adding [additional security headers](configure-tls-caddy.md#security-headers)
    * Cross-origin embedding for unauthenticated visualizations is enabled by default
-   * To enable cross-origin embedding of authenticated visualizations, [modify the cookie options](../app-config/configure.md#application-servers)
+   * To enable cross-origin embedding of authenticated visualizations, [modify the cookie options](../app-config/configure.md#tls)
     
 ## Usage
 
@@ -72,10 +72,10 @@ Graphistry authentication uses standard web software layers:
   
 The most typical authentication configurations are:
 
-1. Set TLS via `Caddyfile`. See TLS [docs](../app-config/configure.md#tls).
+1. Set TLS via `Caddyfile`. See TLS [docs](configure-tls-caddy.md).
 
 2. Open/close account registration and invite users. See [user creation docs](../tools/user-creation.md). Contact staff for more advanced options, such as social logins and LDAP/SAML.
 
-3. Enable cross-origin embedding of authenticated visualizations by [editing cookie settings](../app-config/configure.md#application-servers) (requires TLS)
+3. Enable cross-origin embedding of authenticated visualizations by [editing cookie settings](../app-config/configure.md#tls) (requires TLS)
 
 4. Enable SSO
