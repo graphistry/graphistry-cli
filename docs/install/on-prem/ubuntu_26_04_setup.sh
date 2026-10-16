@@ -62,11 +62,20 @@ set -exo pipefail
 ##############################################################################
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# load_env_file FILE: export KEY=value lines from FILE, except keys already set in
+# the environment, so `KEY=value bash script` overrides the file.
+load_env_file() {
+    local line key
+    while IFS= read -r line || [ -n "${line}" ]; do
+        line=${line#export }
+        [[ "${line}" =~ ^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*)= ]] || continue
+        key=${BASH_REMATCH[1]}
+        [ -n "${!key+x}" ] && continue
+        eval "export ${line}"
+    done < "$1"
+}
 if [ -f "${SCRIPT_DIR}/.env" ]; then
-    set -a
-    # shellcheck source=/dev/null
-    source "${SCRIPT_DIR}/.env"
-    set +a
+    load_env_file "${SCRIPT_DIR}/.env"
 fi
 
 GRAPHISTRY_USER=${GRAPHISTRY_USER:-ubuntu}
@@ -464,6 +473,21 @@ if [ "${SECURE_BOOT}" = "1" ]; then
 elif [ "${loaded_driver}" != "${NVIDIA_DRIVER_VERSION}" ]; then
     echo "ERROR: expected Nvidia driver ${NVIDIA_DRIVER_VERSION}, found ${loaded_driver}" >&2
     exit 1
+fi
+
+if [ "${SECURE_BOOT}" = "1" ]; then
+    # Ubuntu's nvidia-persistenced runs with --no-persistence-mode, so the GPU is torn
+    # down whenever no client holds it. Match Nvidia's package (and the 22.04 hosts):
+    # keep persistence mode on, as Nvidia recommends for datacenter GPUs.
+    sudo mkdir -p /etc/systemd/system/nvidia-persistenced.service.d
+    printf '[Service]\nExecStart=\nExecStart=/usr/bin/nvidia-persistenced --user nvidia-persistenced --verbose\n' | \
+        sudo tee /etc/systemd/system/nvidia-persistenced.service.d/10-graphistry-persistence-mode.conf
+    sudo systemctl daemon-reload
+    if [ "${REQUIRE_GPU}" = "1" ]; then
+        sudo systemctl restart nvidia-persistenced
+        nvidia-smi --query-gpu=persistence_mode --format=csv,noheader | grep Enabled > /dev/null \
+            || { echo "ERROR: GPU persistence mode is not enabled" >&2; exit 1; }
+    fi
 fi
 
 # 532-docker.sh:
