@@ -80,6 +80,7 @@ Enabling **cross-origin authenticated use** is often desirable:
 
 * Cross-origin embedding for unauthenticated visualizations is enabled by default
 * Cross-origin embedding for authenticated visualizations is disabled by default, enable as part of [TLS configuration](../app-config/configure.md#tls)
+* An HTTPS page on another site can embed a Graphistry HTTPS visualization iframe without listing the parent origin in [`CORS_ALLOWED_ORIGINS`](../app-config/environment-variables.md#cross-origin-embedding-cors). JavaScript inside the iframe opens the socket from Graphistry's origin, which passes the socket's own-host check. List the parent origin only when JavaScript on the parent page connects directly to Graphistry's API or socket. The allowlist admits an origin; it does not authenticate requests or enable credentialed cross-origin REST or socket polling. Authenticated cross-site embeds also need `SameSite=None; Secure` cookies that the browser permits, compatible frame policies on both sites, and an iframe without an opaque sandbox origin. A sandbox without `allow-same-origin` produces `Origin: null` on the socket handshake and is rejected.
 
 ### Firewalls & SSH
 
@@ -171,4 +172,3 @@ Some environments require operation without access to the public internet
 As a Docker-based Linux system, most custom data is stored in Docker volumes. The remaining data, such as server accounts, are in standard Linux locations.
 
 In Graphistry, persistent data appears as the Postgres volume alongside the other Docker-managed volumes, and mounted subfolders of `$GRAPHISTRY_HOME/data`. Data like web login credentials are encrypted in Postgres (standard Django), with random values generated on first system start and recorded in your `${GRAPHISTRY_HOME}/data/config/custom.env`. See the migration sections for more on each. Several containers have additional named volumes used for caching purposes and, like Postgres, are managed by Docker.
-

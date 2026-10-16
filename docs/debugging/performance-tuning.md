@@ -62,8 +62,8 @@ Default configuration aims to saturate a 1 GPU (16 GB RAM) / 8 core (16 GB RAM) 
 Add environment variables to `data/config/custom.env` to control:
   * GPU live clustering: `STREAMGL_NUM_WORKERS`, defaults to `4`, recommend 1 per 4GB GPU and 4 GB CPU (service `streamgl-gpu`)
   * GPU/CPU analytics:`FORGE_NUM_WORKERS`, defaults to `4`, recommend 1 per 4 GB GPU and 4 GB CPU (service `forge-etl-python`)
-  * CPU visualization: `STREAMGL_CPU_NUM_WORKERS` + `PM2_MAX_WORKERS`, defaults to `4` or `max`, (service `streamgl-viz`)
-    * Recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS`
+  * CPU visualization: `STREAMGL_CPU_NUM_WORKERS` (service `streamgl-viz`); the current Compose default is one worker and the Helm viz-tier default is four. `PM2_MAX_WORKERS` does not set this service's worker count.
+    * When set above one, viz automatically routes each Socket.IO polling session to the worker that opened it. No separate sticky-worker setting is needed. Size the count for available CPU and memory, then verify the socket and worker health checks after changing it.
   * Deprecated - CPU upload handlers: `PM2_MAX_WORKERS`, defaults to `max`, recommend 1 per 2 CPUs or matching `STREAMGL_NUM_WORKERS`
 
 ### RMM GPU settings

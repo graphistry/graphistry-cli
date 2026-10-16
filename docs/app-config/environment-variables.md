@@ -220,11 +220,74 @@ See [Performance Tuning - Cache Size](../debugging/performance-tuning.md#cache-s
 | `COOKIE_SECURE` | Use secure cookies (requires HTTPS) | `false` |
 | `COOKIE_SAMESITE` | SameSite cookie policy | `Lax` |
 
-**For cross-origin embedding**:
+**For authenticated cross-site iframe embedding over HTTPS**:
 ```bash
 COOKIE_SECURE=true
 COOKIE_SAMESITE=None
 ```
+
+## Cross-Origin Embedding (CORS)
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `CORS_ALLOWED_ORIGINS` | Comma-separated list of additional browser origins allowed for cross-origin API requests and visualization socket handshakes; does not control iframe embedding | empty (no additional origins) |
+
+`CORS_ALLOWED_ORIGINS` is the single source of truth for cross-origin access across the stack — read by
+nginx, nexus, pivot, and the visualization realtime socket. **Empty (the default) allows no additional
+browser origins for those requests.** This is intentional (earlier releases allowed all origins; that default
+was removed for security). It does not prevent an HTTPS site from loading a Graphistry HTTPS page in an
+iframe. **Most deployments need no change** — see the authoritative reference in
+`data/config/custom.env`. Two distinct cases are easy to conflate:
+
+- **Embedding `https://graphistry.example.com/graph.html` in an iframe on
+  `https://dashboard.example.com`**: JavaScript inside the iframe opens the visualization socket from
+  the **Graphistry origin**, which passes the socket's own-host check. Do not add the parent page's origin
+  to `CORS_ALLOWED_ORIGINS` for this embed. For authenticated cross-site embeds, session cookies need
+  `SameSite=None; Secure` (settings above), and the browser must allow third-party cookies. The parent
+  page must permit the iframe, and Graphistry's response must permit that parent to frame it. An iframe
+  sandboxed without `allow-same-origin` has an opaque origin (`Origin: null` on its socket handshake)
+  and is rejected.
+- **JavaScript running on `https://dashboard.example.com` directly calling Graphistry's API or socket**:
+  list `https://dashboard.example.com` in `CORS_ALLOWED_ORIGINS`. This admits the origin but does not
+  authenticate the request or enable credentialed cross-origin REST or socket polling by itself.
+
+```bash
+# only when JavaScript on this different host calls Graphistry directly:
+CORS_ALLOWED_ORIGINS=https://dashboard.example.com
+```
+
+> **Credentialed cross-origin REST requests are not supported.** REST responses do not emit
+> `Access-Control-Allow-Credentials`; a separate frontend making browser `fetch` requests must use
+> bearer-token / API-key authentication instead of `credentials: 'include'`. Same-origin pages and
+> iframe embeds continue to use Graphistry's session cookies.
+
+**Realtime socket (upgrade note):** the visualization's realtime (socket.io) connection now also honors
+`CORS_ALLOWED_ORIGINS` on its handshake, for both HTTP polling and WebSocket upgrade. The allowlist
+admits an origin; it does **not** authenticate a socket. The visualization socket uses cookie-backed
+authentication, and credentialed cross-origin polling is not enabled by this setting. The supported
+iframe embed loads Graphistry's own page and makes same-origin socket requests, so its parent origin
+needs no socket allowlist entry. A sandboxed iframe without `allow-same-origin` instead sends
+`Origin: null` on its socket handshake and is refused.
+
+The first `GET /graph/graph.html?dataset=...` can arrive without `session`; the graph page normally
+redirects to a URL containing `session=<Graphistry session ID>`. Its built-in socket client carries
+that value on every transport request. Caddy hashes the value to the same engine pod in multi-engine
+Kubernetes, then viz keeps each Engine.IO connection on one CPU worker. This is routing, not
+authorization or a guarantee of cross-user collaboration: same-account tabs may retain one session,
+but a different authenticated user opening its URL is redirected to a fresh session. Anonymous reuse
+of an anonymous session is limited to 10 seconds. The app-level two-tab smoke test checks that closing
+one tab leaves the other operational; the proxy fixture checks transport routing only.
+
+A **direct Socket.IO handshake** without `session` differs from that expected first page GET. In
+multi-engine Kubernetes, it can open a socket but lose its next polling request across engine pods.
+Include the Graphistry `session` query on every direct-client connection and reconnect. Compose's
+single-engine path has no inter-pod risk. No server-side 422 rejection has been introduced while
+direct-client compatibility remains under review. A VPN or changing browser IP does not affect a
+session-based route.
+
+> **Marketplace / turnkey deployments** ship with `CORS_ALLOWED_ORIGINS` empty (same-origin only,
+> fail-closed) — the same secure default as every other distribution. Set it only if a separate
+> different-origin frontend needs browser-side API/socket access.
 
 ## Maps / Geospatial
 

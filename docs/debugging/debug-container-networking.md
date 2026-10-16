@@ -70,11 +70,12 @@ http://MY_GRAPHISTRY_SERVER.com/graph/graph.html?dataset=Twitter
 ```
 =>
 ```
-302 on `/graph/graph.html?dataset=Twitter
-200 on `/graph.graph.html?dataset=Twitter&workbook=<HASH>`
+302 on `/graph/graph.html?dataset=Twitter`
+200 on `/graph/graph.html?dataset=Twitter&session=<SESSION_ID>`
 Page UI loads (`vendor.<HASH>.css`, ...)
-Socket connects (`/worker/<NUMBER>/socket.io/?dataset=Twitter&...`)
-Dataset positions stream in (`/worker/<NUMBER>/vbo?id=<HASH>&buffer=curPoints`)
+Socket connects (`/graph/socket.io/?EIO=4&transport=websocket&session=<SESSION_ID>`)
+If WebSocket upgrade is blocked, socket polling `GET`/`POST` requests keep the same `session` value
+Dataset positions stream in through `/streamgl/` requests
 ```
 
 This call sequence stress a lot of the pipeline.
