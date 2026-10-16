@@ -13,10 +13,10 @@ Backup and restore scripts are provided that will backup your Graphistry environ
 
 <br>
 
-### [Configuration](#configuration)
-### [Backup](#backup)
-### [Restore](#restore)
-### [Scheduling Backups](#scheduling-backups)
+- [Configuration](#configuration)
+- [Backup](#backup)
+- [Restore](#restore)
+- [Scheduling Backups](#scheduling-backups)
 
 <br>
 
