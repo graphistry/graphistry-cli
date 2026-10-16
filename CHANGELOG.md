@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Added
 
+* Ubuntu 26.04 prerequisites install script (`docs/install/on-prem/ubuntu_26_04_setup.sh`) with pinned Nvidia driver 595.91.07, plus `ubuntu_26_04_setup.example.env`
 * GPU Configuration Wizard documentation (`docs/tools/gpu-config-wizard.md`)
 * Environment Variables Reference page (`docs/app-config/environment-variables.md`)
 * GPU Memory Watcher documentation in performance tuning

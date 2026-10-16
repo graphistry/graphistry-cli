@@ -72,6 +72,8 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 
 See `etc/scripts/bootstrap/` in your Graphistry distribution for Ubuntu and RHEL setup scripts. For legacy OS references, see [Legacy Setup Guides](legacy/index.rst). For automating this process, please contact Graphistry staff.
 
+**Ubuntu 26.04 LTS:** `ubuntu_26_04_setup.sh` in this folder installs the prerequisites on a fresh Ubuntu 26.04 host: OS prep, the Nvidia driver pinned to 595.91.07 (open kernel modules, built with DKMS), Docker from Docker's apt repo, and nvidia-container-toolkit set as Docker's default runtime. Run it twice as the `ubuntu` user with sudo rights: the first run reboots, the second finishes the install and checks `nvidia-smi` on the host and in Docker. Optional settings, such as a different driver version or proprietary kernel modules for Pascal / Volta GPUs, are listed in `ubuntu_26_04_setup.example.env`; copy it to `.env` next to the script to use them.
+
 
 
 ## 4. Graphistry Container Installation
