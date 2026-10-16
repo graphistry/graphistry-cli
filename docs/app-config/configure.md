@@ -28,7 +28,7 @@ We typically recommend doing targeted and localized restarts via `./graphistry s
 ### Secondary:: docker-compose.yml, Caddyfile, `pivot-db/`
 
 * More advanced administrators may edit `docker-compose.yml` .  Maintenance is easier if you never edit it.
-* Custom TLS is via editing `Caddyfile`([Caddy docs](https://caddyserver.com/docs/automatic-https)), see below
+* Custom TLS is via editing `Caddyfile` ([Caddy docs](https://caddyserver.com/docs/automatic-https)), see [Configure TLS with Caddy](../security/configure-tls-caddy.md)
 * Visual playbooks may be configured via `data/pivot-db/config/config.json`
 
 ## SSO
@@ -45,9 +45,9 @@ Recommendations for SSO when self-hosting:
 
 ## TLS
 
-We encourage everyone to use HTTPS over HTTP, especially through the automatic TLS option, for [securing authentication](../security/authentication.md)
+We encourage everyone to use HTTPS over HTTP, for [securing authentication](../security/authentication.md)
 
-Graphistry supports both free automatic TLS within your server (Caddy/LetsEncrypt) and offloading to an external load balancer or proxy
+Graphistry supports free automatic TLS within your server (Caddy/LetsEncrypt), your own certificates, and offloading to an external load balancer or proxy. See [Configure TLS with Caddy](../security/configure-tls-caddy.md) for setup, HTTP to HTTPS redirects, and debugging.
 
 As part of TLS configuration, decide whether to allow cross-origin embedding of private visualizations
 
@@ -55,35 +55,7 @@ As part of TLS configuration, decide whether to allow cross-origin embedding of 
 
 #### Caddy
 
-If Caddy is used for TLS, several additional policies may be of interest, but only use ones that match your intended usage patterns:
-
-```
-grphstry.my-website.org, :80 {
-  ...
-  @mismatchedHost {
-        not host grphstry.my-website.org localhost
-  }
-  handle @mismatchedHost {
-        respond 400
-  }
-  ...
-  reverse_proxy nginx:80 {
-        # enable HSTS (1yr)
-        header_down Strict-Transport-Security max-age=31536000;
-
-        # disable clients from sniffing the media type
-        header_down X-Content-Type-Options nosniff
-
-        # clickjacking protection
-        header_down X-Frame-Options SAMEORIGIN
-
-        # keep referrer data off of HTTP connections
-        header_down Referrer-Policy no-referrer-when-downgrade
-  }
-}
-```
-
-Note: Configuration line `header_down X-Frame-Options SAMEORIGIN` will prevent all cross-origin embedding. By default, public content can be cross-origin embedded while private content cannot. See also `COOKIE_SAMESITE` for enabling authorized private content in cross-origin embeddings.
+See [Security headers](../security/configure-tls-caddy.md#security-headers) for optional Caddyfile policies such as HSTS and host checks.
 
 #### Application servers
 
@@ -120,92 +92,6 @@ After restarting, verify in browser DevTools → Application → Cookies on the 
 ##### Embedding host requirements
 
 The host embedding the Graphistry iframe must also include the Graphistry origin in its CSP `frame-src` and `child-src` directives, in addition to the cookie flags above. For Louie, see the [Graphistry Iframe Blocked in Louie](https://louieai-documentation.readthedocs.io/en/latest/admin/100_Graphistry_Iframe_Blocked.html) runbook for the full three-way (`OA2_HOST` <-> Graphistry host <-> Caddy CSP) checklist.
-
-
-### Setup free Automatic TLS
-
-Caddy supports [free automatic TLS](https://caddyserver.com/docs/automatic-https) as long as your site meets the listed conditions.  
-
-Sample `Caddyfile`:
-
-```
-https://*.website.org:443 {
-  tls {
-    max_certs 100
-  }
-  respond /caddy/health/ 200 {
-    body "{\"success\": true}"
-    close
-  }
-  reverse_proxy nginx:80
-}
-```
-
-Note that Graphistry is internally configured via `nginx`.
-
-### Setup free Semi-Automatic TLS
-
-The above step may fail if your server does not allow outbound internet traffic. To work around, perform a [manual LetsEncrypt Certbot handshake for Caddy](../security/configure-tls-caddy-manual-lets-encrypt-handshake.md).
-
-### Setup custom certs
-
-If you already have certificates, Caddy can use them:
-
-* Place your certs in `./.caddy/my.crt` and `./.caddy/my.key`
-* Modify `Caddyfile`:
-
-```
-https://your.site.ngo:443 {
-  tls /root/.caddy/my.crt /root/.caddy/my.key
-  respond /caddy/health/ 200 {
-    body "{\"success\": true}"
-    close
-  }
-  reverse_proxy nginx:80
-}
-```
-
-Note the use of a fully qualified domain name in the first line, and that the file paths are for the `caddy` container's file system, not the host file system
-
-### Setup offloading TLS from a load balancer or proxy
-
-To enforce TLS using your own outside load balancer or proxy rather than the built-in Caddy server, we recommend:
-
-* Setup TLS at your load balancer (ex: AWS ALB) or proxy
-* Ensure http traffic is auto-upgraded (redirected) to https
-* Forward (stripped) http traffic to Graphistry
-* Optionally, in your `Caddyfile`'s [reverse_proxy](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy) section, add [trusted_proxies](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy#trusted_proxies) so your load balancer's `X-Forwarded-{For,Proto,Host}` headers are trusted for propagation to Graphistry
-
-
-
-To safelist typical internal IPs `192.168.0.0/16 172.16.0.0/12 10.0.0.0/8 127.0.0.1/8 fd00::/8 ::1`:
-
-```
-reverse_proxy nginx:80 {
-	trusted_proxies private_ranges
-}
-```
-
-If you know the specific range, you can provide that as well:
-
-```
-reverse_proxy nginx:80 {
-	trusted_proxies 173.245.48.0/20 103.21.244.0/22
-}
-```
-
-
-### Debugging TLS
-
-Custom TLS setups often fail due to the certificate, OS, network, Caddy config, and file permissions. To perform isolated checks on each, try:
-
-* Test the certificate
-* Test a [standalone Caddy static file server](https://www.baty.net/2018/using-caddy-for-serving-static-content/)
-* ... Including on another box, if OS/network issues are suspected
-* Check the logs of `./graphistry logs -f -t caddy nginx`
-* Test whether the containers are up and ports match via `./graphistry ps`, `curl`, and `curl` from within a docker container (so within the docker network namespace)
-
-If problems persist, please reach out to your Graphistry counterparts. Additional workarounds are possible.
 
 
 ## Email

@@ -6,6 +6,7 @@ Security
 
   authentication
   configure-security
+  configure-tls-caddy
   configure-tls-caddy-manual-lets-encrypt-handshake
   SSO
   threatmodel

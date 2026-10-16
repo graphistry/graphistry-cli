@@ -68,11 +68,11 @@ Upon changing, restart the web server with the fresh environment: `./graphistry 
 
 We **highly** encourage using TLS and make it easy:
 
-* [Configure the Caddyfile](../app-config/configure.md#tls) for auto-TLS with one line (recommended), add your own TLS certificate, or offload TLS
+* [Configure TLS with Caddy](configure-tls-caddy.md) for auto-TLS with one line (recommended), add your own TLS certificate, or offload TLS
 * TLS is required for JWT auth to be secured against MitM attacks
 * Beyond enabling TLS, check other common server settings around it in the authentication configuration docs
 
-After, there are additional [Caddyfile http/https header settings](https://github.com/graphistry/graphistry-cli/blob/master/docs/configure.md#tls-hardening)
+After, there are additional [Caddyfile http/https header settings](configure-tls-caddy.md#security-headers)
 
 ### Embedding
 

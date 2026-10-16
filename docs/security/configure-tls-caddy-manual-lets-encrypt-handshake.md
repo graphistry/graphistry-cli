@@ -1,5 +1,7 @@
 # Manual Caddy LetsEncrypt TLS Certificates
 
+For the other TLS options (automatic Let's Encrypt, your own certificates, offloading), see [Configure TLS with Caddy](configure-tls-caddy.md).
+
 The following instructions show how to do a manual LetsEncrypt handshake for Caddy, including for internal IPs. 
 
 It helps work around challenges getting a TLS certificate in some enterprise environment. This is common due to internal security team processes, and further complicated by firewall policies preventing outbound communications needed for LetsEncrypt's automatic TLS certificate generation protocol's handshake.
@@ -51,7 +53,7 @@ my-org.graphistry.com {
 }
 ```
 
-Optionally, there are additional [Caddyfile http/https header settings](https://github.com/graphistry/graphistry-cli/blob/master/docs/configure.md#tls-hardening)
+Optionally, there are additional [Caddyfile http/https header settings](configure-tls-caddy.md#security-headers)
 
 ### 4. Restart Caddy
 
