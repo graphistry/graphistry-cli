@@ -72,7 +72,12 @@ The Graphistry environnment depends soley on [Nvidia RAPIDS](https://rapids.ai) 
 
 See `etc/scripts/bootstrap/` in your Graphistry distribution for Ubuntu and RHEL setup scripts. For legacy OS references, see [Legacy Setup Guides](legacy/index.rst). For automating this process, please contact Graphistry staff.
 
-**Ubuntu 26.04 LTS:** `ubuntu_26_04_setup.sh` in this folder installs the prerequisites on a fresh Ubuntu 26.04 host: OS prep, the Nvidia driver pinned to 595.91.07 (open kernel modules, built with DKMS), Docker from Docker's apt repo, and nvidia-container-toolkit set as Docker's default runtime. Run it twice as the `ubuntu` user with sudo rights: the first run reboots, the second finishes the install and checks `nvidia-smi` on the host and in Docker. Optional settings, such as a different driver version or proprietary kernel modules for Pascal / Volta GPUs, are listed in `ubuntu_26_04_setup.example.env`; copy it to `.env` next to the script to use them.
+**Ubuntu 26.04 LTS:** `ubuntu_26_04_setup.sh` in this folder installs the prerequisites on a fresh Ubuntu 26.04 host: OS prep, the Nvidia 595 driver, Docker from Docker's apt repo, and nvidia-container-toolkit set as Docker's default runtime. Run it twice as the `ubuntu` user with sudo rights: the first run reboots, the second finishes the install and checks `nvidia-smi` on the host and in Docker. Settings go in a `.env` next to the script; `ubuntu_26_04_setup.example.env` lists them all with explanations. Decide these before the first run:
+
+* **`SECURE_BOOT`** picks the driver source. `0` (default) installs exactly 595.91.07 from Nvidia's CUDA repo and builds the kernel module with DKMS; the module is unsigned, so Secure Boot must be off. `1` installs Ubuntu's `595-server` driver with prebuilt modules signed by Canonical, which load with Secure Boot on; Ubuntu may ship newer 595.x point releases with later kernel updates. Check a host with `mokutil --sb-state`.
+* **`DOCKER_LOG_MAX_SIZE`** (optional, e.g. `100m`) caps each container's log; Docker's default never rotates.
+* **Security updates are turned off.** The script removes unattended-upgrades and disables apt's automatic timers so the driver, kernel and Docker do not change under a running server. Patch in a maintenance window with `sudo apt-get update && sudo apt-get dist-upgrade && sudo reboot`.
+* Any apt failure, including a repository that cannot be fetched, stops the script.
 
 
 

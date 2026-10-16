@@ -25,10 +25,27 @@ set -exo pipefail
 #   Settings can be passed as environment variables, or placed in a `.env`   #
 #    file next to this script. See `ubuntu_26_04_setup.example.env`.         #
 #                                                                            #
+#   Nvidia driver, two sources (SECURE_BOOT in `.env`):                      #
+#   - SECURE_BOOT=0 (default): Nvidia's CUDA apt repo, exact version pinned  #
+#     (595.91.07) with nvidia-driver-pinning-<version>; kernel module built  #
+#     locally by DKMS, unsigned, so it needs Secure Boot off (or a MOK key   #
+#     enrolled at the console). The version never moves, including across    #
+#     kernel updates.                                                        #
+#   - SECURE_BOOT=1: Ubuntu's <branch>-server driver (595-server) with       #
+#     prebuilt kernel modules signed by Canonical, so it loads with Secure   #
+#     Boot on and needs no compiler. Ubuntu ships point releases within the  #
+#     branch with kernel updates, so the version can move (595.91.07 today). #
+#                                                                            #
+#   SECURITY UPDATES ARE TURNED OFF: stage 1 removes unattended-upgrades and #
+#    disables the apt-daily timers and APT::Periodic, so the host installs   #
+#    no patches on its own. This avoids unplanned driver, kernel or Docker   #
+#    changes and reboots under a running GPU server. Patch on your own       #
+#    schedule in a maintenance window:                                       #
+#        sudo apt-get update && sudo apt-get dist-upgrade && sudo reboot     #
+#                                                                            #
 #   Changes vs ubuntu_22_04_setup.sh:                                        #
-#   - Nvidia driver pinned to an exact version (595.91.07 by default) from   #
-#     Nvidia's CUDA apt repo via nvidia-driver-pinning-<version>, open       #
-#     kernel modules built with DKMS (Turing / T4 and newer)                 #
+#   - Nvidia driver 595 instead of 470 (see above); open kernel modules by   #
+#     default (Turing / T4 and newer), proprietary for Pascal / Volta        #
 #   - nvidia-container-toolkit from the current libnvidia-container repo     #
 #     (the old nvidia-docker repo has no ubuntu26.04 list) and configured    #
 #     via `nvidia-ctk`; apt-key replaced with signed-by keyrings             #
@@ -37,6 +54,8 @@ set -exo pipefail
 #   - DNS fallback via systemd-resolved drop-in instead of appending to the  #
 #     /etc/resolv.conf stub, which is regenerated on every boot              #
 #   - needrestart prompts suppressed, apt lock waits, sudo env fixes         #
+#   - any apt failure stops the script, including repo fetch errors          #
+#   - optional Docker log size limit (DOCKER_LOG_MAX_SIZE)                   #
 #                                                                            #
 #    for assistance:  support@graphistry.com                                 #
 #                                                                            #
@@ -52,13 +71,17 @@ fi
 
 GRAPHISTRY_USER=${GRAPHISTRY_USER:-ubuntu}
 GRAPHISTRY_HOME=${GRAPHISTRY_HOME:-/home/${GRAPHISTRY_USER}/graphistry}
+SECURE_BOOT=${SECURE_BOOT:-0}
 NVIDIA_DRIVER_VERSION=${NVIDIA_DRIVER_VERSION:-595.91.07}
+NVIDIA_UBUNTU_BRANCH=${NVIDIA_UBUNTU_BRANCH:-${NVIDIA_DRIVER_VERSION%%.*}-server}
 NVIDIA_KERNEL_MODULES=${NVIDIA_KERNEL_MODULES:-open}
 NVIDIA_REPO=${NVIDIA_REPO:-https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2604/x86_64}
 ALLOW_SECURE_BOOT_MOK=${ALLOW_SECURE_BOOT_MOK:-0}
 NVIDIA_CONTAINER=${NVIDIA_CONTAINER:-nvidia/cuda:12.8.1-base-ubuntu24.04}
 DOCKER_VERSION=${DOCKER_VERSION:-}
 DOCKER_CONTAINERD_SNAPSHOTTER=${DOCKER_CONTAINERD_SNAPSHOTTER:-false}
+DOCKER_LOG_MAX_SIZE=${DOCKER_LOG_MAX_SIZE:-}
+DOCKER_LOG_MAX_FILE=${DOCKER_LOG_MAX_FILE:-3}
 REQUIRE_GPU=${REQUIRE_GPU:-1}
 DISABLE_SNAPD=${DISABLE_SNAPD:-1}
 FALLBACK_DNS=${FALLBACK_DNS:-8.8.8.8 8.8.4.4}
@@ -69,9 +92,11 @@ lock_file=${LOCK_FILE:-~/g-part1.lck}
 
 # sudo resets the environment, so DEBIAN_FRONTEND must be set after sudo.
 # needrestart (default since 24.04) otherwise prompts during apt and hangs scripts.
+# Update::Error-Mode=any: `apt-get update` otherwise exits 0 when a repo fails to fetch.
 apt_get() {
     sudo DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a NEEDRESTART_SUSPEND=1 \
         apt-get -y \
+        -o APT::Update::Error-Mode=any \
         -o DPkg::Lock::Timeout=600 \
         -o Dpkg::Options::="--force-confdef" \
         -o Dpkg::Options::="--force-confold" \
@@ -87,10 +112,21 @@ if [ "${VERSION_ID}" != "26.04" ]; then
 fi
 
 case "${NVIDIA_KERNEL_MODULES}" in
-    open) nvidia_headless_pkg=nvidia-headless-open ;;
-    proprietary) nvidia_headless_pkg=nvidia-headless ;;
+    open) nvidia_headless_pkg=nvidia-headless-open; ubuntu_open_suffix=-open ;;
+    proprietary) nvidia_headless_pkg=nvidia-headless; ubuntu_open_suffix= ;;
     *) echo "ERROR: NVIDIA_KERNEL_MODULES must be open or proprietary" >&2; exit 1 ;;
 esac
+case "${SECURE_BOOT}" in
+    0|1) ;;
+    *) echo "ERROR: SECURE_BOOT must be 0 (Nvidia repo, exact pin, DKMS) or 1 (Ubuntu signed modules)" >&2; exit 1 ;;
+esac
+# SECURE_BOOT=1 packages, e.g. nvidia-headless-no-dkms-595-server-open
+ubuntu_driver_pkg=nvidia-headless-no-dkms-${NVIDIA_UBUNTU_BRANCH}${ubuntu_open_suffix}
+
+# installed_pkgs pkg...: print the given packages that are installed
+installed_pkgs() {
+    dpkg-query -W -f='${Package} ${Status}\n' "$@" 2>/dev/null | awk '/ ok installed$/ {print $1}' || true
+}
 
 if [ ! -f ${lock_file} ]; then
 
@@ -105,6 +141,14 @@ if [ ! -f ${lock_file} ]; then
     echo "----- CHECK APT -------"
     ps -aux | grep apt || echo ok
 
+    # NOTE: this turns off automatic security updates (see the header). The host gets
+    # no patches until an admin runs apt-get dist-upgrade. To turn them back on later:
+    #   sudo apt-get install unattended-upgrades
+    #   sudo rm /etc/apt/apt.conf.d/99periodic-disable
+    #   sudo systemctl enable --now apt-daily.timer apt-daily-upgrade.timer
+    # With SECURE_BOOT=1 that can also update the Nvidia driver (it ships in the
+    # -security pocket), leaving the loaded module out of step with userspace until
+    # the next reboot.
     echo "---- DISABLE apt-daily ----"
     ### https://stackoverflow.com/questions/45269225/ansible-playbook-fails-to-lock-apt/51919678#51919678
     sudo systemctl disable --now 'apt-daily.timer'
@@ -234,18 +278,12 @@ EOF
 
     # 400-upgrade.sh:
 
-    apt_get update \
-        && echo "======= UPDATED SUCCESSFULLY =======" \
-        || echo "======= UPDATE FAILED ======="
-
+    # Any apt failure stops the script (set -e): continuing on a half-upgraded
+    # system just fails later in a less obvious place.
+    apt_get update
     # dist-upgrade, not upgrade: plain upgrade keeps back the kernel meta packages
-    apt_get dist-upgrade \
-        && echo "======= UPGRADED SUCCESSFULLY ======" \
-        || echo "======= UPGRADE FAILED ======"
-
-    apt_get install build-essential ca-certificates \
-        && echo "======  INSTALLED SUCCESSFULY =======" \
-        || echo "======  INSTALL FAILED ======="
+    apt_get dist-upgrade
+    apt_get install build-essential ca-certificates
 
 
     # 510-base-util.sh:
@@ -283,47 +321,106 @@ EOF
         echo "WARNING: no Nvidia GPU found, installing driver packages anyway (REQUIRE_GPU=0)"
     fi
 
-    # Nvidia's repo modules are built locally by DKMS and are not signed by Canonical.
-    # With Secure Boot on they will not load until a MOK key is enrolled at the console.
+    secure_boot_on=0
     if mokutil --sb-state 2>/dev/null | grep 'SecureBoot enabled' > /dev/null; then
-        if [ "${ALLOW_SECURE_BOOT_MOK}" = "1" ]; then
-            echo "WARNING: Secure Boot is enabled; enroll the DKMS MOK key at the console on reboot"
-        else
-            echo "ERROR: Secure Boot is enabled and the pinned driver uses unsigned DKMS modules." >&2
-            echo "       Disable Secure Boot, or set ALLOW_SECURE_BOOT_MOK=1 if you have console" >&2
-            echo "       access to enroll the MOK key during the reboot." >&2
-            exit 1
-        fi
+        secure_boot_on=1
+    fi
+    echo "Secure Boot enabled: ${secure_boot_on}, SECURE_BOOT=${SECURE_BOOT}"
+
+    # The two driver sources conflict; switching on an installed host is not supported
+    if [ "${SECURE_BOOT}" = "1" ]; then
+        other_source=$(installed_pkgs 'nvidia-driver-pinning-*' libnvidia-compute)
+    else
+        other_source=$(installed_pkgs 'nvidia-headless-no-dkms-[0-9]*')
+    fi
+    if [ -n "${other_source}" ]; then
+        echo "ERROR: the other Nvidia driver source is already installed (${other_source//$'\n'/ })." >&2
+        echo "       Use the same SECURE_BOOT value as the first install, or purge the driver first." >&2
+        exit 1
     fi
 
-    # Driver goes in after the upgrade so DKMS builds for the kernel the machine
-    # reboots into. The pinning package locks every driver package to one version.
-    installed_driver=$(dpkg-query -W -f='${Version}' libnvidia-compute 2>/dev/null || true)
-    if [[ "${installed_driver}" == "${NVIDIA_DRIVER_VERSION}"-* ]]; then
-        echo "Nvidia driver ${NVIDIA_DRIVER_VERSION} already installed"
-    else
-        kernel_flavour=generic
-        for f in generic-hwe-26.04 aws azure gcp oracle generic virtual; do
-            if dpkg-query -W -f='${Status}' "linux-image-${f}" 2>/dev/null | grep "ok installed" > /dev/null; then
-                kernel_flavour=${f}
-                break
-            fi
-        done
-        echo "Kernel flavour: ${kernel_flavour}"
-        # Headers meta package keeps DKMS building for future kernel updates too
-        apt_get install dkms "linux-headers-${kernel_flavour}"
-
-        if ! dpkg -s cuda-keyring > /dev/null 2>&1; then
-            curl -fsSL -o ~/tmp_cuda-keyring.deb "${NVIDIA_REPO}/cuda-keyring_1.1-1_all.deb"
-            sudo dpkg -i ~/tmp_cuda-keyring.deb
-            rm -f ~/tmp_cuda-keyring.deb
+    # Kernel flavour picks the matching headers (SECURE_BOOT=0) or signed modules (=1)
+    kernel_flavour=generic
+    for f in generic-hwe-26.04 aws azure gcp oracle generic virtual; do
+        if [ -n "$(installed_pkgs "linux-image-${f}")" ]; then
+            kernel_flavour=${f}
+            break
         fi
-        apt_get update
-        apt_get install "nvidia-driver-pinning-${NVIDIA_DRIVER_VERSION}"
-        apt_get install "${nvidia_headless_pkg}" nvidia-persistenced
+    done
+    # linux-image-virtual runs the generic kernel
+    [ "${kernel_flavour}" = virtual ] && kernel_flavour=generic
+    echo "Kernel flavour: ${kernel_flavour}"
 
-        # Fail now rather than after the reboot if DKMS did not build the module
-        dkms status | grep "${NVIDIA_DRIVER_VERSION}.*installed" > /dev/null
+    # Driver goes in after the upgrade so its kernel module is in place for the
+    # kernel the machine reboots into.
+    if [ "${SECURE_BOOT}" = "1" ]; then
+
+        # Ubuntu's driver with prebuilt kernel modules signed by Canonical: loads with
+        # Secure Boot on, no DKMS. The linux-modules meta package follows kernel updates.
+        ubuntu_modules_pkg=linux-modules-nvidia-${NVIDIA_UBUNTU_BRANCH}${ubuntu_open_suffix}-${kernel_flavour}
+        if [ -n "$(installed_pkgs "${ubuntu_driver_pkg}")" ]; then
+            echo "Nvidia driver ${ubuntu_driver_pkg} already installed"
+        else
+            for p in "${ubuntu_modules_pkg}" "${ubuntu_driver_pkg}"; do
+                if ! apt-cache show "${p}" > /dev/null 2>&1; then
+                    echo "ERROR: ${p} is not in the Ubuntu archive (kernel flavour ${kernel_flavour}," >&2
+                    echo "       branch ${NVIDIA_UBUNTU_BRANCH}). Use SECURE_BOOT=0, or set NVIDIA_UBUNTU_BRANCH." >&2
+                    exit 1
+                fi
+            done
+            apt_get install "${ubuntu_modules_pkg}" "${ubuntu_driver_pkg}" "nvidia-utils-${NVIDIA_UBUNTU_BRANCH}"
+        fi
+
+        ubuntu_driver_version=$(dpkg-query -W -f='${Version}' "nvidia-utils-${NVIDIA_UBUNTU_BRANCH}")
+        ubuntu_driver_version=${ubuntu_driver_version%%-*}
+        # Fail now rather than after the reboot if the newest kernel has no matching module
+        newest_kernel=$(find /boot -maxdepth 1 -name 'vmlinuz-*' -printf '%f\n' | sed 's/^vmlinuz-//' | sort -V | tail -1)
+        module_version=$(modinfo -k "${newest_kernel}" -F version nvidia)
+        if [ "${module_version}" != "${ubuntu_driver_version}" ]; then
+            echo "ERROR: kernel ${newest_kernel} has nvidia module ${module_version}, driver is ${ubuntu_driver_version}" >&2
+            exit 1
+        fi
+        if [ "${ubuntu_driver_version}" != "${NVIDIA_DRIVER_VERSION}" ]; then
+            echo "WARNING: Ubuntu's ${NVIDIA_UBUNTU_BRANCH} driver is ${ubuntu_driver_version}, not ${NVIDIA_DRIVER_VERSION}."
+            echo "         Use SECURE_BOOT=0 if the exact version is required."
+        fi
+
+    else
+
+        # Nvidia's repo modules are built locally by DKMS and are not signed by Canonical.
+        # With Secure Boot on they will not load until a MOK key is enrolled at the console.
+        if [ "${secure_boot_on}" = "1" ]; then
+            if [ "${ALLOW_SECURE_BOOT_MOK}" = "1" ]; then
+                echo "WARNING: Secure Boot is enabled; enroll the DKMS MOK key at the console on reboot"
+            else
+                echo "ERROR: Secure Boot is enabled and SECURE_BOOT=0 builds unsigned DKMS modules." >&2
+                echo "       Set SECURE_BOOT=1 for Ubuntu's signed driver, disable Secure Boot, or set" >&2
+                echo "       ALLOW_SECURE_BOOT_MOK=1 if you can enroll the MOK key at the console." >&2
+                exit 1
+            fi
+        fi
+
+        # The pinning package locks every driver package to one version
+        installed_driver=$(dpkg-query -W -f='${Version}' libnvidia-compute 2>/dev/null || true)
+        if [[ "${installed_driver}" == "${NVIDIA_DRIVER_VERSION}"-* ]]; then
+            echo "Nvidia driver ${NVIDIA_DRIVER_VERSION} already installed"
+        else
+            # Headers meta package keeps DKMS building for future kernel updates too
+            apt_get install dkms "linux-headers-${kernel_flavour}"
+
+            if [ -z "$(installed_pkgs cuda-keyring)" ]; then
+                curl -fsSL -o ~/tmp_cuda-keyring.deb "${NVIDIA_REPO}/cuda-keyring_1.1-1_all.deb"
+                sudo dpkg -i ~/tmp_cuda-keyring.deb
+                rm -f ~/tmp_cuda-keyring.deb
+            fi
+            apt_get update
+            apt_get install "nvidia-driver-pinning-${NVIDIA_DRIVER_VERSION}"
+            apt_get install "${nvidia_headless_pkg}" nvidia-persistenced
+
+            # Fail now rather than after the reboot if DKMS did not build the module
+            dkms status | grep "${NVIDIA_DRIVER_VERSION}.*installed" > /dev/null
+        fi
+
     fi
 
     # Applied on next boot, before docker loads the overlay module
@@ -355,7 +452,16 @@ else
     # No GPU: check the module DKMS built for the running kernel instead
     loaded_driver=$(modinfo -F version nvidia)
 fi
-if [ "${loaded_driver}" != "${NVIDIA_DRIVER_VERSION}" ]; then
+if [ "${SECURE_BOOT}" = "1" ]; then
+    # Ubuntu sets the point release within the branch; only the branch must match
+    if [ "${loaded_driver%%.*}" != "${NVIDIA_UBUNTU_BRANCH%%-*}" ]; then
+        echo "ERROR: expected Nvidia driver branch ${NVIDIA_UBUNTU_BRANCH}, found ${loaded_driver}" >&2
+        exit 1
+    fi
+    if [ "${loaded_driver}" != "${NVIDIA_DRIVER_VERSION}" ]; then
+        echo "WARNING: Nvidia driver ${loaded_driver} loaded, not ${NVIDIA_DRIVER_VERSION} (SECURE_BOOT=1 follows Ubuntu's branch)"
+    fi
+elif [ "${loaded_driver}" != "${NVIDIA_DRIVER_VERSION}" ]; then
     echo "ERROR: expected Nvidia driver ${NVIDIA_DRIVER_VERSION}, found ${loaded_driver}" >&2
     exit 1
 fi
@@ -365,16 +471,27 @@ fi
 # Set daemon options before docker first starts: changing the image store later
 # hides previously loaded images.
 sudo mkdir -p /etc/docker
+# DOCKER_LOG_MAX_SIZE caps each container's json-file log (applies to containers
+# created after the change; existing ones keep their settings until recreated).
 daemon_json=$( { sudo cat /etc/docker/daemon.json 2>/dev/null || echo '{}' ; } \
     | jq --argjson snap "${DOCKER_CONTAINERD_SNAPSHOTTER}" \
-        '. + {"live-restore": true} | .features = ((.features // {}) + {"containerd-snapshotter": $snap})' )
+        --arg log_size "${DOCKER_LOG_MAX_SIZE}" --arg log_files "${DOCKER_LOG_MAX_FILE}" \
+        '. + {"live-restore": true}
+        | .features = ((.features // {}) + {"containerd-snapshotter": $snap})
+        | if $log_size != "" then
+            ."log-driver" = "json-file"
+            | ."log-opts" = ((."log-opts" // {}) + {"max-size": $log_size, "max-file": $log_files})
+          else . end' )
 echo "${daemon_json}" | sudo tee /etc/docker/daemon.json
 
 sudo docker --version \
 || {
-    for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
-        apt_get remove "${pkg}" || true
-    done
+    # Only remove what is installed, so a real apt failure still stops the script
+    old_docker=$(installed_pkgs docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc)
+    if [ -n "${old_docker}" ]; then
+        # shellcheck disable=SC2086
+        apt_get remove ${old_docker}
+    fi
 
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
