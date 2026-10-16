@@ -126,13 +126,10 @@ The host embedding the Graphistry iframe must also include the Graphistry origin
 
 Caddy supports [free automatic TLS](https://caddyserver.com/docs/automatic-https) as long as your site meets the listed conditions.  
 
-Sample `Caddyfile`:
+Sample `Caddyfile`, replacing `graphistry.website.org` with your server's fully qualified domain name:
 
 ```
-https://*.website.org:443 {
-  tls {
-    max_certs 100
-  }
+graphistry.website.org {
   respond /caddy/health/ 200 {
     body "{\"success\": true}"
     close
@@ -140,6 +137,8 @@ https://*.website.org:443 {
   reverse_proxy nginx:80
 }
 ```
+
+Let's Encrypt must be able to reach the server on port 80 or 443 at that name to issue the certificate. Wildcard names such as `*.website.org` cannot use this automatic flow: Let's Encrypt only issues wildcard certificates through a DNS challenge, which requires a Caddy build with your DNS provider's plugin.
 
 Note that Graphistry is internally configured via `nginx`.
 
@@ -149,14 +148,21 @@ The above step may fail if your server does not allow outbound internet traffic.
 
 ### Setup custom certs
 
-If you already have certificates, Caddy can use them:
+If you already have certificates, such as from your organization's certificate authority, Caddy can use them instead of Let's Encrypt:
 
-* Place your certs in `./.caddy/my.crt` and `./.caddy/my.key`
-* Modify `Caddyfile`:
+* Use PEM files: the certificate as a full chain (server certificate followed by intermediates) and an unencrypted private key. The certificate's Subject Alternative Names must include the domain users browse to.
+* Copy them into `data/caddy/config/` in your Graphistry folder. The `caddy` container sees that folder as `/config`:
+
+```bash
+cp fullchain.pem privkey.pem data/caddy/config/
+chmod 600 data/caddy/config/privkey.pem
+```
+
+* Modify `data/config/Caddyfile`:
 
 ```
-https://your.site.ngo:443 {
-  tls /root/.caddy/my.crt /root/.caddy/my.key
+your.site.ngo {
+  tls /config/fullchain.pem /config/privkey.pem
   respond /caddy/health/ 200 {
     body "{\"success\": true}"
     close
@@ -165,7 +171,9 @@ https://your.site.ngo:443 {
 }
 ```
 
-Note the use of a fully qualified domain name in the first line, and that the file paths are for the `caddy` container's file system, not the host file system
+* Restart Caddy: `./graphistry up -d --force-recreate --no-deps caddy`
+
+Note the use of a fully qualified domain name in the first line, and that the file paths are for the `caddy` container's file system, not the host file system. With a `tls` line naming certificate files, Caddy does not contact Let's Encrypt for that domain, so this works without outbound internet access. Caddy does not renew certificates it is given: replace the files and restart Caddy before they expire.
 
 ### Setup offloading TLS from a load balancer or proxy
 
