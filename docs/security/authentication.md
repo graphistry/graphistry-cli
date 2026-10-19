@@ -53,7 +53,7 @@ Graphistry authentication uses standard web software layers:
    * Unconfigured servers do nto have TLS
    * [Add a TLS certificate](../app-config/configure.md#tls) enables TLS
    * Further consider adding [additional security headers](../app-config/configure.md#caddy)
-   * Cross-origin embedding for unauthenticated visualizations is enabled by default
+   * Same-origin embedding enforced by default via CSP `frame-ancestors 'self'`; set `FRAME_ANCESTORS` in `custom.env` to allow specific cross-origin hosts (e.g., Databricks, Jupyter)
    * To enable cross-origin embedding of authenticated visualizations, [modify the cookie options](../app-config/configure.md#application-servers)
     
 ## Usage

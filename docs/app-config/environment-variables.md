@@ -226,6 +226,19 @@ COOKIE_SECURE=true
 COOKIE_SAMESITE=None
 ```
 
+## Security Headers
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `FRAME_ANCESTORS` | Space-separated origins allowed to embed Graphistry in iframes (CSP `frame-ancestors`) | `""` (same-origin only) |
+
+**Example** — allow Databricks:
+```bash
+FRAME_ANCESTORS=https://*.databricks.com https://*.cloud.databricks.com
+```
+
+See [TLS Hardening - Caddy](configure.md#caddy) for Caddyfile context.
+
 ## Maps / Geospatial
 
 Enable Kepler.gl-based geospatial map visualizations.
