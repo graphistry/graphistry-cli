@@ -59,13 +59,10 @@ The browser developer panel, especially around console logs and history of netwo
 
 ## Nginx logs
 
-Nginx in debug mode should log the following sequence of `GET` and `POST` requests. An error or early stop hints at which service is failing. The pipeline is roughly: create a session's workbook, redirect the user to it, starts a GPU service session, loads the static UI, connect a browser's socket to the GPU session, and then starts streaming visual data to the browser.
+Nginx in debug mode should show the graph-page redirect and a viz socket connection. The current route is `/graph/socket.io/`; worker-number URLs belong to older deployments. A proxy that blocks WebSocket upgrade causes the client to use HTTP polling, with repeated `GET` and `POST` requests carrying the same `session` value.
 
 1. `GET /graph/graph.html?dataset=Facebook`
-2. `GET /graph/graph.html?dataset=Facebook&workbook=<SOME_FRAGMENT_STRING>`
-3. `GET /worker/<WORKER_NUMBER>/socket.io/?dataset=Facebook&workbook=<SOME_FRAGMENT_STRING>`
-4. `GET /worker/<WORKER_NUMBER>/graph/img/logo_white_horiz.png`
-5. `5 x GET/POST /worker<WORKER_NUMBER>/socket.io/?dataset=Facebook&workbook=<SOME_FRAGMENT_STRING>...`
-6. `GET  /worker/<WORKER_NUMBER>/vbo?...`
-
+2. Redirect to `GET /graph/graph.html?dataset=Facebook&session=<SESSION_ID>`
+3. `GET /graph/socket.io/?EIO=4&transport=websocket&session=<SESSION_ID>` (upgrade), or `GET`/`POST` with `transport=polling&session=<SESSION_ID>` (fallback)
+4. Visualization data requests under `/streamgl/` as the graph loads
 
