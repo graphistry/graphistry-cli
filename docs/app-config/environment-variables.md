@@ -233,7 +233,7 @@ COOKIE_SAMESITE=None
 | `CORS_ALLOWED_ORIGINS` | Comma-separated list of additional browser origins allowed for cross-origin API requests and visualization socket handshakes; does not control iframe embedding | empty (no additional origins) |
 
 `CORS_ALLOWED_ORIGINS` is the single source of truth for cross-origin access across the stack — read by
-nginx, nexus, pivot, and the visualization realtime socket. **Empty (the default) allows no additional
+nginx, nexus, and the visualization realtime socket. **Empty (the default) allows no additional
 browser origins for those requests.** This is intentional (earlier releases allowed all origins; that default
 was removed for security). It does not prevent an HTTPS site from loading a Graphistry HTTPS page in an
 iframe. **Most deployments need no change** — see the authoritative reference in
@@ -267,7 +267,9 @@ admits an origin; it does **not** authenticate a socket. The visualization socke
 authentication, and credentialed cross-origin polling is not enabled by this setting. The supported
 iframe embed loads Graphistry's own page and makes same-origin socket requests, so its parent origin
 needs no socket allowlist entry. A sandboxed iframe without `allow-same-origin` instead sends
-`Origin: null` on its socket handshake and is refused.
+`Origin: null` on its socket handshake and is refused. The socket server speaks Socket.IO 4 / Engine.IO 4
+only: Engine.IO 3 (socket.io-client 2.x) handshakes are refused, so browser tabs opened before the
+upgrade must reload, and direct integrations must use socket.io-client 4.x.
 
 The first `GET /graph/graph.html?dataset=...` can arrive without `session`; the graph page normally
 redirects to a URL containing `session=<Graphistry session ID>`. Its built-in socket client carries
